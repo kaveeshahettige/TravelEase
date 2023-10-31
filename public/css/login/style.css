@@ -1,0 +1,111 @@
+body{
+    background-color:#FBF9F3;
+    font-family: 'Inter', sans-serif;
+}
+.main1 .registerForm{
+    background-color: #FEFEFE;
+    display: grid;
+    grid-template-columns: 60% 40%;
+    margin: 20px 100px 20px 100px;
+    
+}
+.image{
+   height: 93vh;
+}
+.registerForm .image img{
+    width: 100%;
+    height: 100%;
+    margin-bottom: 0px;
+    border-radius: 20px;
+}
+
+.formLeft{
+    display: grid;
+    grid-template-rows: 40% 60%;
+    padding: 30px;
+}
+.formLeft .c1{
+    display: grid;
+    grid-template-rows: 60% 40%;
+}
+.c1 .c1_1{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+.c1_1_1{
+    max-width: 100%; /* Ensure the div does not exceed its parent's width */
+    max-height: 100%; /* Ensure the div does not exceed its parent's height */
+    overflow: hidden; /* Hide any overflow if the image is larger than the div */
+    text-align: center; /* Center the image horizontally (optional) */
+}
+.c1_1 .c1_1_1 img{
+    max-width: 50%; /* Keep the image width within the div */
+    max-height: 100%;
+    float: right;
+}
+.c1_1_2{
+    color: #000;
+font-size: 54px;
+font-style: normal;
+display: flex;
+    align-items: center;
+font-weight: 700;
+line-height: normal;
+font-family: Comic Sans MS, Comic Sans, cursive;
+}
+.c1_2{
+    color: #605D5D;
+text-align: center;
+font-size: 28px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+
+.c2{
+    
+    /* Center the child horizontally */
+   padding-left: 10%;
+   padding-right: 10%;
+   
+}
+
+.formcontainer input{
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    
+}
+
+.login-button button{
+    border-radius: 20px;
+    background: #706F6C;
+    color: #FFF;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    padding: 10px 30px 10px 30px;
+
+}
+.login-button #forgot{
+    float: right;
+    
+}
+.login-button a{
+    text-decoration: none; /* Remove underline */
+    color: inherit;
+    font-weight: bold;
+}
+.login-button button{
+    cursor: pointer;
+}
+.login-button .buttonCA{
+  
+   display: flex;
+   justify-content: center;
+} 
+
+.formcontainer .invalid-feedback{
+    color:red;
+    
+}

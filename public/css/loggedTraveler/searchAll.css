@@ -1,0 +1,369 @@
+body{
+    background-color:  #FDFFFF;
+    font-family: 'Inter', sans-serif;
+   
+}
+/* Style for the navbar */
+.navbar {
+    overflow: hidden; 
+    /*display: flex;
+    flex-direction: row;*/
+}
+
+/* Style for the logo */
+.logo {
+    float: left; 
+    font-family: 'Caveat', cursive;
+    font-style: italic;
+}
+.logo img{
+    width: 50px;
+    margin-left: 30px;
+    padding: 7px;
+}
+.logo label{
+    position: absolute;
+    padding: 20px;
+    padding-left: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Style for the navigation list */
+.navbar ul {
+    list-style-type: none; /* Remove bullet points from the list */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Clear floats within the list */
+    margin-left: 400px;
+}
+
+/* Style for list items (navigation links) */
+.navbar li {
+    float: left; /* Float the list items to the right */
+    padding: 10px 15px 10px 15px;
+}
+
+/* Style for list item links */
+.navbar a {
+    display: block; /* Make links block-level for better spacing */
+    color: black; /* Text color of the links */
+    text-align: center; /* Center-align the text within the links */
+    padding: 14px 16px; /* Add padding to the links */
+    text-decoration: none; /* Remove underlines from the links */
+    font-size: 20px;
+}
+.navbar a:hover{
+   
+   color:#F9B314;
+}
+#selected{
+    font-weight: bold;
+}
+.rightcontent{
+    float: right;
+}
+
+#logout{
+    background-color: #F9B314;
+    padding: 10px 15px 10px 15px;
+    border-radius: 20px;
+    color: #FDFFFF;
+}
+.rightcontent li a{
+   padding: 0px;
+  }
+.rightcontent li a img {
+    width: 50px; /* Set the width of the profile picture */
+    height: 50px; /* Set the height of the profile picture */
+    border-radius: 50%; /* Make the image circular */
+    margin-left: 10px; /* Add spacing between the profile picture and the last navigation item */
+    border: 2px solid #F9B314;
+   
+  }
+
+/* /////////////////////// */
+.resultPagem1{
+    display: grid;
+    grid-template-columns: 60% 40%;
+}
+.results{
+    position: relative;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5)
+    
+}
+.ResultTopics{
+font-size: 40px;
+}
+
+.results img{
+    max-width: 100%;
+    height: 100%;
+    
+}
+.results .textonimage{
+    width: 95%;
+    position: absolute; /* Position the div absolutely */
+    bottom: 0%; /* Position it 80% from the top of the parent container */
+    left: 50%; /* Position it 50% from the left of the parent container */
+    transform: translate(-50%, -50%); /* Center it both horizontally and vertically */
+    text-align: center; /* Center the text horizontally */
+    color:#FDFFFF; /* Text color */
+    font-size: 20px;
+    
+    padding: 0px; /* Add padding for spacing */
+}
+.dark-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Adjust the alpha (fourth) value to control darkness */
+    pointer-events: none; /* Allows interaction with the underlying image */
+}
+
+.map img{
+    max-width: 100%;
+    height: 100%;
+}
+
+.resultsPage1_1 .Buttons button{
+    padding: 10px 30px;
+    margin: 40px;
+    margin-top: 30px;
+    margin-right: 40px;
+    margin-bottom:20px;
+    color: #F9B314;
+    border: 2px solid #F9B314;
+    background-color: #FDFFFF;
+    border-radius: 10px;
+   font-size: 17px;
+}
+
+.resultsPage1_1 .Buttons button:hover{
+    padding: 10px 30px;
+    margin: 40px;
+    margin-top: 30px;
+    margin-right: 40px;
+    margin-bottom:20px;
+    color: #FDFFFF;
+    border: 2px solid #FDFFFF;
+    background-color: #F9B314;
+    border-radius: 10px;
+   font-size: 17px;
+}
+/* /////////// */
+
+.whatToDo{
+        display: grid;
+       grid-template-columns: 48% 48%;
+        grid-column-gap: 4%;
+}
+
+.whatToDo .divleft{
+    display: grid;
+    grid-template-rows: 30% 30% 30%;
+     grid-row-gap: 3%;
+}
+.divleft .divleft1_1{
+    display: flex;
+  flex-direction: row; /* Stack items vertically */
+   /* Center items horizontally */
+  text-align: center; 
+}
+.divleft1_1 img{
+    width: 300px;
+    height: 200px;
+    border-radius: 10px;
+}
+/* ////////////// */
+.whatToDo .divright{
+    display: grid;
+    grid-template-rows: 30% 30% 30%;
+     grid-row-gap: 3%;
+}
+.divright .divright1_1{
+    display: flex;
+  flex-direction: row; /* Stack items vertically */
+   /* Center items horizontally */
+  text-align: center; 
+}
+.divright1_1 img{
+    width: 300px;
+    height: 200px;
+    border-radius: 10px;
+}
+
+/* /////////////mainsection3////////////////// */
+
+.resultPagem3{
+    margin-top: 70px;
+}
+
+/* ////////////////// */
+.main2images{
+    display: grid;
+    grid-template-columns:33% 33% 33%;
+    column-gap: 1%;
+    align-items: center;
+}
+
+.main2images .main2img1content{
+    display: grid;
+    height: 80%;
+    grid-template-rows: 65% 10%;
+    margin: 2%;
+    margin-top: 0px;
+    
+}
+.main2images .main2img1content:hover{
+    
+    display: grid;
+    grid-template-rows: 65% 10%;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+.main2images .main2img2content{
+    display: grid;
+    height: 80%;
+    grid-template-rows: 65% 10%;
+    margin: 2%;
+    margin-top: 0px;
+}
+.main2images .main2img2content:hover{
+    display: grid;
+    grid-template-rows: 65% 10%;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+
+}
+.main2images .main2img3content{
+    display: grid;
+    height: 80%;
+    grid-template-rows: 65% 10%;
+    margin: 2%;
+    margin-top: 0px;
+}
+.main2images .main2img3content:hover{
+    display: grid;
+    grid-template-rows: 65% 10%;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+
+}
+.main2images img{
+    width: 90%;
+    height:90%;
+    padding: 0px;
+}
+
+.main2images p{
+    padding-left: 10px;
+}
+.main2img1content .c1{
+    display: grid;
+    grid-template-columns:55% 40%;
+}
+.main2img2content .c2{
+    display: grid;
+    grid-template-columns:60% 40%;
+}
+.main2img3content .c3{
+    display: grid;
+    grid-template-columns:60% 40%;
+}
+.main2images button{
+    padding: 10px 20px 10px 20px;
+    margin: 20px;
+    margin-left: 50px;
+    border-radius: 20px;
+    border: 2px solid #F9B314;
+    color: #F9B314;
+    background-color: #FDFFFF;
+    cursor: pointer;
+}
+.main2images button:hover{
+    padding: 10px 20px 10px 20px;
+    margin: 20px;
+    margin-left: 50px;
+    border-radius: 20px;
+    background-color: #F9B314;
+    color: #FDFFFF;
+    cursor: pointer;
+}
+
+/* ////resultPagem4/// */
+.resultPagem4 .vehicles{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.resultPagem4 .vehicles .vehicledetails{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+   padding-left: 50px;
+   padding-right: 100px;
+   align-items: center;
+    
+}
+.resultPagem4 .vehicles .vehicledetails:hover{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 50px;
+    padding-right: 100px;
+   align-items: center;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    
+}
+.resultPagem4 .vehicles img{
+   
+    
+}
+.vehicles .vehicledetails .vehicleIndetails{
+    /* 
+    display: flex;
+    flex-direction: row; */
+    border-radius: 10px;
+    background-color: #ffe2a4;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 35% 30% 35%;
+    align-items: center;
+    width: 100%;
+    
+}
+.vehicles .vehicledetails .vehicleIndetails ul {
+    list-style: none;
+}
+
+.vehicledetails .vehicleBookButton button{
+    padding: 10px 30px 10px 30px;
+    margin-left: 20px;
+    border-radius: 20px;
+    border: 2px solid #F9B314;
+    color: #F9B314;
+    background-color: #FDFFFF;
+    cursor: pointer;
+}
+.vehicledetails .vehicleBookButton button:hover{
+    padding: 10px 30px 10px 30px;
+    margin-left: 20px;
+    border-radius: 20px;
+    background-color: #F9B314;
+    color: #FDFFFF;
+    cursor: pointer;
+}
+
+.footer{
+    background-color: #353432;
+    width: 100%;
+    height: 200px;
+}
+
+#loginbut{
+    background-color: #706F6C;
+    padding: 10px 25px 10px 25px;
+    border-radius: 20px;
+    color: #FDFFFF;
+}

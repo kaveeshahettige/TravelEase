@@ -1,0 +1,137 @@
+body{
+    background-color:  #FDFFFF;
+    font-family: 'Inter', sans-serif;
+   
+}
+/* Style for the navbar */
+.navbar {
+    overflow: hidden; 
+    /*display: flex;
+    flex-direction: row;*/
+}
+
+/* Style for the logo */
+.logo {
+    float: left; 
+    font-family: 'Caveat', cursive;
+    font-style: italic;
+}
+.logo img{
+    width: 50px;
+    margin-left: 30px;
+    padding: 7px;
+}
+.logo label{
+    position: absolute;
+    padding: 20px;
+    padding-left: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Style for the navigation list */
+.navbar ul {
+    list-style-type: none; /* Remove bullet points from the list */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Clear floats within the list */
+    margin-left: 400px;
+}
+
+/* Style for list items (navigation links) */
+.navbar li {
+    float: left; /* Float the list items to the right */
+    padding: 10px 15px 10px 15px;
+}
+
+/* Style for list item links */
+.navbar a {
+    display: block; /* Make links block-level for better spacing */
+    color: black; /* Text color of the links */
+    text-align: center; /* Center-align the text within the links */
+    padding: 14px 16px; /* Add padding to the links */
+    text-decoration: none; /* Remove underlines from the links */
+    font-size: 20px;
+}
+.navbar a:hover{
+   
+   color:#F9B314;
+}
+#selected{
+    font-weight: bold;
+}
+.buttons{
+    float: right;
+}
+#loginbut{
+    background-color: #706F6C;
+    padding: 10px 25px 10px 25px;
+    border-radius: 20px;
+    color: #FDFFFF;
+}
+/*#signupbut{
+    background-color: #F9B314;
+    padding: 10px 15px 10px 15px;
+    border-radius: 20px;
+    color: #FDFFFF;
+}*/
+/* ////////////////// */
+.plantipResultm1{
+    font-size: 20px;
+}
+.form{
+    width: 50%;
+    margin-left: 25%;
+}
+.plantipResultm1 .form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 50px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding-bottom: 50px;
+    border-radius: 10px;
+}
+.plantipResultm1 .form form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    gap: 40px;
+}
+.plantipResultm1 .form form label{
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.plantipResultm1 .wherediv{
+    border: 1px solid #706F6C;
+    padding: 20px 200px 20px 0px;
+    border-radius: 10px;
+}
+.plantipResultm1 .datediv{
+    border: 1px solid #706F6C;
+    padding: 20px 100px 20px 0px;
+    border-radius: 10px;
+}
+.plantipResultm1 .buttondiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.plantipResultm1 #startplan{
+    background-color: #F9B314;
+    padding: 10px 15px 10px 15px;
+    border-radius: 20px;
+    color: #FDFFFF;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+}
+.plantipResultm1 input {
+    border: none;
+    outline: none; /* This removes the default focus outline as well */
+    font-size: 15px;
+}

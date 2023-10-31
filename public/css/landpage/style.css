@@ -1,0 +1,476 @@
+body{
+    background-color:  #FDFFFF;
+    font-family: 'Inter', sans-serif;
+   
+}
+/* Style for the navbar */
+.navbar {
+    overflow: hidden; 
+    /*display: flex;
+    flex-direction: row;*/
+}
+
+/* Style for the logo */
+.logo {
+    float: left; 
+    font-family: 'Caveat', cursive;
+    font-style: italic;
+}
+.logo img{
+    width: 50px;
+    margin-left: 30px;
+    padding: 7px;
+}
+.logo label{
+    position: absolute;
+    padding: 20px;
+    padding-left: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Style for the navigation list */
+.navbar ul {
+    list-style-type: none; /* Remove bullet points from the list */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Clear floats within the list */
+    margin-left: 400px;
+}
+
+/* Style for list items (navigation links) */
+.navbar li {
+    float: left; /* Float the list items to the right */
+    padding: 10px 15px 10px 15px;
+}
+
+/* Style for list item links */
+.navbar a {
+    display: block; /* Make links block-level for better spacing */
+    color: black; /* Text color of the links */
+    text-align: center; /* Center-align the text within the links */
+    padding: 14px 16px; /* Add padding to the links */
+    text-decoration: none; /* Remove underlines from the links */
+    font-size: 20px;
+}
+.navbar a:hover{
+   
+   color:#F9B314;
+}
+#selected{
+    font-weight: bold;
+}
+.buttons{
+    float: right;
+}
+#loginbut{
+    background-color: #706F6C;
+    padding: 10px 25px 10px 25px;
+    border-radius: 20px;
+    color: #FDFFFF;
+}
+/*#signupbut{
+    background-color: #F9B314;
+    padding: 10px 15px 10px 15px;
+    border-radius: 20px;
+    color: #FDFFFF;
+}*/
+
+
+/*--------main1----*/
+.main1{
+    display: grid;
+    grid-template-rows: 85% 15%;
+    margin-left: 30px;
+    
+    
+}
+.grid1{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    padding: 0px;
+
+}
+.paragraph1{
+   display: grid;
+   grid-template-rows:60% 20% 20%;
+   
+}
+.paragraph1 p{
+    margin: 0; /* Remove margin */
+    padding: 0; /* Remove padding */
+}
+
+#text1{
+    margin-top: 20px;
+    font-size: 80px;
+    font-weight: bold;
+    padding: 0px;
+}
+#text3{
+    color: #605D5D;
+    font-size: 30px;
+}
+#planbutton{
+    margin: 10px 20px 10px 20px;
+    background-color: #F9B314;
+    color: #FDFFFF;
+    font-size: 20px;
+    padding: 20px 30px 20px 30px;
+    border-radius: 20px;
+    border: none;
+    font-weight: bold;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+.image1{
+  position: relative; 
+  overflow: hidden;
+  
+}
+.image img{
+    position: relative; /* Ensure the image is in front of the circle */
+    z-index: -1; /* Set the image's stacking order above the circle */
+    padding-bottom: 0px;
+}
+.circle {
+    position: absolute; /* Position the circle absolutely within the container */
+    top: 0px;
+    left: 20%;
+    width: 80%; /* Make the circle take the full width of the container */
+    height: 100%; /* Make the circle take the full height of the container */
+    background-color:#F9B314; /* Circle background color */
+    border-radius: 50%; /* Create a circle by setting border-radius to 50% */
+    z-index: -1; /* Set the image's stacking order above the circle */
+    padding: 10px;
+}
+/*------------------searchbar--------------------------*/
+.searchbar1{
+    text-align: center;
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 40px;
+    background-color: #FFFFFF;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+}
+
+.search-input{
+    border: none;
+    padding: 10px;
+    font-size: 17px;
+    outline: none;
+}
+.search-button{
+    background-color: #F9B314;
+    padding: 10px;
+    border-radius: 20px;
+    color: #FDFFFF;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+}
+/*---------main2----------------------*/
+
+.main2{
+    margin-left: 30px;
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: 35% 65%;
+   
+}
+.image2{
+    background: linear-gradient(to bottom, #F9B314, #ffffff);
+    border-radius: 20px;
+    height: 700px;
+    object-fit: contain;
+}
+.image2 img{
+    width:500px;
+    height: 700px;
+    padding: 0px;
+    position: absolute;
+
+    
+}
+.main2-content{
+    display: grid;
+    grid-template-rows: 25% 75%;
+    height: 700px;
+   
+}
+
+.main2-content .heading{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    margin-left: 80px;
+    /*background-color: #605D5D;*/
+}
+.heading .head1{
+     font-size: 70px;
+     font-weight: bold;
+     margin: 30px 0px 10px 0px;
+     
+}
+.heading .head2{
+    font-size: 30px;
+    font-weight: bold;
+    margin: 10px 0px 10px 0px;
+    color: #605D5D;   
+}
+.main2-content .detail{
+    display: grid;
+    grid-template-columns: 35% 65%;
+}
+
+.detailL {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Adjust the spacing between images */
+    align-items: center;
+}
+
+.detailL div {
+    flex: 1; /* Make each div take an equal portion of the available space */
+    max-width: 30%; /* Limit the maximum width of each div to 30% of the parent container */
+    text-align: center; /* Center the image horizontally within each div */
+    padding-top: 20px;
+}
+
+.detailL img {
+    max-width: 100%; /* Limit the maximum width of the images to the width of the div */
+    max-height: 100%; /* Limit the maximum height of the images to the height of the div */
+}
+
+
+.detail .detailL img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto; /* Add to prevent stretching */
+    height: auto; /* Add to prevent stretching */
+}
+.detail .detailR{
+    margin-left: 80px;
+    grid-template-rows: 30% 30% 30%;
+}
+.detail .detailR div{
+   margin: 20px 0px 60px 0px;
+}
+.detail .detailR h1{
+    font-size: 30px;
+    font-weight: bold;
+}
+.detail .detailR p{
+    font-size: 25px;
+    color: #605D5D;   
+}
+/*--------------------------------------------*/
+
+/*-------------main3---------------------*/
+
+.main3{
+    grid-template-rows: 30% 70%;
+    margin-left: 30px;
+    margin-top: 100px;
+    margin-bottom: 70px;
+}
+.main3 .main3heading{
+    width: 80%;
+    margin-left: 10%;
+    font-size: 70px;
+    font-weight: bold;
+    align-content: center;
+}
+.main3images{
+    display: grid;
+    grid-template-columns:33% 33% 33%;
+    align-items: center;
+    
+}
+
+.main3images .main3img1content{
+    display: grid;
+    grid-template-rows: 80% 20%;;
+    margin: 2%;
+}
+.main3images .main3img1content:hover{
+    display: grid;
+    grid-template-rows: 80% 20%;;
+    margin: 2%;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+.main3images .main3img2content{
+    display: grid;
+    grid-template-rows: 80% 20%;;
+    margin: 2%;
+}
+.main3images .main3img2content:hover{
+    display: grid;
+    grid-template-rows: 80% 20%;;
+    margin: 2%;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+
+}
+.main3images .main3img3content{
+    display: grid;
+    grid-template-rows: 80% 20%;;
+    margin: 2%;
+}
+.main3images .main3img3content:hover{
+    display: grid;
+    grid-template-rows: 80% 20%;;
+    margin: 2%;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+
+}
+.main3images img{
+    width: 450px;
+    height:300px;
+    padding: 0px;
+}
+
+.main3images p{
+    padding-left: 10px;
+}
+.main3img1content .c1{
+    display: grid;
+    grid-template-columns:55% 40%;
+}
+.main3img2content .c2{
+    display: grid;
+    grid-template-columns:60% 40%;
+}
+.main3img3content .c3{
+    display: grid;
+    grid-template-columns:60% 40%;
+}
+.main3images button{
+    padding: 10px 20px 10px 20px;
+    margin: 20px;
+    margin-left: 50px;
+    border-radius: 20px;
+    border: 2px solid #F9B314;
+    color: #F9B314;
+    background-color: #FDFFFF;
+    cursor: pointer;
+}
+.main3images button:hover{
+    padding: 10px 20px 10px 20px;
+    margin: 20px;
+    margin-left: 50px;
+    border-radius: 20px;
+    background-color: #F9B314;
+    color: #FDFFFF;
+    cursor: pointer;
+}
+/*------------------------------------------*/
+
+
+/*-------------main4----*/
+.main4{
+    display: grid;
+    grid-template-rows: 80% 20%;
+    margin-bottom: 0px;
+    height: 100vh;
+}
+.main4 .main4img img{
+    width: 100%;
+    height: 100%;
+
+}
+.main4 .footer{
+    background-color: #353432;
+}
+.main4img{
+    position: relative;
+    display: inline-block;
+}
+.shade{
+        position: absolute;
+        top: 0;
+        left: 55%;
+        width: 45%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black shade */
+        z-index: 0;
+    
+}
+.shade p{
+    color: #FFFFFF;
+    font-size:60px;
+    margin-top: 25%;
+    margin-left: 10%;
+    font-weight: bold;
+}
+ .shade button{
+    position: absolute;
+    border-radius: 20px;
+    background-color:#F9B314;
+    color: #FDFFFF;
+    font-size: 25px;
+    margin-left: 35%;
+   z-index: 1;
+   padding: 10px 20px 10px 20px;
+   cursor: pointer;
+   border: none;
+
+}
+
+/*////////////////////////*/
+.footer {
+    
+    color: #FDFFFF;
+    padding: 20px 0;
+    text-align: center;
+    margin-left: 0px;
+    /* border: 2px solid rgb(59, 35, 244); */
+}
+
+/* Style the footer content container */
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Style contact information */
+.contact-info p {
+    margin: 5px 0;
+}
+
+/* Style social media links */
+.social-links a {
+    color: #c21e1e;
+    text-decoration: none;
+    font-size: 20px;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #007BFF;
+}
+
+/* Style site links */
+.site-links a {
+    color: #FDFFFF;
+    text-decoration: none;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.site-links a:hover {
+    color: #F9B314;
+}
+
+/* Style copyright text */
+.copyright {
+    margin-top: 20px;
+    font-size: 14px;
+    background-color: #353432;
+}
+
+
+/*////////////////////////*/
