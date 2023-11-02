@@ -3,110 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/settingssub.css">    <title>Hotel - Add Rooms</title>
-    <link rel="icon" type="image/x-icon" href="../Images/TravelEase.png">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/hotel/settingssub.css">
+    <title>Hotel - Add Rooms</title>
+    <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-    <nav class="left-menu">
-        <div class="user-profile">
-            <img src="../Images/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Wikum Preethika</span>
-        </div>
-        
-        <div class="search-bar">
-            <form action="#" method="GET">
-                <input type="text" placeholder="Find a Setting">
-                <button type="submit">Search</button>
-            </form>
-        </div>
-        
-            
-        <ul>
-            <li><a href="<?php echo URLROOT; ?>hotel/index" class="nav-button active"><i class='bx bxs-info-circle bx-tada-hover bx-sm bx-fw'></i> Dashboard</a></li>
-            <li><a href="<?php echo URLROOT; ?>hotel/bookings" class="nav-button "><i class='bx bxs-book bx-sm bx-fw'></i> Bookings</a></li>
-            <li><a href="<?php echo URLROOT; ?>hotel/calender" class="nav-button "><i class='bx bxs-calendar bx-sm bx-fw'></i> Availability</a></li>
-            <li><a href="<?php echo URLROOT; ?>hotel/gallery" class="nav-button "><i class='bx bx-images bx-sm bx-fw'></i> Gallery</a></li>
-            <li><a href="<?php echo URLROOT; ?>hotel/revenue" class="nav-button "><i class='bx bxs-wallet bx-sm bx-fw'></i> Revenue</a></li>
-            <li><a href="<?php echo URLROOT; ?>hotel/reviews" class="nav-button "><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
-            <li><a href="<?php echo URLROOT; ?>hotel/settings" class="nav-button "><i class='bx bxs-cog bx-sm bx-fw'></i> Settings</a></li>
-        </ul>  
-        
-        
-        
-    </nav>
-    <main>
-        <div class="logo-container">
-            <img src="../Images/TravelEase.png" alt="TravelEase Logo">
-            <span class="logo-text">TravelEase</span>
-        </div>
-        <div class="dashboard-content">
-            <div><h1>Settings</h1> </div>
-             
-            <div id="base">
-                <h3 style="padding-left:20px;">Add Rooms</h3>
-                <div id="form">
-                    <form class="registration-form">
-                        <div>
-                            <div class="form-group">
-                                <label for="roomType">Room Type</label>
-                                <select id="roomType" name="roomType">
-                                  <option value="standard">Standard</option>
-                                  <option value="deluxe">Deluxe</option>
-                                  <option value="suite">Suite</option>
-                                  <option value="other">Other</option>
-                                </select>
-                            </div>
-                        
-                            <div class="form-group">
-                                <label for="numOfBeds">Number of Beds</label>
-                                <select id="numOfBeds" name="numOfBeds">
-                                  <option value="1">1 Bed</option>
-                                  <option value="2">2 Beds</option>
-                                  <option value="3">3 Beds</option>
-                                  <option value="4">4 Beds</option>
-                                </select>
-                            </div>
-                        </div>
-                        
+<nav class="left-menu">
+    <div class="user-profile">
+        <img src="<?php echo URLROOT; ?>/images/hotel/wikum.jpg" alt="User Profile Photo">
+        <span class="user-name">Wikum Preethika</span>
+    </div>
 
-                        <div>
-                            <div class="form-group">
-                                <label for="price">Price (per night)</label>
-                                <input type="number" id="price" name="price" required>
-                            </div> 
-                            <div  class="form-group">
-                                <label for="roomImages">Room Images:</label>
-                                <input type="file" id="roomImages" name="roomImages[]" accept="image/*" multiple required>
-                            </div>                           
+    <div class="search-bar">
+        <form action="#" method="GET">
+            <input type="text" placeholder="Find a Setting">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <ul>
+        <li><a href="<?php echo URLROOT; ?>hotel/index" class="nav-button"><i class='bx bxs-info-circle bx-tada-hover bx-sm bx-fw'></i> Dashboard</a></li>
+        <li><a href="<?php echo URLROOT; ?>hotel/bookings" class="nav-button "><i class='bx bxs-book bx-sm bx-fw'></i> Bookings</a></li>
+        <li><a href="<?php echo URLROOT; ?>hotel/calender" class="nav-button "><i class='bx bxs-calendar bx-sm bx-fw'></i> Availability</a></li>
+        <li><a href="<?php echo URLROOT; ?>hotel/gallery" class="nav-button "><i class='bx bx-images bx-sm bx-fw'></i> Gallery</a></li>
+        <li><a href="<?php echo URLROOT; ?>hotel/revenue" class="nav-button "><i class='bx bxs-wallet bx-sm bx-fw'></i> Revenue</a></li>
+        <li><a href="<?php echo URLROOT; ?>hotel/reviews" class="nav-button "><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
+        <li><a href="<?php echo URLROOT; ?>hotel/settings" class="nav-button active "><i class='bx bxs-cog bx-sm bx-fw'></i> Settings</a></li>
+    </ul>
+</nav>
+<main>
+    <div class="logo-container">
+        <img src="<?php echo URLROOT; ?>/images/hotel/TravelEase.png" alt="TravelEase Logo">
+        <span class="logo-text">TravelEase</span>
+    </div>
+    <div class="dashboard-content">
+        <div>
+            <h1>Settings</h1>
+        </div>
+
+
+        <div id="base">
+            <h3>Add Rooms</h3>
+            <div id="form">
+                <form class="registration-form" action="" method="POST">
+                    <div>
+                        <div class="form-group">
+                            <label for="roomType">Room Type</label>
+                            <select id="roomType" name="roomType">
+                                <option value="standard">Standard</option>
+                                <option value="deluxe">Deluxe</option>
+                                <option value="suite">Suite</option>
+                            </select>
                         </div>
 
-                        <div>
-                            <div class="form-group">
-                                <label for="roomDescription">Room Description:</label>
-                                <textarea id="roomDescription" name="roomDescription" rows="4" required></textarea>
-                            </div>                            
+                        <div class="form-group">
+                            <label for="numOfBeds">Number of Beds</label>
+                            <select id="numOfBeds" name="numOfBeds">
+                                <option value="1">1 Bed</option>
+                                <option value="2">2 Beds</option>
+                                <option value="3">3 Beds</option>
+                                <option value="4">4 Beds</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+
+                        <div class="form-group">
+                            <label for="price">Price (per night)</label>
+                            <input type="number" id="price" name="price" required>
                         </div>
 
-                        <div >
-                            <div class="baseButtons">
-                                <button id="cancelBut">Cancel</button>
-                                <button id="saveBut" type="submit">Save</button>
-                            </div>
+                        <div  class="form-group">
+                            <label for="roomImages">Room Images:</label>
+                            <input type="file" id="roomImages" name="roomImages[]" accept="image/*" multiple required>
                         </div>
-                       
-                        
-                    
-                    
-                    
-                    </form>
-                </div>
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label for="roomDescription">Room Description:</label>
+                            <textarea id="roomDescription" name="roomDescription" rows="4" required></textarea>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="baseButtons">
+                            <button id="cancelBut">Cancel</button>
+                            <button id="saveBut" type="submit">Save</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-           
-            
         </div>
-    </main>
+    </div>
+</main>
 </body>
 </html>
