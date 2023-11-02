@@ -14,7 +14,7 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img src="<?php echo URLROOT?>images/5.jpg" alt="User Profile Photo">
-            <span class="user-name"><?php echo $_SESSION['user_fname']."  ".$_SESSION['user_lname']?></span>
+            <span class="user-name"><?php echo $data['fname']."   ".$data['lname']?></span>
         </div>
         
         <div class="search-bar">

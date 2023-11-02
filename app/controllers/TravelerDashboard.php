@@ -13,11 +13,22 @@ class TravelerDashboard extends Controller{
       }
     
     public function index(){
-      $this->view('travelerDashboard/index');
-    }
-    public function settings(){
       $id= $_SESSION['user_id'];
-        $user=$this->userModel->findUserDetail($id);
+      $user=$this->userModel->findUserDetail($id);
+
+      $data = [
+        'id' => '$id',
+        'email'=>$user->email,
+        'lname' => $user->lname,
+        'fname' => $user->fname,
+        'number' => $user->number,
+      ];
+      $this->view('travelerDashboard/index',$data);
+    }
+    public function settings($id){
+      $id= $_SESSION['user_id'];
+      $user=$this->userModel->findUserDetail($id);
+
       $data = [
         'id' => '$id',
         'email'=>$user->email,
@@ -28,6 +39,7 @@ class TravelerDashboard extends Controller{
         $this->view('travelerDashboard/settings',$data);
     }
     public function editInfo(){
+      
       $this->view('travelerDashboard/editInfo');
     }
     

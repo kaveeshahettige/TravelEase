@@ -119,8 +119,9 @@
         <div class="main4img">
             <img src="<?php echo URLROOT?>images/5.jpg" alt="">
             <div class="shade">
-                <p>Is Your Service Ready to Shine?</p>
-                <button>Register</button>
+                <p>Is Your Agency Ready to Shine?</p>
+                <button><a href="<?php echo URLROOT ?>users/transportReg1" style="text-decoration: none; color: inherit;">Register</a></button>
+                
             </div>
             
         </div>

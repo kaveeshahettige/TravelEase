@@ -6,7 +6,7 @@
     <title>TravelEase</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
     <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/style.css">
-    <script src="./script.js"></script>
+    <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
     <style>
 
     </style>
@@ -43,7 +43,7 @@
                 <div class="search1"><input type="text" placeholder="Location: "></div>
                 <div class="search2">Check in Date:<input type="date" placeholder="Check in Date"></div>
                 <div class="search3">Check out Date:<input type="date" placeholder="Check out Date"></div>
-                <div class="search4"><button id="searchbtn" onclick="SearchAll()">Search</button></div>
+                <div class="search4"><button id="searchbtn" onclick="SearchAll()">  Search</button></div>
             </div>
         </div>
     </section>

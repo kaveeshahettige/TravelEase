@@ -118,8 +118,8 @@
         <div class="main4img">
             <img src="<?php echo URLROOT?>images/5.jpg" alt="">
             <div class="shade">
-                <p>Is Your Service Ready to Shine?</p>
-                <button>Register</button>
+                <p>Would you like to join as a Package Provider</p>
+                <button >Register</button>
             </div>
             
         </div>

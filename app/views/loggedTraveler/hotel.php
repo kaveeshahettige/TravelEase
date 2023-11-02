@@ -12,7 +12,8 @@
     </style>
 </head>
 <body>
-    
+ <!-- ggg    -->
+ <!-- jhh -->
     <div class="navbar">
         <div class="logo">
             <img src="<?php echo URLROOT?>/images/TravelEase_logo.png" alt="Logo">

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/settings.css">
     <title>Business admin Settings</title>
-    <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT; ?>/images/admin/TravelEase.png">
+    <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -14,7 +14,7 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img src="<?php echo URLROOT; ?>/images/admin/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Travel Agency 1</span>
+            <span class="user-name">Admin</span>
         </div>
         
         <div class="search-bar">
@@ -30,13 +30,15 @@
             <li><a href="<?php echo URLROOT; ?>admin/agency"><i class='bx bxs-car bx-sm'></i> Travel Agencies </a></li>
             <li><a href="<?php echo URLROOT; ?>admin/package"><i class='bx bx-package bx-sm'></i>Packages</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/settings"class="active"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-            <li><a href="<?php echo URLROOT; ?>pages/indes" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
+            <li><a href="<?php echo URLROOT; ?>users/logout" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
+            
         </ul> 
+            
+            
         
-
         
         <!-- <div class="logout">
-            <a href="<?php echo URLROOT; ?>pages/indes" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
+            <a href="<?php echo URLROOT?>users/logout" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a>
         </div> -->
     </nav>
     <main>
@@ -44,62 +46,73 @@
             <img src="<?php echo URLROOT; ?>/images/admin/TravelEase.png" alt="TravelEase Logo">
             <span class="logo-text">TravelEase</span>
         </div>
+        
         <div class="dashboard-content">
-            <div><h1>Settings</h1> </div>
-             
-            <div id="base">
-                <h3 style="padding-left:20px;">Basic Info</h3>
-                <div id="form">
-                    <form class="registration-form">
-                        <div>
-                            <div class="form-group">
-                                <label for="First Name">First Name</label>
-                                <input type="text" id="first-name" name="first-name" placeholder="Kaveesha"required>
-                            </div>
-                            <div class="form-group">
-                                <label for="Last Name">Last Name</label>
-                                <input type="text" id="last-name" name="last-name" placeholder="Hettige" required>
-                            </div>
-                            
-                            
-                            
-                        </div>
-                        <div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="text" id="email" name="email" placeholder="kaveesha.hettige@gmail.com" required>
-                            </div>
-                        
-                            <div class="form-group">
-                                <label for="phonenumber">Phone Number</label>
-                                <input type="text" id="number" name="number" placeholder="0764532789" required>
-                            </div>
-                            
-                        </div>
-                        <div>
-                            <div class="form-group">
-                                <label for="location">Location</label>
-                                <input type="text" id="location" name="location" placeholder="Galle">
-                            </div>
-                            
-                        </div>
-                        <div >
-                            <div class="baseButtons">
-                                <button id="cancelBut">Cancel</button>
-                                <button id="saveBut" type="submit">Save</button>
-                            </div>
-                        </div>
-                       
-                        
-                    
-                    
-                    
-                    </form>
-                </div>
-            </div>
-           
-            
+            <h1>Settings</h1>
         </div>
+
+        <div class="dashboard-subcontent">
+        <div class="content-container">
+            <div class="left-content">
+
+                <div class="rectangle">
+                    <div class="basic-info-content">
+                        <div class="center-image">
+                            <img src="<?php echo URLROOT; ?>/images/admin/wikum.jpg" alt="Profile Picture">
+                        </div>
+                        <div class="hotel-details">
+                            <h3><?php echo ucfirst($data['fname']); ?></h3>
+                            <h6>Contact Number</h6>
+                            <p><?php echo $data['number']; ?></p>
+                            <h6>Email</h6>
+                            <p><?php echo $data['email']; ?></p>
+                            
+                        </div>
+                        <a href="<?php echo URLROOT; ?>/admin/adminedit">
+                        <button class ="edit-button">Edit</button>
+                        </a>
+                     </div>
+                </div>
+
+                
+            </div>
+
+            <div class="right-content">
+                
+
+                <div class="rectangle">
+                    <div class="basic-info-content">
+                    <div class="hotel-details">
+                        <h2>Add Business Manager</h2>
+                        <h6>No. of Business Managers</h6>
+                        <p><?php echo $data['no'] ?></p>
+                    </div>
+                        <a href="<?php echo URLROOT; ?>/admin/addbusinessmanager">  
+                        <button  class ="edit-button">Add</button>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="rectangle">
+                    <div class="basic-info-content">
+                        <h2>Change Password</h2>
+                            <a href="<?php echo URLROOT; ?>admin/adminpassword">
+                                <button  class ="edit-button">Edit</button>
+                            </a>
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+        <div class="rectangle">
+            <div class="basic-info-content">
+            <h2>Profile Deletion</h2>
+            <a href="">
+            <button class ="delete-button">Delete</button></a>
+            </div>
+        </div>
+    </div>
     </main>
 </body>
 </html>

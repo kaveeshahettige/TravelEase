@@ -29,6 +29,23 @@ class User{
             return false;
         }
     }
+    public function managerregister($data){
+        $this->db->query('INSERT INTO users (fname,email,password,number,type) VALUES (:name,:email,:password,:number,:type)');
+        
+        //bind values
+        //bind values
+        $this->db->bind(':name',$data['name']);
+        $this->db->bind(':email',$data['email']);
+        $this->db->bind(':password',$data['password']);
+        $this->db->bind(':number',$data['number']);
+        $this->db->bind(':type','2');
+        //execute
+        if($this->db->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     public function login($email,$password){
         $this->db->query('SELECT * FROM users WHERE email=:email');
@@ -103,6 +120,105 @@ class User{
         }
       }
 
+      ////////////
+      public function findmanagerDetail(){
+        $this->db->query("SELECT * from users where type='2'");
+        $data=$this->db->resultSet();
 
+        //check row
+        if($this->db->rowCount()>0){
+            return $data;
+        }else{
+            return null;
+        }
+    }
+    public function deleteManager($id){
+        $this->db->query('DELETE FROM users WHERE id = :id');
+        // Bind values
+        $this->db->bind(':id', $id);
+  
+        // Execute
+        if($this->db->execute()){
+            redirect('admin/addbusinessmanager');
+        } else {
+          return false;
+        }
+      }
+
+      public function updatemanager($data){
+        $this->db->query('UPDATE users SET fname = :name,email = :email,number = :number WHERE id = :id');
+        // Bind values
+        $this->db->bind(':id', $data['id']);
+        $this->db->bind(':name', $data['name']);  
+        $this->db->bind(':email', $data['email']);
+        $this->db->bind(':number', $data['number']);
+  
+        // Execute
+        if($this->db->execute()){
+        //add a function to rlaod site
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      public function noOfManagers(){
+        $this->db->query('SELECT COUNT(*) AS count FROM users WHERE type = 2');
+        $row = $this->db->single();
+         if($this->db->rowcount()>0){
+            return $row->count;
+         }
+         else{
+            return false;
+        }
+    }
+
+    public function getadmindata(){
+        $this->db->query("SELECT * from users where type='0'");
+        $data=$this->db->single();
+
+        //check row
+        if($this->db->rowCount()>0){
+            return $data;
+        }else{
+            return null;
+        }
+    }
+    // registerTransportuser
+    public function registerTransportuser($data){
+        $this->db->query('INSERT INTO users (fname,email,password,number,type) VALUES (:fname,:email,:password,:number,:type)');
+        //bind values
+        $this->db->bind(':fname',$data['fname']);
+        $this->db->bind(':email',$data['email']);
+        $this->db->bind(':number',$data['number']);
+        $this->db->bind(':password',$data['password']);
+        $this->db->bind(':type','4');
+        //execute
+        if($this->db->execute()){
+            $userid=$this->db->lastInsertId();
+            return $userid;
+        }else{
+            return false;
+        }
+    }
+///////////////// tranposrt add
+
+public function registerTransport($data){
+    $this->db->query('INSERT INTO travelagency (agency_name,reg_number,address,user_id) VALUES (:name,:number,:address,:id)');
+
+    
+    //bind values
+    //bind values
+    $this->db->bind(':name',$data['agencyname']);
+    $this->db->bind(':number',$data['address']);
+    $this->db->bind(':address',$data['renumber']);
+    $this->db->bind(':id',$data['user_id']);
+    //execute
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+}
 
 }

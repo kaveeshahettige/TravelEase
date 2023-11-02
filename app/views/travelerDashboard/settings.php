@@ -60,13 +60,13 @@
                             <img src="<?php echo URLROOT?>images/5.jpg" alt="Profile Picture">
                         </div>
                         <div class="hotel-details">
-                            <h3><?php echo $_SESSION['user_fname']."  ".$_SESSION['user_lname']?></h3>
+                            <h3><?php echo $data['fname']."  ".$data['lname']?></h3>
                             <h5></h5>
                             <h6>Contact Number</h6>
-                            <p><?php echo $_SESSION['user_number']?></p>
+                            <p><?php echo $data['number']?></p>
                             <h6>Email</h6>
-                            <p><?php echo $_SESSION['user_email']?></p>
-                            <h6>Location</h6>
+                            <p><?php echo $data['email']?></p>
+                            
                             <p></p>
                         </div>
                     

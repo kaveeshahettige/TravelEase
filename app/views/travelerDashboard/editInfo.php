@@ -89,7 +89,7 @@
                         </div>
                         <div >
                             <div class="baseButtons">
-                                <button id="cancelBut" type="cancel">Cancel</button>
+                                <button id="cancelBut" type="reset">Cancel</button>
                                 <button id="saveBut" type="submit">Save</button>
                             </div>
                         </div>

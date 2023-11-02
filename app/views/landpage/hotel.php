@@ -120,8 +120,11 @@
         <div class="main4img">
             <img src="<?php echo URLROOT?>images/5.jpg" alt="">
             <div class="shade">
-                <p style="font-size: 40px;">Welcome to the ultimate destination for your dream getaway! Our site is your passport to a world of endless possibilities.</p>
+                <p>Is Your Hotel Ready to Shine?</p>
                 
+                <button><a href="" style="text-decoration: none; color: inherit;">Register</a></button>
+
+
             </div>
             
         </div>

@@ -236,9 +236,29 @@
            
         </div>
     </section>
-    <section class="footer">
-
-    </section>
+    <div class="footer">
+            <div class="contact-info">
+                    
+                <p>Phone: 011 456-7890</p>
+                <p>Email: travelEase@gmail.com</p>
+            </div>
+            <div class="social-links">
+                <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+            <div class="site-links">
+                <a href="<?php echo URLROOT?>Landpage">Home</a> |
+                <a href="">About Us</a> |
+                <a href="<?php echo URLROOT?>Landpage/termsofuse" target="_blank">Terms of Use</a> | 
+                <a href="">Contact</a>
+            </div>
+        <br><br>
+        <div class="copyright">
+            &copy; 2023 Your Company Name. All rights reserved.
+        </div>
+        </div>
 </body>
 </html>
 

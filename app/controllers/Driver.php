@@ -3,10 +3,11 @@
 class Driver extends Controller{
 
     private $postModel;
-    public function __construct()
-    {
-        
-    }
+    public function __construct(){
+        if(!isLoggedIn()){
+          redirect('users/login');
+        }
+      }
 
     public function index(){
         $this->view('driver/index');
