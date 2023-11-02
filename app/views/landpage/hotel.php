@@ -122,7 +122,7 @@
             <div class="shade">
                 <p>Is Your Hotel Ready to Shine?</p>
                 
-                <button><a href="" style="text-decoration: none; color: inherit;">Register</a></button>
+                <button><a href="<?php echo URLROOT ?>users/hotelreg" style="text-decoration: none; color: inherit;">Register</a></button>
 
 
             </div>

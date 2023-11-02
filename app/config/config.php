@@ -11,6 +11,8 @@ define('APPROOT',dirname(dirname(__FILE__)));
 //url root
 Define('URLROOT','http://localhost/TravelEase/');
 
+define('STOREROOT',dirname(dirname(dirname(__FILE__)))."\public\store");
+
 //sitename
 
 define('SITENAME','TravelEase');

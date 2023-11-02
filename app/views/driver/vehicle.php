@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/driver/vehicle.css">
-    <title>Business Financial Management</title>
+    <title><?php echo SITENAME ?></title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/driver/x-icon" href="<?php echo URLROOT; ?>/images/driver/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -34,13 +34,11 @@
             
             <li><a href="<?php echo URLROOT; ?>driver/reviews"><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
             <li><a href="<?php echo URLROOT; ?>driver/settings"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-            <li><a href="<?php echo URLROOT; ?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
+            <li><a href="<?php echo URLROOT?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
         </ul> 
         
         
-        <!-- <div class="logout">
-            <a href="<?php echo URLROOT; ?>pages/indes" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
-        </div> -->
+        
     </nav>
     <main>
         <div class="logo-container">
@@ -69,128 +67,57 @@
                 <h2>Total Vehicles</h2>
                 <p>2</p >
             </div>
-        
+                        
+            <div class="box">
+                    <!-- Rectangle 2: Change Password -->
+                    <div class="basic-info-content">
+                        <h2>Add Vehicle</h2>
+                        <!-- Add change password form here -->
+                            <a href="<?php echo URLROOT; ?>driver/vehiclereg">
+                                <button  class ="edit-button">Add</button>
+                            </a>
+                    </div>
+                </div>
 
         </div>
         </div>
 
-
         
-        <div class="Vehicle-content">
-            <div class="Vehicle-box">
-                <div class="Vehicle-sub-content">
-                    <div class="Vehicle-image">
+        <div class="interim_container">
+            <div class="dashboard-subcontent">
+                  <div class="content-container">
+    <?php if (!empty($data)): ?>
+    <?php foreach ($data as $vehicle): ?>
+        
+            <div class="left-content">
+
+                <div class="rectangle">
+                   <!-- Rectangle 1: Basic Info -->
+                    <div class="basic-info-content">
+                        <div class="center-image">
                         <img src="<?php echo URLROOT; ?>/images/driver/vehicle_1.jpg" alt="Guest Photo">
-                    </div>
-                    <h2>Benz ABC 123</h2>
-                    <div class="detail"><strong>Make:</strong>Toyota</div>
-                    <div class="detail"><strong>Model:</strong> Camry</div >
-                    <div class="detail"><strong>Plate Number:</strong> ABC 123</div >
-                    <div class="detail"><strong>Insurance Details:</strong> Insurance details here...</div >
-                    <div class="detail"><strong>Registration Details:</strong> Registration details here...</div >
-                    <div class="detail"><strong>Capacity:</strong> 4 passengers</div >
-                    <div class="detail"><strong>Fuel Type:</strong> Gasoline</div >
-                    <div class="detail"><strong>Mileage:</strong> 30 MPG</div >
-                    <div class="detail"><strong>Year:</strong> 2021</div >
-                    <div class="detail"><strong>License Plate State:</strong> CA</div >
-                    <div class="detail"><strong>Vehicle Class:</strong> Sedan</div >
-                    <div class="detail"><strong>Additional Features:</strong> Wi-Fi, Air Conditioning</div >
-                    <div class="detail"><strong>Maintenance History:</strong> Recent oil change, new tires</div >
-                    <button class="read-more-btn" onclick="openEditWindow()">Edit Details</button>
+                        </div>
+                        <div class="hotel-details">
+                        <div class="detail"><strong>Vehicle Brand :</strong><?php echo $vehicle['brand']?></div>
+                    <div class="detail"><strong>Model:</strong> <?php echo $vehicle['model']?></div>
+                    <div class="detail"><strong>Plate Number:</strong> <?php echo $vehicle['plate_number']?></div>
+                    <div class="detail"><strong>Year:</strong> <?php echo $vehicle['year']?></div>
+                    <div class="detail"><strong>Fuel Type:</strong> <?php echo $vehicle['fuel_type']?></div>
+                        </div>
+                        <a href="<?php echo URLROOT; ?>driver/vehicleedit/<?php echo $vehicle['id']?>"><button class="edit-button2">Edit </button>
+</a>
+                    <a href="<?php echo URLROOT?>driver/vehicle/<?php echo $vehicle['id']?>"><button class ="edit-button2">Delete</button></a>
+                     </div>
+                     
                 </div>
+                </div>
+                
+                <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+            </div>
             </div>
 
-            <div class="Vehicle-box">
-                <div class="Vehicle-sub-content">
-                    <div class="Vehicle-image">
-                        <img src="<?php echo URLROOT; ?>/images/driver/vehicle_2.png" alt="Guest Photo">
-                    </div>
-                    <h2>BMW CDE 3233</h2>
-                    <div class="detail"><strong>Make:</strong> Toyota</div >
-                    <div class="detail"><strong>Model:</strong> Camry</div >
-                    <div class="detail"><strong>Plate Number:</strong> ABC 123</div >
-                    <div class="detail"><strong>Insurance Details:</strong> Insurance details here...</div >
-                    <div class="detail"><strong>Registration Details:</strong> Registration details here...</div >
-                    <div class="detail"><strong>Capacity:</strong> 4 passengers</div >
-                    <div class="detail"><strong>Fuel Type:</strong> Gasoline</div >
-                    <div class="detail"><strong>Mileage:</strong> 30 MPG</div >
-                    <div class="detail"><strong>Year:</strong> 2021</div >
-                    <div class="detail"><strong>License Plate State:</strong> CA</div >
-                    <div class="detail"><strong>Vehicle Class:</strong> Sedan</div >
-                    <div class="detail"><strong>Additional Features:</strong> Wi-Fi, Air Conditioning</div >
-                    <div class="detail"><strong>Maintenance History:</strong> Recent oil change, new tires</div >
-                    <button class="read-more-btn" onclick="openEditWindow()">Edit Details</button>
-                </div>
-            </div>
-            <div id="edit-popup" class="popup">
-                <h2>Edit Vehicle Details</h2>
-                <form onsubmit="saveEditedDetails()">
-                    <div class="form-group">
-                        <label for="make">Make:</label>
-                        <input type="text" id="make" name="make" value="Toyota">
-                    </div>
-                    <div class="form-group">
-                        <label for="model">Model:</label>
-                        <input type="text" id="model" name="model" value="Camry">
-                    </div>
-                    <div class="form-group">
-                        <label for="plate">Plate Number:</label>
-                        <input type="text" id="plate" name="plate" value="ABC 123">
-                    </div>
-                    <div class="form-group">
-                        <label for="insurance">Insurance Details:</label>
-                        <textarea id="insurance" name="insurance">Insurance details here...</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="registration">Registration Details:</label>
-                        <textarea id="registration" name="registration">Registration details here...</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="capacity">Capacity:</label>
-                        <input type="text" id="capacity" name="capacity" value="4 passengers">
-                    </div>
-                    <div class="form-group">
-                        <label for="fuel-type">Fuel Type:</label>
-                        <input type="text" id="fuel-type" name="fuel-type" value="Gasoline">
-                    </div>
-                    <div class="form-group">
-                        <label for="mileage">Mileage:</label>
-                        <input type="text" id="mileage" name="mileage" value="30 MPG">
-                    </div>
-                    <div class="form-group">
-                        <label for="year">Year:</label>
-                        <input type="text" id="year" name="year" value="2021">
-                    </div>
-                    <div class="form-group">
-                        <label for="license-state">License Plate State:</label>
-                        <input type="text" id="license-state" name="license-state" value="CA">
-                    </div>
-                    <div class="form-group">
-                        <label for="vehicle-class">Vehicle Class:</label>
-                        <input type="text" id="vehicle-class" name="vehicle-class" value="Sedan">
-                    </div>
-                    <div class="form-group">
-                        <label for="additional-features">Additional Features:</label>
-                        <textarea id="additional-features" name="additional-features">Wi-Fi, Air Conditioning</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="maintenance-history">Maintenance History:</label>
-                        <textarea id="maintenance-history" name="maintenance-history">Recent oil change, new tires</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="vehicle-photo">Vehicle Photo:</label>
-                        <input type="file" id="vehicle-photo" name="vehicle-photo">
-                    </div>
-                    <div class="image-preview">
-                        <img id="vehicle-image-preview" src="vehicle_image.jpg" alt="Vehicle Image Preview">
-                    </div>
-                    <div class="form-group">
-                        <button type="submit">Save Changes</button>
-                        <button type="button" onclick="closeEditWindow()">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
 
         <div class="more-content">
             <button class="next-page-btn">More<i class='bx bx-chevron-right'></i></button>
@@ -199,3 +126,4 @@
     </main>
 </body>
 </html>
+            

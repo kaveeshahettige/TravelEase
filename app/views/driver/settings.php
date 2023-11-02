@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/driver/settings.css">
-    <title>Business admin Settings</title>
+    <title><?php echo SITENAME ?></title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/driver/x-icon" href="<?php echo URLROOT; ?>/images/driver/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -31,10 +31,9 @@
             <li><a href="<?php echo URLROOT; ?>driver/vehicle"><i class='bx bxs-car bx-sm'></i> Vehicle Informaion </a></li>
             <li><a href="<?php echo URLROOT; ?>driver/earings"><i class='bx bx-money-withdraw bx-sm'></i>Earings and Payments</a></li>
             <li><a href="<?php echo URLROOT; ?>driver/notification"><i class='bx bxs-bell bx-sm'></i>Notification</a></li>
-            
             <li><a href="<?php echo URLROOT; ?>driver/reviews"><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
             <li><a href="<?php echo URLROOT; ?>driver/settings" class="active"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-            <li><a href="<?php echo URLROOT; ?>pages/indes" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
+            <li><a href="<?php echo URLROOT?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
         </ul>
         
         <!-- <div class="logout">
@@ -43,65 +42,72 @@
     </nav>
     <main>
         <div class="logo-container">
-            <img src="<?php echo URLROOT; ?>/images/driver/TravelEase.png" alt="TravelEase Logo">
+            <img src="<?php echo URLROOT?>/images/driver/TravelEase.png" alt="TravelEase Logo">
             <span class="logo-text">TravelEase</span>
         </div>
+        
         <div class="dashboard-content">
-            <div><h1>Settings</h1> </div>
-             
-            <div id="base">
-                <h3 style="padding-left:20px;">Basic Info</h3>
-                <div id="form">
-                    <form class="registration-form">
-                        <div>
-                            <div class="form-group">
-                                <label for="First Name">First Name</label>
-                                <input type="text" id="first-name" name="first-name" placeholder="Kaveesha"required>
-                            </div>
-                            <div class="form-group">
-                                <label for="Last Name">Last Name</label>
-                                <input type="text" id="last-name" name="last-name" placeholder="Hettige" required>
-                            </div>
-                            
-                            
-                            
-                        </div>
-                        <div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="text" id="email" name="email" placeholder="kaveesha.hettige@gmail.com" required>
-                            </div>
-                        
-                            <div class="form-group">
-                                <label for="phonenumber">Phone Number</label>
-                                <input type="text" id="number" name="number" placeholder="0764532789" required>
-                            </div>
-                            
-                        </div>
-                        <div>
-                            <div class="form-group">
-                                <label for="location">Location</label>
-                                <input type="text" id="location" name="location" placeholder="Galle">
-                            </div>
-                            
-                        </div>
-                        <div >
-                            <div class="baseButtons">
-                                <button id="cancelBut">Cancel</button>
-                                <button id="saveBut" type="submit">Save</button>
-                            </div>
-                        </div>
-                       
-                        
-                    
-                    
-                    
-                    </form>
-                </div>
-            </div>
-           
-            
+            <h1>Settings</h1>
         </div>
+
+        <div class="dashboard-subcontent">
+        <div class="content-container">
+            <div class="left-content">
+
+                <div class="rectangle">
+                   <!-- Rectangle 1: Basic Info -->
+                    <div class="basic-info-content">
+                        <div class="center-image">
+                            <img src="<?php echo URLROOT?>/images/driver/wikum.jpg" alt="Profile Picture">
+                        </div>
+                        <div class="hotel-details">
+                            <h3>Travel agency Name</h3>
+                            <h6>Contact Number</h6>
+                            <p>+1 123-456-7890</p>
+                            <h6>Email</h6>
+                            <p>example@example.com</p>
+                            <h6>Location</h6>
+                            <p>City, Country</p>
+                        </div>
+                        <a href="<?php echo URLROOT; ?>driver/vehicleedit">
+                        <button class ="edit-button">Edit</button>
+                        </a>
+                     </div>
+                </div>
+
+                
+            </div>
+
+            <div class="right-content">
+
+              
+            <div class="rectangle">
+                    <!-- Rectangle 2: Change Password -->
+                    <div class="basic-info-content">
+                        <h2>Change Password</h2>
+                        <!-- Add change password form here -->
+                            <a href="<?php echo URLROOT; ?>driver/vehiclepassword">
+                                <button  class ="edit-button">Edit</button>
+                            </a>
+                    </div>
+
+
+                </div>
+
+                <div class="rectangle">
+            <!-- Rectangle 3: Profile Deletion -->
+            <div class="basic-info-content">
+            <h2>Profile Deletion</h2>
+            <!-- Add profile deletion option here -->
+            <a href="<?php echo URLROOT; ?>driver/vehicleedit">
+            <button class ="delete-button">Delete</button></a>
+            </div>
+        </div>
+            </div>
+
+        </div>
+
+    </div>
     </main>
 </body>
 </html>

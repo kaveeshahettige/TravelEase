@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business admin Dashboard</title>
+    <title><?php echo SITENAME ?></title>
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/driver/dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -33,7 +33,7 @@
             
             <li><a href="<?php echo URLROOT; ?>driver/reviews"><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
             <li><a href="<?php echo URLROOT; ?>driver/settings"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-            <li><a href="<?php echo URLROOT; ?>pages/indes" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
+            <li><a href="<?php echo URLROOT?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
         </ul>
         <!-- <div class="logout">
             <a href="<?php echo URLROOT; ?>pages/indes" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
@@ -48,6 +48,29 @@
         <h1>Overview</h1>
     </div>
 
+    <div class="dashboard-subcontent">
+        <div class="content-container">
+            <div class="left-content">
 
+                <div class="rectangle">
+                   <!-- Rectangle 1: Basic Info -->
+                    <div class="basic-info-content">
+                        <div class="center-image">
+                            <img src="<?php echo URLROOT?>/images/driver/wikum.jpg" alt="Profile Picture">
+                        </div>
+                        <div class="hotel-details">
+                            <h3>Travel agency Name</h3>
+                            <h6>Contact Number</h6>
+                            <p>+1 123-456-7890</p>
+                            <h6>Email</h6>
+                            <p>example@example.com</p>
+                            <h6>Location</h6>
+                            <p>City, Country</p>
+                        </div>
+                     </div>
+                </div>
+                </div>
+                </div>
+                </div>
 </body>
 </html>

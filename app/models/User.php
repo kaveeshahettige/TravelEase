@@ -220,5 +220,41 @@ public function registerTransport($data){
         return false;
     }
 }
+public function registerHotel($data){
+    $this->db->query('INSERT INTO users (fname,email,password,number,type) VALUES (:fname,:email,:password,:number,:type)');
+
+    
+    //bind values
+    //bind values
+    $this->db->bind(':fname',$data['fname']);
+    $this->db->bind(':number',$data['number']);
+    $this->db->bind(':email',$data['email']);
+    $this->db->bind(':password',$data['password']);
+    
+    $this->db->bind(':type','3');
+    //execute
+    if($this->db->execute()){
+        $user_id = $this->db->lastInsertId();
+         var_dump($data);
+         $this->db->query('INSERT INTO hotel (user_id, hotel_type, description, `add`, no_rooms) VALUES (:id, :hoteltype, :description, :address, :norooms)');
+
+         $this->db->bind(':hoteltype', $data['hoteltype']);
+         $this->db->bind(':description', $data['description']);
+         $this->db->bind(':address', $data['address']); // Change the binding to :address
+         $this->db->bind(':norooms', $data['norooms']);
+         $this->db->bind(':id', $user_id);
+         
+
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }else{
+        return false;
+    }
+}
+
 
 }

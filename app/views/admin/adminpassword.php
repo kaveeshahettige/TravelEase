@@ -36,7 +36,7 @@
         
         
         <div class="logout">
-            <a href="#" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
+            <a href="<?php echo URLROOT?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
         </div>
     </nav>
     <main>
