@@ -1,0 +1,320 @@
+body, ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Left menu styles */
+.left-menu {
+    background-color: #FFDB8B;
+    color: #000;
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    overflow-y: auto;
+    font-family: "Poppins", sans;
+}
+
+/* User profile styles */
+.user-profile {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.user-profile img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.user-name {
+    font-weight: bold;
+}
+
+.search-bar {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.search-bar form {
+    display: inline-block;
+    background-color: #f1f1f1;
+    border-radius: 25px;
+    padding: 5px;
+    box-shadow: 0px 1px 3px rgba(127, 127, 127, 0.2);
+}
+
+.search-bar input[type="text"] {
+    width: 80%; /* Use 100% width for responsiveness */
+    width: 15vh;
+    padding: 5px;
+    border: none;
+    border-radius: 25px;
+    outline: none;
+    background-color: #f1f1f1;
+    font-family: "Poppins", sans;
+}
+
+.search-bar button[type="submit"] {
+    background-color: #F9B314;
+    color: #ffffff;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+
+/* Main content styles */
+main {
+    padding: 20px;
+}
+
+/* Remove margin from the ul element */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 20px;
+    font-family: "Poppins", sans;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+.nav-button {
+    text-decoration: none;
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.nav-button.active {
+    background-color: #F1F1F1;
+    font-weight: bold;
+    color: #F9B314;
+}
+
+.nav-button.active::before, .nav-button:active::before, .nav-button:hover::before {
+    content: "";
+    border-left: 4px solid #F9B314;
+    height: 100%;
+    position: absolute;
+    left: 0;
+}
+
+.nav-button i {
+    margin-right: 10px; /* Add spacing between icon and text */
+}
+
+
+/* Logo container styles */
+.logo-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+}
+
+/* Define styles for menu icons */
+
+
+.logout {
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    bottom: 20px;   
+    width: 100%;
+}
+
+/* Logo styles */
+.logo-container img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    margin-top: 0%;
+}
+
+.logo-text {
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #000;
+    font-family: "Caveat", cursive;
+}
+
+.dashboard-content {
+    display: flex;
+    padding-left: 275px;
+    margin-right: 50px;
+    padding-top: 25px;
+    font-family: "Poppins", sans;
+}
+
+.dashboard-sub-content {
+    padding-left: 250px;
+    margin-right: auto;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
+}
+
+/* Style for the container of top boxes */
+.top-boxes {
+    display: flex;
+    flex-wrap: wrap; /* Allow boxes to wrap to the next row on smaller screens */
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 5px;
+   
+}
+
+/* Style for each individual box */
+.box {
+    text-align: center;
+    border-radius: 5px;
+    border: 0.5px solid #e9e7e7;
+    flex: 1;
+    margin: 10px; /* Add spacing between boxes */
+    background-color: #ffffff;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
+    width: 120px; /* Set the width to your desired size */
+    height: 120px; /* Set the height to your desired size */
+    box-sizing: border-box; /* Include padding and border in box width */
+    overflow: hidden; /* Hide overflow content */
+    border-left: 10px solid #FFEFCC;
+}
+
+/* Style for box heading */
+.box h2 {
+    font-size: 20px;
+    margin: 5;
+    font-weight: bold;
+    color: #605D5D;
+    text-align: left;
+    padding-left: 10px;
+}
+
+/* Style for box content */
+.box p {
+    font-size: 32px;
+    margin: 5px 0;
+    font-weight: bold;
+    color: #000000;
+    text-align: left;
+    padding-left: 10px;
+}
+
+
+
+/* Style for small image boxes */
+.img-box {
+    text-align: center;
+    border: 1px solid #e9e9e9;
+    border-radius: 5px;
+    flex: 0.5;
+    margin: 10px;
+    background-color: #f9f9f9;
+    width: 120px;
+    height: 120px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Style for small image */
+.img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+
+
+
+
+/* Media Query for Responsive Design */
+@media screen and (max-width: 768px) {
+    .left-menu {
+        width: 100%;
+        height: auto;
+        position: static;
+        overflow-y: hidden;
+    }
+
+    main {
+        margin-left: 0;
+    }
+
+    .logo-container {
+        position: static;
+        text-align: center;
+    }
+    .search-bar button[type="submit"] {
+        padding: 10px 20px;
+    }
+    
+    .logout {
+        position: static;
+        text-align: center;
+        margin-top: 20px; /* Add spacing above the logout button */
+        width: 100%; 
+    }
+
+    .nav-button {
+        padding: 10px 15px; /* Adjust padding for smaller screens */
+    }
+
+    .dashboard-content{
+        position: static;
+        text-align: center;
+    }
+    .dashboard-content {
+        padding-left: 20px; /* Adjust padding for smaller screens */
+        text-align: center; /* Center-align the content */
+    }
+    
+    .dashboard-content h1 {
+        font-size: 24px; /* Reduce font size for smaller screens */
+    }
+
+    .dashboard-sub-content {
+        padding-left: 10px;
+        text-align: center;
+    }
+    .top-boxes {
+        flex-direction: column; /* Stack boxes vertically on smaller screens */
+        align-items: flex-start; /* Align boxes to the left */
+    }
+
+    .box {
+        max-width: 100%; /* Each box takes full width on smaller screens */
+        margin-right: 0; /* No margin between boxes */
+    }
+
+    .img-box {
+        max-width: 100%;
+        margin: 2; /* Adjust the margin between img-box elements */
+    }
+
+    .box h2 {
+        font-size: 16px; /* Set the desired font size for heading */
+        padding-left: 5px; /* Adjust the padding as needed */
+    }
+
+    .box p {
+        font-size: 24px; /* Set the desired font size for paragraph */
+        padding-left: 5px; /* Adjust the padding as needed */
+    }
+
+}
