@@ -35,10 +35,11 @@ class Hotels{
         }
     }
 
-    public function findrooms(){
-        $this->db->query('SELECT * from hotel_rooms');
+    public function findrooms($room_id){
+        $this->db->query('SELECT * from hotel_rooms WHERE room_id = :room_id ');
+        $this->db->bind(':room_id', $room_id);
         $roomData=$this->db->resultSet();
-
+//        print_r($roomData);
         //check row
         if($this->db->rowCount()>0){
 //            echo "hi";
@@ -52,13 +53,13 @@ class Hotels{
 
     public function hotelupdaterooms($roomData) {
 
-        $this->db->query ('UPDATE hotel_rooms SET roomType = :roomType, numOfBeds = :numOfBeds, price = :price, roomImages = :roomImages, roomDescription = :roomDescription WHERE room_id = :room_id');
+        $this->db->query ('UPDATE hotel_rooms SET roomType = :roomType, numOfBeds = :numOfBeds, price = :price, roomDescription = :roomDescription WHERE room_id = :room_id');
         //bind values
         $this->db->bind(':room_id', $roomData['room_id']);
         $this->db->bind(':roomType',$roomData['roomType']);
         $this->db->bind(':numOfBeds',$roomData['numOfBeds']);
         $this->db->bind(':price',$roomData['price']);
-        $this->db->bind(':roomImages',$roomData['roomImages']);
+        //$this->db->bind(':roomImages',$roomData['roomImages']);
         $this->db->bind(':roomDescription',$roomData['roomDescription']);
 
         //execute

@@ -14,7 +14,7 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img src="<?php echo URLROOT?>/images/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Wikum Preethika</span>
+            <span class="user-name"><?php echo ['user_fname'].' '.['user_lname']?></span>
         </div>
         
         <div class="search-bar">
@@ -36,7 +36,7 @@
         
         
         <div class="logout">
-            <a href="#" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
+            <a href="<?php echo URLROOT; ?>users/logout" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
         </div>
     </nav>
     <main>

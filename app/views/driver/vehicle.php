@@ -65,7 +65,7 @@
             <!-- Total Request Box -->
             <div class="box">
                 <h2>Total Vehicles</h2>
-                <p>2</p >
+                <p>1</p >
             </div>
                         
             <div class="box">
@@ -73,7 +73,7 @@
                     <div class="basic-info-content">
                         <h2>Add Vehicle</h2>
                         <!-- Add change password form here -->
-                            <a href="<?php echo URLROOT; ?>driver/vehiclereg">
+                            <a href="<?php echo URLROOT; ?>driver/vehiclereg/<?php echo $_SESSION['user_id']?>">
                                 <button  class ="edit-button">Add</button>
                             </a>
                     </div>
@@ -86,6 +86,7 @@
         <div class="interim_container">
             <div class="dashboard-subcontent">
                   <div class="content-container">
+                  <!-- <?php var_dump($data) ?>    ;  -->
     <?php if (!empty($data)): ?>
     <?php foreach ($data as $vehicle): ?>
         
@@ -106,9 +107,9 @@
                         </div>
                         <a href="<?php echo URLROOT; ?>driver/vehicleedit/<?php echo $vehicle['id']?>"><button class="edit-button2">Edit </button>
 </a>
-                    <a href="<?php echo URLROOT?>driver/vehicle/<?php echo $vehicle['id']?>"><button class ="edit-button2">Delete</button></a>
+                    <a href="<?php echo URLROOT?>driver/vehicledelete/<?php echo $vehicle['id']?>"><button class ="edit-button2">Delete</button></a>
                      </div>
-                     
+                    
                 </div>
                 </div>
                 

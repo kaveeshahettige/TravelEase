@@ -1,6 +1,6 @@
 body{
     background-color:#FBF9F3;
-    font-family: 'Inter', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 .main1 .registerForm{
     background-color: #FEFEFE;
@@ -79,8 +79,11 @@ line-height: normal;
     font-style: normal;
     font-weight: 700;
     padding: 10px 30px 10px 30px;
+    margin-left: -150px;
+    
 
 }
+
 .submit-button a{
     text-decoration: none; /* Remove underline */
     color: inherit;

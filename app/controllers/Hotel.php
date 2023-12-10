@@ -5,10 +5,10 @@ class Hotel extends Controller{
     private $postModel;
     public function __construct()
     {
-        $this->hotelsModel = $this->model('Hotels');
         if(!isLoggedIn()){
             redirect('users/login');
-          }
+        }
+        $this->hotelsModel = $this->model('Hotels');
     }
 
     public function index(){
@@ -35,15 +35,21 @@ class Hotel extends Controller{
     public function addrooms(){
         $roomData = $this->hotelsModel->getHotel();
         $data["roomData"] = $roomData;
+//        print_r($data);
         $this->view('hotel/addrooms', $data);
+
     }
     public function addroomsedit(){
+        $roomData = $this->hotelsModel->getHotel();
+        $data["roomData"] = $roomData;
         $this->view('hotel/addroomsedit');
     }
 
-    public function updateroom(){
-        $this->view('hotel/updateroom');
-    }
+//    public function updateroom(){
+//        $roomData = $this->hotelsModel->getHotel();
+//        $data["roomData"] = $roomData;
+//        $this->view('hotel/updateroom');
+//    }
     public function hoteledit(){
         $this->view('hotel/hoteledit');
     }
@@ -156,6 +162,7 @@ class Hotel extends Controller{
 
     public function hotelupdaterooms($room_id)
     {
+//        print_r($room_id);
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -164,7 +171,7 @@ class Hotel extends Controller{
                 'roomType' => trim($_POST['roomType']),
                 'numOfBeds' => trim($_POST['numOfBeds']),
                 'price' => trim($_POST['price']),
-                'roomImages' => trim($_POST['roomImages']),
+//                'roomImages' => trim($_POST['roomImages']),
                 'roomDescription' => trim($_POST['roomDescription']),
                 'room_id' => $room_id,
                 'roomType_err' => '',
@@ -173,6 +180,7 @@ class Hotel extends Controller{
                 'roomImages_err' => '',
                 'roomDescription_err' => '',
             ];
+
 
             // //validateroomType
             // if(empty($roomData['roomType'])){
@@ -198,9 +206,12 @@ class Hotel extends Controller{
             // if(empty($roomData['roomDescription'])){
             //     $roomData['roomDescription_err']='Please choose Room Description';
             // }
+//            echo "<pre>";
+//            print_r($roomData);
+//            exit();
 
             //make sure errors are empty
-            if(empty($roomData['roomType_err'])&& empty($roomData['numOfBeds_err']) && empty($roomData['price']) && empty($roomData['roomImages_err']) && empty($RoomData['roomDescription']) ) {
+            if(empty($roomData['roomType_err'])&& empty($roomData['numOfBeds_err']) && empty($roomData['price_err']) && empty($roomData['roomImages_err']) && empty($RoomData['roomDescription_err']) ) {
 
                 if($this->hotelsModel->hotelupdaterooms($roomData)){
                     flash('user_message', 'user Updated');
@@ -211,6 +222,8 @@ class Hotel extends Controller{
                 }
 
             }else{
+                var_dump("Case");
+                exit();
                 $this->view('hotel/addrooms', $roomData);
             }
         }
@@ -218,11 +231,11 @@ class Hotel extends Controller{
             $hotels=$this->hotelsModel->findrooms($room_id);
 
             $roomData = [
-                'room_id'=>'$room_id',
+                'room_id'=>$room_id,
                 'roomType' =>$hotels->roomType,
                 'numOfBeds' =>$hotels->numOfBeds,
                 'price' => $hotels->price,
-                'roomImages' => $hotels->roomImages,
+//                'roomImages' => $hotels->roomImages,
                 'roomDescription' => $hotels->roomDescription,
             ];
 
@@ -235,7 +248,7 @@ class Hotel extends Controller{
 //        echo $room_id;
 //        die;
         if($this->hotelsModel->deleterooms($room_id)){
-            flash('post_message', 'user Removed');
+            flash('post_message', 'Room Removed');
             redirect('hotel/addrooms');
         } else {
             die('Something went wrong');

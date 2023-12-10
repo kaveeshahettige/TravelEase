@@ -36,7 +36,7 @@
             <li><a href="<?php echo URLROOT; ?>driver/notification"><i class='bx bxs-bell bx-sm'></i>Notification</a></li>
             <li><a href="<?php echo URLROOT; ?>driver/reviews"><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
             <li><a href="<?php echo URLROOT; ?>driver/settings" ><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-            <li><a href="<?php echo URLROOT?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
+            <li><a href="<?php echo URLROOT; ?>pages/index" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
         </ul>   
         
     </nav>
@@ -93,11 +93,11 @@
                     </select>
                 </div>
 
-                <!-- <div class="form-group">
+                <div class="form-group">
                     <label for="vehicle-photo">Vehicle Photo:</label>
                     <input type="file" id="vehicle-photo" name="veh_photo" accept="image/*" required>
                     
-                </div> -->
+                </div>
 
                     <h2 style="padding-left:40px;">Insurance Details</h2>
                     <div class="form-group">
@@ -124,10 +124,10 @@
                         <input type="date" id="license-state" name="end_date" value="" required>
                         
                     </div>
-                    <!-- <div class="form-group">
+                    <div class="form-group">
                         <label for="vehicle-photo">Insurance Photo:</label>
                         <input type="file" id="Insurance-photo" name="ins_photo">
-                    </div> -->
+                    </div>
                     <p style="padding-left:30px;">Take a photo of the front and back of your car insurance card.</p>
                     <p style="padding-left:30px;">Crop the photos to include only the insurance card.</p>
                     <p style="padding-left:30px;">Save the photos as JPEG files.</p>
@@ -136,9 +136,9 @@
                     <!-- Registation details -->
 
                     <h2 style="padding-left:40px;">Registation Details</h2>
-                    <!-- <div class="form-group">
+                    <div class="form-group">
                     <label for="insurance-photo">Registation card Photo:</label>
-                    <input type="file" id="insurance-photo" name="reg_photo" accept="image/*" required> -->
+                    <input type="file" id="insurance-photo" name="reg_photo" accept="image/*" required>
 
                     </div>
                     <p style="padding-left:30px;">Take a photo of the front and back of your car Registation card.</p>

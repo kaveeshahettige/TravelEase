@@ -52,6 +52,7 @@
             <div id="base">
                 <h3 style="padding-left:20px;">Basic Info</h3>
                 <div id="form">
+                <!-- <?php echo $_SERVER['REQUEST_URI']; ?>" -->
                 <form class="registration-form" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST">
                     <div class="form-group">
                         <label for="make">Vehicle Brand:</label>

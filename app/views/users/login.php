@@ -6,6 +6,8 @@
     <title>TraveleEase Login</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/login/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="index.js"></script>
     <style>
 
@@ -13,12 +15,15 @@
 </head>
 <body>
     <section class="main1">
-    <!-- <?php flash('register_success');?> message apppear after reg -->
         <div class="registerForm">
             <div class="formLeft">
                 <div class="c1">
                     <div class="c1_1">
-                        <div class="c1_1_1"><img src="<?php echo URLROOT?>/images/TravelEase_logo.png" alt=""></div>
+                    
+                        <div class="c1_1_1">
+                            <div style="text-align: center;color: red;"><?php echo flash('register_success')?></div>
+                        
+                            <img src="<?php echo URLROOT?>/images/TravelEase_logo.png" alt=""></div>
                        <div class="c1_1_2">TravelEase</div>
                     </div>
                     <div class="c1_2">Adventure awaits just one login away <br>

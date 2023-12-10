@@ -21,19 +21,20 @@
         <form action="<?php echo URLROOT?>users/hotelreg" method="POST">
             <div class="column">
                 <label for="hotelName">Hotel Name:</label>
-                <input type="text" id="hotelName" name="hotelName" required>
+                <input type="text" id="hotelName" name="hotelName"  <?php echo (!empty($data['fname_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['fname']; ?>" >
+                <span class="invalid-feedback"><?php echo $data['fname_err']; ?></span>
 
                 <label for="address">Address:</label>
                 <input type="text" id="address" name="address" required>
 
                 <label for="email">Email:</label>
-                <input type="email" id="website" name="email" required>
+                <input type="email" id="website" name="email" <?php echo (!empty($data['email_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['email']; ?>">
+                <span class="invalid-feedback"><?php echo $data['email_err']; ?></span>
+                
 
                 <label for="description">Description:</label>
                 <textarea id="description" name="description" rows="4" required></textarea>
-
-		    <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                
 
             </div>
             
@@ -48,7 +49,8 @@
 
 
                 <label for="number">Contact number:</label>
-                <input type="number" id="number" name="number" required>
+                <input type="text" id="number" name="number" <?php echo (!empty($data['email_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['email']; ?>">
+                <span class="invalid-feedback"><?php echo $data['number_err']; ?></span>
 
                 <label for="allocatedRooms">Number of Allocated Rooms:</label>
                 <input type="number" id="allocatedRooms" name="allocatedRooms" required>
@@ -58,9 +60,15 @@
 		
 		 <label for="license">License and Certifications:</label>
                 <input type="file" id="license" name="license" accept=".pdf,.doc,.docx" required> -->
-
-		        <label for="password">Confirm Password:</label>
-                <input type="password" id="confirm-password" name="confirm_password" required> 
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" <?php echo (!empty($data['password_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['password']; ?>">
+                <span class="invalid-feedback"><?php echo $data['password_err']; ?></span>
+                
+                <label for="password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm_password" <?php echo (!empty($data['confirm_password_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['confirm_password']; ?>"> 
+                <span class="invalid-feedback"><?php echo $data['confirm_password_err']; ?></span>
+		    
+		        
 
                 <div class="submit"><br><input type="checkbox"><span>By registering, you agree to our <a href="">Terms & Conditions.</a></span>      
                 <button type="submit">Submit</button>

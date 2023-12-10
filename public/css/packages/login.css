@@ -1,0 +1,133 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #FBF9F3;
+    font-family: "Inter", sans-serif;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    width: 70%;
+    height: 80vh;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.left-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.right-side {
+    flex: 1;
+    display: flex;
+    align-items: right;
+    justify-content: right;
+    overflow: hidden;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0px;
+}
+
+.logo-img {
+    width: 150px;
+    height: 150px;
+    margin-right: 10px;
+}
+
+.logo {
+    font-family: "Caveat", cursive;
+    font-size: 28px;
+    margin: 0;
+}
+
+.text-section {
+    margin-top: 20px; 
+}
+
+.text-line {
+    margin-bottom: 10px; 
+}
+
+.form-section {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.checkboxSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.checkboxSection a {
+    margin-left: auto;
+}
+
+.picture-container {
+    max-width: 100%;
+    max-height: 85.5vh;
+    overflow: hidden;
+    margin-left: 0px;
+}
+
+.picture {
+    max-width: 100%;
+    max-height: 1000vh;
+}
+
+h1 {
+    text-align: center;
+}
+
+h3 {
+    text-align: center;
+    margin: 0;
+    color: #605D5D;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #706F6C;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+p {
+    text-align: center;
+    margin-top: 20px;
+    color: #605D5D;
+}

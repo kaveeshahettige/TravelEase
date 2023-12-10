@@ -1,6 +1,6 @@
 body{
     background-color:  #FDFFFF;
-    font-family: 'Inter', sans-serif;
+    font-family: "Poppins", sans-serif;
    
 }
 /* Style for the navbar */
@@ -216,7 +216,7 @@ input[type="text"] {
     
     display: grid;
     grid-template-rows: 65% 10%;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    /* box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3); */
 }
 .main2images .main2img2content{
     display: grid;
@@ -228,7 +228,7 @@ input[type="text"] {
 .main2images .main2img2content:hover{
     display: grid;
     grid-template-rows: 65% 10%;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    /* box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3); */
 
 }
 .main2images .main2img3content{
@@ -241,7 +241,7 @@ input[type="text"] {
 .main2images .main2img3content:hover{
     display: grid;
     grid-template-rows: 65% 10%;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    /* box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3); */
 
 }
 .main2images img{

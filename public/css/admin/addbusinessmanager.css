@@ -1,6 +1,10 @@
 body, ul {
     margin: 0;
     padding: 0;
+    font-family: "Poppins", sans-serif;
+}
+body{
+    background-color: #FBF9F3;
 }
 
 /* Left menu styles */
@@ -65,6 +69,115 @@ body, ul {
     border-radius: 25px;
     cursor: pointer;
     margin-left: 10px;
+}
+
+
+/* Main content styles */
+main {
+    padding: 20px;
+    
+}
+
+/* Remove margin from the ul element */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 20px;
+    font-family: "Poppins", sans-serif;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+/* Apply background and border for active and clicked buttons */
+a.active, a:active {
+    background-color: #F1F1F1;
+    font-weight: bold;
+}
+
+a.active::before, a:active::before, a:hover::before {
+    content: "";
+    border-left: 4px solid #F9B314;
+    height: 100%;
+    position: absolute;
+    left: 0;
+}
+
+/* Logo container styles */
+.logo-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+}
+
+/* Define styles for menu icons */
+a img.menu-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.logout {
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    bottom: 20px;   
+    width: 100%;
+}
+
+/* Logo styles */
+.logo-container img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    margin-top: 0%;
+}
+
+.logo-text {
+    margin-left: 2px;
+    font-weight: bold;
+    font-size: 20px;
+    color: #000;
+    font-family: "Caveat", cursive;
+}
+
+.dashboard-content {
+    display: flex;
+    flex-direction: column;
+    padding-left: 275px;
+    margin-right: 50px;
+    padding-top: 25px;
+    font-family: "Poppins", sans;
+    
+    
+    
+}
+
+/* Apply styles to the icon */
+a i {
+    margin-right: 10px; /* Add spacing between icon and text */
+}
+
+/* Adjust styles for active and clicked buttons */
+a.active, a:active {
+    background-color: #F1F1F1;
+    font-weight: bold;
+    color: #F9B314; /* Change text color for active buttons */
 }
 
 

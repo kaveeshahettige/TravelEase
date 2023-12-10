@@ -6,6 +6,8 @@
     <title>TraveleEase Registration</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/trRegister/stylet.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="indext.js"></script>
     <style>
 

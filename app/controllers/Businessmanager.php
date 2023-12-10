@@ -5,7 +5,10 @@ class Businessmanager extends Controller{
     private $postModel;
     public function __construct()
     {
-        
+        // $this->userModel = $this->model('Travel');
+        if(!isLoggedIn()){
+            redirect('users/login');
+          }
     }
 
     public function index(){

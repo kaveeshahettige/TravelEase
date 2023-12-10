@@ -1,6 +1,7 @@
 body, ul {
     margin: 0;
     padding: 0;
+    font-family: "Poppins", sans-serif;
 }
 
 /* Left menu styles */
@@ -160,6 +161,22 @@ li {
     font-family: "Poppins", sans;
 }
 
+.filter-content {
+    display: flex;
+    padding-left: 275px;
+    margin-right: 50px;
+    padding-top: 25px;
+    font-family: "Poppins", sans;
+}
+
+.table-content {
+    display: flex;
+    padding-left: 10px;
+    margin-right: 50px;
+    padding-top: 25px;
+    font-family: "Poppins", sans;
+}
+
 .dashboard-sub-content {
     padding-left: 250px;
     margin-right: auto;
@@ -237,42 +254,98 @@ li {
     height: 100%;
     object-fit: cover;
 }
-
-
-.calendar {
-    max-width: 600px;
-    margin: 50px auto;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-}
-
-.calendar-header {
+.filter-options {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 10px;
+
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-left:20px;
+}
+
+.filter-option label {
+    margin-right: 10px;
     font-weight: bold;
 }
 
-.calendar-week {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
-}
-
-span {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #ccc;
-}
-
-.other-month {
-    color: #999;
+.filter-option select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 2px solid #F9B314;
 }
 
 
+
+
+
+
+/* Style for the booking table */
+.table-content {
+    padding-left: 275px;
+    margin-right: 20px;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
+}
+
+.booking-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.booking-table th, .booking-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.booking-table th {
+    background-color: #f2f2f2;
+}
+
+/* Style for the "View" button */
+.view-button {
+    background-color: #F9B314;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.view-button:hover {
+    background-color: #FFDB8B;
+}
+
+td.approved {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+td.pending {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.download-button {
+    background-color: #1432f9;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.download-button:hover {
+    background-color: #91b8f7;
+}
 
 
 

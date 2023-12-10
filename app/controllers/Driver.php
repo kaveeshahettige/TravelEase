@@ -34,7 +34,7 @@ class Driver extends Controller{
         $this->view('driver/settings');
                 }
     public function vehicle(){
-
+        
         $data=$this->userModel->vehicleDetails();
         $this->view('driver/vehicle',$data);
         // redirect('driver/vehicle');
@@ -92,7 +92,7 @@ class Driver extends Controller{
           $this->view('driver/vehiclepassword');
                }
 
-    public function vehiclereg()
+               public function vehiclereg()
                {
                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                        // Initialize these variables
@@ -135,7 +135,7 @@ class Driver extends Controller{
                        // Now, save this data to the database using your model
                        $travelModel = $this->model('Travel');
                        if ($travelModel->vehiclereg($data)) {
-                           // Data successfully saved
+                           redirect ('driver/vehicle');
                        } else {
                            // Data save failed, handle the error
                        }
@@ -158,6 +158,10 @@ class Driver extends Controller{
                        }
                    }
                
-                   return null; // Handle file upload error
+                   return null; 
                }
+
+               public function vehicledelete($id){
+                $data=$this->userModel->vehicledelete($id);
+                            }
             }         

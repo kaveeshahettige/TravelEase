@@ -78,8 +78,9 @@
 
             $this->view('admin/businessmanageraddform',$data);
         }
-        
+        public function traveler(){
+            $this->view('admin/traveler'); 
 
-
+        }
 
     }

@@ -7,6 +7,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    font-family: "Poppins", sans-serif;
 }
 
 .container {
@@ -91,6 +92,10 @@ input[type="file"] {
     height: auto;
 }
 
+input[type="checkbox"]{
+    margin-right: 100px;
+}
+
 button {
     background-color: #F9B314;
     color: #fff;
@@ -99,14 +104,18 @@ button {
     border-radius: 5px;
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
-    margin-bottom: auto;
-    margin-top: 0px;
-    margin-left: 990px;
+    margin-top: 30px;
+    margin-left: 240px;
 }
 
 button:hover {
     background-color: #FFDB8B;
 }
 /* .submit{
-    margin-right: 100px;
+    margin-right: 0px;
 } */
+
+ .invalid-feedback{
+    color:red;
+    
+}

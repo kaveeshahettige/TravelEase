@@ -4,10 +4,6 @@ class Users extends Controller{
     public function __construct(){
       $this->userModel=$this->model('User');
     }
-    //  public function index(){
-    //    //$this->view('landpagehotel/index');
-    //    echo 'hoo';
-    // }
     
     public function register(){
         if($_SERVER['REQUEST_METHOD']=='POST'){
@@ -183,13 +179,13 @@ class Users extends Controller{
         }else if($user->type==0){
             redirect('Admin/index');
         }else if($user->type==2){
-
+            redirect('Businessmanager/index');
         }else if($user->type==3){
             redirect('hotel/index');
         }else if($user->type==4){
             redirect('driver/index');
         }else if($user->type==5){
-
+            redirect('packages/index');
         }
         
     }
@@ -658,40 +654,40 @@ public function hotelreg(){
             
 
         ];
-        //validate fname
-        // if(empty($data['fname'])){
-        //     $data['fname_err']='Please enter first name';      
-        // }
-        // //validate email
-        // if(empty($data['email'])){
-        //     $data['email_err']='Please enter email';      
-        // }else{
-        //     if($this->userModel->findUserByEmail($data['email'])){
-        //         $data['email_err']='Email is already taken'; 
-        //     }
-        // }
-        // //validate password
-        // if(empty($data['password'])){
-        //     $data['password_err']='Please enter password';      
-        // }elseif(strlen($data['password'])<6){
-        //     $data['password_err']='Password must be atleast 6 characters'; 
-        // }
+        // validate fname
+        if(empty($data['fname'])){
+            $data['fname_err']='Please enter first name';      
+        }
+        //validate email
+        if(empty($data['email'])){
+            $data['email_err']='Please enter email';      
+        }else{
+            if($this->userModel->findUserByEmail($data['email'])){
+                $data['email_err']='Email is already taken'; 
+            }
+        }
+        //validate password
+        if(empty($data['password'])){
+            $data['password_err']='Please enter password';      
+        }elseif(strlen($data['password'])<6){
+            $data['password_err']='Password must be atleast 6 characters'; 
+        }
 
-        //  //validate confirm password
-        //  if(empty($data['confirm_password'])){
-        //     $data['confirm_password_err']='Please confirm password';      
-        // }else{
-        //     if($data['password']!=$data['confirm_password']){
-        //         $data['confirm_password_err']='password not matching';
-        //     }
-        // }
+         //validate confirm password
+         if(empty($data['confirm_password'])){
+            $data['confirm_password_err']='Please confirm password';      
+        }else{
+            if($data['password']!=$data['confirm_password']){
+                $data['confirm_password_err']='password not matching';
+            }
+        }
 
-        // //validate email
-        // if(empty($data['number'])){
-        //     $data['number_err']='Please enter number';      
-        // }elseif(strlen($data['number'])<10){
-        //     $data['number_err']='Invalid phone number'; 
-        // }
+        //validate email
+        if(empty($data['number'])){
+            $data['number_err']='Please enter number';      
+        }elseif(strlen($data['number'])<10){
+            $data['number_err']='Invalid phone number'; 
+        }
 
         //make sure errors are empty
         if(empty($data['fname_err']) && empty($data['email_err']) && empty($data['password_err']) && empty($data['confirm_password_err']) && empty($data['number_err']) ){
@@ -735,6 +731,112 @@ public function hotelreg(){
         $this->view('users/hotelreg',$data);
     }
 }
+
+public function packagereg(){
+    if($_SERVER['REQUEST_METHOD']=='POST'){
+        //process form
+        
+        //sanitize data
+        $_POST=filter_input_array(INPUT_POST,FILTER_SANITIZE_STRING);
+        //init data
+        $data=[
+            'fname'=>trim($_POST['packageOwnerName']),
+            'packageType'=>trim($_POST['packageType']),
+            'address'=>trim($_POST['address']),
+            'email'=>trim($_POST['email']),
+            'description'=>trim($_POST['description']),  
+            'password'=>trim($_POST['password']),
+            'number'=>trim($_POST['number']),
+            'confirm_password'=>trim($_POST['confirm_password']),
+            'fname_err'=>'',
+            'address_err'=>'',
+            'email_err'=>'',
+            'description_err'=>'',
+            'password_err'=>'',
+            'number_err'=>'',
+            'packageType_err'=>'',
+            'confirm_password_err'=>'',
+            
+
+        ];
+        //validate fname
+        // if(empty($data['fname'])){
+        //     $data['fname_err']='Please enter first name';      
+        // }
+        // //validate email
+        // if(empty($data['email'])){
+        //     $data['email_err']='Please enter email';      
+        // }else{
+        //     if($this->userModel->findUserByEmail($data['email'])){
+        //         $data['email_err']='Email is already taken'; 
+        //     }
+        // }
+        // //validate password
+        // if(empty($data['password'])){
+        //     $data['password_err']='Please enter password';      
+        // }elseif(strlen($data['password'])<6){
+        //     $data['password_err']='Password must be atleast 6 characters'; 
+        // }
+
+        //  //validate confirm password
+        //  if(empty($data['confirm_password'])){
+        //     $data['confirm_password_err']='Please confirm password';      
+        // }else{
+        //     if($data['password']!=$data['confirm_password']){
+        //         $data['confirm_password_err']='password not matching';
+        //     }
+        // }
+
+        // //validate email
+        // if(empty($data['number'])){
+        //     $data['number_err']='Please enter number';      
+        // }elseif(strlen($data['number'])<10){
+        //     $data['number_err']='Invalid phone number'; 
+        // }
+
+        //make sure errors are empty
+        if(empty($data['fname_err']) && empty($data['email_err']) && empty($data['password_err']) && empty($data['confirm_password_err']) && empty($data['number_err']) ){
+            //validate
+
+            //hash password
+            $data['password']=password_hash($data['password'],PASSWORD_DEFAULT);
+
+            //regsiter user
+            if($this->userModel->registerPackageProvider($data)){
+                flash('register_success','You are registered and can login');
+                redirect('users/login');
+            }else{
+                die('Something went wrong');
+            }
+
+        }else{
+            $this->view('users/packagereg',$data);
+        }
+
+        
+
+    }else{
+        
+        //init data
+        $data=[
+            'fname'=>'',
+            'lname'=>'',
+            'email'=>'',
+            'password'=>'',
+            'confirm_password'=>'',
+            'number'=>'',
+            'fname_err'=>'',
+            'lname_err'=>'',
+            'email_err'=>'',
+            'password_err'=>'',
+            'confirm_password_err'=>'',
+            'number_err'=>'',
+
+        ];
+        $this->view('users/packagereg',$data);
+    }
+}
+
 
       }  
     

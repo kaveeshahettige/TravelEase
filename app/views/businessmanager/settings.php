@@ -14,7 +14,7 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img src="<?php echo URLROOT?>/images/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Hotel Name</span>
+            <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
         </div>
         
         <div class="search-bar">
@@ -33,7 +33,7 @@
         </ul> 
 
         <div class="logout">
-            <a href="#" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
+            <a href="<?php echo URLROOT; ?>users/logout" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
         </div>
     </nav>
     <main>
@@ -56,13 +56,13 @@
                             <img src="<?php echo URLROOT?>/images/wikum.jpg" alt="Profile Picture">
                         </div>
                         <div class="hotel-details">
-                            <h3>Business Manager Name</h3>
+                            <h3><?=$_SESSION['user_fname']?></h3>
                             <h6>Contact Number</h6>
-                            <p>070 1145478</p>
+                            <p><?=$_SESSION['user_number']?></p>
                             <h6>Email</h6>
-                            <p>example@example.com</p>
-                            <h6>Location</h6>
-                            <p>City, Country</p>
+                            <p><?=$_SESSION['user_email']?></p>
+                            <!-- <h6>Location</h6>
+                            <p>City, Country</p> -->
                         </div>
                         <a href="<?php echo URLROOT; ?>businessmanager/businessmanageredit">
                         <button class ="edit-button">Edit</button>

@@ -6,6 +6,8 @@
     <title>TravelEase</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
     <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
     <style>
 
@@ -50,7 +52,7 @@
     <section class="main2">
         <div class="topbar">
             <span id="upcoming">Upcoming Trips</span>
-            <button id="plantrip" onclick="plan()">Plan New Trip</button>
+            <button id="plantrip">Plan New Trip</button>
         </div>
         <div class="main2trip">
             <div class="main2img1content">
@@ -66,7 +68,7 @@
             </div>
             <!-- not displaying until more trios available from here-->
             <div class="main2img2content">
-                <div><img src="./assets/4.jpg" alt=""></div>
+                <div><img src="./assets/.jpg" alt=""></div>
                 <div class="c1"> 
                     <div>
                         <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
@@ -96,22 +98,22 @@
         </div>
         <div class="main3images">
             <div class="main3img1content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT?>images/car 7.jpg" alt=""></div>
                 <div class="c1"> 
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold">Explore Sigiriya</p>
+                        <p>Sigiriya</p>
                     </div>
                     <div> <button>Book Now</button></div>
                 </div>
                 
             </div>
             <div class="main3img2content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT?>images/car 5.jpg" alt=""></div>
                 <div class="c2">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold">Kandy</p>
+                        <p>Kandy</p>
                     </div>
                     <div><button>Book Now</button></div>
                 </div>

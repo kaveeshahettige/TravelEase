@@ -6,6 +6,8 @@
     <title>TraveleEase Landpage</title>
     <link rel="icon" type="image/x-icon" href="../landpage/assets/TravelEase_logo.png">
     <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/booking.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="./script.js"></script>
     <style>
 

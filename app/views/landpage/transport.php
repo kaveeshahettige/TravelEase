@@ -6,6 +6,8 @@
     <title>TraveleEase Landpage</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>images/TravelEase_logo.png">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/landpage/styletr.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="./scripttr.js"></script>
     <style>
 
@@ -50,10 +52,10 @@
         </div>
         <div class="main2images">
             <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT?>images/car 2.jpg" alt=""></div>
                 <div class="c1"> 
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold">Rent car in Yala</p>
                         <p>Hambantota</p>
                     </div>
                     <div> <button>Book Now</button></div>
@@ -61,21 +63,21 @@
                 
             </div>
             <div class="main2img2content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT?>images/car 6.jpg" alt=""></div>
                 <div class="c2">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wild Renters</p>
                         <p>Hambantota</p>
                     </div>
                     <div><button>Book Now</button></div>
                 </div>
             </div>
             <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT?>images/car 4.jpg" alt=""></div>
                 <div class="c3">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wijitha Renters</p>
+                        <p>Galle</p>
                     </div>
                     <div><button>Book Now</button></div>
                 </div>
@@ -83,21 +85,21 @@
         </div>
         <div class="main2images">
             <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT?>images/car 1.jpg" alt=""></div>
                 <div class="c1"> 
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold">Dambulla cars</p>
+                        <p>Matara</p>
                     </div>
                     <div> <button>Book Now</button></div>
                 </div>
                 
             </div>
             <div class="main2img2content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT?>images/car 7.jpg" alt=""></div>
                 <div class="c2">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold">Colombo tours</p>
                         <p>Hambantota</p>
                     </div>
                     <div><button>Book Now</button></div>

@@ -6,6 +6,8 @@
     <title>TravelEase</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
     <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/styleh.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="./scripth.js"></script>
     <style>
 
@@ -52,10 +54,10 @@
         </div>
         <div class="main2images" id="div1">
             <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT?>images/hotel 6.jpg" alt=""></div>
                 <div class="c1"> 
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold">Serene Shores Retreat</p>
                         <p>Hambantota</p>
                     </div>
                     <div> <button>Book Now</button></div>
@@ -63,21 +65,21 @@
                 
             </div>
             <div class="main2img2content" >
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT?>images/hotel 7.jpg" alt=""></div>
                 <div class="c2">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold">Island Breeze Inn</p>
+                        <p>Galle</p>
                     </div>
                     <div><button>Book Now</button></div>
                 </div>
             </div>
             <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT?>images/hotel 8.jpg" alt=""></div>
                 <div class="c3">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold">Ceylon Grand Oasis</p>
+                        <p>Kandy</p>
                     </div>
                     <div><button>Book Now</button></div>
                 </div>
@@ -85,32 +87,32 @@
         </div>
         <div class="main2images" id="div2">
             <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT?>images/hotel 9.jpg" alt=""></div>
                 <div class="c1"> 
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold">Sri Lankan Splendor Hotel</p>
+                        <p>Jaffna</p>
                     </div>
                     <div> <button>Book Now</button></div>
                 </div>
                 
             </div>
             <div class="main2img2content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT?>images/hotel 10.jpg" alt=""></div>
                 <div class="c2">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold">Golden Sands Beachfront</p>
+                        <p>Ampara</p>
                     </div>
                     <div><button>Book Now</button></div>
                 </div>
             </div>
             <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT?>images/hotel 11.jpg" alt=""></div>
                 <div class="c3">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold">Jungle Oasis Lodge</p>
+                        <p>Galle</p>
                     </div>
                     <div><button>Book Now</button></div>
                 </div>

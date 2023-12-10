@@ -1,6 +1,6 @@
 body{
     background-color:  #FDFFFF;
-    font-family: 'Inter', sans-serif;
+    font-family: "Poppins", sans-serif;
    
 }
 /* Style for the navbar */
@@ -153,7 +153,7 @@ body{
     margin-left: 25%;
     margin-top: 40px;
     background-color: #FFFFFF;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
     border-radius: 20px;
 }
 
@@ -171,6 +171,7 @@ body{
     font-size: 18px;
     border: none;
     cursor: pointer;
+    margin: 10px;
 }
 /*---------main2----------------------*/
 

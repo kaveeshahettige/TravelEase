@@ -1,6 +1,6 @@
 body{
     background-color:#FBF9F3;
-    font-family: 'Inter', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 .main1 .registerForm{
     background-color: #FEFEFE;
@@ -51,7 +51,7 @@ display: flex;
     align-items: center;
 font-weight: 700;
 line-height: normal;
-font-family: Comic Sans MS, Comic Sans, cursive;
+font-family: caveat;
 }
 .c1_2{
     color: #605D5D;

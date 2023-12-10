@@ -28,7 +28,7 @@ class Travel{
 
     public function vehiclereg($data){
         {
-            $this->db->query('INSERT INTO vehicles (brand, model, plate_number, fuel_type, year, ins_number, ins_name, start_date, end_date) VALUES (:brand, :model, :plate_number, :fuel_type, :year, :ins_number, :ins_name, :start_date, :end_date)');
+            $this->db->query('INSERT INTO vehicles (brand, model, plate_number, fuel_type, year, ins_number, ins_name, start_date, end_date) VALUES (:brand, :model, :plate_number, :fuel_type, :year, :ins_number, :ins_name, :start_date, :end_date) ');
     
             $this->db->bind(':brand', $data['brand']);
             $this->db->bind(':model', $data['model']);
@@ -40,6 +40,7 @@ class Travel{
             $this->db->bind(':ins_name', $data['ins_name']);
             $this->db->bind(':start_date', $data['start_date']);
             $this->db->bind(':end_date', $data['end_date']);
+           
             // $this->db->bind(':ins_photo', $data['ins_photo']);
             // $this->db->bind(':reg_photo', $data['reg_photo']);
     
@@ -67,10 +68,11 @@ class Travel{
 
     public function updatevehicle($data){
         // var_dump($data);
-        $this->db->query('UPDATE vehicles SET brand = :brand, model = :model,year = :year,fuel_type = :fuel_type WHERE id = :id');
+        $this->db->query('UPDATE vehicles SET brand = :brand, model = :model,year = :year,fuel_type = :fuel_type, plate_number= :plate_number WHERE id = :id');
         // Bind values
         $this->db->bind(':id', $data['vehicle_id']);
         $this->db->bind(':brand', $data['brand']);
+        $this->db->bind(':plate_number', $data['plate_number']);
         $this->db->bind(':year', $data['year']);
         $this->db->bind(':model', $data['model']);
         $this->db->bind(':fuel_type', $data['fuel_type']);
@@ -82,8 +84,32 @@ class Travel{
           return true;
         } else {
           return false;
-        }
+}
       }
+      
+      public function countVehicles(){
+        $this->db->query('SELECT COUNT(*) AS count FROM vehicles');
+        $row = $this->db->single();
+         if($this->db->rowcount()>0){
+            return $row->count;
+         }
+         else{
+            return false;
+        }
+        
+    }
+    public function vehicledelete($id){
+        $this->db->query('DELETE FROM vehicles WHERE id = :id');
+        // Bind values
+        $this->db->bind(':id', $id);
+  
+        // Execute
+        if($this->db->execute()){
+            redirect('driver/vehicle');
+        } else {
+          return false;
+        }
+}
       
 }
 

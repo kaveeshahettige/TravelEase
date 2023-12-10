@@ -13,7 +13,7 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img src="<?php echo URLROOT; ?>/images/hotel/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Hotel Name</span>
+            <span class="user-name"><?=$_SESSION['user_fname']?></span>
         </div>
         
         <div class="search-bar">
@@ -34,7 +34,7 @@
         </ul>
 
         <div class="logout">
-            <a href="#" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
+            <a href="<?php echo URLROOT?>users/logout" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
         </div>
         
         

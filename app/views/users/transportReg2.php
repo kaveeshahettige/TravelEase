@@ -6,6 +6,8 @@
     <title>TraveleEase Registration</title>
     <link rel="icon" type="image/x-icon" href="./assets/TravelEase_logo.png">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/trRegister/stylet.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="indext.js"></script>
     <style>
 
@@ -34,14 +36,14 @@
                                 <input type="text" id="first-name" placeholder="Agency Name" name="agencyname" <?php echo (!empty($data['agencyname_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['agencyname']; ?>" ><br>
                                 <span class="invalid-feedback"><?php echo $data['agencyname_err']; ?></span>
                                 <p>Business Address</p>
-                                <input type="text" id="No" placeholder="No 21" name="address" <?php echo (!empty($data['address_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['address']; ?>"><br>
+                                <input type="text" id="No" placeholder="123 Main Street,ityville, State" name="address" <?php echo (!empty($data['address_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['address']; ?>"><br>
                                 <span class="invalid-feedback"><?php echo $data['address_err']; ?></span>
                                 
                                 
                             </div>
                             <div class="right-column">
                                 
-                                <p>Register Number</p>
+                                <p>Agency Register Number</p>
                                 <input type="text" id="regnumber" placeholder="Register Number" name="renumber" <?php echo (!empty($data['renumber_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['renumber']; ?>"><br>
                                 <span class="invalid-feedback"><?php echo $data['renumber_err']; ?></span>
                                 
