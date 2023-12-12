@@ -186,6 +186,10 @@ class Users extends Controller{
             redirect('driver/index');
         }else if($user->type==5){
             redirect('packages/index');
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         }
         
     }
