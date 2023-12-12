@@ -311,6 +311,7 @@ public function addpackagesedit()
 
 //                die;
 
+<<<<<<< Updated upstream
             } else {
                 $this->view('packages/addpackagesedit', $packageData);
             }
