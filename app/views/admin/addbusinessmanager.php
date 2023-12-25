@@ -60,8 +60,8 @@
                     <h3><?php echo $manager->email?></h3>
                     <p>Contact Number : <?php echo $manager->number?></p>
                     <div class="icons">
-                        <a href="<?php echo URLROOT; ?>admin/businessmanageredit/<?php echo $manager->id; ?>"><i class='bx bx-edit'></i></a> 
-                        <a href="<?php echo URLROOT; ?>users/deleteManager/<?php echo $manager->id; ?>"><i class='bx bx-trash'></i></a> 
+                        <a href="<?php echo URLROOT; ?>admin/businessmanageredit/<?php echo $manager->id;?>"><i class='bx bx-edit'></i></a> 
+                        <a href="<?php echo URLROOT; ?>users/deleteManager/<?php echo $manager->id;?>"><i class='bx bx-trash'></i></a> 
                     </div>
                 </div>
                 <?php endforeach; ?>

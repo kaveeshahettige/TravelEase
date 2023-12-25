@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/addbusinessedit.css">
-    <title>Edit-Business Manager</title>
-    <link rel="icon" type="image/x-icon" href="../Images/TravelEase.png">
+    <title>Edit Business Manager</title>
+    <link rel="icon" type="image/x-icon" href= "<?php echo URLROOT; ?>/images/TravelEase_logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -29,7 +29,6 @@
         <li><a href="<?php echo URLROOT; ?>admin/index" ><i class='bx bxs-dashboard bx-sm'></i> Overview</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/request" ><i class='bx bxs-book bx-sm'></i> Request</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/traveler" ><i class='bx bx-child bx-sm'></i></i> Traveler</a></li>
-
             <li><a href="<?php echo URLROOT; ?>admin/hotel"><i class='bx bxs-hotel bx-sm'></i></i> Hotels</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/agency"><i class='bx bxs-car bx-sm'></i> Travel Agencies </a></li>
             <li><a href="<?php echo URLROOT; ?>admin/package"><i class='bx bx-package bx-sm'></i>Packages</a></li>
@@ -54,11 +53,11 @@
             <div id="base">
                 <h3 style="padding-left:20px;">Basic Info</h3>
                 <div id="form">
-                    <form class="registration-form" method="POST" action="<?php echo URLROOT?>/users/businessmanageredit/<?php echo $data['id']; ?>" >
+                    <form class="registration-form" method="POST" action="<?php echo URLROOT?>/admin/businessmanageredit/<?php echo $data['id']; ?>" >
                         <div>
                             <div class="form-group">
                                 <label for="First Name">Business Manager Name</label>
-                                <input type="text" id="business-manager-name" name="name" placeholder="business manager name"required>
+                                <input type="text" id="business-manager-name" name="fname"  value="<?php echo $data['fname'];?>" required>
                             </div>
                          
                         </div>
@@ -66,12 +65,12 @@
                         <div>
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="text" id="email" name="email" placeholder="email@gmail.com" required>
+                                <input type="email" id="email" name="email" value="<?php echo $data['email'];?>" required>
                             </div>
                         
                             <div class="form-group">
                                 <label for="phonenumber">Phone Number</label>
-                                <input type="text" id="phone-number" name="number" placeholder="phone number" required>
+                                <input type="text" id="phone-number" name="number" value="<?php echo $data['number'];?>" required>
                             </div>
                         </div>
 

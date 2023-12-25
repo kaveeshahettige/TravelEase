@@ -58,7 +58,7 @@
                         <div>
                             <div class="form-group">
                                 <label for="First Name">Admin Name</label>
-                                <input type="text" id="admin-name" name="admin-name" placeholder="Admin Name"required>
+                                <input type="text" id="admin-name" name="admin-name" placeholder="Admin Name" required>
                             </div>
 
                             <div class="form-group">
@@ -76,7 +76,7 @@
                         
                             <div class="form-group">
                                 <label for="location">Location</label>
-                                <input type="text" id="location" name="location" placeholder="Location,Location">
+                                <input type="text" id="location" name="location" placeholder="Location">
                             </div>
                         </div>
 

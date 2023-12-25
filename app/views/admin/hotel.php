@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/hotel.css">
-    <title>Business admin Packages</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
+    <title></title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT; ?>/images/admin/Images/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -57,7 +59,7 @@
             <!-- Total Request Box -->
             <div class="box">
                 <h2>Total Hotels</h2>
-                <p>1200</p>
+                <p><?php echo $data['no'] ?></p>
             </div>
         
 
@@ -79,41 +81,33 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Registration Number</th>
                         <th>Hotel Name</th>
-                        <th>Requested Number</th>
-                        <th>Provider Name</th>
+                        <!-- <th>Provider Name</th> -->
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                        
-                    <tr>
-                        <td>1</td>
-                        <td>Hotel 1</td>
-                        <td>00001</td>
-                        <td>Wikum Preethika</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Hotel 2</td>
-                        <td>00002</td>
-                        <td>Kaveesha Hettige</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Hotel 3</td>
-                        <td>00003</td>
-                        <td>Dilanga Niroshan</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>   
+                <?php
+$count=1;
+                foreach ($data['hotel'] as $user) {
+                    echo '<tr class="t-row">';
+    echo '<td>' . $count . '</td>';
+    echo '<td>' . $user->id . '</td>';
+    echo '<td>' . ucfirst($user->fname).'  '.ucfirst($user->lname) . '</td>';
+    // echo '<td>' . $user->id . '</td>';
+    echo '<td><button class="view-button">View</button>&nbsp;
+    <button class="view-button" >Delete</button></td>';
+    echo '</tr>';
+    $count++;
+}?>
                 </tbody>
             </table>
         </div>
 
         <div class="more-content">
-            <button class="next-page-btn">More Hotels <i class='bx bx-chevron-right'></i></button>
+        <button class="next-page-btn" id="moreBtn">More Hotels <i class='bx bx-chevron-right'></i></button>
+
         </div>
 
     </main>

@@ -27,8 +27,8 @@
             
         <ul>
             <li><a href="<?php echo URLROOT; ?>admin/index"class="active" ><i class='bx bxs-dashboard bx-sm'></i> Overview</a></li>
-            <li><a href="<?php echo URLROOT; ?>admin/request" ><i class='bx bxs-book bx-sm'></i> Request</a></li>
-            <li><a href="<?php echo URLROOT; ?>admin/traveler" ><i class='bx bx-child bx-sm'></i></i> Traveler</a></li>
+            <li><a href="<?php echo URLROOT; ?>admin/request" ><i class='bx bxs-book bx-sm'></i> Requests</a></li>
+            <li><a href="<?php echo URLROOT; ?>admin/traveler" ><i class='bx bx-child bx-sm'></i></i> Travelers</a></li>
 
             <li><a href="<?php echo URLROOT; ?>admin/hotel"><i class='bx bxs-hotel bx-sm'></i></i> Hotels</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/agency"><i class='bx bxs-car bx-sm'></i> Travel Agencies </a></li>
@@ -79,19 +79,19 @@
             <!-- Customers Box -->
             <div class="box">
                 <h2>Total Travelers</h2>
-                <p>10</p>
+                <p><?php echo $data['not']?></p>
             </div>
             <div class="box">
                 <h2>Total Hotels</h2>
-                <p>50</p>
+                <p><?php echo $data['noh']?></p>
             </div>
             <div class="box">
                 <h2>Total Transport providers</h2>
-                <p>10</p>
+                <p><?php echo $data['noa']?></p>
             </div>
             <div class="box">
                 <h2>Total Packages providers</h2>
-                <p>10</p>
+                <p><?php echo $data['nop']?></p>
             </div>
         </div>
         </div>

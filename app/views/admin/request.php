@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/request.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
     <title>Admin Requests</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT; ?>/images/admin/Images/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -54,8 +56,8 @@
  
             <!-- Total Request Box -->
             <div class="box">
-                <h2>Total Request</h2>
-                <p>120</p>
+                <h2>Total Requests</h2>
+                <p><?php echo $data['nore'] ?></p>
             </div>
         
 
@@ -84,34 +86,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                        
-                    <tr>
-                        <td>1</td>
-                        <td>Wikum Preethika</td>
-                        <td>2023-10-06</td>
-                        <td>Hotel</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Kaveesha Hettige</td>
-                        <td>2023-10-17</td>
-                        <td>Travel Agency</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Dilanga</td>
-                        <td>2023-10-17</td>
-                        <td>Package</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>   
+                <?php
+$count = 1;
+foreach ($data['requests'] as $user) {
+    echo '<tr class="t-row">';
+    echo '<td>' . $count . '</td>';
+    echo '<td>' . $user->id . '</td>';
+    echo '<td>' . $user->name .'</td>';
+    echo '<td>' . $user->type .'</td>';
+    echo '<td> <button class="view-button">View</button>&nbsp;
+    <button onclick="deleteTraveler()" class="view-button">Delete</button></td>';
+    echo '</tr>';
+    $count++;
+}
+?>     
+                   
                 </tbody>
             </table>
         </div>
 
         <div class="more-content">
-            <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
+            <button class="next-page-btn"  id="moreBtn">More Bookings <i class='bx bx-chevron-right'></i></button>
         </div>
 
     </main>
