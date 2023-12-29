@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/request.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
-    <title>Admin Requests</title>
-    <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT; ?>/images/admin/Images/TravelEase.png">
+    <title>TravelEase</title>
+    <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -94,8 +94,7 @@ foreach ($data['requests'] as $user) {
     echo '<td>' . $user->id . '</td>';
     echo '<td>' . $user->name .'</td>';
     echo '<td>' . $user->type .'</td>';
-    echo '<td> <button class="view-button">View</button>&nbsp;
-    <button onclick="deleteTraveler()" class="view-button">Delete</button></td>';
+    echo '<td> <button class="view-button">View Document</button></td>';
     echo '</tr>';
     $count++;
 }

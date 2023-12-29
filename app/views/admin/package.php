@@ -97,7 +97,8 @@ $count=1;
     echo '<td>' . $count . '</td>';
     echo '<td>' . $user->id . '</td>';
     echo '<td>' . ucfirst($user->fname).'  '.ucfirst($user->lname) . '</td>';
-    echo '<td><button class="view-button">View</button>&nbsp;<button class="view-button">Delete</button></td>';
+    echo '<td><button class="view-button">View</button>&nbsp;
+    <button onclick="deleteGuide(' . $user->id . ')" class="view-button">Delete</button></td>';
     echo '</tr>';
     $count++;
 }?>

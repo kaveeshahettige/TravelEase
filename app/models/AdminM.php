@@ -189,4 +189,106 @@ public function findRequestDetail(){
     }
 }
 
-}
+public function deleteTraveler($id){
+    $this->db->query('DELETE FROM users WHERE id = :id');
+    // Bind values
+    $this->db->bind(':id', $id);
+
+    // Execute
+    if($this->db->execute()){
+        redirect('admin/traveler');
+    } else {
+      return false;
+    }
+  }
+ 
+  public function deleteHotel($id){
+    $this->db->query('DELETE FROM users WHERE id = :id');
+    // Bind values
+    $this->db->bind(':id', $id);
+
+    // Execute
+    if($this->db->execute()){
+        redirect('admin/hotel');
+    } else {
+      return false;
+    }
+  }
+
+  public function deleteAgency($id){
+    $this->db->query('DELETE FROM users WHERE id = :id');
+    // Bind values
+    $this->db->bind(':id', $id);
+
+    // Execute
+    if($this->db->execute()){
+        redirect('admin/agency');
+    } else {
+      return false;
+    }
+  }
+  
+//   deleteGuide
+  public function deleteGuide($id){
+    $this->db->query('DELETE FROM users WHERE id = :id');
+    // Bind values
+    $this->db->bind(':id', $id);
+
+    // Execute
+    if($this->db->execute()){
+        redirect('admin/package');
+    } else {
+      return false;
+    }
+  }
+
+  //updateAdmin
+
+  public function updateAdmin($data){
+    $this->db->query('UPDATE users SET fname = :name,email = :email,number = :number WHERE id=:id');
+    // Bind values
+    $this->db->bind(':id', $data['id']); 
+    $this->db->bind(':name', $data['name']);  
+    $this->db->bind(':email', $data['email']);
+    $this->db->bind(':number', $data['number']);
+
+    // Execute
+    if($this->db->execute()){
+    //add a function to rlaod site
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  //getpassword
+    public function getpassword($id){
+        $this->db->query('SELECT password FROM users WHERE id = :id');
+        // Bind values
+        $this->db->bind(':id', $id);
+    
+        $row = $this->db->single();
+        if($this->db->rowCount()>0){
+            return $row;
+        }else{
+            return null;
+        }
+    }
+
+    //updatePassword
+    public function updatePassword($data){
+        $this->db->query('UPDATE users SET password = :password WHERE id=:id');
+        // Bind values
+        $this->db->bind(':id', $data['id']); 
+        $this->db->bind(':password', $data['hashed-password']);  
+        
+        // Execute
+        if($this->db->execute()){
+        //add a function to rlaod site
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+    }

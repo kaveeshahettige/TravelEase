@@ -53,11 +53,12 @@
             <div id="base">
                 <h3 style="padding-left:20px;">Password</h3>
                 <div id="form">
-                    <form class="registration-form">
+                    <form class="registration-form" method="POST" action="<?php echo URLROOT?>/admin/adminpassword">
                         <div>
                             <div class="form-group">
                                 <label for="current-password">Current Password</label>
-                                <input type="password" id="current-password" name="current-password" placeholder="Current Password" required>
+                                <input type="password" id="current-password" name="current-password" placeholder="Current Password" <?php echo (!empty($data['current-password_err'])) ? 'is-invalid' : ''; ?>required>
+                                <span class="invalid-feedback"><?php echo $data['current-password_err']; ?></span>
                             </div>
                             <div>
                                 
@@ -68,14 +69,17 @@
                         <div>
                             <div class="form-group">
                                 <label for="passowrd">New Password</label>
-                                <input type="password" id="new-password" name="new-password" placeholder="New Password" required>
+                                <input type="password" id="new-password" name="new-password" placeholder="New Password" <?php echo (!empty($data['new-password_err'])) ? 'is-invalid' : ''; ?> >
+                                <span class="invalid-feedback"><?php echo $data['new-password_err']; ?></span>
+                                
                             </div>                            
                         </div>
 
                         <div>
                             <div class="form-group">
                                 <label for="password">Confirm Password</label>
-                                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password">
+                                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password"  <?php echo (!empty($data['confirm-password_err'])) ? 'is-invalid' : ''; ?>>
+                                <span class="invalid-feedback"><?php echo $data['confirm-password_err']; ?></span>
                             </div>                            
                         </div>
 

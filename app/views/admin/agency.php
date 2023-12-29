@@ -81,7 +81,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Requested Number</th>
+                        <th>Registration Number</th>
                         <th>Hotel Name</th>
                         <!-- <th>Provider Name</th> -->
                         <th>Action</th>
@@ -96,7 +96,8 @@ $count=1;
     echo '<td>' . $count . '</td>';
     echo '<td>' . $user->id . '</td>';
     echo '<td>' . ucfirst($user->fname).'  '.ucfirst($user->lname) . '</td>';
-    echo '<td><button class="view-button">View</button>&nbsp;<button class="view-button">Delete</button></td>';
+    echo '<td><button class="view-button">View</button>&nbsp;
+    <button onclick="deleteAgency(' . $user->id . ')" class="view-button" >Delete</button></td>';
     echo '</tr>';
     $count++;
 }?>

@@ -54,30 +54,32 @@
             <div id="base">
                 <h3 style="padding-left:20px;">Basic Info</h3>
                 <div id="form">
-                    <form class="registration-form">
+                    <form class="registration-form" method="POST" action="<?php echo URLROOT?>/admin/adminedit">
                         <div>
+                        <div class="form-group">
+                                <label for="First Name">ID</label>
+                                <input type="text" id="admin-id" name="admin-id" placeholder="Admin id" value="<?php echo $data['id']?>" required readonly>
+                            </div>
                             <div class="form-group">
                                 <label for="First Name">Admin Name</label>
-                                <input type="text" id="admin-name" name="admin-name" placeholder="Admin Name" required>
+                                <input type="text" id="admin-name" name="name" placeholder="Admin Name" value="<?php echo $data['fname']?>" required>
                             </div>
 
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="text" id="email" name="email" placeholder="email@gmail.com" required>
-                            </div> 
+                            
 
                         </div>
 
                         <div>
+                        <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="text" id="email" name="email" placeholder="email@gmail.com" value="<?php echo $data['email']?>" required>
+                            </div> 
                             <div class="form-group">
                                 <label for="phonenumber">Phone Number</label>
-                                <input type="text" id="phone-number" name="phone-number" placeholder="0764532789" required>
+                                <input type="text" id="phone-number" name="phone-number" placeholder="0764532789" value="<?php echo $data['number']?>" required>
                             </div>
                         
-                            <div class="form-group">
-                                <label for="location">Location</label>
-                                <input type="text" id="location" name="location" placeholder="Location">
-                            </div>
+                            
                         </div>
 
                         <div >

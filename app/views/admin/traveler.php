@@ -96,7 +96,7 @@ foreach ($data['traveler'] as $user) {
     echo '<td>' . $user->id . '</td>';
     echo '<td>' . ucfirst($user->fname) . ' ' . ucfirst($user->lname) . '</td>';
     echo '<td> <button class="view-button">View</button>&nbsp;
-    <button onclick="deleteTraveler()" class="view-button">Delete</button></td>';
+    <button  onclick="deleteTraveler(' . $user->id . ')" class="view-button">Delete</button></td>';
     echo '</tr>';
     $count++;
 }

@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/settings.css">
-    <title>Business admin Settings</title>
+    <title>TravelEase</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -14,7 +15,7 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img src="<?php echo URLROOT; ?>/images/admin/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Admin</span>
+            <span class="user-name"><?php echo ucfirst($_SESSION['user_fname'])?></span>
         </div>
         
         <div class="search-bar">
@@ -99,7 +100,7 @@
                     <div class="basic-info-content">
                         <h2>Change Password</h2>
                             <a href="<?php echo URLROOT; ?>admin/adminpassword">
-                                <button  class ="edit-button">Edit</button>
+                                <button  class ="edit-button">Change</button>
                             </a>
                     </div>
                 </div>

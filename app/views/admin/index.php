@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/index.css">
-    <title>Business admin Dashboard</title>
+    <title>TravelEase</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT; ?>/images/admin/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -63,7 +63,7 @@
             <!-- Total Bookings Box -->
             <div class="box">
                 <h2>Total Requests</h2>
-                <p>35</p>
+                <p><?php echo $data['nore']?></p>
             </div>
             <div class="box">
                 <h2>Total Bookings</h2>

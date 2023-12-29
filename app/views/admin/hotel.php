@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/hotel.css">
+    <title>TravelEase</title>
+    <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
     <title></title>
@@ -97,7 +99,7 @@ $count=1;
     echo '<td>' . ucfirst($user->fname).'  '.ucfirst($user->lname) . '</td>';
     // echo '<td>' . $user->id . '</td>';
     echo '<td><button class="view-button">View</button>&nbsp;
-    <button class="view-button" >Delete</button></td>';
+    <button class="view-button" onclick="deleteHotel(' . $user->id . ')">Delete</button></td>';
     echo '</tr>';
     $count++;
 }?>

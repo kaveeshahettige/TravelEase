@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/addbusinessmanager.css">
-    <title>Add Business Manager</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
+    <title>TravelEase</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT; ?>/images/admin/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -61,7 +63,7 @@
                     <p>Contact Number : <?php echo $manager->number?></p>
                     <div class="icons">
                         <a href="<?php echo URLROOT; ?>admin/businessmanageredit/<?php echo $manager->id;?>"><i class='bx bx-edit'></i></a> 
-                        <a href="<?php echo URLROOT; ?>users/deleteManager/<?php echo $manager->id;?>"><i class='bx bx-trash'></i></a> 
+                        <a href="<?php echo URLROOT; ?>users/deleteManager/<?php echo $manager->id;?>" onclick="return confirmDelete();"><i class='bx bx-trash'></i></a> 
                     </div>
                 </div>
                 <?php endforeach; ?>
