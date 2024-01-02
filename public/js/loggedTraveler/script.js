@@ -23,3 +23,25 @@ function viewBooking() {
   const kbutton1 = document.getElementById("plantrip");
   kbutton1.addEventListener("click", plan);
   /////////////////////////
+
+  function booking() {
+    // Change the URL to the desired destination
+    window.open("http://localhost/TravelEase//LoggedTraveler/bookingpayment", "_blank");
+    //window.open = "bookingpayment";
+}
+
+function Tripdetails() {
+  
+
+  window.location.href = "tripfurtherdetail";
+}
+
+  /////////////////////
+
+  function initMap() {
+    // Map initialization code here
+    var map = new google.maps.Map(document.querySelector('.map'), {
+        center: { lat: -34.397, lng: 150.644 },
+        zoom: 8
+    });
+}

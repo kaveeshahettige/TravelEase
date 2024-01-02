@@ -16,7 +16,7 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img src="<?php echo URLROOT; ?>/images/admin/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Admin</span>
+            <span class="user-name"><?php echo ucfirst($data['fname']) ?></span>
         </div>
         
         <div class="search-bar">
@@ -54,8 +54,8 @@
         
         <div class="main-content">
             <div class="room-container">
-            <?php if (!empty($data)): ?>
-                <?php foreach ($data as $manager): ?>
+            <?php if (!empty($data['manager'])): ?>
+                <?php foreach ($data['manager'] as $manager): ?>
                 <div class="room-box">
                     <h3><?php echo $manager->id?></h3>
                     <h3><?php echo ucfirst($manager->fname);?></h3>

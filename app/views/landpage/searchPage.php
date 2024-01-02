@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/searchAll.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
-    <script src="./script.js"></script>
+    <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
     <style>
 
     </style>
@@ -39,9 +40,7 @@
                 <p>Galle is a beautiful coastal city in southern Sri Lanka. Declared a UNESCO World Heritage Site, Galle is an old trading port blessed with imposing Dutch-colonial buildings, ancient mosques and churches, and grand mansions.Today, the fort's surroundings are now a busy commercial district with many shops, restaurants, and hotels.</p>
             </div>
         </div>
-        <div class="map">
-            <img src="<?php echo URLROOT?>/images/mappic.png" alt="">
-        </div>
+        <div class="map"></div>
     </section>
     <section class="resultsPage1_1">
         <div class="Buttons">

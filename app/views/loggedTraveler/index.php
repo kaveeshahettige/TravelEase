@@ -74,7 +74,7 @@
                         <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
                         <p>Hambantota</p>
                     </div>
-                    <div> <button>Book Now</button></div>
+                    <div> <button> Book Now</button></div>
                 </div>
                 
             </div>
@@ -104,7 +104,7 @@
                         <p style="font-size: 30px;margin:0px;font-weight:bold">Explore Sigiriya</p>
                         <p>Sigiriya</p>
                     </div>
-                    <div> <button>Book Now</button></div>
+                    <div> <button id="bookingButton" onclick="Tripdetails()">Book Now</button></div>
                 </div>
                 
             </div>

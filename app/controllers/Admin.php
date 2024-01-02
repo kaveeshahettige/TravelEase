@@ -10,9 +10,13 @@
               redirect('users/login');
             }
             $this->userModel=$this->model('AdminM');
+            
           }
 
         public function index(){
+          $admindetail=$this->userModel->getadmindata();
+          $id= $_SESSION['user_id'];
+            $user=$this->userModel->findUserDetail($id);
           $not=$this->userModel->noOfTravelers();
           $noh=$this->userModel->noOfHotels();
           $noa=$this->userModel->noOfAgencies();
@@ -20,6 +24,7 @@
           $nore=$this->userModel->noOfRequests();
 
           $data = [
+            'fname'=>$admindetail->fname,
             'not'=>$not,
             'noh'=>$noh, 
             'noa'=>$noa,
@@ -30,15 +35,18 @@
         }
         
         public function request(){
+          $admindetail=$this->userModel->getadmindata();
           $requests=$this->userModel->findRequestDetail();
           $nore=$this->userModel->noOfRequests();
           $data = [
+            'fname'=>$admindetail->fname,
             'requests'=>$requests,
             'nore'=>$nore,
           ];
             $this->view('admin/request',$data);
         }
         public function hotel(){
+          $admindetail=$this->userModel->getadmindata();
             $no=$this->userModel->noOfHotels(); 
             $hotel=$this->userModel->findHotelDetail();
             $data = [
@@ -46,31 +54,33 @@
               'hotel'=>$hotel,
               
               // 'lname' => $traveler->lname,
-              // 'fname' => $traveler->fname,
+               'fname' => $admindetail->fname,
               // 'number' => $user->number,   
             ];
             $this->view('admin/hotel',$data);
         }
         public function agency(){
+          $admindetail=$this->userModel->getadmindata();
           $no=$this->userModel->noOfAgencies();
           $agency=$this->userModel->findAgencyDetail();
           $data = [
             'no'=>$no,
             'agency'=>$agency,
             // 'lname' => $traveler->lname,
-            // 'fname' => $traveler->fname,
+             'fname' => $admindetail->fname,
             // 'number' => $user->number,   
           ];
             $this->view('admin/agency',$data);
         }
         public function package(){
+          $admindetail=$this->userModel->getadmindata();
           $no=$this->userModel->noOfpackages();
           $package=$this->userModel->findPackageDetail();
           $data = [
             'no'=>$no,
             'package'=>$package,
             // 'lname' => $traveler->lname,
-            // 'fname' => $traveler->fname,
+            'fname' => $admindetail->fname,
             // 'number' => $user->number,   
           ];
             $this->view('admin/package',$data);
@@ -79,6 +89,7 @@
             $no=$this->userModel->noOfManagers();
             $admindetail=$this->userModel->getadmindata();
             $data=[
+                
                 'no'=>$no,
                 'id' => $admindetail->id,
                 'email'=>$admindetail->email,
@@ -90,8 +101,12 @@
             $this->view('admin/settings',$data);
         }
         public function addbusinessmanager(){
-
-            $data=$this->userModel->findmanagerDetail();
+          $admindetail=$this->userModel->getadmindata();
+            $manager=$this->userModel->findmanagerDetail();
+            $data=[
+              'manager'=>$manager,
+              'fname'=>$admindetail->fname,
+            ];
             $this->view('admin/addbusinessmanager',$data);
         }
         public function adminedit(){
@@ -164,11 +179,14 @@
           
         }
         public function adminpassword(){
+          $admindetail=$this->userModel->getadmindata();
           if($_SERVER['REQUEST_METHOD'] == 'POST'){
             // Sanitize POST array
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            
     
             $data = [
+             
               'current-password' => trim($_POST['current-password']),
               'new-password' => trim($_POST['new-password']),
               'confirm-password' => trim($_POST['confirm-password']),
@@ -233,6 +251,7 @@
     
           }
           $data=[
+            'fname'=>$admindetail->fname,
             'current-password' => '',
               'new-password' => '',
               'confirm-password' => '',
@@ -244,6 +263,7 @@
             $this->view('admin/adminpassword',$data);
         }
         public function businessmanageredit($id){
+          $admindetail=$this->userModel->getadmindata();
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 // Sanitize POST array
                 $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -299,6 +319,7 @@
               $user=$this->userModel->findUserDetail($id);
       
                 $data = [
+                  'afname'=>$admindetail->fname,
                   'id' => '$id',
                   'email'=>$user->email,
                   'lname' => $user->lname,
@@ -315,7 +336,7 @@
             // $this->view('admin/businessmanageredit',$data);
         }
         public function businessmanageraddform(){
-
+          $admindetail=$this->userModel->getadmindata();
             $data=[
                 'name'=>'',
                 'name_err'=>'',
@@ -334,13 +355,16 @@
             $this->view('admin/businessmanageraddform',$data);
         }
         public function traveler(){
+          $admindetail=$this->userModel->getadmindata();
             $no=$this->userModel->noOfTravelers();
             $traveler=$this->userModel->findTravelerDetail();
+
             $data = [
               'no'=>$no,
               'traveler'=>$traveler,
+
               // 'lname' => $traveler->lname,
-              // 'fname' => $traveler->fname,
+             'fname' => $admindetail->fname,
               // 'number' => $user->number,   
             ];
             $this->view('admin/traveler',$data); 
@@ -357,6 +381,9 @@
         }
         public function deleteGuide($id){
           $user=$this->userModel->deleteGuide($id);
+        }
+        public function adminDelete($id){
+          // $user=$this->userModel->deleteGuide($id);
         }
 
     }

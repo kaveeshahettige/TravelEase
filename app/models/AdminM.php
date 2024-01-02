@@ -291,4 +291,19 @@ public function deleteTraveler($id){
         }
       }
 
+    //   public function findUserDetail($id){
+    //     $this->db->query('SELECT * from users where id=:id');
+    //     $this->db->bind(':id',$id);
+
+    //     $row=$this->db->single();
+
+    //     //check row
+    //     if($this->db->rowCount()>0){
+    //         return $row;
+    //     }else{
+    //         return null;
+    //     }
+    // }
+
+
     }

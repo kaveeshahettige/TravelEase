@@ -385,4 +385,34 @@ public function registerPackageProvider($data){
     }
 }
 
+public function updatePicture($data){
+    
+    $this->db->query('UPDATE users SET profile_picture = :profilepicture WHERE id = :id');
+    // Bind values
+    $this->db->bind(':id', $data['id']);
+    $this->db->bind(':profilepicture', $data['picture']);
+    var_dump($data['picture']);
+    // Execute
+    if($this->db->execute()){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public function updateProPicture($data){
+    
+    $this->db->query('UPDATE users SET profile_picture = :profilepicture WHERE id = :id');
+    // Bind values
+    $this->db->bind(':id', $data['id']);
+    $this->db->bind(':profilepicture', $data['picture']);
+    // Execute
+    if($this->db->execute()){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
 }

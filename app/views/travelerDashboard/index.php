@@ -13,7 +13,7 @@
 <body>
     <nav class="left-menu">
         <div class="user-profile">
-            <img src="<?php echo URLROOT?>images/5.jpg" alt="User Profile Photo">
+            <img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> 
             <span class="user-name"><?php echo $data['fname']."   ".$data['lname']?></span>
         </div>
         
@@ -53,7 +53,7 @@
                 <div class="item4">
                     <div class="profile-card">
                         <div class="profilepicture">
-                            <img src="<?php echo URLROOT?>images/5.jpg" alt="profile Photo">
+                        <img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> 
                         </div>
                         <div class="profileinfo">
                             <h2><?php echo $_SESSION['user_fname']."  ".$_SESSION['user_lname']?></h2>

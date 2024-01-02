@@ -1,0 +1,114 @@
+body {
+    font-family: 'Poppins', sans-serif; /* Change font to Poppins */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.payment-container {
+    display: flex;
+    width: 80%;
+}
+
+.payment-box {
+    flex: 2;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 0 10px;
+    padding: 25px;
+    margin-bottom: 30px;
+    margin-top: 300px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.booking-box {
+    flex: 1;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 0 10px;
+    padding: 25px;
+    margin-bottom: 30px;
+    margin-top: 300px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.payment-box:hover,
+.booking-box:hover {
+    transform: scale(1.05);
+}
+
+.payment-gateway,
+.hotel-details {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+h2, h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.hotel-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.hotel-details img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px; /
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.payment-button,
+.cancel-button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.payment-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.cancel-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.total {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: right; 
+}

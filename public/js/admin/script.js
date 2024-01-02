@@ -75,3 +75,43 @@ function deleteGuide(id) {
     }
     // If the user cancels, do nothing
 }
+
+/////////////
+function adminDelete(id) {
+    // Use JavaScript to show a confirmation dialog
+    if (confirm('Are you sure you want to delete?')) {
+        // If the user confirms, navigate to the deletion controller
+        window.location.href = 'adminDelete';
+    }
+    // If the user cancels, do nothing
+}
+
+/////////////
+//------- not working----------
+$(document).ready(function () {
+    // Handle form submission
+    $('#searchForm').submit(function (e) {
+        e.preventDefault(); // Prevent the form from submitting normally
+
+        // Get the search input value
+        var searchTerm = $('#searchInput').val().toLowerCase();
+
+        // Iterate through each list item
+        $('ul li').each(function () {
+            // Get the text content of the list item
+            var listItemText = $(this).text().toLowerCase();
+
+            // Check if the search term is present in the list item text
+            if (listItemText.includes(searchTerm)) {
+                // Show the matching item
+                $(this).show();
+            } else {
+                // Hide non-matching items
+                $(this).hide();
+            }
+        });
+    });
+});
+
+//----------------------------
+

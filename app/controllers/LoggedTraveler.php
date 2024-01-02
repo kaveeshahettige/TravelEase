@@ -30,6 +30,14 @@ class LoggedTraveler extends Controller{
       $data=[];
       $this->view('loggedTraveler/bookingdetails',$data);
     }
+    public function bookingpayment(){
+      $data=[];
+      $this->view('loggedTraveler/bookingpayment',$data);
+    }
+    public function tripfurtherdetail(){
+      $data=[];
+      $this->view('loggedTraveler/tripfurtherdetail',$data);
+    }
 
     
 }
