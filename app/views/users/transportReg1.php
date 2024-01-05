@@ -20,6 +20,7 @@
                 <img src="<?php echo URLROOT?>/images/6.jpg" alt="image">
             </div>
             <div class="formRight">
+                
                 <div class="c1">
                     <div class="c1_1">
                         <div class="c1_1_1"><img src="<?php echo URLROOT?>/images/TravelEase_logo.png" alt=""></div>

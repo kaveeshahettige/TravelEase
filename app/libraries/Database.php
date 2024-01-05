@@ -68,6 +68,13 @@
         $this->execute();
         return $this->stmt->fetchAll(PDO::FETCH_OBJ);
       }
+
+      // Get result set as array of objects
+      public function bookingSet(){
+        
+  return $this->stmt->fetchAll(PDO::FETCH_OBJ);
+}
+
   
       // Get single record as object
       public function single(){

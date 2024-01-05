@@ -16,9 +16,7 @@ class Travel{
 
 
 
-        // $row=$this->db->single();
-
-        //check row
+       
         if($this->db->rowCount()>0){
             return $row;
         }else{
@@ -28,13 +26,17 @@ class Travel{
 
     public function vehiclereg($data){
         {
-            $this->db->query('INSERT INTO vehicles (brand, model, plate_number, fuel_type, year, ins_number, ins_name, start_date, end_date) VALUES (:brand, :model, :plate_number, :fuel_type, :year, :ins_number, :ins_name, :start_date, :end_date) ');
+            $this->db->query('INSERT INTO vehicles (brand, model, plate_number, fuel_type, year,seating_capacity,ac_type,ins_number, ins_name, start_date, end_date,user_id) VALUES (:brand, :model, :plate_number, :fuel_type, :year,:seating_capacity,:ac_type, :ins_number, :ins_name, :start_date, :end_date,:user_id) ');
     
             $this->db->bind(':brand', $data['brand']);
             $this->db->bind(':model', $data['model']);
             $this->db->bind(':plate_number', $data['plate_number']);
             $this->db->bind(':fuel_type', $data['fuel_type']);
             $this->db->bind(':year', $data['year']);
+            $this->db->bind(':seating_capacity', $data['seating_capacity']);
+            $this->db->bind(':ac_type', $data['ac_type']);
+            $this->db->bind(':user_id', $data['user_id']);
+
             // $this->db->bind(':veh_photo', $data['veh_photo']);
             $this->db->bind(':ins_number', $data['ins_number']);
             $this->db->bind(':ins_name', $data['ins_name']);
@@ -52,30 +54,29 @@ class Travel{
         }
     }
 
-    public function vehicleDetails(){
-        $this->db->query('SELECT * from vehicles');
-
-         $data=$this->db->resultSet();
-         $data = json_decode(json_encode($data), true);
-
-        //check row
+    public function vehicleDetails($user_id) {
+        $this->db->query('SELECT * FROM vehicles WHERE user_id=:user_id');
+        $this->db->bind(':user_id', $user_id);  
+        $data = $this->db->resultSet();
+        $data = json_decode(json_encode($data), true);
+    
+        // Check row
         if($this->db->rowCount()>0){
             return $data;
-        }else{
+        } else {
             return null;
         }
     }
+    
 
     public function updatevehicle($data){
         // var_dump($data);
-        $this->db->query('UPDATE vehicles SET brand = :brand, model = :model,year = :year,fuel_type = :fuel_type, plate_number= :plate_number WHERE id = :id');
+        $this->db->query('UPDATE vehicles SET seating_capacity = :seating_capacity, ac_type = :ac_type WHERE id = :id');
         // Bind values
         $this->db->bind(':id', $data['vehicle_id']);
-        $this->db->bind(':brand', $data['brand']);
-        $this->db->bind(':plate_number', $data['plate_number']);
-        $this->db->bind(':year', $data['year']);
-        $this->db->bind(':model', $data['model']);
-        $this->db->bind(':fuel_type', $data['fuel_type']);
+        
+        $this->db->bind(':seating_capacity', $data['seating_capacity']);
+        $this->db->bind(':ac_type', $data['ac_type']);
   
         // Execute
         if($this->db->execute()){
@@ -110,6 +111,58 @@ class Travel{
           return false;
         }
 }
+
       
+        public function getPendingBookings($user_id) {
+            $this->db->query('SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = "pending"');
+            $this->db->bind(':user_id', $user_id);
+            $results = $this->db->resultSet();
+            return $results;
+        }
+        
+
+        public function acceptedbookings($user_id){
+            $this->db->query('SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = "accepted"');
+            $this->db->bind(':user_id', $user_id);
+            $results = $this->db->resultSet();
+            return $results;
+        }
+
+        public function completedbookings($user_id){
+            $this->db->query('SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = "completed"');
+            $this->db->bind(':user_id', $user_id);
+            $results = $this->db->resultSet();
+            return $results;
+        }
+
+        
+        public function getReviews($user_id) {
+            $this->db->query('SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = "completed" AND comments != ""');
+            $this->db->bind(':user_id', $user_id);
+            $results = $this->db->resultSet();
+            return $results;
+        }
+         
+        public function getPayments($user_id) {
+            $this->db->query('SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = "completed"');
+            $this->db->bind(':user_id', $user_id);
+            $results = $this->db->resultSet();
+            return $results;
+        }
+        
+        public function getTotalPayments($user_id) {
+            $this->db->query('SELECT SUM(earnings) AS total_earnings FROM vehicle_bookings WHERE agency_id = :user_id AND status = "completed"');
+            $this->db->bind(':user_id', $user_id);
+            $result = $this->db->single();
+            return $result->total_earnings;
+        }
+        
+        
+        
+
+
+        
+        
+    
 }
 

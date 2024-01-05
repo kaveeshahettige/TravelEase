@@ -59,13 +59,13 @@
                             <img src="<?php echo URLROOT?>/images/driver/wikum.jpg" alt="Profile Picture">
                         </div>
                         <div class="hotel-details">
-                            <h3>Travel agency Name</h3>
+                            <h3><?php echo $_SESSION['user_fname']."  ".$_SESSION['user_lname']?></h3>
                             <h6>Contact Number</h6>
-                            <p>+1 123-456-7890</p>
+                            <p><?php echo $_SESSION['user_number']?></p>
                             <h6>Email</h6>
-                            <p>example@example.com</p>
+                            <p><?php echo $_SESSION['user_email']?></p>
                             <h6>Location</h6>
-                            <p>City, Country</p>
+                            <p>LOL</p>
                         </div>
                      </div>
                 </div>

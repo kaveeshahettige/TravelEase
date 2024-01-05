@@ -185,41 +185,38 @@ class User{
         }
     }
     // registerTransportuser
-    public function registerTransportuser($data){
+    public function registerTransportuserold($data){
         $this->db->query('INSERT INTO users (fname,email,password,number,type) VALUES (:fname,:email,:password,:number,:type)');
+    
+        
         //bind values
         $this->db->bind(':fname',$data['fname']);
-        $this->db->bind(':email',$data['email']);
         $this->db->bind(':number',$data['number']);
+        $this->db->bind(':email',$data['email']);
         $this->db->bind(':password',$data['password']);
         $this->db->bind(':type','4');
         //execute
         if($this->db->execute()){
-            $userid=$this->db->lastInsertId();
-            return $userid;
+            $user_id = $this->db->lastInsertId();
+             var_dump($data);
+             $this->db->query('INSERT INTO travelagency (user_id, agency_name, reg_number,address) VALUES (:id, :name, :renumber, :address)');
+    
+             $this->db->bind(':agency_name',$data['name']);
+             $this->db->bind(':reg_number',$data['renumber']);
+             $this->db->bind(':address',$data['address']);
+             $this->db->bind(':user_id',$data['user_id']);
+        
+             if ($this->db->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+    
         }else{
             return false;
         }
-    }
-///////////////// tranposrt add
-
-public function registerTransport($data){
-    $this->db->query('INSERT INTO travelagency (agency_name,reg_number,address,user_id) VALUES (:name,:number,:address,:id)');
-
     
-    //bind values
-    //bind values
-    $this->db->bind(':name',$data['agencyname']);
-    $this->db->bind(':number',$data['address']);
-    $this->db->bind(':address',$data['renumber']);
-    $this->db->bind(':id',$data['user_id']);
-    //execute
-    if($this->db->execute()){
-        return true;
-    }else{
-        return false;
     }
-}
 public function registerHotel($data){
     $this->db->query('INSERT INTO users (fname,email,password,number,type) VALUES (:fname,:email,:password,:number,:type)');
 
@@ -280,6 +277,39 @@ public function registerPackageProvider($data){
          $this->db->bind(':description', $data['description']);
          $this->db->bind(':address', $data['address']); // Change the binding to :address
          $this->db->bind(':id', $user_id);
+         
+
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }else{
+        return false;
+    }
+}
+
+public function registerTransportuser($data){
+    $this->db->query('INSERT INTO users (fname,email,password,number,type) VALUES (:fname,:email,:password,:number,:type)');
+    
+        
+    //bind values
+    $this->db->bind(':fname',$data['fname']);
+    $this->db->bind(':number',$data['number']);
+    $this->db->bind(':email',$data['email']);
+    $this->db->bind(':password',$data['password']);
+    $this->db->bind(':type','4');
+    //execute
+    if($this->db->execute()){
+        $user_id = $this->db->lastInsertId();
+        //  var_dump($data);
+         $this->db->query('INSERT INTO travelagency (user_id, agency_name, reg_number,address) VALUES (:id, :agency_name, :reg_number, :address)');
+    
+             $this->db->bind(':agency_name',$data['agency_name']);
+             $this->db->bind(':reg_number',$data['reg_number']);
+             $this->db->bind(':address',$data['address']);
+             $this->db->bind(':id', $user_id);
          
 
         if ($this->db->execute()) {

@@ -86,7 +86,6 @@
         <div class="interim_container">
             <div class="dashboard-subcontent">
                   <div class="content-container">
-                  <!-- <?php var_dump($data) ?>    ;  -->
     <?php if (!empty($data)): ?>
     <?php foreach ($data as $vehicle): ?>
         
@@ -104,6 +103,16 @@
                     <div class="detail"><strong>Plate Number:</strong> <?php echo $vehicle['plate_number']?></div>
                     <div class="detail"><strong>Year:</strong> <?php echo $vehicle['year']?></div>
                     <div class="detail"><strong>Fuel Type:</strong> <?php echo $vehicle['fuel_type']?></div>
+                    <div class="detail"><strong>Seating Capacity:</strong><?php echo $vehicle['seating_capacity']?></div>
+                    <div class="detail">
+                    <strong>Air Conditioning:</strong>
+                    <?php echo ($vehicle['ac_type'] == 1) ? 'AC' : 'Non-AC'; ?>
+                    </div>   
+                    <div class="detail"><strong>Insurance Policy Number:</strong><?php echo $vehicle['ins_number']; ?></div>
+                    <div class="detail"><strong>Insurance Company Name:</strong><?php echo $vehicle['ins_name']; ?></div>
+                    <div class="detail"><strong>Coverage Period Start Date:</strong><?php echo $vehicle['start_date']; ?></div>
+                    <div class="detail"><strong>Coverage Period End Date:</strong><?php echo $vehicle['end_date']; ?></div>
+
                         </div>
                         <a href="<?php echo URLROOT; ?>driver/vehicleedit/<?php echo $vehicle['id']?>"><button class="edit-button2">Edit </button>
 </a>

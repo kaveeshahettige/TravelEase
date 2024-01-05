@@ -14,7 +14,7 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img src="<?php echo URLROOT; ?>/images/driver/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Travel Agency 1</span>
+            <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
         </div>
         
         <div class="search-bar">
@@ -87,49 +87,100 @@
                 </button>
             </div>
             </div>
+            
+<div class="table-content">
+    <h2>Pending Booking Details</h2>
+    <table class="booking-table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Trip ID</th>
+                <th>Pickup Date</th>
+                <th>End Date</th>
+                <th>Pickup Location</th>
+                <th>Dropoff Location</th>
+                <th>Number of passengers</th>
+                <th>Accept</th>
+                <th>Decline</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if (!empty($data['pendingbookings'])) {
+                $count = 1;
+                foreach ($data['pendingbookings'] as $booking) :
+            ?>
+                    <tr>
+                        <td><?php echo $count; ?></td>
+                        <td><?php echo $booking->trip_id; ?></td>
+                        <td><?php echo $booking->start_date; ?></td>
+                        <td><?php echo $booking->end_date; ?></td>
+                        <td><?php echo $booking->pickup_location; ?></td>
+                        <td><?php echo $booking->dropoff_location; ?></td>
+                        <td><?php echo $booking->passenger_count; ?></td>
+                        <td><button class="view-button">Accept</button></td>
+                        <td><button class="view-button">Decline</button></td>
+                    </tr>
+            <?php
+                    $count++;
+                endforeach;
+            } else {
+                echo '<tr><td colspan="8"><center>No pending bookings available.</center></td></tr>';
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
+
            
+
             <div class="table-content">
-            <h2>Ongoin Booking Details</h2>
-                <table class="booking-table">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Guest Name</th>
-                            <th>Check-in Date</th>
-                            <th>Room Type</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                            
-                        <tr>
-                            <td>1</td>
-                            <td>Wikum Preethika</td>
-                            <td>2023-10-06</td>
-                            <td>Single Room</td>
-                            <td><button class="view-button">View</button></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Kaveesha Hettige</td>
-                            <td>2023-10-17</td>
-                            <td>Double Room</td>
-                            <td><button class="view-button">View</button></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Dilanga</td>
-                            <td>2023-10-17</td>
-                            <td>Double Room</td>
-                            <td><button class="view-button">View</button></td>
-                        </tr>   
-                    </tbody>
-                </table>
-            </div>
+    <h2>Accepted Booking Details</h2>
+    <table class="booking-table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Trip ID</th>
+                <th>Pickup Date</th>
+                <th>End Date</th>
+                <th>Pickup Location</th>
+                <th>Dropoff Location</th>
+                <th>Number of passengers</th>
+                <th>Trip Charge</th>
+                <th>Decline</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if (!empty($data['acceptedbookings'])) {
+                $count = 1;
+                foreach ($data['acceptedbookings'] as $booking) :
+            ?>
+                    <tr>
+                        <td><?php echo $count; ?></td>
+                        <td><?php echo $booking->trip_id; ?></td>
+                        <td><?php echo $booking->start_date; ?></td>
+                        <td><?php echo $booking->end_date; ?></td>
+                        <td><?php echo $booking->pickup_location; ?></td>
+                        <td><?php echo $booking->dropoff_location; ?></td>
+                        <td><?php echo $booking->passenger_count; ?></td>
+                        <td><?php echo $booking->earnings; ?></td>
+                        <td><button class="view-button">Decline</button></td>
+                    </tr>
+            <?php
+                    $count++;
+                endforeach;
+            } else {
+                echo '<tr><td colspan="8"><center>No accepted bookings available.</center></td></tr>';
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
+
+
     
-            <div class="more-content">
-                <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
-            </div>
+           
             <div class="dashboard-content">
             <h1>Trip History</h1>
         </div>
@@ -157,71 +208,54 @@
         </div>
        
         <div class="table-content">
-        <h2>Past Trip Details</h2>
-            <table class="booking-table">
-                <thead>
-                    <tr><th>No</th>
-                        <th>Trip ID</th>
-                        <th>Date & Time</th>
-                        <th>Pickup Location</th>
-                        <th>Dropoff Location</th>
-                        <th>Duration</th>
-                        <th>Earnings</th>
-                        <th>Passenger</th>
-                        <th>Rating</th>
-                        <th>Comments</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                        
+    <h2>Completed Booking Details</h2>
+    <table class="booking-table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Trip ID</th>
+                <th>Start Date</th>
+                <th>End Date</th>           
+                <th>Pickup Location</th>
+                <th>Dropoff Location</th>
+                <th>Earnings</th>
+                <th>Passenger</th>
+                <th>Rating</th>
+                <th>Comments</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if (!empty($data['completedbookings'])) {
+                $count = 1;
+                foreach ($data['completedbookings'] as $booking) :
+            ?>
                     <tr>
-                        <td>1</td>
-                        <td>12345</td>
-                        <td>2023-09-01 10:30 AM</td>
-                        <td>123 Main St</td>
-                        <td>456 Elm St</td>
-                        <td>30 min</td>
-                        <td>$25.00</td>
-                        <td>John Doe</td>
-                        <td>4.5</td>
-                        <td>Great ride!</td>
-                        <td><button class="view-button">View</button></td>
+                        <td><?php echo $count; ?></td>
+                        <td><?php echo $booking->trip_id; ?></td>
+                        <td><?php echo $booking->start_date; ?></td>
+                        <td><?php echo $booking->end_date; ?></td>
+                        <td><?php echo $booking->pickup_location; ?></td>
+                        <td><?php echo $booking->dropoff_location; ?></td>
+                        <td><?php echo $booking->earnings; ?></td>
+                        <td><?php echo $booking->passenger_count; ?></td>
+                        <td><?php echo $booking->rating; ?></td>
+                        <td><?php echo $booking->comments; ?></td>
+                        <td><button class="view-button">More Details</button></td>
                     </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>12345</td>
-                        <td>2023-09-01 10:30 AM</td>
-                        <td>123 Main St</td>
-                        <td>456 Elm St</td>
-                        <td>30 min</td>
-                        <td>$25.00</td>
-                        <td>John Doe</td>
-                        <td>4.5</td>
-                        <td>Great ride!</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>12345</td>
-                        <td>2023-09-01 10:30 AM</td>
-                        <td>123 Main St</td>
-                        <td>456 Elm St</td>
-                        <td>30 min</td>
-                        <td>$25.00</td>
-                        <td>John Doe</td>
-                        <td>4.5</td>
-                        <td>Great ride!</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>   
-                </tbody>
-            </table>
-        </div>
+            <?php
+                    $count++;
+                endforeach;
+            } else {
+                echo '<tr><td colspan="11"><center>No completed bookings available.</center></td></tr>';
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
 
-        <div class="more-content">
-            <button class="next-page-btn">More <i class='bx bx-chevron-right'></i></button>
-        </div>
-    
+        
         </main>
 
     </main>

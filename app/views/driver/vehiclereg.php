@@ -11,12 +11,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script> -->
 </head>
 <body>
     <nav class="left-menu">
     <div class="user-profile">
             <img src="<?php echo URLROOT; ?>/images/driver/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Travel Agency 1</span>
+            <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
         </div>
         
         <div class="search-bar">
@@ -42,7 +43,7 @@
     </nav>
     <main>
         <div class="logo-container">
-            <img src="../Images/TravelEase.png" alt="TravelEase Logo">
+            <img src="<?php echo URLROOT; ?>/images/driver/TravelEase.png" alt="TravelEase Logo">
             <span class="logo-text">TravelEase</span>
         </div>
         <div class="dashboard-content">
@@ -69,10 +70,10 @@
                     <div class="form-group">
                     <label for="fuel-type">Fuel Type:</label>
                     <select id="fuel-type" name="fuel_type" required>
-                    <option value="petrol">Petrol</option>
-                    <option value="diesel">Diesel</option>
-                    <option value="electric">Electric</option>
-                    <option value="hybrid">Hybrid</option>
+                    <option value="Petrol">Petrol</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="Electric">Electric</option>
+                    <option value="Hybrid">Hybrid</option>
                    
                 </select>
 </div>
@@ -91,16 +92,34 @@
                         }
                         ?>
                     </select>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="seating-capacity">Seating Capacity:</label>
+                    <input type="number" id="seating_capacity" name="seating_capacity" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="vehicle-photo">Vehicle Photo:</label>
-                    <input type="file" id="vehicle-photo" name="veh_photo" accept="image/*" required>
-                    
+                    <label for="ac">Air Conditioning (AC) or Non-AC:</label>
+                    <select id="ac_type" name="ac_type" required>
+                        <option value="1">AC</option>
+                        <option value="0">Non-AC</option>
+                    </select>
                 </div>
-
-                    <h2 style="padding-left:40px;">Insurance Details</h2>
+                    <h2 style="padding-left:40px;">Take a photo of your Vehicle</h2>
+                    <div class="upload-container">
                     <div class="form-group">
+                    <label id="file-label" for="file-input">Vehicle Photo</label>
+                <input type="file" id="file-input" />
+                    </div>
+                </div>
+            
+               
+                
+
+                    <h2 style="padding-left:40px;">Take a photo of your Vehicle Insurance</h2>
+
+                        <div class="form-group">
 
                         <label for="insurance">Insurance policy number:</label>
                         <input type="text" id="license-state" name="ins_number" value="" required>
@@ -124,26 +143,42 @@
                         <input type="date" id="license-state" name="end_date" value="" required>
                         
                     </div>
+
+                    <div class="upload-container">
                     <div class="form-group">
-                        <label for="vehicle-photo">Insurance Photo:</label>
-                        <input type="file" id="Insurance-photo" name="ins_photo">
+                    <label id="file-label" for="file-input">Insurance Photo</label>
+                <input type="file" id="file-input" />
                     </div>
-                    <p style="padding-left:30px;">Take a photo of the front and back of your car insurance card.</p>
-                    <p style="padding-left:30px;">Crop the photos to include only the insurance card.</p>
-                    <p style="padding-left:30px;">Save the photos as JPEG files.</p>
+                </div>
+                
+                
+                    <p style="padding-left:30px;">If the vehicle owner name on the vehicle documents is different from mine, then I hereby confirm that I have the vehicle owner's consent to drive this vehicle on the TravelEase Platform. This declaration can be treated as a No-Objection Certificate and releases TravelEase from any legal obligations and consequences.
+
 
                     
                     <!-- Registation details -->
 
-                    <h2 style="padding-left:40px;">Registation Details</h2>
+                    <h2 style="padding-left:40px;">Take a photo of your Vehicle Registration Document</h2>
+                    <div class="upload-container">
                     <div class="form-group">
-                    <label for="insurance-photo">Registation card Photo:</label>
-                    <input type="file" id="insurance-photo" name="reg_photo" accept="image/*" required>
+                    <label id="file-label" for="file-input">Registation card Photo</label>
+                <input type="file" id="file-input" />
+                    
+                </div></div>
 
-                    </div>
-                    <p style="padding-left:30px;">Take a photo of the front and back of your car Registation card.</p>
-                    <p style="padding-left:30px;">Crop the photos to include only the Registation card.</p>
-                    <p style="padding-left:30px;">Save the photos as JPEG files.</p>
+
+                    <p style="padding-left:30px;">If the vehicle owner name on the vehicle documents is different from mine, then I hereby confirm that I have the vehicle owner's consent to drive this vehicle on the TravelEase Platform. This declaration can be treated as a No-Objection Certificate and releases TravelEase from any legal obligations and consequences.</p>
+                    
+                    <h2 style="padding-left:40px;">Take a photo of your Revenue License</h2>
+                    <div class="upload-container">
+                    <div class="form-group">
+                    <label id="file-label" for="file-input">Revenue License Photo</label>
+                <input type="file" id="file-input" />
+                    
+                </div></div>
+                    <p style="padding-left:30px;">If the vehicle owner name on the vehicle documents is different from mine, then I hereby confirm that I have the vehicle owner's consent to drive this vehicle on the TravelEase Platform. This declaration can be treated as a No-Objection Certificate and releases TravelEase from any legal obligations and consequences.</p>
+                
+                    
                     <div >
                             <div class="baseButtons">
                                 <button id="cancelBut">Cancel</button>

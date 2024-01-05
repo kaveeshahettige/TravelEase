@@ -841,6 +841,121 @@ public function packagereg(){
     }
 }
 
+public function transportRegNew(){
+        if($_SERVER['REQUEST_METHOD']=='POST'){
+        //process form
+        
+        //sanitize data
+        $_POST=filter_input_array(INPUT_POST,FILTER_SANITIZE_STRING);
+        //init data
+        $data=[
+            'fname'=>trim($_POST['fname']),
+            'address'=>trim($_POST['address']),
+            'email'=>trim($_POST['email']),
+            'password'=>trim($_POST['password']),
+            'number'=>trim($_POST['number']),
+            'confirm_password'=>trim($_POST['confirm_password']),
+            'agency_name'=>trim($_POST['agency_name']),
+            'address'=>trim($_POST['address']),
+            'reg_number'=>trim($_POST['reg_number']),
+            'agencyname_err'=>'',
+            'renumber_err'=>'',
+            'user_id'=>'',
+            'fname_err'=>'',
+            'address_err'=>'',
+            'email_err'=>'',
+            'password_err'=>'',
+            'number_err'=>'',
+            'confirm_password_err'=>'',
+            
+
+        ];
+     
+
+        //make sure errors are empty
+        if(empty($data['fname_err']) && empty($data['email_err']) && empty($data['password_err']) && empty($data['confirm_password_err']) && empty($data['number_err']) && empty($data['renumber_err']) && empty($data['address_err']) && empty($data['agencyname_err']) ){
+            //validate
+
+            if(empty($data['agencyname'])){
+                $data['agencyname_err']='Please enter agency name';      
+            }
+            if(empty($data['address'])){
+                $data['address_err']='Please enter address';      
+            }
+            if(empty($data['renumber'])){
+                $data['renumber_err']='Please enter register number';      
+            }
+            if(empty($data['fname'])){
+                $data['fname_err']='Please enter transport provider name';      
+            }
+            if(empty($data['password'])){
+                $data['password_err']='Please enter password';
+            }elseif(strlen($data['password'])<6){
+                $data['password_err']='Password must be atleast 6 characters'; 
+            }
+            if(empty($data['confirm_password'])){
+                $data['confirm_password_err']='Please confirm password';
+            }else{
+                if($data['password']!=$data['confirm_password']){
+                    $data['confirm_password_err']='password not matching';
+                }
+            }
+            if(empty($data['email'])){
+                $data['email_err']='Please enter email';      
+            }else{
+                if($this->userModel->findUserByEmail($data['email'])){
+                    $data['email_err']='Email is already taken'; 
+                }
+            }
+        
+
+            //hash password
+            $data['password']=password_hash($data['password'],PASSWORD_DEFAULT);
+
+            //regsiter user
+            if($this->userModel->registerTransportuser($data)){
+                // flash('register_success','You are registered and can login');
+                redirect('driver/index');
+            }else
+            {
+                die('Something went wrong');
+            }
+
+        }else{
+            $this->view('users/transportRegNew',$data);
+        }
+    
+
+        
+
+    }else {
+        
+        //init data
+        $data=[
+            'user_id'=>'',
+            'fname'=>'',
+            'email'=>'',
+            'password'=>'',
+            'confirm_password'=>'',
+            'number'=>'',
+            'agency_name'=>'',
+            'address'=>'',
+            'reg_number'=>'',
+
+            'fname_err'=>'',
+            'email_err'=>'',
+            'password_err'=>'',
+            'confirm_password_err'=>'',
+            'number_err'=>'',
+            'name_err'=>'',
+            'address_err'=>'',
+            'renumber_err'=>'',
+
+        ];
+        $this->view('users/transportRegNew',$data);
+    }
+  }
+
 
       }  
     
