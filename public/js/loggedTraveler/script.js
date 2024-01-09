@@ -1,10 +1,11 @@
-function viewBooking() {
-    // Set the new URL you want to navigate to
-    const newPageURL = "bookingdetails"; // Replace with your desired URL//wada krnne na login ek illnw56;pt[l0;;]
-  
-    // Use window.location to navigate to the new page
-    window.location.href = newPageURL;
-  }
+function viewBooking($id) {
+  // Set the new URL you want to navigate to
+  const newPageURL = `bookingdetails/${$id}`; // Replace with your desired URL
+
+  // Use window.location to navigate to the new page
+  window.location.href = newPageURL;
+}
+
   
   // Attach the clickSearch function to the button's click event
   const kbutton = document.getElementById("viewbooking");

@@ -36,7 +36,7 @@ class AdminM{
       public function updatemanager($data){
         $this->db->query('UPDATE users SET fname = :name,email = :email,number = :number WHERE id=:id');
         // Bind values
-        $this->db->bind(':id', $data['id']); 
+        $this->db->bind(':id', $data['id'], PDO::PARAM_INT);
         $this->db->bind(':name', $data['fname']);  
         $this->db->bind(':email', $data['email']);
         $this->db->bind(':number', $data['number']);
@@ -73,7 +73,7 @@ class AdminM{
     }
 
     public function noOfHotels(){
-        $this->db->query('SELECT COUNT(*) AS count FROM users WHERE type = 3');
+        $this->db->query('SELECT COUNT(*) AS count FROM users WHERE type = 3 and approval=1');
         $row = $this->db->single();
          if($this->db->rowcount()>0){
             return $row->count;
@@ -83,7 +83,7 @@ class AdminM{
         }
     }
     public function noOfAgencies(){
-        $this->db->query('SELECT COUNT(*) AS count FROM users WHERE type = 4');
+        $this->db->query('SELECT COUNT(*) AS count FROM users WHERE type = 4 and approval=1');
         $row = $this->db->single();
          if($this->db->rowcount()>0){
             return $row->count;
@@ -93,7 +93,7 @@ class AdminM{
         }
     }
     public function noOfPackages(){
-        $this->db->query('SELECT COUNT(*) AS count FROM users WHERE type = 5');
+        $this->db->query('SELECT COUNT(*) AS count FROM users WHERE type = 5 and approval=1');
         $row = $this->db->single();
          if($this->db->rowcount()>0){
             return $row->count;
@@ -104,7 +104,8 @@ class AdminM{
     }
     //noOfRequests
     public function noOfRequests(){
-        $this->db->query('SELECT COUNT(*) AS count FROM requests WHERE approval = 0');
+      
+      $this->db->query("SELECT COUNT(*) AS count FROM users WHERE approval = 0 AND type NOT IN (0, 1, 2)");
         $row = $this->db->single();
          if($this->db->rowcount()>0){
             return $row->count;
@@ -138,7 +139,7 @@ class AdminM{
     }
     //findHotelDetail
     public function findHotelDetail(){
-        $this->db->query("SELECT * from users where type='3'");
+        $this->db->query("SELECT * from users where type='3' and approval='1'");
         $data=$this->db->resultSet();
 
         //check row
@@ -150,7 +151,7 @@ class AdminM{
     }
     //findAgencyDetail
     public function findAgencyDetail(){
-        $this->db->query("SELECT * from users where type='4'");
+        $this->db->query("SELECT * from users where type='4' and approval='1'");
         $data=$this->db->resultSet();
 
         //check row
@@ -163,7 +164,7 @@ class AdminM{
 
     //findPackageDetail
     public function findPackageDetail(){
-        $this->db->query("SELECT * from users where type='5'");
+        $this->db->query("SELECT * from users where type='5' and approval='1'");
         $data=$this->db->resultSet();
 
         //check row
@@ -178,7 +179,7 @@ class AdminM{
    
 //findRequestDetail
 public function findRequestDetail(){
-    $this->db->query("SELECT * from requests where approval='0'");
+    $this->db->query("SELECT * FROM users WHERE approval = '0' AND type NOT IN ('0', '1','2')");
     $data=$this->db->resultSet();
 
     //check row
@@ -305,5 +306,47 @@ public function deleteTraveler($id){
     //     }
     // }
 
+    public function viewDocument($id){
+        $this->db->query('SELECT document from requests where id=:id');
+        $this->db->bind(':id',$id);
+
+        $row=$this->db->single();
+
+        //check row
+        if($this->db->rowCount()>0){
+            return $row;
+        }else{
+            return null;
+        }
+
+    }
+    // acceptUser set 1
+    public function acceptUser($id){
+        $this->db->query('UPDATE users SET approval = 1 WHERE id=:id');
+        // Bind values
+        $this->db->bind(':id', $id); 
+        
+        // Execute
+        if($this->db->execute()){
+        //add a function to rlaod site
+          return true;
+        } else {
+          return false;
+        }
+      }
+//declineUser set 2
+      public function declineUser($id){
+        $this->db->query('UPDATE users SET approval = 2 WHERE id=:id');
+        // Bind values
+        $this->db->bind(':id', $id); 
+        
+        // Execute
+        if($this->db->execute()){
+        //add a function to rlaod site
+          return true;
+        } else {
+          return false;
+        }
+      }
 
     }

@@ -1,5 +1,6 @@
     <?php
-
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
     class Admin extends Controller{
     
 
@@ -38,10 +39,12 @@
           $admindetail=$this->userModel->getadmindata();
           $requests=$this->userModel->findRequestDetail();
           $nore=$this->userModel->noOfRequests();
+          
           $data = [
             'fname'=>$admindetail->fname,
             'requests'=>$requests,
             'nore'=>$nore,
+            // 'document'=>$document,
           ];
             $this->view('admin/request',$data);
         }
@@ -272,7 +275,7 @@
                   'fname' => trim($_POST['fname']),
                   'email' => trim($_POST['email']),
                   'number' => trim($_POST['number']),
-                  'id' => $_SESSION['user_id'],
+                  'id' => $id,
                   'fname_err'=>'',
                   'email_err'=>'',
                   'number_err'=>'',
@@ -320,7 +323,7 @@
       
                 $data = [
                   'afname'=>$admindetail->fname,
-                  'id' => '$id',
+                  'id' => $id,
                   'email'=>$user->email,
                   'lname' => $user->lname,
                   'fname' => $user->fname,
@@ -385,5 +388,97 @@
         public function adminDelete($id){
           // $user=$this->userModel->deleteGuide($id);
         }
+        public function viewDocument($id){
+          $document=$this->userModel->viewDocument($id);
+          $data=[
+            'document'=>$document,
+          ];
+         return $data;
+
+        }
+        function getDocumentName($userId) {
+          // Implement your database query to get the document name based on the user ID
+          $documentName=$this->userModel->viewDocument($id);
+          // For example, $documentName = ...;
+          return $documentName;
+      }
+
+      public function acceptUser($id){
+        $user=$this->userModel->findUserDetail($id);
+
+        if($document=$this->userModel->acceptUser($id)){
+          //send email accept
+          require  __DIR__."./../libraries/phpma/vendor/autoload.php";
+          
+          
+
+          $mail = new PHPMailer(true);
+          $mail->isSMTP();
+          $mail->SMTPAuth = true;
+          $mail->Host = 'smtp.gmail.com';
+          $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+          $mail->Port = 587;
+
+          $mail->Username = '';
+          $mail->Password = '';
+          $mail->setFrom('2021is046@stu.ucsc.cmb.ac.lk', 'TravelEase');//our
+          $mail->addAddress($user->email, 'kaveesha');//sender
+          $mail->Subject = 'TravelEase Confirmation';
+          $mail->isHTML(true);
+          $mail->Body='<p>We are pleased to inform you that your document has been approved by TravelEase. </p>
+          You are now authorized to provide your service. <br>
+    
+          
+          Thank you for choosing TravelEase! <br> If you have any further questions or require assistance, feel free to contact us
+           <br>
+           
+           ';
+          $mail->send();
+
+          echo '<script>alert("Confirmation email sent.");</script>';
+          redirect('admin/request');
+          
+        }
+        
+        $data=[];
+      }
+
+      public function declineUser($id){
+        $user=$this->userModel->findUserDetail($id);
+        if($document=$this->userModel->declineUser($id)){
+          //send email decline
+          require  __DIR__."./../libraries/phpma/vendor/autoload.php";
+          
+          
+
+          $mail = new PHPMailer(true);
+          $mail->isSMTP();
+          $mail->SMTPAuth = true;
+          $mail->Host = 'smtp.gmail.com';
+          $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+          $mail->Port = 587;
+
+          $mail->Username = '2021is046@stu.ucsc.cmb.ac.lk';
+          $mail->Password = '200036202687';
+          $mail->setFrom('2021is046@stu.ucsc.cmb.ac.lk', 'TravelEase');//our
+          $mail->addAddress($user->email, 'kaveesha');//sender
+          $mail->Subject = 'TravelEase Confirmation';
+          $mail->isHTML(true);
+          $mail->Body='<p>We are pleased to inform you that your document has been rejected by TravelEase. </p>
+          You are not authorized to provide your service. <br>
+          <p>please resubmit your document to get approved</p>
+    
+          
+          Thank you for choosing TravelEase! <br> If you have any further questions or require assistance, feel free to contact us
+           <br>
+           
+           ';
+          $mail->send();
+
+          echo '<script>alert("Confirmation email sent.");</script>';
+          redirect('admin/request');
+        }
+        $data=[];
+      }
 
     }

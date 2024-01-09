@@ -91,18 +91,24 @@
                 </thead>
                 <tbody>
                 <?php
-$count=1;
-                foreach ($data['hotel'] as $user) {
-                    echo '<tr class="t-row">';
-    echo '<td>' . $count . '</td>';
-    echo '<td>' . $user->id . '</td>';
-    echo '<td>' . ucfirst($user->fname).'  '.ucfirst($user->lname) . '</td>';
-    // echo '<td>' . $user->id . '</td>';
-    echo '<td><button class="view-button">View</button>&nbsp;
-    <button class="view-button" onclick="deleteHotel(' . $user->id . ')">Delete</button></td>';
-    echo '</tr>';
-    $count++;
-}?>
+$count = 1;
+
+if (!empty($data['hotel']) && is_array($data['hotel'])) {
+    foreach ($data['hotel'] as $user) {
+        echo '<tr class="t-row">';
+        echo '<td>' . $count . '</td>';
+        echo '<td>' . $user->id . '</td>';
+        echo '<td>' . ucfirst($user->fname) . '  ' . ucfirst($user->lname) . '</td>';
+        echo '<td><button class="view-button">View</button>&nbsp;
+            <button class="view-button" onclick="deleteHotel(' . $user->id . ')">Delete</button></td>';
+        echo '</tr>';
+        $count++;
+    }
+} else {
+    echo '<tr><td colspan="4">No data available</td></tr>';
+}
+?>
+
                 </tbody>
             </table>
         </div>

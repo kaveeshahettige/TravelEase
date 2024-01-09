@@ -114,7 +114,7 @@
                         <h2>Change Password</h2>
                         
                             
-                                <button class ="edit-button">Edit</button>
+                                <button class ="edit-button" onclick="changePassword()">Edit</button>
                            
                     </div>
                 </div>

@@ -26,7 +26,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
             <div class="rightcontent">
-            <li><a href="<?php echo URLROOT?>travelerDashboard/index"><img src="<?php echo URLROOT?>/images/5.jpg" alt="Profile Picture"></a></li>
+            <li><a href="<?php echo URLROOT?>travelerDashboard/index"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
             <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
             </div>
         </ul>
@@ -51,45 +51,29 @@
     </section>
     <section class="main2">
         <div class="topbar">
+        <?php if (!empty($data['serviceProviderName']) && !empty($data['location'])): ?>
             <span id="upcoming">Upcoming Trips</span>
+            <?php endif; ?>
             <button id="plantrip">Plan New Trip</button>
         </div>
         <div class="main2trip">
-            <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c1"> 
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div> <button id="viewbooking" onclick="viewBooking()">View</button></div>
+    <?php if (!empty($data['serviceProviderName']) && !empty($data['location'])): ?>
+        <div class="main2img1content">
+            <div><img src="<?php echo URLROOT ?>images/<?php echo $data['picture'] ?>" alt=""></div>
+            <div class="c1"> 
+                <div>
+                    <p style="font-size: 30px; margin: 0; font-weight: bold;"><?php echo $data['serviceProviderName'] ?></p>
+                    <p><?php echo $data['location'] ?></p>
                 </div>
-                
+                <div> <button id="viewbooking" onclick="viewBooking(<?php echo $data['serviceProviderID']; ?>)">View</button></div>
             </div>
-            <!-- not displaying until more trios available from here-->
-            <div class="main2img2content">
-                <div><img src="./assets/.jpg" alt=""></div>
-                <div class="c1"> 
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div> <button> Book Now</button></div>
-                </div>
-                
-            </div>
-            <div class="main2img3content">
-                <div><img src="./assets/4.jpg" alt=""></div>
-                <div class="c1"> 
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div> <button>Book Now</button></div>
-                </div>
-                
-            </div>
-            <!--to here-->
+        </div>
+    <!--  <?//php else: ?> 
+        <p>No upcoming trips</p> -->
+    <?php endif; ?>
+</div>
+
+           
         </div>
     </section>
     <section class="main3">
@@ -101,8 +85,8 @@
                 <div><img src="<?php echo URLROOT?>images/car 7.jpg" alt=""></div>
                 <div class="c1"> 
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Explore Sigiriya</p>
-                        <p>Sigiriya</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider1Name']?></p>
+                        <p><?php echo $data['randomServiceProvider1Location']?></p>
                     </div>
                     <div> <button id="bookingButton" onclick="Tripdetails()">Book Now</button></div>
                 </div>
@@ -112,8 +96,8 @@
                 <div><img src="<?php echo URLROOT?>images/car 5.jpg" alt=""></div>
                 <div class="c2">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Kandy</p>
-                        <p>Kandy</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider2Name']?></p>
+                        <p><?php echo $data['randomServiceProvider2Location']?></p>
                     </div>
                     <div><button>Book Now</button></div>
                 </div>
@@ -122,8 +106,8 @@
                 <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
                 <div class="c3">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider3Name']?></p>
+                        <p><?php echo $data['randomServiceProvider3Location']?></p>
                     </div>
                     <div><button>Book Now</button></div>
                 </div>

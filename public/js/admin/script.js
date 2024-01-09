@@ -115,3 +115,60 @@ $(document).ready(function () {
 
 //----------------------------
 
+// function viewDocument($id){
+    
+//     window.location.href = 'viewDocument/'.$id;
+// }
+
+/////////////////////
+
+// function viewDocument(id) {
+
+    
+//     window.location.href = 'viewDocument/'+id;
+
+//     // Open the document in a new window or tab
+//     window.open(documents, '_blank');
+// }
+
+/////////////////////
+
+
+function openDocument(documentName) {
+    // Add any necessary security checks here before constructing the URL
+
+    // Construct the URL and open the document
+    if(documentName == null || documentName == ""){
+        alert("No document found");
+    }else{
+    const documentUrl = '../documents/' + encodeURIComponent(documentName);
+    window.open(documentUrl, '_blank');
+    }
+}
+
+
+function acceptUser(id) {
+    // Display a confirmation dialog
+    var confirmAccept = window.confirm('Are you sure you want to accept this user?');
+
+    // Check if the user clicked "OK" in the confirmation dialog
+    if (confirmAccept) {
+        // If confirmed, navigate to the URL
+        window.location.href = 'acceptUser/' + id;
+    }
+    // If canceled, do nothing or handle it as needed
+}
+
+
+function declineUser(id) {
+    var confirmDecline = window.confirm('Are you sure you want to decline this user?');
+    if (confirmDecline) {
+        window.location.href = 'declineUser/'+id;
+    }
+    
+}
+
+
+
+
+

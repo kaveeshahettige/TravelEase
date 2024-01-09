@@ -104,3 +104,8 @@ function displayImage(e) {
     reader.readAsDataURL(e.files[0]);
   }   
 }
+
+function changePassword() {
+  // Replace 'https://example.com' with the URL of the page you want to navigate to
+  window.location.href = '../changePassword';
+}

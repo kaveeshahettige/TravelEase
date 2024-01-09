@@ -149,6 +149,98 @@ echo '</script>';
 
     }
 
+    public function changePassword(){
+      $id= $_SESSION['user_id'];
+      $user=$this->userModel->findUserDetail($id);
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+          // Sanitize POST array
+          $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+          
+    
+          $data = [
+           
+            'current-password' => trim($_POST['current-password']),
+            'new-password' => trim($_POST['new-password']),
+            'confirm-password' => trim($_POST['confirm-password']),
+            'id' => $_SESSION['user_id'],
+            'current-password_err'=>'',
+            'new-password_err'=>'',
+            'confirm-password_err'=>'',
+            'fname'=>$user->fname,
+            'lname'=>$user->lname,
+            'profile_picture'=>$user->profile_picture,
+            
+          ];
+          
+          //get current password
+          //$currentpassword=$this->userModel->getpassword($data['id']);
+          // $userData = $this->userModel->getpassword($data['id']);
+          $currentPasswordHash = $user->password;;
+          // var_dump($currentpassword);
+    
+          // Validate data
+        //  validate current_password
+         if(empty($data['current-password'])){
+            $data['current-password_err']='Please enter current password';      
+        }else if(!password_verify($data['current-password'], $currentPasswordHash)){
+          //current== entered
+            $data['current-password_err']='Current password is incorrect';
+        }
+        
+        //validate new password
+        if(empty($data['new-password'])){
+            $data['new-password_err']='Please enter new password';      
+         }else{
+            if(strlen($data['new-password'])<6){
+                $data['new-password_err']='password must have atleast 6 characters'; 
+            }
+          }
+        
+        //validate confirmpassword
+        if(empty($data['confirm-password'])){
+            $data['confirm-password_err']='Please enter password';      
+        }else
+        if($data['new-password'] != $data['confirm-password']){
+            $data['confirm-password_err']='password does not match'; 
+        }
+    
+          // Make sure no errors
+          if(empty($data['confirm-password_err']) && empty($data['new-password_err']) && empty($data['current-password_err'])){
+            // Validated
+            $hashedNewPassword = password_hash($data['new-password'], PASSWORD_DEFAULT);
+            $data1 = [
+              'hashed-password' => $hashedNewPassword,
+              'id' => $_SESSION['user_id'],
+              
+            ];
+            if($this->userModel->updatePassword($data1)){
+              flash('user_message', 'user Updated');
+              redirect('travelerDashboard/settings/'.$_SESSION['user_id']);
+            } else {
+              die('Something went wrong');
+            }
+          } else {
+            // Load view with errors
+            $this->view('travelerDashboard/changePassword', $data);
+          }
+    
+        }
+        $data=[
+           'fname'=>$user->fname,
+           'lname'=>$user->lname,
+          'current-password' => '',
+            'new-password' => '',
+            'confirm-password' => '',
+            'id' => '',
+            'current-password_err'=>'',
+            'new-password_err'=>'',
+            'confirm-password_err'=>'',
+            'profile_picture'=>$user->profile_picture,
+        ];
+          $this->view('travelerDashboard/changePassword',$data);
+      }
+    
+
     
 }
 

@@ -29,6 +29,7 @@ class User{
             return false;
         }
     }
+
     public function managerregister($data){
         $this->db->query('INSERT INTO users (fname,email,password,number,type) VALUES (:name,:email,:password,:number,:type)');
         
@@ -60,6 +61,7 @@ class User{
             return false;
         }
     }
+
     //find by user email
     public function findUserByEmail($email){
         $this->db->query('SELECT * from users WHERE email=:email');
@@ -413,6 +415,115 @@ public function updatePicture($data){
       return false;
     }
   }
+
+  public function updatePassword($data){
+    $this->db->query('UPDATE users SET password = :password WHERE id=:id');
+    // Bind values
+    $this->db->bind(':id', $data['id']); 
+    $this->db->bind(':password', $data['hashed-password']);  
+    
+    // Execute
+    if($this->db->execute()){
+    //add a function to rlaod site
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+    public function findBookingAvailable($id){
+
+        $this->db->query('SELECT * from bookings where user_id=:id');
+        $this->db->bind(':id',$id);
+    
+        $data=$this->db->single();
+    
+        //check row
+        if($this->db->rowCount()>0){
+            return $data;
+        }else{
+            return null;
+        }
+    }
+
+    //   findBookingDetail
+    public function findBookingDetail($type,$id){
+        if($type=='3'){
+            $this->db->query('SELECT * from hotel where user_id=:id');
+            $this->db->bind(':id',$id);
+        
+            $data=$this->db->single();
+        
+            //check row
+            if($this->db->rowCount()>0){
+                return $data;
+            }else{
+                return null;
+            }
+        }
+        else if($type=='4'){
+            $this->db->query('SELECT * from travelagency where user_id=:id');
+            $this->db->bind(':id',$id);
+        
+            $data=$this->db->single();
+        
+            //check row
+            if($this->db->rowCount()>0){
+                return $data;
+            }else{
+                return null;
+            }
+        }
+        else if($type=='5'){
+            $this->db->query('SELECT * from packageprovider where user_id=:id');
+            $this->db->bind(':id',$id);
+        
+            $data=$this->db->single();
+        
+            //check row
+            if($this->db->rowCount()>0){
+                return $data;
+            }else{
+                return null;
+            }
+        }
+    }
+
+    // getRandomServiceProviders
+    public function getRandomServiceProviders(){
+
+        $this->db->query('SELECT * FROM users WHERE type NOT IN (0, 1, 2) /*AND approval = 1*/ ORDER BY RAND() LIMIT 3');
+    
+    
+        $data=$this->db->resultSet();
+    
+        //check row
+        if($this->db->rowCount()>0){
+            return $data;
+        }else{
+            return null;
+        }
+    }
+
+    //checkCancellationEligibility($booking->id)
+    public function checkCancellationEligibility($id){
+        $this->db->query('SELECT * FROM bookings WHERE booking_id = :id');
+        $this->db->bind(':id', $id);
+        $booking = $this->db->single();
+        $today = date("Y-m-d");
+        $checkInDate = $booking->startDate;
+        $diff = strtotime($checkInDate) - strtotime($today);
+        $days = abs(round($diff / 86400));
+        if ($days >= 7) {
+            return "Unavailable";
+        } else {
+            return "Available";
+        }
+    }
+
+
+
 
 
 }

@@ -56,9 +56,9 @@
                         <img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> 
                         </div>
                         <div class="profileinfo">
-                            <h2><?php echo $_SESSION['user_fname']."  ".$_SESSION['user_lname']?></h2>
-                            <p><?php echo $_SESSION['user_email']?></p>
-                            <p>Registration Number: <?php echo $_SESSION['user_id']?></p>
+                            <h1><?php echo $_SESSION['user_fname']."  ".$_SESSION['user_lname']?></h1>
+                            <h4 style="font-weight:bold"><?php echo $_SESSION['user_email']?></h4>
+                            <h4 style="font-weight:bold">Registration Number: <?php echo $_SESSION['user_id']?></h4>
                             
                         </div>
                     </div>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/request.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
     <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
     <title>TravelEase</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
@@ -79,26 +80,49 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Request Name</th>
-                        <th>Requested Date</th>
+                        <th>ID</th>
+                        <th>Name</th>
                         <th>Provider Type</th>
+                        <th>Document</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php
 $count = 1;
-foreach ($data['requests'] as $user) {
-    echo '<tr class="t-row">';
-    echo '<td>' . $count . '</td>';
-    echo '<td>' . $user->id . '</td>';
-    echo '<td>' . $user->name .'</td>';
-    echo '<td>' . $user->type .'</td>';
-    echo '<td> <button class="view-button">View Document</button></td>';
-    echo '</tr>';
-    $count++;
+
+if (!empty($data['requests']) && is_array($data['requests'])) {
+    foreach ($data['requests'] as $user) {
+        echo '<tr class="t-row">';
+        echo '<td>' . $count . '</td>';
+        echo '<td>' . $user->id . '</td>';
+        echo '<td>' . $user->fname . '</td>';
+        echo '<td>';
+        switch ($user->type) {
+            case 3:
+                echo 'Hotel';
+                break;
+            case 4:
+                echo 'Travel Agency';
+                break;
+            case 5:
+                echo 'Guide';
+                break;
+        }
+        echo '</td>';
+        // echo '<td>' . $user->document .'</td>';
+        // Assuming $user->documentName contains the document name
+        echo '<td><button class="view-button" onclick="openDocument(\'' . $user->document . '\')">View Document</button></td>';
+        // echo '<td> <button class="view-button" onclick="viewDocument(' . $user->id . ')">View Document</button></td>';
+        echo '<td> <button class="accept-button" onclick="acceptUser(' . $user->id . ')">Accept</button> <button class="decline-button" onclick="declineUser(' . $user->id . ')">Decline</button></td>';
+        echo '</tr>';
+        $count++;
+    }
+} else {
+    echo '<tr><td colspan="6">No requests available</td></tr>';
 }
-?>     
+?>
+    
                    
                 </tbody>
             </table>

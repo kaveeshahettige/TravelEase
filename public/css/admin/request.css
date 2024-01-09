@@ -686,3 +686,24 @@ li {
     }
 
 }
+
+.accept-button{
+    background-color: rgb(67, 202, 89);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 15px;
+    
+    font-weight: 600;
+}
+.decline-button{
+    background-color: rgb(197, 75, 85);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
