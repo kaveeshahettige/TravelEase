@@ -27,7 +27,7 @@
             <li><a href="<?php echo URLROOT; ?>hotel/index" class="nav-button "><i class='bx bxs-info-circle bx-tada-hover bx-sm bx-fw'></i> Dashboard</a></li>
             <li><a href="<?php echo URLROOT; ?>hotel/bookings" class="nav-button "><i class='bx bxs-book bx-sm bx-fw'></i> Bookings</a></li>
             <li><a href="<?php echo URLROOT; ?>hotel/calender" class="nav-button "><i class='bx bxs-calendar bx-sm bx-fw'></i> Availability</a></li>
-            <li><a href="<?php echo URLROOT; ?>hotel/gallery" class="nav-button active"><i class='bx bx-images bx-sm bx-fw'></i> Notifications</a></li>
+            <li><a href="<?php echo URLROOT; ?>hotel/gallery" class="nav-button active"><i class='bx bx-bell bx-sm bx-fw'></i> Notifications</a></li>
             <li><a href="<?php echo URLROOT; ?>hotel/revenue" class="nav-button "><i class='bx bxs-wallet bx-sm bx-fw'></i> Revenue</a></li>
             <li><a href="<?php echo URLROOT; ?>hotel/reviews" class="nav-button "><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
             <li><a href="<?php echo URLROOT; ?>hotel/settings" class="nav-button "><i class='bx bxs-cog bx-sm bx-fw'></i> Settings</a></li>
@@ -45,6 +45,59 @@
         
         <div class="dashboard-content">
             <h1>Notifications</h1>
+        </div>
+
+        <div class="dashboard-sub-content">
+            <div class="top-boxes">
+                <!-- Small Image Boxes -->
+                <div class="img-box">
+                    <img src="<?php echo URLROOT; ?>/images/hotel/dashboard.jpg" alt="hotel Image">
+                </div>
+
+
+                <!-- Total Bookings Box -->
+                <div class="box">
+                    <h2>Total Bookings</h2>
+                    <p>120</p>
+                </div>
+
+                <!-- Ongoing Bookings Box -->
+                <div class="box">
+                    <h2>Ongoing Bookings</h2>
+                    <p>35</p>
+                </div>
+
+                <!-- Customers Box -->
+                <div class="box">
+                    <h2>Total Customers</h2>
+                    <p>10</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="notifications-content">
+            <div class="notification-item">
+                <img src="<?php echo URLROOT; ?>public/images/hotel/wikum.jpg" alt="Sender Image" class="sender-image">
+                <div class="notification-text-container">
+                    <span class="sender-name">Wikum Preethika</span>
+                    <span class="notification-date">5 minutes ago</span>
+                    <p class="notification-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam hendrerit velit eu turpis vulputate, a cursus dui sagittis.</p>
+                    <button class="mark-as-read-btn">Mark as Read</button>
+                </div>
+                <div class="read-status-dot read"></div>
+            </div>
+
+            <div class="notification-item">
+                <img src="<?php echo URLROOT; ?>public/images/hotel/wikum.jpg" alt="Sender Image" class="sender-image">
+                <div class="notification-text-container">
+                    <span class="sender-name">Wikum Preethika</span>
+                    <span class="notification-date">5 minutes ago</span>
+                    <p class="notification-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam hendrerit velit eu turpis vulputate, a cursus dui sagittis.</p>
+                    <button class="mark-as-read-btn">Mark as Read</button>
+                </div>
+                <div class="read-status-dot unread"></div>
+            </div>
+
         </div>
 
     </main>

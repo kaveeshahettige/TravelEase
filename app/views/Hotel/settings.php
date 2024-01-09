@@ -15,14 +15,14 @@
             <img src="<?php echo URLROOT?>/images/hotel/wikum.jpg" alt="User Profile Photo">
             <span class="user-name"><?=$_SESSION['user_fname']?></span>
         </div>
-        
+
         <div class="search-bar">
             <form action="#" method="GET">
                 <input type="text" placeholder="Find a Setting">
                 <button type="submit">Search</button>
             </form>
         </div>
-        
+
         <ul>
             <li><a href="<?php echo URLROOT; ?>hotel/index" class="nav-button "><i class='bx bxs-info-circle bx-tada-hover bx-sm bx-fw'></i> Dashboard</a></li>
             <li><a href="<?php echo URLROOT; ?>hotel/bookings" class="nav-button "><i class='bx bxs-book bx-sm bx-fw'></i> Bookings</a></li>
@@ -32,7 +32,7 @@
             <li><a href="<?php echo URLROOT; ?>hotel/reviews" class="nav-button "><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
             <li><a href="<?php echo URLROOT; ?>hotel/settings" class="nav-button active"><i class='bx bxs-cog bx-sm bx-fw'></i> Settings</a></li>
         </ul>
-        
+
         <div class="logout">
             <a href="<?php echo URLROOT?>users/logout" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
         </div>
@@ -42,7 +42,7 @@
             <img src="<?php echo URLROOT?>/images/hotel/TravelEase.png" alt="TravelEase Logo">
             <span class="logo-text">TravelEase</span>
         </div>
-        
+
         <div class="dashboard-content">
             <h1>Settings</h1>
         </div>
@@ -58,14 +58,14 @@
                             <img src="<?php echo URLROOT?>/images/hotel/wikum.jpg" alt="Profile Picture">
                         </div>
                         <div class="hotel-details">
-                            <h3>Hotel Name</h3>
-                            <h5>Hotel Type</h5>
+                            <h3><?=$_SESSION['user_fname']?></h3>
+<!--                            <h5>--><?php //=$_SESSION['hotel_type']?><!--</h5>-->
                             <h6>Contact Number</h6>
-                            <p>+1 123-456-7890</p>
+                            <p><?=$_SESSION['user_number']?></p>
                             <h6>Email</h6>
-                            <p>example@example.com</p>
+                            <p><?=$_SESSION['user_email']?></p>
                             <h6>Location</h6>
-                            <p>City, Country</p>
+<!--                            <p>--><?php //=$_SESSION['add']?><!--</p>-->
                         </div>
                         <a href="<?php echo URLROOT; ?>hotel/hoteledit">
                         <button class ="edit-button">Edit</button>
@@ -83,7 +83,15 @@
                             </a>
                     </div>
                 </div>
-                
+
+                <div class="rectangle">
+                    <div class="basic-info-content">
+                        <h2>Service Validation</h2>
+                        <a href="<?php echo URLROOT; ?>hotel/servicevalidation">
+                            <button class ="edit-button">Submit</button></a>
+                    </div>
+                </div>
+
             </div>
 
             <div class="right-content">
@@ -92,33 +100,39 @@
                     <!-- Rectangle 1: Image Slideshow -->
                     <img class="slideshow-image" src="<?php echo URLROOT?>/images/hotel/hotel-01.jpg" alt="Image 1">
                 </div>
-                
+
 
                 <div class="rectangle">
+
                     <!-- Rectangle 2: Rooms Allocated -->
                     <div class="basic-info-content">
-                    <div class="hotel-details">
-                        <h2>Rooms Allocated</h2>
-                        <h6>No.of Rooms</h6>
-                        <p>5</p>
-                    </div>
-                        <a href="<?php echo URLROOT; ?>hotel/addrooms">  
-                        <button  class ="edit-button">Add</button>
+                        <div class="hotel-details">
+                            <h2>Rooms Allocated</h2>
+                            <h6>No.of Rooms</h6>
+                            <?php
+                            $roomCount = $data;
+                            //                print_r($data);
+                            ?>
+                            <p><?php echo $roomCount['roomCount']; ?></p>
+                        </div>
+                        <a href="<?php echo URLROOT; ?>hotel/addrooms">
+                            <button  class ="edit-button">Add</button>
                         </a>
                     </div>
                 </div>
-                
+
+                <div class="rectangle">
+                    <!-- Rectangle 3: Profile Deletion -->
+                    <div class="basic-info-content">
+                        <h2>Profile Deletion</h2>
+                        <!-- Add profile deletion option here -->
+                        <a href="<?php echo URLROOT; ?>hotel/hoteledit">
+                            <button class ="delete-button">Delete</button></a>
+                    </div>
             </div>
 
         </div>
-        <div class="rectangle">
-            <!-- Rectangle 3: Profile Deletion -->
-            <div class="basic-info-content">
-            <h2>Profile Deletion</h2>
-            <!-- Add profile deletion option here -->
-            <a href="<?php echo URLROOT; ?>hotel/hoteledit">
-            <button class ="delete-button">Delete</button></a>
-            </div>
+
         </div>
     </div>
     </main>

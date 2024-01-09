@@ -84,36 +84,40 @@
         </div>
 
         <div class="review-content">
-
-            <div class="review-box">
-                <div class="review-sub-content">
-                    <div class="review-image">
-                        <img src="<?php echo URLROOT; ?>/images/hotel/wikum.jpg" alt="Guest Photo">
+            <?php
+            $reviews = $data["reviews"];
+//            var_dump($reviews);
+            foreach ($reviews as $review): ?>
+                <div class="review-box">
+                    <div class="review-sub-content">
+                        <div class="review-image">
+                            <!-- You may want to display the actual user image if available -->
+                            <img src="<?php echo URLROOT; ?>/images/hotel/wikum.jpg" alt="Guest Photo">
+                        </div>
+                        <h2><?= $review->fname; ?></h2>
+<!--                        <p>Date: --><?php //= $review->created_at; ?><!--</p>-->
+                        <p class="review-text"><?= $review->comment; ?></p>
+                        <button class="read-more-btn" onclick="openModal('<?= $review->fname; ?>', '<?= $review->created_at; ?>', '<?= $review->comment; ?>')">Read More</button>
                     </div>
-                    <h2>Wikum Preethika</h2>
-                    <p>Date: October 15, 2023</p>
-                    <p class="review-text">Review:Hotel Review Hotel Review Hotel Review Hotel Review Hotel Review Hotel Review.</p>
-                    <button class="read-more-btn">Read More</button>
                 </div>
-            </div>
-
-            <div class="review-box">
-                <div class="review-sub-content">
-                    <div class="review-image">
-                        <img src="<?php echo URLROOT; ?>/images/hotel/wikum.jpg" alt="Guest Photo">
-                    </div>
-                    <h2>Wikum Preethika</h2>
-                    <p>Date: October 15, 2023</p>
-                    <p class="review-text">Review:Hotel Review Hotel Review Hotel Review Hotel Review Hotel Review Hotel Review.</p>
-                    <button class="read-more-btn">Read More</button>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
-        
+
+
+
         <div class="more-content">
             <button class="next-page-btn">More Reviews <i class='bx bx-chevron-right'></i></button>
         </div>
 
     </main>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-date"></p>
+            <p id="modal-review"></p>
+        </div>
+    </div>
+    <script src= "<?php echo URLROOT?>/public/js/hotel/reviews.js"></script>
 </body>
 </html>

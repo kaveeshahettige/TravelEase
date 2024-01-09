@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/calender.css">    <title>Hotel Availability</title>
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/calender.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/calenders.css">
+    <title>Hotel Availability</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -75,74 +77,28 @@
         </div>
         </div>
 
-            <div class="filter-content">
-
-                <div class="filter-option">
-                    <label for="service-type">Room Type:</label>
-                    <select id="service-type">
-                        <option value="hotel">Standard</option>
-                        <option value="transport">Deluxe</option>
-                        <option value="transport">Suite</option>
-                    </select>
+        <div class ="dashboard-sub-content">
+            <div class="calendar-container">
+                <div class="calendar-content">
+                    <div class="calendar-header">
+                        <button onclick="navigateMonth(-1)">←</button>
+                        <span id="current-month-year"></span>
+                        <button onclick="navigateMonth(1)">→</button>
+                    </div>
+                    <div id="calendar-days" class="calendar-days"></div>
                 </div>
-
-
-
-
-
-
-
-
-
+                <div class="availability-content" id="availability-content">
+                    <div id="selected-date"></div>
+                    <div id="availability-info"></div>
+                    <div class="calendar-buttons">
+                        <button onclick="handleButtonClick('Add')">Make Unavailable</button>
+                        <button onclick="handleButtonClick('Delete')">Delete Unavailable</button>
+                    </div>
+                </div>
             </div>
+            <script src= "<?php echo URLROOT?>/public/js/hotel/calender.js"></script>
+        </div>
 
-            <div class="table-content">
-
-                <table class="booking-table">
-                    <thead>
-                    <tr>
-                        <th>Room Number</th>
-                        <th>Room Type</th>
-                        <th>Price</th>
-                        <th>Availability</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <tr>
-                        <td>01 </td>
-                        <td>Standard</td>
-                        <td>10 000LKR</td>
-                        <td class="approved">Available</td>
-                        <td>
-                            <button class="view-button">View</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>02 </td>
-                        <td>Deluxe</td>
-                        <td>20 000LKR</td>
-                        <td class="pending">Unavailable</td>
-                        <td>
-                            <button class="view-button">View</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>03</td>
-                        <td>Suite</td>
-                        <td>15 000LKR</td>
-                        <td class="approved">Available</td>
-                        <td>
-                            <button class="view-button">View</button>
-                        </td>
-                    </tr>
-
-                    </tbody>
-                </table>
-            </div>
     </main>
 </body>
 </html>

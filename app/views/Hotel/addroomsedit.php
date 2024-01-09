@@ -48,16 +48,14 @@
 
         <div id="base">
             <h3>Add Rooms</h3>
+            <!-- ... existing code ... -->
+
             <div id="form">
                 <form class="registration-form" action="" method="POST">
                     <div>
                         <div class="form-group">
                             <label for="roomType">Room Type</label>
-                            <select id="roomType" name="roomType">
-                                <option value="standard" >Standard</option>
-                                <option value="deluxe">Deluxe</option>
-                                <option value="suite">Suite</option>
-                            </select >
+                            <input type="text" id="roomType" name="roomType" placeholder="Enter Room Type" required>
                         </div>
 
                         <div class="form-group">
@@ -74,21 +72,77 @@
 
                         <div class="form-group">
                             <label for="price">Price (per night)</label>
-                            <input type="number" id="price" name="price" required >
+                            <input type="number" id="price" name="price" required>
                         </div>
 
-                        <div  class="form-group">
+                        <div class="form-group">
                             <label for="roomImages">Room Images:</label>
                             <input type="file" id="roomImages" name="roomImages[]" accept="image/*" multiple required>
+                        </div>
+                    </div>
+
+                    <!-- New attributes -->
+                    <div>
+                        <div class="form-group">
+                            <label for="acAvailability">AC Availability:</label>
+                            <select id="acAvailability" name="acAvailability">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tvAvailability">TV Availability:</label>
+                            <select id="tvAvailability" name="tvAvailability">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label for="wifiAvailability">WiFi Availability:</label>
+                            <select id="wifiAvailability" name="wifiAvailability">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="smokingPolicy">Smoking Policy:</label>
+                            <select id="smokingPolicy" name="smokingPolicy">
+                                <option value="smoking">Smoking</option>
+                                <option value="non-smoking">Non-Smoking</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label for="petPolicy">Pet Policy:</label>
+                            <select id="petPolicy" name="petPolicy">
+                                <option value="allowed">Allowed</option>
+                                <option value="not-allowed">Not Allowed</option>
+                            </select>
                         </div>
                     </div>
 
                     <div>
                         <div class="form-group">
                             <label for="roomDescription">Room Description:</label>
-                            <textarea id="roomDescription" name="roomDescription" rows="4" required ></textarea>
+                            <textarea id="roomDescription" name="roomDescription" rows="4" required></textarea>
                         </div>
                     </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label for="cancellationPolicy">Cancellation Policy:</label>
+                            <textarea id="cancellationPolicy" name="cancellationPolicy" rows="4" required></textarea>
+                        </div>
+                    </div>
+
 
 
                     <div>

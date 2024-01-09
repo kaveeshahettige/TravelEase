@@ -85,50 +85,60 @@
             </button>
         </div>
         </div>
-       
+
         <div class="table-content">
-        <h2>Booking Details</h2>
+            <h2>Booking Details</h2>
             <table class="booking-table">
                 <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Guest Name</th>
-                        <th>Check-in Date</th>
-                        <th>Room Type</th>
-                        <th>Action</th>
-                    </tr>
+                <tr>
+                    <th>No</th>
+                    <th>Guest Name</th>
+                    <th>Check-in Date</th>
+                    <th>Room Type</th>
+                    <th>Action</th>
+                </tr>
                 </thead>
                 <tbody>
-                        
+
+
+                <?php
+                $bookingData = $data["bookingData"];
+                foreach ($bookingData as $key => $booking): ?>
                     <tr>
-                        <td>1</td>
-                        <td>Wikum Preethika</td>
-                        <td>2023-10-06</td>
-                        <td>Single Room</td>
-                        <td><button class="view-button">View</button></td>
+                        <td><?php echo $key + 1; ?></td>
+                        <td><?php echo $booking->guest_name; ?></td>
+                        <td><?php echo $booking->checkin_date; ?></td>
+                        <td><?php echo $booking->room_type; ?></td>
+                        <td>
+                            <button class="view-button" onclick="openPopup(); updatePopupDetails('<?php echo $booking->guest_name; ?>', '<?php echo $booking->checkin_date; ?>', '<?php echo $booking->room_type; ?>')">
+                                <i class='bx bx-show'></i>
+                            </button>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Kaveesha Hettige</td>
-                        <td>2023-10-17</td>
-                        <td>Double Room</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Dilanga</td>
-                        <td>2023-10-17</td>
-                        <td>Double Room</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>   
+                <?php endforeach; ?>
+
                 </tbody>
             </table>
         </div>
+
 
         <div class="more-content">
             <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
         </div>
 
     </main>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <!-- Add details about the booking here -->
+            <h2>Booking Details</h2>
+            <p id="guestName">Guest Name: John Doe</p>
+            <p id="checkInDate">Check-in Date: 2023-09-01</p>
+            <p id="roomType">Room Type: Single Room</p>
+            <!-- Add more details as needed -->
+        </div>
+    </div>
+    <script src= "<?php echo URLROOT?>/public/js/hotel/bookings.js"></script>
 </body>
 </html>

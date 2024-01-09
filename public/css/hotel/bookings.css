@@ -264,20 +264,24 @@ li {
     background-color: #f2f2f2;
 }
 
-/* Style for the "View" button */
 .view-button {
     background-color: #F9B314;
     color: #ffffff;
     border: none;
-    padding: 8px 12px;
+    padding: 8px; /* Adjust the padding for the button */
     border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 16px; /* Adjust the font size for the button */
+}
+
+.view-button i {
+    font-size: 18px; /* Set the desired font size for the icon */
 }
 
 .view-button:hover {
     background-color: #FFDB8B;
 }
+
 
 
 /* Style for the booking search container */
@@ -354,6 +358,43 @@ li {
     padding-top: 5px;
     font-family: "Poppins", sans;
 }
+
+/* Existing CSS styles above */
+
+/* CSS for Popup */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Existing CSS styles below */
+
 
 
 

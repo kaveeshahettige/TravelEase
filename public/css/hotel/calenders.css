@@ -1,0 +1,133 @@
+.calendar-container {
+    font-family: 'Poppins', sans-serif;
+    background-color: #ffffff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-width: 40%;
+    margin: 20px;
+    margin-left: 300px;
+}
+
+.calendar-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #F9B314;
+    color: #fff;
+    padding: 20px; /* Increase padding for larger header */
+}
+
+.calendar-header button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px; /* Increase font size for navigation buttons */
+    cursor: pointer;
+}
+
+#current-month-year {
+    font-size: 24px; /* Increase font size for month-year */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px; /* Increase margin for better spacing */
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px; /* Increase gap between days */
+    padding: 20px; /* Increase padding for days container */
+}
+
+.day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px; /* Increase height for each day */
+    cursor: pointer;
+    position: relative;
+}
+
+.day-number {
+    font-size: 20px; /* Increase font size for day numbers */
+}
+
+.selected-day {
+    background-color: #F9B314;
+    color: #fff;
+}
+
+.empty-cell {
+    background-color: #f4f4f4;
+}
+
+.date-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#selected-date {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+#availability-content {
+    font-family: 'Poppins', sans-serif;
+    width: 100%; /* Make the availability content full width */
+    padding: 20px; /* Increase padding for better spacing */
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9;
+    align-items: center;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+#availability-info {
+    font-size: 18px; /* Adjust font size for availability info */
+}
+
+.calendar-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.calendar-buttons button {
+    background-color:#F9B314;
+    color: #fff;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.calendar-buttons button:hover {
+    background-color: #F9B314;
+}

@@ -18,7 +18,10 @@ class Hotel extends Controller{
         $this->view('hotel/calender');
     }
     public function bookings(){
-        $this->view('hotel/bookings');
+        $bookingData = $this->getBookingsData();
+        $data["bookingData"] = $bookingData;
+        // Pass the data to the view
+        $this->view('hotel/bookings', ['bookingData' => $bookingData]);
     }
     public function gallery(){
         $this->view('hotel/gallery');
@@ -27,10 +30,15 @@ class Hotel extends Controller{
         $this->view('hotel/revenue');
     }
     public function reviews(){
-        $this->view('hotel/reviews');
+        $reviews = $this->getReviewsData();
+        $data ["reviews"] = $reviews;
+        $this->view('hotel/reviews', $data);
     }
     public function settings(){
-        $this->view('hotel/settings');
+        $roomCount = $this->hotelsModel->getRoomCount();
+        $data["roomCount"] = $roomCount;
+//        print_r($data);
+        $this->view('hotel/settings', ['roomCount' => $roomCount]);
     }
     public function addrooms(){
         $roomData = $this->hotelsModel->getHotel();
@@ -69,9 +77,6 @@ class Hotel extends Controller{
     public function hoteladdroomsedit()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-//            print_r($_POST);
-//            die;
-
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
             $roomData = [
@@ -79,90 +84,137 @@ class Hotel extends Controller{
                 'numOfBeds' => trim($_POST['numOfBeds']),
                 'price' => trim($_POST['price']),
                 'roomImages' => trim($_POST['roomImages'][0]),
+                'acAvailability' => trim($_POST['acAvailability']),
+                'tvAvailability' => trim($_POST['tvAvailability']),
+                'wifiAvailability' => trim($_POST['wifiAvailability']),
+                'smokingPolicy' => trim($_POST['smokingPolicy']),
+                'petPolicy' => trim($_POST['petPolicy']),
                 'roomDescription' => trim($_POST['roomDescription']),
+                'cancellationPolicy' => trim($_POST['cancellationPolicy']),
                 'roomType_err' => '',
                 'numOfBeds_err' => '',
                 'price_err' => '',
                 'roomImages_err' => '',
+                'acAvailability_err' => '',
+                'tvAvailability_err' => '',
+                'wifiAvailability_err' => '',
+                'smokingPolicy_err' => '',
+                'petPolicy_err' => '',
                 'roomDescription_err' => '',
+                'cancellationPolicy_err' => '',
             ];
 
-            //validate roomType
-            if(empty($roomData['roomType'])){
-                $roomData['roomType_err']='Please choose Room Type';
+            // Validate roomType
+            if (empty($roomData['roomType'])) {
+                $roomData['roomType_err'] = 'Please choose Room Type';
             }
 
-            //validate numOfBeds
-            if(empty($roomData['numOfBeds'])){
-                $roomData['numOfBeds_err']='Please enter Number of Beds';
+            // Validate numOfBeds
+            if (empty($roomData['numOfBeds'])) {
+                $roomData['numOfBeds_err'] = 'Please enter Number of Beds';
             }
 
-            //validate price
-            if(empty($roomData['price'])){
-                $roomData['price']='Please Enter Price ';
+            // Validate price
+            if (empty($roomData['price'])) {
+                $roomData['price_err'] = 'Please Enter Price';
             }
 
-            //validate room images
-            if(empty($roomData['roomImages'])){
-                $roomData['roomImages_err']='Please Enter Images';
+            // Validate room images
+            if (empty($roomData['roomImages'])) {
+                $roomData['roomImages_err'] = 'Please Enter Images';
             }
 
-            //validate Description
-            if(empty($roomData['roomDescription'])){
-                $roomData['roomDescription_err']='Please choose Room Description';
+            // Validate AC Availability
+            if (empty($roomData['acAvailability'])) {
+                $roomData['acAvailability_err'] = 'Please choose AC Availability';
             }
 
+            // Validate TV Availability
+            if (empty($roomData['tvAvailability'])) {
+                $roomData['tvAvailability_err'] = 'Please choose TV Availability';
+            }
 
+            // Validate WiFi Availability
+            if (empty($roomData['wifiAvailability'])) {
+                $roomData['wifiAvailability_err'] = 'Please choose WiFi Availability';
+            }
 
-            //make sure errors are empty
-            if(empty($roomData['roomType_err'])
-                && empty($roomData['numOfBeds_err'])
-                && empty($roomData['price_err'])
-                && empty($roomData['roomImages_err'])
-                && empty($RoomData['roomDescription']) ) {
+            // Validate Smoking Policy
+            if (empty($roomData['smokingPolicy'])) {
+                $roomData['smokingPolicy_err'] = 'Please choose Smoking Policy';
+            }
 
-//                print_r($roomData);
+            // Validate Pet Policy
+            if (empty($roomData['petPolicy'])) {
+                $roomData['petPolicy_err'] = 'Please choose Pet Policy';
+            }
 
-                if($this->hotelsModel->hoteladdroomsedit($roomData)){
-                    flash('register_success','You are registered and can login');
+            // Validate Description
+            if (empty($roomData['roomDescription'])) {
+                $roomData['roomDescription_err'] = 'Please choose Room Description';
+            }
+
+            // Validate Cancellation Policy
+            if (empty($roomData['cancellationPolicy'])) {
+                $roomData['cancellationPolicy_err'] = 'Please enter Cancellation Policy';
+            }
+
+            // Make sure errors are empty
+            if (
+                empty($roomData['roomType_err']) && empty($roomData['numOfBeds_err']) &&
+                empty($roomData['price_err']) && empty($roomData['roomImages_err']) &&
+                empty($roomData['acAvailability_err']) && empty($roomData['tvAvailability_err']) &&
+                empty($roomData['wifiAvailability_err']) && empty($roomData['smokingPolicy_err']) &&
+                empty($roomData['petPolicy_err']) && empty($roomData['roomDescription_err']) &&
+                empty($roomData['cancellationPolicy_err'])
+            ) {
+                // Save the data to the database
+                if ($this->hotelsModel->hoteladdroomsedit($roomData)) {
+                    flash('register_success', 'You are registered and can login');
                     redirect('hotel/addrooms');
-
-                }else{
+                } else {
                     die('Something went wrong');
                 }
-
-
-//                die;
-
-            }else{
+            } else {
+                // Display the form with validation errors
                 $this->view('hotel/addroomsedit', $roomData);
             }
-        }
-        else{
-
+        } else {
             $roomData = [
                 'roomType' => '',
                 'numOfBeds' => '',
                 'price' => '',
                 'roomImages' => '',
+                'acAvailability' => '',
+                'tvAvailability' => '',
+                'wifiAvailability' => '',
+                'smokingPolicy' => '',
+                'petPolicy' => '',
                 'roomDescription' => '',
+                'cancellationPolicy' => '',
                 'roomType_err' => '',
                 'numOfBeds_err' => '',
                 'price_err' => '',
                 'roomImages_err' => '',
+                'acAvailability_err' => '',
+                'tvAvailability_err' => '',
+                'wifiAvailability_err' => '',
+                'smokingPolicy_err' => '',
+                'petPolicy_err' => '',
                 'roomDescription_err' => '',
+                'cancellationPolicy_err' => '',
             ];
-//             var_dump($roomData);
 
-            $this->view('hotel/addroomsedit', ['roomData'=>$roomData]);
+            // Display the form
+            $this->view('hotel/addroomsedit', ['roomData' => $roomData]);
         }
     }
 
 
 
+
     public function hotelupdaterooms($room_id)
     {
-//        print_r($room_id);
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -171,78 +223,134 @@ class Hotel extends Controller{
                 'roomType' => trim($_POST['roomType']),
                 'numOfBeds' => trim($_POST['numOfBeds']),
                 'price' => trim($_POST['price']),
-//                'roomImages' => trim($_POST['roomImages']),
+                'roomImages' => $_FILES['roomImages'],
+                'acAvailability' => trim($_POST['acAvailability']),
+                'tvAvailability' => trim($_POST['tvAvailability']),
+                'wifiAvailability' => trim($_POST['wifiAvailability']),
+                'smokingPolicy' => trim($_POST['smokingPolicy']),
+                'petPolicy' => trim($_POST['petPolicy']),
                 'roomDescription' => trim($_POST['roomDescription']),
+                'cancellationPolicy' => trim($_POST['cancellationPolicy']),
                 'room_id' => $room_id,
                 'roomType_err' => '',
                 'numOfBeds_err' => '',
                 'price_err' => '',
                 'roomImages_err' => '',
+                'acAvailability_err' => '',
+                'tvAvailability_err' => '',
+                'wifiAvailability_err' => '',
+                'smokingPolicy_err' => '',
+                'petPolicy_err' => '',
                 'roomDescription_err' => '',
+                'cancellationPolicy_err' => '',
             ];
 
+            // Validate Room Type
+            if (empty($roomData['roomType'])) {
+                $roomData['roomType_err'] = 'Please choose Room Type';
+            }
 
-            // //validateroomType
-            // if(empty($roomData['roomType'])){
-            //     $roomData['roomType_err']='Please choose Room Type';
-            // }
+            // Validate Number of Beds
+            if (empty($roomData['numOfBeds'])) {
+                $roomData['numOfBeds_err'] = 'Please enter Number of Beds';
+            }
 
-            // //validate numofBeds
-            // if(empty($roomData['numOfBeds'])){
-            //     $roomData['numOfBeds_err']='Please enter Number of Beds';
-            // }
+            // Validate Price
+            if (empty($roomData['price'])) {
+                $roomData['price_err'] = 'Please Enter Price';
+            }
 
-            // //validate price
-            // if(empty($roomData['price'])){
-            //     $roomData['price']='Please Enter Price ';
-            // }
+            // Validate Room Images
+            if (empty($roomData['roomImages']['name'])) {
+                $roomData['roomImages_err'] = 'Please upload at least one image';
+            }
 
-            // //validate room images
-            // if(empty($roomData['roomImages'])){
-            //     $roomData['roomImages_err']='Please Enter Images';
-            // }
+            // Validate AC Availability
+            if (empty($roomData['acAvailability'])) {
+                $roomData['acAvailability_err'] = 'Please choose AC Availability';
+            }
 
-            // //validate Description
-            // if(empty($roomData['roomDescription'])){
-            //     $roomData['roomDescription_err']='Please choose Room Description';
-            // }
-//            echo "<pre>";
-//            print_r($roomData);
-//            exit();
+            // Validate TV Availability
+            if (empty($roomData['tvAvailability'])) {
+                $roomData['tvAvailability_err'] = 'Please choose TV Availability';
+            }
 
-            //make sure errors are empty
-            if(empty($roomData['roomType_err'])&& empty($roomData['numOfBeds_err']) && empty($roomData['price_err']) && empty($roomData['roomImages_err']) && empty($RoomData['roomDescription_err']) ) {
+            // Validate WiFi Availability
+            if (empty($roomData['wifiAvailability'])) {
+                $roomData['wifiAvailability_err'] = 'Please choose WiFi Availability';
+            }
 
-                if($this->hotelsModel->hotelupdaterooms($roomData)){
-                    flash('user_message', 'user Updated');
+            // Validate Smoking Policy
+            if (empty($roomData['smokingPolicy'])) {
+                $roomData['smokingPolicy_err'] = 'Please choose Smoking Policy';
+            }
+
+            // Validate Pet Policy
+            if (empty($roomData['petPolicy'])) {
+                $roomData['petPolicy_err'] = 'Please choose Pet Policy';
+            }
+
+            // Validate Room Description
+            if (empty($roomData['roomDescription'])) {
+                $roomData['roomDescription_err'] = 'Please enter Room Description';
+            }
+
+            // Validate Cancellation Policy
+            if (empty($roomData['cancellationPolicy'])) {
+                $roomData['cancellationPolicy_err'] = 'Please enter Cancellation Policy';
+            }
+
+//            // Handle File Upload
+//            $uploadResult = $this->handleFileUpload($roomData['roomImages']);
+//
+//            if ($uploadResult['success']) {
+//                $roomData['roomImages'] = $uploadResult['filePath'];
+//            } else {
+//                $roomData['roomImages_err'] = $uploadResult['error'];
+//            }
+
+            // Check for any validation errors
+            if (
+                empty($roomData['roomType_err']) && empty($roomData['numOfBeds_err']) &&
+                empty($roomData['price_err']) && empty($roomData['roomImages_err']) &&
+                empty($roomData['acAvailability_err']) && empty($roomData['tvAvailability_err']) &&
+                empty($roomData['wifiAvailability_err']) && empty($roomData['smokingPolicy_err']) &&
+                empty($roomData['petPolicy_err']) && empty($roomData['roomDescription_err']) &&
+                empty($roomData['cancellationPolicy_err'])
+            ) {
+                // Save the data to the database
+                if ($this->hotelsModel->hotelupdaterooms($roomData)) {
+                    flash('user_message', 'Room Updated');
                     redirect('hotel/addrooms');
-
-                }else{
+                } else {
                     die('Something went wrong');
                 }
-
-            }else{
-                var_dump("Case");
-                exit();
-                $this->view('hotel/addrooms', $roomData);
+            } else {
+                // Display the form with validation errors
+                $this->view('hotel/updateroom', $roomData);
             }
-        }
-        else{
-            $hotels=$this->hotelsModel->findrooms($room_id);
+        } else {
+            // Display the form
+            $hotels = $this->hotelsModel->findrooms($room_id);
 
             $roomData = [
-                'room_id'=>$room_id,
-                'roomType' =>$hotels->roomType,
-                'numOfBeds' =>$hotels->numOfBeds,
+                'room_id' => $room_id,
+                'roomType' => $hotels->roomType,
+                'numOfBeds' => $hotels->numOfBeds,
                 'price' => $hotels->price,
-//                'roomImages' => $hotels->roomImages,
+                'acAvailability' => $hotels->acAvailability,
+                'tvAvailability' => $hotels->tvAvailability,
+                'wifiAvailability' => $hotels->wifiAvailability,
+                'smokingPolicy' => $hotels->smokingPolicy,
+                'petPolicy' => $hotels->petPolicy,
                 'roomDescription' => $hotels->roomDescription,
+                'cancellationPolicy' => $hotels->cancellationPolicy,
             ];
 
-
-            $this->view('hotel/updateroom',$roomData);
+            $this->view('hotel/updateroom', $roomData);
         }
     }
+
 
     public function deleterooms($room_id){
 //        echo $room_id;
@@ -254,4 +362,38 @@ class Hotel extends Controller{
             die('Something went wrong');
         }
     }
+
+    public function roomCount(){
+        $hotelModel = $this->model('Hotels');
+        $roomCount = $hotelModel->getRoomCount();
+
+        // Pass the room count to the view
+        $this->view('Hotel/settings', ['roomCount' => $roomCount]);
+    }
+
+    public function getBookingsData() {
+        // Get bookings data from the model
+        $bookingData = $this->hotelsModel->getBookings();
+
+        // Check if any bookings are found
+        if ($bookingData) {
+            // If there are bookings, return the data
+            return $bookingData;
+        } else {
+            // If no bookings found, return an empty array
+            return [];
+        }
+    }
+
+    public function getReviewsData() {
+        // Get reviews data from the model
+        $reviews = $this->hotelsModel->getReviews();
+        if ($reviews) {
+            return $reviews;
+        } else {
+            return [];
+        }
+    }
+
 }
+
