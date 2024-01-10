@@ -395,5 +395,54 @@ class Hotel extends Controller{
         }
     }
 
+    public function processServiceValidation() {
+        $userId = $_SESSION['user_id'];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $targetDir = "../public/uploads/service_validations/";
+            $targetFile = $targetDir . basename($_FILES['service-validation-pdf']['name']);
+
+            // Move the uploaded file to the target directory
+            move_uploaded_file($_FILES['service-validation-pdf']['tmp_name'], $targetFile);
+
+            // Call the model to insert the PDF information into the database
+            if ($this->hotelsModel->insertPdf($targetFile, $userId)) {
+                // Success - You can redirect or show a success message
+                flash('success', 'PDF submitted successfully');
+                redirect('hotel/settings');
+            } else {
+                // Error - You can redirect or show an error message
+                flash('error', 'Failed to submit PDF');
+                redirect('hotel/settings');
+            }
+        }
+    }
+
+    public function changeProfilePicture() {
+        // Check if a file was uploaded
+        if ($_FILES['profile-picture']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = '../public/uploads/profile-pictures/';
+            $uploadFile = $uploadDir . basename($_FILES['profile-picture']['name']);
+
+            // Move the uploaded file to the desired directory
+            if (move_uploaded_file($_FILES['profile-picture']['tmp_name'], $uploadFile)) {
+                // Update the session with the new file path
+                $_SESSION['user_profile_picture'] = $uploadFile;
+
+                // Update the profile picture in the database
+                $this->hotelsModel->updateProfilePicture($_SESSION['user_id'], $uploadFile);
+            } else {
+                echo 'Error uploading the file.';
+            }
+        } else {
+            echo 'File upload error.';
+        }
+
+        // Redirect to the profile page or wherever you want
+        header('Location: ' . URLROOT . '/hotel/settings');
+        exit;
+    }
+
+
 }
 

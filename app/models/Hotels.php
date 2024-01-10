@@ -10,6 +10,8 @@ class Hotels{
         $this->db =new Database;
     }
 
+
+
     public function getHotel() {
         $this->db->query('SELECT * FROM hotel_rooms');
         $results = $this->db->resultSet();
@@ -127,6 +129,32 @@ class Hotels{
     public function getReviews() {
         $this->db->query('SELECT reviews.*, users.fname FROM reviews JOIN users ON reviews.user_id = users.id');
         return $this->db->resultSet();
+    }
+
+    public function insertPdf($filename, $userId) {
+        $this->db->query('UPDATE users SET document = :filename WHERE id = :userId');
+        $this->db->bind(':filename', $filename);
+        $this->db->bind(':userId', $userId);
+
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function updateProfilePicture($userId, $filename) {
+        $this->db->query('UPDATE users SET profile_picture = :filename WHERE id = :userId');
+        $this->db->bind(':filename', $filename);
+        $this->db->bind(':userId', $userId);
+
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

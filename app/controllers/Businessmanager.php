@@ -20,6 +20,10 @@ class Businessmanager extends Controller{
     public function bookings(){
         $this->view('businessmanager/bookings');
     }
+
+    public function notifications(){
+        $this->view('businessmanager/notifications');
+    }
     public function businessmanageredit(){
         $this->view('businessmanager/businessmanageredit');
     }

@@ -13,7 +13,7 @@
 <body>
     <nav class="left-menu">
         <div class="user-profile">
-            <img src="<?php echo URLROOT; ?>/images/hotel/wikum.jpg" alt="User Profile Photo">
+            <img src="<?= isset($_SESSION['user_profile_picture']) ? $_SESSION['user_profile_picture'] : '../Images/wikum.jpg'; ?> " alt="User Profile Photo">
             <span class="user-name"><?=$_SESSION['user_fname']?></span>
         </div>
         

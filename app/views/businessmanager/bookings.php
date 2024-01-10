@@ -31,6 +31,7 @@
             <li><a href="<?php echo URLROOT; ?>businessmanager/packages" class="nav-button"><i class='bx bxs-package bx-sm'></i></i> Packages</a></li>
             <li><a href="<?php echo URLROOT; ?>businessmanager/reports" class="nav-button"><i class='bx bxs-report bx-sm'></i> Reports</a></li>
             <li><a href="<?php echo URLROOT; ?>businessmanager/financialmanagement" class="nav-button"><i class='bx bx-line-chart bx-sm'></i> Financial Management</a></li>
+            <li><a href="<?php echo URLROOT; ?>businessmanager/notifications" class="nav-button"><i class='bx bx-bell bx-sm bx-fw'></i>Notifications</a></li>
             <li><a href="<?php echo URLROOT; ?>businessmanager/settings" class="nav-button"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
         </ul> 
             
