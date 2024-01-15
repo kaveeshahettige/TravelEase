@@ -22,11 +22,11 @@
         </div>
         <ul>
         <li><a href="<?php echo URLROOT?>loggedTraveler/index">Home</a></li>
-            <li><a href="<?php echo URLROOT?>loggedTraveler/hotel" id="selected">Hotels</a></li>
+            <li><a href="<?php echo URLROOT?>loggedTraveler/hotel" >Hotels</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
             <div class="rightcontent">
-                <li><a href="<?php echo URLROOT?>travelerDashboard/index"><img src="<?php echo URLROOT?>/images/5.jpg" alt="Profile Picture"></a></li>
+            <li><a href="<?php echo URLROOT?>travelerDashboard/index"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
                 <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
                 </div>
         </ul>
@@ -34,7 +34,7 @@
 
     <section class="bookingResultm1">
         <div class="view">
-            <div class="bookingtitles"><h1>Wildlife in Yala</h1>
+            <div class="bookingtitles"><h1><?php echo ucfirst($data['serviceProviderName'])?></h1>
                 <h5>Booking details</h5>
             </div>
             <div class="images">
@@ -53,49 +53,46 @@
             </div>
             <div class="des">
                 <h5 style="margin: 0px;">Description</h5>
-                <p>Our comprehensive package offers a hassle-free experience for your three-day adventure in the park.
-                     You can relax and enjoy your trip knowing that it includes all the essential facilities you need.
-                      From comfortable accommodations to delightful dining options,
-                       experienced guides, and efficient transport, we've got you covered.
-                        Explore every corner of the park with confidence, as our package ensures you have access to all areas, making your journey truly unforgettable</p> 
+                <p><?php echo $data['description'] ? ucfirst($data['description']) : '-----'; ?></p> 
             </div> 
             <div class="bookingdetails">
                 <div class="leftdiv">
-                    <div class="ldiv1">
+                    <!-- <div class="ldiv1">
                         <div class="booking-label">Booking:</div>
-                        <div class="booking-value">Wildlife in Yala</div>
+                        <div class="booking-value"><?php echo ucfirst($data['serviceProviderName'])?></div>
+                    </div> -->
+                    <div class="ldiv1">
+                        <div class="booking-label">Service provider:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['serviceProviderName'])?></div>
                     </div>
                     <div class="ldiv1">
                         <div class="booking-label">District:</div>
-                        <div class="booking-value">Hambantota</div>
+                        <div class="booking-value"><?php echo ucfirst($data['location'])?></div>
+                    </div>
+                    
+                    <!-- <div class="ldiv1">
+                        <div class="booking-label">Cancellation eligibility:</div>
+                        <div class="booking-value">Available</div>
+                    </div>  -->
+                </div>
+
+                <div class="rightdiv">
+                    <div class="ldiv1">
+                        <div class="booking-label">Price:</div>
+                        <div class="booking-value">50 000 Rupees(...)</div>
                     </div>
                     <div class="ldiv1">
+                        <div class="booking-label">Contact details :</div>
+                        <div class="booking-value"><?php echo $data['serviceProvideNumber']?></div>
+                    </div>
+                    <!-- <div class="ldiv1">
                         <div class="booking-label">Start date:</div>
                         <div class="booking-value">10/3/2023</div>
                     </div>
                     <div class="ldiv1">
                         <div class="booking-label">End date:</div>
                         <div class="booking-value">10/6/2023</div>
-                    </div> 
-                </div>
-
-                <div class="rightdiv">
-                    <div class="ldiv1">
-                        <div class="booking-label">Price:</div>
-                        <div class="booking-value">50 000 Rupees</div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Service provider:</div>
-                        <div class="booking-value">Yala Residencies</div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Contact details :</div>
-                        <div class="booking-value">0766244356</div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Cancellation eligibility:</div>
-                        <div class="booking-value">Available</div>
-                    </div> 
+                    </div>  -->
                 </div>
 
             </div>

@@ -419,8 +419,8 @@ use PHPMailer\PHPMailer\Exception;
           $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
           $mail->Port = 587;
 
-          $mail->Username = '';
-          $mail->Password = '';
+          $mail->Username = '2021is046@stu.ucsc.cmb.ac.lk';
+          $mail->Password = '200036202687';
           $mail->setFrom('2021is046@stu.ucsc.cmb.ac.lk', 'TravelEase');//our
           $mail->addAddress($user->email, 'kaveesha');//sender
           $mail->Subject = 'TravelEase Confirmation';

@@ -88,7 +88,8 @@
                         <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider1Name']?></p>
                         <p><?php echo $data['randomServiceProvider1Location']?></p>
                     </div>
-                    <div> <button id="bookingButton" onclick="Tripdetails()">Book Now</button></div>
+                    <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider1Id'] ?>)">Book Now</button></div>
+                    <!-- <?php echo $data['randomServiceProvider1Id']?> -->
                 </div>
                 
             </div>
@@ -99,7 +100,7 @@
                         <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider2Name']?></p>
                         <p><?php echo $data['randomServiceProvider2Location']?></p>
                     </div>
-                    <div><button>Book Now</button></div>
+                    <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider2Id'] ?>)">Book Now</button></div>
                 </div>
             </div>
             <div class="main3img3content">
@@ -109,7 +110,7 @@
                         <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider3Name']?></p>
                         <p><?php echo $data['randomServiceProvider3Location']?></p>
                     </div>
-                    <div><button>Book Now</button></div>
+                    <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider3Id'] ?>)">Book Now</button></div>
                 </div>
             </div>
         </div>

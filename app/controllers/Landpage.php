@@ -20,6 +20,7 @@ class Landpage extends Controller{
       $this->view('landpage/plantrip');
     }
     public function searchPage(){
+      
       $this->view('landpage/searchpage');
     }   
     public function termsofuse(){

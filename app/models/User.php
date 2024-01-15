@@ -522,6 +522,37 @@ public function updatePicture($data){
         }
     }
 
+    //findMyBooking
+    public function findMyBooking($id){
+        $this->db->query('SELECT bookings.*, users.*
+        FROM bookings
+        LEFT JOIN users ON bookings.serviceProvider_id = users.id
+        WHERE bookings.user_id = :id;');
+        $this->db->bind(':id',$id);
+
+        $data=$this->db->resultSet();
+
+        //check row
+        if($this->db->rowCount()>0){
+            return $data;
+        }else{
+            return null;
+        }
+    }
+
+    //countMyBooking
+    public function countMyBooking($id){
+        $this->db->query('SELECT COUNT(*) AS count FROM bookings WHERE user_id = :id');
+        $this->db->bind(':id', $id);
+        $row = $this->db->single();
+         if($this->db->rowcount()>0){
+            return $row->count;
+         }
+         else{
+            return false;
+        }
+    }
+
 
 
 

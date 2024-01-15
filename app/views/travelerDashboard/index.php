@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>css/travelerDashboard/style.css">
-    <title>  Dashboard</title>
+    <title>Dashboard</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>images/TravelEase_logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -14,7 +14,8 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> 
-            <span class="user-name"><?php echo $data['fname']."   ".$data['lname']?></span>
+            <span class="user-name" style="font-weight: bold;"><?php echo $data['fname']." ".$data['lname']?></span>
+
         </div>
         
         <div class="search-bar">
@@ -27,7 +28,7 @@
             
         <ul>
             <li><a href="<?php echo URLROOT?>travelerDashboard/index/<?php echo $_SESSION['user_id']?>" class="active"><i class='bx bxs-dashboard bx-sm'></i> Overview</a></li>
-            <li><a href=""><i class='bx bxs-book bx-sm'></i> Bookings</a></li>
+            <li><a href="<?php echo URLROOT?>travelerDashboard/bookings/<?php echo $_SESSION['user_id']?>"><i class='bx bxs-book bx-sm'></i> Bookings</a></li>
             <li><a href=""><i class='bx bxs-package bx-sm'></i></i> Payments</a></li>
             <li><a href=""><i class='bx bxs-report bx-sm'></i> Notifications</a></li>
             <li><a href=""><i class='bx bx-line-chart bx-sm'></i> Previous Trips</a></li>

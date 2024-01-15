@@ -44,6 +44,43 @@ class TravelerDashboard extends Controller{
       
       $this->view('travelerDashboard/editInfo');
     }
+
+    //bookings
+    public function bookings($id){
+      $id= $_SESSION['user_id'];
+      $user=$this->userModel->findUserDetail($id);
+      $mybooking=$this->userModel->findMyBooking($id);
+      $noOfBooking=$this->userModel->countMyBooking($id);
+    
+
+      $data = [
+        'id' => '$id',
+        'email'=>$user->email,
+        'lname' => $user->lname,
+        'fname' => $user->fname,
+        'number' => $user->number,
+        'profile_picture'=>$user->profile_picture,
+        'mybooking'=>$mybooking,
+        'noOfBooking'=>$noOfBooking,
+
+      ];
+      $this->view('travelerDashboard/bookings',$data);
+    }
+
+    //payments
+    public function payments($id){
+      $this->view('travelerDashboard/payments');
+    }
+
+    //notifications
+    public function notifications($id){
+      $this->view('travelerDashboard/notifications');
+    }
+
+    //previous trips
+    public function previoustrips($id){
+      $this->view('travelerDashboard/previoustrips');
+    }
     
 //     public function changeProfilePicture(){
 //       if($_SERVER['REQUEST_METHOD'] == 'POST'){

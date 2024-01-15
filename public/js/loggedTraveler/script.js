@@ -31,18 +31,18 @@ function viewBooking($id) {
     //window.open = "bookingpayment";
 }
 
-function Tripdetails() {
-  
-
-  window.location.href = "tripfurtherdetail";
+function Tripdetails(id) {
+  // Corrected implementation
+  window.location.href = `tripfurtherdetail/${id}`;
 }
+
 
   /////////////////////
 
   function initMap() {
     // Map initialization code here
     var map = new google.maps.Map(document.querySelector('.map'), {
-        center: { lat: -34.397, lng: 150.644 },
+        center: { lat: 6.0329, lng: 80.2168 },
         zoom: 8
     });
 }

@@ -34,10 +34,13 @@ $data = [
     'location' => $bookingDetails ? $bookingDetails->location : null,
     'picture' => $bookingDetails ? $bookingDetails->picture : null,
     'randomServiceProvider1Location'=>$service1Details ? $service1Details->location : null,
+    'randomServiceProvider1Id'=>$service1Details ? $service1Details->user_id : null,
     'randomServiceProvider1Name'=>$service1Name ? $service1Name->fname . ' ' . $service1Name->lname : null,
     'randomServiceProvider2Location'=>$service2Details ? $service2Details->location : null,
+    'randomServiceProvider2Id'=>$service2Details ? $service2Details->user_id : null,
     'randomServiceProvider2Name'=>$service2Name ? $service2Name->fname . ' ' . $service2Name->lname : null,
     'randomServiceProvider3Location'=>$service3Details ? $service3Details->location : null,
+    'randomServiceProvider3Id'=>$service3Details ? $service3Details->user_id : null,
     'randomServiceProvider3Name'=>$service3Name ? $service3Name->fname . ' ' . $service3Name->lname : null,
     //'randomServiceProvider1Name'=>$service1Details ? $service1Details->fname . ' ' . $service1Details->lname : null,
     
@@ -62,7 +65,9 @@ $data = [
       $this->view('loggedTraveler/searchAll',$data);
     } 
     public function bookingdetails($Sid){
+
       $id = $_SESSION['user_id'];
+      $user=$this->userModel->findUserDetail($id);
       $serviceProvider = $this->userModel->findUserDetail($Sid);
       $bookingDetails = $serviceProvider ? $this->userModel->findBookingDetail($serviceProvider->type, $Sid) : null;
       
@@ -72,6 +77,7 @@ $data = [
         'serviceProviderName' => $serviceProvider ? $serviceProvider->fname . ' ' . $serviceProvider->lname : null,
         // 'serviceProviderID' => $booking ? $booking->serviceProvider_id : null,
         // 'serviceProviderType' => $serviceProvider ? $serviceProvider->type : null,
+        'profile_picture' => $user ? $user->profile_picture : null,
         'number' => $serviceProvider ? $serviceProvider->number : null,
         'location' => $bookingDetails ? $bookingDetails->location : null,
         'picture' => $bookingDetails ? $bookingDetails->picture : null,
@@ -86,8 +92,17 @@ $data = [
       $data=[];
       $this->view('loggedTraveler/bookingpayment',$data);
     }
-    public function tripfurtherdetail(){
-      $data=[];
+    public function tripfurtherdetail($Sid){
+      $servicProvider=$this->userModel->findUserDetail($Sid);
+      $user=$this->userModel->findUserDetail($_SESSION['user_id']);
+      $bookingDetails = $servicProvider ? $this->userModel->findBookingDetail($servicProvider->type, $Sid) : null;
+      $data=[
+        'serviceProviderName' => $servicProvider ? $servicProvider->fname . ' ' . $servicProvider->lname : null,
+        'location' => $bookingDetails ? $bookingDetails->location : null,
+        'profile_picture' => $user ? $user->profile_picture : null,
+        'serviceProvideNumber'=>$servicProvider ? $servicProvider->number : null,
+        'description' => $bookingDetails ? $bookingDetails->description : null,
+      ];
       $this->view('loggedTraveler/tripfurtherdetail',$data);
     }
 

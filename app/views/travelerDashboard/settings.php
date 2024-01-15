@@ -30,7 +30,7 @@
         
         <ul>
             <li><a href="<?php echo URLROOT?>travelerDashboard/index/<?php echo $_SESSION['user_id']?>"><i class='bx bxs-dashboard bx-sm'></i> Overview</a></li>
-            <li><a href=""><i class='bx bxs-book bx-sm'></i> Bookings</a></li>
+            <li><a href="<?php echo URLROOT?>travelerDashboard/bookings/<?php echo $_SESSION['user_id']?>"><i class='bx bxs-book bx-sm'></i> Bookings</a></li>
             <li><a href=""><i class='bx bxs-package bx-sm'></i></i> Payments</a></li>
             <li><a href=""><i class='bx bxs-report bx-sm'></i> Notifications</a></li>
             <li><a href=""><i class='bx bx-line-chart bx-sm'></i> Previous Trips</a></li>
