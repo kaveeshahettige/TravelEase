@@ -69,8 +69,52 @@
                         </div>
                      </div>
                 </div>
+                <form action="<?php echo URLROOT; ?>driver/process-form.php" method="POST" enctype="multipart/form-data">
+                <div class="rectangle">
+                <h2>Agency Detailes</h2>
+
+                <lable for="agencyname">Agency Name:</lable>
+                <input type="text" id="agency_name" name="agency_name" required>
+
+                <label for="agencyAddress">Agency Address:</label>
+                <input type="text" id="address" name="address" required>
+
+                <label for="agencyRegNumber">Agency Registration Number:</label>
+                <input type="text" id="reg_number" name="reg_number" required>
+                
+                <label class="checkbox-label" for="terms">
+                <input type="checkbox" id="terms" name="terms" required>
+                I agree to the <a href="#">Terms and Conditions</a>
+</label>
+                    
+                
+                            
+                <button type="submit">Submit</button>          
+            
+
+           
+           
+                    </div>
+</div>
+            </div>
+            </form>
+            <div class="rectangle">
+                    <!-- Rectangle 3: Service Validation -->
+                    <div class="basic-info-content">
+                        <h2>Service Validation</h2>
+                        <form class="service-validation-form" method="POST" action="<?php echo URLROOT; ?>/driver/process-form" enctype="multipart/form-data">
+                            <p>Submit a PDF for Service Validation:</p>
+                            <input type="file" id="service-validation-pdf" name="service-validation-pdf" accept=".pdf" required>
+                            <button class="edit-button" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+           
                 </div>
                 </div>
                 </div>
+
+
+                
 </body>
 </html>

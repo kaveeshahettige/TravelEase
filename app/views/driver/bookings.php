@@ -88,49 +88,63 @@
             </div>
             </div>
             
+            <?php
+        // Check if the sort parameter is set in the URL
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'asc';
+
+// Determine the sorting order based on the current order
+$newSort = ($sort === 'asc') ? 'desc' : 'asc';
+?>
+
 <div class="table-content">
     <h2>Pending Booking Details</h2>
-    <table class="booking-table">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Trip ID</th>
-                <th>Pickup Date</th>
-                <th>End Date</th>
-                <th>Pickup Location</th>
-                <th>Dropoff Location</th>
-                <th>Number of passengers</th>
-                <th>Accept</th>
-                <th>Decline</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if (!empty($data['pendingbookings'])) {
-                $count = 1;
-                foreach ($data['pendingbookings'] as $booking) :
-            ?>
-                    <tr>
-                        <td><?php echo $count; ?></td>
-                        <td><?php echo $booking->trip_id; ?></td>
-                        <td><?php echo $booking->start_date; ?></td>
-                        <td><?php echo $booking->end_date; ?></td>
-                        <td><?php echo $booking->pickup_location; ?></td>
-                        <td><?php echo $booking->dropoff_location; ?></td>
-                        <td><?php echo $booking->passenger_count; ?></td>
-                        <td><button class="view-button">Accept</button></td>
-                        <td><button class="view-button">Decline</button></td>
-                    </tr>
-            <?php
-                    $count++;
-                endforeach;
-            } else {
-                echo '<tr><td colspan="8"><center>No pending bookings available.</center></td></tr>';
-            }
-            ?>
-        </tbody>
-    </table>
+    <form action="<?php echo URLROOT; ?>/driver/bookings" method="post">
+        <table class="booking-table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=trip_id&sort=<?php echo $newSort; ?>">Trip ID</a></th>
+                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=start_date&sort=<?php echo $newSort; ?>">Start Date</a></th>
+                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=end_date&sort=<?php echo $newSort; ?>">End Date</a></th>
+                    <th>Pickup Location</th>
+                    <th>Dropoff Location</th>
+                    <th>Number of passengers</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if (!empty($data['pendingbookings'])) {
+                    $count = 1;
+                    foreach ($data['pendingbookings'] as $booking) :
+                ?>
+                        <tr>
+                            <td><?php echo $count; ?></td>
+                            <td><?php echo $booking->trip_id; ?></td>
+                            <td><?php echo $booking->start_date; ?></td>
+                            <td><?php echo $booking->end_date; ?></td>
+                            <td><?php echo $booking->pickup_location; ?></td>
+                            <td><?php echo $booking->dropoff_location; ?></td>
+                            <td><?php echo $booking->passenger_count; ?></td>
+                            <td>
+        <input type="hidden" name="booking_id" value="<?php echo $booking->trip_id; ?>">
+        <button type="submit" name="status" value="accepted" class="view-button">Accept</button>
+        <button type="submit" name="status" value="decline" class="view-button">Decline</button>
+    </td>
+                        </tr>
+                <?php
+                        $count++;
+                    endforeach;
+                } else {
+                    echo '<tr><td colspan="8"><center>No pending bookings available.</center></td></tr>';
+                }
+                ?>
+            </tbody>
+        </table>
+    </form>
 </div>
+
+
 
            
 

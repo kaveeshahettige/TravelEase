@@ -107,11 +107,12 @@
                     <div class="detail">
                     <strong>Air Conditioning:</strong>
                     <?php echo ($vehicle['ac_type'] == 1) ? 'AC' : 'Non-AC'; ?>
-                    </div>   
-                    <div class="detail"><strong>Insurance Policy Number:</strong><?php echo $vehicle['ins_number']; ?></div>
+                    </div> 
+                    <div class="detail"><strong>Description:</strong><?php echo $vehicle['description']?></div>  
+                    <!-- <div class="detail"><strong>Insurance Policy Number:</strong><?php echo $vehicle['ins_number']; ?></div>
                     <div class="detail"><strong>Insurance Company Name:</strong><?php echo $vehicle['ins_name']; ?></div>
                     <div class="detail"><strong>Coverage Period Start Date:</strong><?php echo $vehicle['start_date']; ?></div>
-                    <div class="detail"><strong>Coverage Period End Date:</strong><?php echo $vehicle['end_date']; ?></div>
+                    <div class="detail"><strong>Coverage Period End Date:</strong><?php echo $vehicle['end_date']; ?></div> -->
 
                         </div>
                         <a href="<?php echo URLROOT; ?>driver/vehicleedit/<?php echo $vehicle['id']?>"><button class="edit-button2">Edit </button>

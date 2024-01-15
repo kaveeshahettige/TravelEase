@@ -56,14 +56,19 @@
                 <form class="registration-form" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST">
                     <div class="form-group">
                     <label for="seating-capacity">Seating Capacity:</label>
-                    <input type="number" id="seating_capacity" name="seating_capacity" required>
+                    <input type="number" id="seating_capacity" name="seating_capacity" >
                     </div>
                     <div class="form-group">
                     <label for="ac">Air Conditioning (AC) or Non-AC:</label>
-                    <select id="ac_type" name="ac_type" required>
+                    <select id="ac_type" name="ac_type" >
                         <option value="1">AC</option>
                         <option value="0">Non-AC</option>
                     </select>
+                    </div>
+                    <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" rows="4" cols="65" ></textarea>
+
                     </div>
 
                     <div class="upload-container">

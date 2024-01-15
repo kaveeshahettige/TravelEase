@@ -7,7 +7,6 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    font-family: "Poppins", sans-serif;
 }
 
 .container {
@@ -20,8 +19,6 @@ body {
     text-align: center;
     margin-top: 100px;
     margin-bottom: 20px;
-    position: relative;
-    
 }
 
 .logo-text {
@@ -46,12 +43,11 @@ h1 {
 }
 
 .quote {
-    margin-top:-20px;
+    margin-top: -20px;
     font-family: 'Poppins', sans-serif;
     font-size: 18px;
     color: #454545;
 }
-
 
 form {
     display: flex;
@@ -63,7 +59,6 @@ form {
     width: 48%;
     margin-top: 10px;
     text-align: left;
-    
 }
 
 label {
@@ -92,10 +87,6 @@ input[type="file"] {
     height: auto;
 }
 
-input[type="checkbox"]{
-    margin-right: 100px;
-}
-
 button {
     background-color: #F9B314;
     color: #fff;
@@ -104,25 +95,59 @@ button {
     border-radius: 5px;
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
-    margin-top: 30px;
-    margin-left: 240px;
+    margin-top: 20px;
 }
 
 button:hover {
     background-color: #FFDB8B;
 }
-/* .submit{
-    margin-right: 0px;
-} */
 
- .invalid-feedback{
-    color:red;
-    
+.invalid-feedback {
+    color: red;
 }
+
 .checkbox-container {
-    display: flex;
-    align-items: center;
+    /* display: flex; */
+    align-items: left;
+    justify-content:left; /* Center horizontally */
+    margin-top: 20px;
 }
 
-.checkbox-label::before {
-    margin-right: 5px; }
+.checkbox-label {
+    display:flow-root;
+    align-items: left;
+    /* justify-content:left; */
+}
+
+#terms {
+    /* margin-right: 5px;  */
+}
+
+.checkbox-label a.terms-link {
+    margin-left: 5px;
+}
+
+.submit-container {
+    text-align: center; /* Center the button */
+    margin-top: 20px;
+}
+.dashboard-content .baseButtons #cancelBut{
+    border:2px solid #FFDB8B;
+    margin-right: 20px;
+}
+.dashboard-content .baseButtons #saveBut{
+    background-color: #FFDB8B;
+}
+
+.dashboard-content .baseButtons{
+    margin-left: auto;
+}
+
+.dashboard-content .baseButtons button{
+    padding: 10px 30px;
+    border-radius: 10px;
+    border: none;
+    background-color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+}
