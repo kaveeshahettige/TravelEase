@@ -50,62 +50,45 @@
            
              
             <div id="base">
-                <h3 style="padding-left:20px;">Basic Info</h3>
+                <h3 style="padding-left:20px;">Edit Basic Info</h3>
                 <div id="form">
                 <!-- <?php echo $_SERVER['REQUEST_URI']; ?>" -->
                 <form class="registration-form" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST">
                     <div class="form-group">
-                        <label for="make">Vehicle Brand:</label>
-                        <input type="text" id="make" name="brand" required>
-
+                    <label for="seating-capacity">Seating Capacity:</label>
+                    <input type="number" id="seating_capacity" name="seating_capacity" >
                     </div>
                     <div class="form-group">
-                        <label for="model">Model:</label>
-                        <input type="text" id="model" name="model"  required>
-                    </div>
-                    <div class="form-group">
-                        <label for="plate">Plate Number:</label>
-                        <input type="text" id="plate" name="plate_number"  required>
-                    </div>
-
-                    <div class="form-group">
-                    <label for="fuel-type">Fuel Type:</label>
-                    <select id="fuel-type" name="fuel_type" required>
-                    <option value="petrol">Petrol</option>
-                    <option value="diesel">Diesel</option>
-                    <option value="electric">Electric</option>
-                    <option value="hybrid">Hybrid</option>
-
+                    <label for="ac">Air Conditioning (AC) or Non-AC:</label>
+                    <select id="ac_type" name="ac_type" >
+                        <option value="1">AC</option>
+                        <option value="0">Non-AC</option>
                     </select>
                     </div>
-
-
                     <div class="form-group">
-                    <label for="year">Year:</label>
-                    <select id="year" name="year" required>
-                        <?php
-                        $currentYear = date("Y");
-                        $startYear = $currentYear-50; // Set the start year, e.g., 50 years ago
-                        $endYear = $currentYear; // Set the end year as the current year
-                        
-                        for ($year = $endYear; $year >= $startYear; $year--) {
-                            echo "<option value='$year'>$year</option>";
-                        }
-                        ?>
-                    </select>
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" rows="4" cols="65" ></textarea>
+
                     </div>
+
+                    <div class="upload-container">
+                    <div class="form-group">
+                    <label id="file-label" for="file-input">Vehicle Photo</label>
+                <input type="file" id="file-input" />
+                    </div>
+                </div>
+            
+                  
+                  
+
+
+                   
                   
                             <div class="baseButtons">
                                 <button id="cancelBut" type="cancel">Cancel</button>
                                 <button id="saveBut" type="submit">Save</button>
                             </div>
                     
-                    <!-- <div class="form-group">
-                    <label for="vehicle-photo">Vehicle Photo:</label>
-                    <input type="file" id="vehicle-photo" name="veh_photo" accept="image/*" required>
-
-                    </div> -->
-
                     </form>
                             </div>
 

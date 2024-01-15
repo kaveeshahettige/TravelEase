@@ -122,7 +122,7 @@
             <img src="<?php echo URLROOT?>images/5.jpg" alt="">
             <div class="shade">
                 <p>Is Your Agency Ready to Shine?</p>
-                <button><a href="<?php echo URLROOT ?>users/transportReg1" style="text-decoration: none; color: inherit;">Register</a></button>
+                <button><a href="<?php echo URLROOT ?>users/transportRegNew" style="text-decoration: none; color: inherit;">Register</a></button>
                 
             </div>
             

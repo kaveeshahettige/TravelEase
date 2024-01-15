@@ -35,9 +35,7 @@
             <li><a href="<?php echo URLROOT?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
         </ul>
         
-        <!-- <div class="logout">
-            <a href="<?php echo URLROOT; ?>pages/indes" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
-        </div> -->
+       
     </nav>
     <main>
         <div class="logo-container">
@@ -86,36 +84,48 @@
             </div>
         </div>
 
-        <div class="review-content">
-
-            <div class="review-box">
-                <div class="review-sub-content">
-                    <div class="review-image">
-                        <img src="<?php echo URLROOT; ?>/images/driver/wikum.jpg" alt="Guest Photo">
-                    </div>
-                    <h2>Wikum Preethika</h2>
-                    <p>Date: October 15, 2023</p>
-                    <p class="review-text">Review:Hotel Review Hotel Review Hotel Review Hotel Review Hotel Review Hotel Review.</p>
-                    <button class="read-more-btn">Read More</button>
-                </div>
-            </div>
-
-            <div class="review-box">
-                <div class="review-sub-content">
-                    <div class="review-image">
-                        <img src="<?php echo URLROOT; ?>/images/driver/wikum.jpg" alt="Guest Photo">
-                    </div>
-                    <h2>Wikum Preethika</h2>
-                    <p>Date: October 15, 2023</p>
-                    <p class="review-text">Review:Hotel Review Hotel Review Hotel Review Hotel Review Hotel Review Hotel Review.</p>
-                    <button class="read-more-btn">Read More</button>
-                </div>
-            </div>
-        </div>
         
-        <div class="more-content">
-            <button class="next-page-btn">More Reviews <i class='bx bx-chevron-right'></i></button>
-        </div>
+       
+        <div class="review-content">
+    <!-- Assuming $data['reviews'] is an array of reviews -->
+    <?php
+    if (!empty($data['reviews'])) {
+        foreach ($data['reviews'] as $review) :
+    ?>
+            <div class="review-box">
+                <div class="review-sub-content">
+                    <div class="review-image">
+                        <img src="<?php echo URLROOT; ?>/images/driver/wikum.jpg" alt="Guest Photo">
+                    </div>
+                    <!-- <h2><?php echo $review->user_name; ?></h2> -->
+
+                    <div class="rating">
+                    <?php
+                    $rating = $review->rating;
+                    for ($i = 1; $i <= 5; $i++) {
+                        echo ($i <= $rating) ? '<span class="star">&#9733;</span>' : '<span class="star">&#9734;</span>';
+                    }
+                    ?>
+                  </div>
+                    <p>Trip ID: <?php echo $review->trip_id; ?></p>
+                    <p>Date: <?php echo $review->end_date; ?></p>
+                    <p class="review-text"><?php echo $review->comments; ?></p>
+
+                    
+                </div>
+            </div>
+    <?php
+        endforeach;
+    } else {
+        echo '<p>No reviews available.</p>';
+    }
+    ?>
+</div>
+
+
+</div>
+
+        
 
     </main>
 </body>

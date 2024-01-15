@@ -72,43 +72,49 @@
         </div>
        
         <div class="table-content">
-        <h2>Notification History</h2>
-            <table class="booking-table">
-                <thead>
+    <h2>Pending Booking Details</h2>
+    <table class="booking-table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Trip ID</th>
+                <th>Pickup Date</th>
+                <th>End Date</th>
+                <th>Pickup Location</th>
+                <th>Dropoff Location</th>
+                <th>Number of passengers</th>
+                <th>Accept</th>
+                <th>Decline</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if (!empty($data['pendingbookings'])) {
+                $count = 1;
+                foreach ($data['pendingbookings'] as $booking) :
+            ?>
                     <tr>
-                        <th>No</th>
-                        <th>Category</th>
-                        <th>Message</th>
-                        <th>Time</th>
-                        <th>Action</th>
+                        <td><?php echo $count; ?></td>
+                        <td><?php echo $booking->trip_id; ?></td>
+                        <td><?php echo $booking->start_date; ?></td>
+                        <td><?php echo $booking->end_date; ?></td>
+                        <td><?php echo $booking->pickup_location; ?></td>
+                        <td><?php echo $booking->dropoff_location; ?></td>
+                        <td><?php echo $booking->passenger_count; ?></td>
+                        <td><button class="view-button">Accept</button></td>
+                        <td><button class="view-button">Decline</button></td>
                     </tr>
-                </thead>
-                <tbody>
-                        
-                    <tr>
-                        <td>1</td>
-                        <td>Ride Request</td>
-                        <td>New ride request from John Doe.</td>
-                        <td>2 hours ago</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Ride Request</td>
-                        <td>New ride request from John Doe.</td>
-                        <td>2 hours ago</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Ride Request</td>
-                        <td>New ride request from John Doe.</td>
-                        <td>2 hours ago</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>   
-                </tbody>
-            </table>
-        </div>
+            <?php
+                    $count++;
+                endforeach;
+            } else {
+                echo '<tr><td colspan="8"><center>No pending bookings available.</center></td></tr>';
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
+
 
         <div class="more-content">
             <button class="next-page-btn">More Notifications <i class='bx bx-chevron-right'></i></button>

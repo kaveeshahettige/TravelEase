@@ -837,6 +837,110 @@ public function packagereg(){
     }
 }
 
+public function transportRegNew(){
+    if($_SERVER['REQUEST_METHOD']=='POST'){
+        //process form
+        
+        //sanitize data
+        $_POST=filter_input_array(INPUT_POST,FILTER_SANITIZE_STRING);
+        //init data
+        $data=[
+            'fname'=>trim($_POST['fname']),
+            'lname'=>trim($_POST['lname']),
+            'email'=>trim($_POST['email']),
+            'password'=>trim($_POST['password']),
+            'confirm_password'=>trim($_POST['confirm_password']),
+            'number'=>trim($_POST['number']),
+            'fname_err'=>'',
+            'lname_err'=>'',
+            'email_err'=>'',
+            'password_err'=>'',
+            'confirm_password_err'=>'',
+            'number_err'=>'',
+
+        ];
+        //validate fname
+        if(empty($data['fname'])){
+            $data['fname_err']='Please enter first name';      
+        }
+        //validate lname
+        if(empty($data['lname'])){
+            $data['lname_err']='Please enter last name';      
+        }
+        //validate email
+        if(empty($data['email'])){
+            $data['email_err']='Please enter email';      
+        }else{
+            if($this->userModel->findUserByEmail($data['email'])){
+                $data['email_err']='Email is already taken'; 
+            }
+        }
+        //validate password
+        if(empty($data['password'])){
+            $data['password_err']='Please enter password';      
+        }elseif(strlen($data['password'])<6){
+            $data['password_err']='Password must be atleast 6 characters'; 
+        }
+
+         //validate confirm password
+         if(empty($data['confirm_password'])){
+            $data['confirm_password_err']='Please confirm password';      
+        }else{
+            if($data['password']!=$data['confirm_password']){
+                $data['confirm_password_err']='password not matching';
+            }
+        }
+
+        //validate number
+        if(empty($data['number'])){
+            $data['number_err']='Please enter number';      
+        }elseif(strlen($data['number'])<10){
+            $data['number_err']='Invalid phone number'; 
+        }
+
+        //make sure errors are empty
+        if(empty($data['fname_err']) && empty($data['lname_err']) && empty($data['email_err']) && empty($data['password_err']) && empty($data['confirm_password_err']) && empty($data['number_err']) ){
+            //validate
+
+            //hash password
+            $data['password']=password_hash($data['password'],PASSWORD_DEFAULT);
+
+            //regsiter user
+            if($this->userModel->registerTransportuser($data)){
+                // flash('register_success','You are registered and can login');
+                redirect('users/login');
+            }else{
+                die('Something went wrong');
+            }
+
+        }else{
+            $this->view('users/transportRegNew',$data);
+        }
+
+        
+
+    }else{
+        
+        //init data
+        $data=[
+            'fname'=>'',
+            'lname'=>'',
+            'email'=>'',
+            'password'=>'',
+            'confirm_password'=>'',
+            'number'=>'',
+            'fname_err'=>'',
+            'lname_err'=>'',
+            'email_err'=>'',
+            'password_err'=>'',
+            'confirm_password_err'=>'',
+            'number_err'=>'',
+
+        ];
+        $this->view('users/transportRegNew',$data);
+    }
+}
+
 
       }  
     
@@ -844,7 +948,8 @@ public function packagereg(){
 
 
     
-
-
+      
+      
+     
 
 

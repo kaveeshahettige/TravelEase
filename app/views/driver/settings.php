@@ -69,7 +69,7 @@
                             <h6>Location</h6>
                             <p>City, Country</p>
                         </div>
-                        <a href="<?php echo URLROOT; ?>driver/vehicleedit">
+                        <a href="<?php echo URLROOT; ?>driver/index">
                         <button class ="edit-button">Edit</button>
                         </a>
                      </div>

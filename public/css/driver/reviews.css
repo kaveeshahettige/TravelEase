@@ -4,6 +4,8 @@ body, ul {
     font-family: "Poppins", sans-serif;
 }
 
+
+
 .search-bar {
     text-align: center;
     margin-top: 30px;
@@ -403,7 +405,7 @@ a.active, a:active {
 .review-sub-content p {
     margin: 5px 0;
     color: #000000;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 /* Style for the review image */
@@ -423,6 +425,7 @@ a.active, a:active {
 .review-text {
     max-height: 100px; /* Adjust the height as needed */
     overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .read-more-btn {
@@ -620,4 +623,20 @@ a.active, a:active {
         padding-left: 200px;
         text-align: center;
     }
+    .rating {
+        unicode-bidi: bidi-override;
+        direction: rtl;
+        text-align: center;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .star {
+        display: inline-block;
+        margin: 0 2px;
+        font-size: 30px;
+        color: gold !important; /* Set the color to gold */
+    }
+    
+    
 }
