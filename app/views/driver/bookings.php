@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/driver/bookings.css">
     <title><?php echo SITENAME ?></title>
-    <link rel="icon" type="<?php echo URLROOT; ?>/images/driver/x-icon" href="<?php echo URLROOT; ?>/images/driver/TravelEase.png">
+    <link rel="icon" type="image/x-icon" href="<?php echo URLROOT; ?>/images/driver/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -106,9 +106,9 @@ $newSort = ($sort === 'asc') ? 'desc' : 'asc';
                     <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=trip_id&sort=<?php echo $newSort; ?>">Trip ID</a></th>
                     <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=start_date&sort=<?php echo $newSort; ?>">Start Date</a></th>
                     <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=end_date&sort=<?php echo $newSort; ?>">End Date</a></th>
-                    <th>Pickup Location</th>
-                    <th>Dropoff Location</th>
-                    <th>Number of passengers</th>
+                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=pickup_location&sort=<?php echo $newSort; ?>">Pickup Location</th>
+                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=dropoff_location&sort=<?php echo $newSort; ?>">Dropoff Location</th>
+                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=passenger_count&sort=<?php echo $newSort; ?>">Number of passengers</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -147,21 +147,21 @@ $newSort = ($sort === 'asc') ? 'desc' : 'asc';
 
 
            
-
-            <div class="table-content">
+<div class="table-content">
     <h2>Accepted Booking Details</h2>
-    <table class="booking-table">
+    <form action="<?php echo URLROOT; ?>/driver/bookings" method="post">
+        <table class="booking-table">
         <thead>
             <tr>
                 <th>No</th>
-                <th>Trip ID</th>
-                <th>Pickup Date</th>
-                <th>End Date</th>
-                <th>Pickup Location</th>
-                <th>Dropoff Location</th>
-                <th>Number of passengers</th>
-                <th>Trip Charge</th>
-                <th>Decline</th>
+                <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=trip_id&sort=<?php echo $newSort; ?>">Trip ID</a></th>
+                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=start_date&sort=<?php echo $newSort; ?>">Start Date</a></th>
+                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=end_date&sort=<?php echo $newSort; ?>">End Date</a></th>
+                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=pickup_location&sort=<?php echo $newSort; ?>">Pickup Location</th>
+                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=dropoff_location&sort=<?php echo $newSort; ?>">Dropoff Location</th>
+                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=passenger_count&sort=<?php echo $newSort; ?>">Number of passengers</th>
+                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=earnings&sort=<?php echo $newSort; ?>">Trip Charges</th>
+                    <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -179,7 +179,13 @@ $newSort = ($sort === 'asc') ? 'desc' : 'asc';
                         <td><?php echo $booking->dropoff_location; ?></td>
                         <td><?php echo $booking->passenger_count; ?></td>
                         <td><?php echo $booking->earnings; ?></td>
-                        <td><button class="view-button">Decline</button></td>
+                        <td>
+    <input type="hidden" name="booking_id" value="<?php echo $booking->trip_id; ?>">
+    <button type="submit" name="status" value="complete" class="view-button">Complete</button>
+    <button type="submit" name="status" value="decline" class="view-button">Decline</button>
+</td>
+
+                        
                     </tr>
             <?php
                     $count++;
@@ -189,7 +195,8 @@ $newSort = ($sort === 'asc') ? 'desc' : 'asc';
             }
             ?>
         </tbody>
-    </table>
+        </table>
+    </form>
 </div>
 
 
@@ -222,21 +229,17 @@ $newSort = ($sort === 'asc') ? 'desc' : 'asc';
         </div>
        
         <div class="table-content">
+        <form action="<?php echo URLROOT; ?>/driver/bookings" method="post">
     <h2>Completed Booking Details</h2>
     <table class="booking-table">
         <thead>
             <tr>
                 <th>No</th>
-                <th>Trip ID</th>
-                <th>Start Date</th>
-                <th>End Date</th>           
-                <th>Pickup Location</th>
-                <th>Dropoff Location</th>
-                <th>Earnings</th>
-                <th>Passenger</th>
-                <th>Rating</th>
-                <th>Comments</th>
-                <th>Action</th>
+                <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=trip_id&sort=<?php echo $newSort; ?>">Trip ID</a></th>
+                <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=earnings&sort=<?php echo $newSort; ?>">Trip Charges</th>
+                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=rating&sort=<?php echo $newSort; ?>">Rating</th>
+                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=comments&sort=<?php echo $newSort; ?>">Comments</th>
+                <th>More Details</th>
             </tr>
         </thead>
         <tbody>
@@ -248,16 +251,13 @@ $newSort = ($sort === 'asc') ? 'desc' : 'asc';
                     <tr>
                         <td><?php echo $count; ?></td>
                         <td><?php echo $booking->trip_id; ?></td>
-                        <td><?php echo $booking->start_date; ?></td>
-                        <td><?php echo $booking->end_date; ?></td>
-                        <td><?php echo $booking->pickup_location; ?></td>
-                        <td><?php echo $booking->dropoff_location; ?></td>
                         <td><?php echo $booking->earnings; ?></td>
-                        <td><?php echo $booking->passenger_count; ?></td>
                         <td><?php echo $booking->rating; ?></td>
                         <td><?php echo $booking->comments; ?></td>
-                        <td><button class="view-button">More Details</button></td>
+                        <td><button class="view-button">More</button></td>
                     </tr>
+
+
             <?php
                     $count++;
                 endforeach;
@@ -267,6 +267,7 @@ $newSort = ($sort === 'asc') ? 'desc' : 'asc';
             ?>
         </tbody>
     </table>
+</form>
 </div>
 
         
