@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/index.css">
-    <title>Business admin Dashboard</title>
+    <title>TravelEase</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT; ?>/images/admin/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img src="<?php echo URLROOT; ?>/images/admin/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Admin</span>
+            <span class="user-name"><?php echo ucfirst($data['fname'])?></span>
         </div>
         
         <div class="search-bar">
@@ -27,8 +27,8 @@
             
         <ul>
             <li><a href="<?php echo URLROOT; ?>admin/index"class="active" ><i class='bx bxs-dashboard bx-sm'></i> Overview</a></li>
-            <li><a href="<?php echo URLROOT; ?>admin/request" ><i class='bx bxs-book bx-sm'></i> Request</a></li>
-            <li><a href="<?php echo URLROOT; ?>admin/traveler" ><i class='bx bx-child bx-sm'></i></i> Traveler</a></li>
+            <li><a href="<?php echo URLROOT; ?>admin/request" ><i class='bx bxs-book bx-sm'></i> Requests</a></li>
+            <li><a href="<?php echo URLROOT; ?>admin/traveler" ><i class='bx bx-child bx-sm'></i></i> Travelers</a></li>
 
             <li><a href="<?php echo URLROOT; ?>admin/hotel"><i class='bx bxs-hotel bx-sm'></i></i> Hotels</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/agency"><i class='bx bxs-car bx-sm'></i> Travel Agencies </a></li>
@@ -63,7 +63,7 @@
             <!-- Total Bookings Box -->
             <div class="box">
                 <h2>Total Requests</h2>
-                <p>35</p>
+                <p><?php echo $data['nore']?></p>
             </div>
             <div class="box">
                 <h2>Total Bookings</h2>
@@ -79,19 +79,19 @@
             <!-- Customers Box -->
             <div class="box">
                 <h2>Total Travelers</h2>
-                <p>10</p>
+                <p><?php echo $data['not']?></p>
             </div>
             <div class="box">
                 <h2>Total Hotels</h2>
-                <p>50</p>
+                <p><?php echo $data['noh']?></p>
             </div>
             <div class="box">
                 <h2>Total Transport providers</h2>
-                <p>10</p>
+                <p><?php echo $data['noa']?></p>
             </div>
             <div class="box">
                 <h2>Total Packages providers</h2>
-                <p>10</p>
+                <p><?php echo $data['nop']?></p>
             </div>
         </div>
         </div>

@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/hotel.css">
-    <title>Business admin Packages</title>
-    <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT; ?>/images/admin/Images/TravelEase.png">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
+    
+    <title>TravelEase</title>
+    <link rel="icon" type="" href="<?php echo URLROOT; ?>/images/admin/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -14,7 +17,7 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img src="<?php echo URLROOT; ?>/images/admin/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Admin</span>
+            <span class="user-name"><?php echo ucfirst($data['fname'])?> </span>
         </div>
         
         <div class="search-bar">
@@ -56,7 +59,7 @@
             <!-- Total Request Box -->
             <div class="box">
                 <h2>Total Travelers</h2>
-                <p>120000</p>
+                <p><?php echo $data['no'] ?></p>
             </div>
         
 
@@ -74,41 +77,45 @@
        
         <div class="table-content">
         <h2>Traveler Details</h2>
+        <!-- <?php var_dump($data['traveler']);?> -->
             <table class="booking-table">
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Requested Number</th>
+                        <th>Registration Number</th>
                         <th>Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
+                <?php
+$count = 1;
+
+if (!empty($data['traveler']) && is_array($data['traveler'])) {
+    foreach ($data['traveler'] as $user) {
+        echo '<tr class="t-row">';
+        echo '<td>' . $count . '</td>';
+        echo '<td>' . $user->id . '</td>';
+        echo '<td>' . ucfirst($user->fname) . ' ' . ucfirst($user->lname) . '</td>';
+        echo '<td> <button class="view-button">View</button>&nbsp;
+        <button  onclick="deleteTraveler(' . $user->id . ')" class="view-button">Delete</button></td>';
+        echo '</tr>';
+        $count++;
+    }
+} else {
+    echo '<tr><td colspan="4">No data available</td></tr>';
+}
+?>
+
                         
-                    <tr>
-                        <td>1</td>
-                        <td>00001</td>
-                        <td>Wikum Preethika</td>
-                        <td><button class="view-button">View</button>&nbsp;<button class="view-button">Delete</button></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>00002</td>
-                        <td>Kaveesha Hettige</td>
-                        <td><button class="view-button">View</button>&nbsp;<button class="view-button">Delete</button></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>00003</td>
-                        <td>Dilanga Niroshan</td>
-                        <td><button class="view-button">View</button>&nbsp;<button class="view-button">Delete</button></td>
-                    </tr>   
+                   
                 </tbody>
             </table>
         </div>
 
         <div class="more-content">
-            <button class="next-page-btn">More Travelers <i class='bx bx-chevron-right'></i></button>
+        <button class="next-page-btn" id="moreBtn">More Travelers <i class='bx bx-chevron-right'></i></button>
+
         </div>
 
     </main>

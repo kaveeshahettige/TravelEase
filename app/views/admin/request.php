@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/request.css">
-    <title>Admin Requests</title>
-    <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT; ?>/images/admin/Images/TravelEase.png">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
+    <title>TravelEase</title>
+    <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -14,7 +17,7 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img src="<?php echo URLROOT; ?>/images/admin/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Admin</span>
+            <span class="user-name"><?php echo ucfirst($data['fname']); ?></span>
         </div>
         
         <div class="search-bar">
@@ -54,8 +57,8 @@
  
             <!-- Total Request Box -->
             <div class="box">
-                <h2>Total Request</h2>
-                <p>120</p>
+                <h2>Total Requests</h2>
+                <p><?php echo $data['nore'] ?></p>
             </div>
         
 
@@ -77,41 +80,56 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Request Name</th>
-                        <th>Requested Date</th>
+                        <th>ID</th>
+                        <th>Name</th>
                         <th>Provider Type</th>
+                        <th>Document</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                        
-                    <tr>
-                        <td>1</td>
-                        <td>Wikum Preethika</td>
-                        <td>2023-10-06</td>
-                        <td>Hotel</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Kaveesha Hettige</td>
-                        <td>2023-10-17</td>
-                        <td>Travel Agency</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Dilanga</td>
-                        <td>2023-10-17</td>
-                        <td>Package</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>   
+                <?php
+$count = 1;
+
+if (!empty($data['requests']) && is_array($data['requests'])) {
+    foreach ($data['requests'] as $user) {
+        echo '<tr class="t-row">';
+        echo '<td>' . $count . '</td>';
+        echo '<td>' . $user->id . '</td>';
+        echo '<td>' . $user->fname . '</td>';
+        echo '<td>';
+        switch ($user->type) {
+            case 3:
+                echo 'Hotel';
+                break;
+            case 4:
+                echo 'Travel Agency';
+                break;
+            case 5:
+                echo 'Guide';
+                break;
+        }
+        echo '</td>';
+        // echo '<td>' . $user->document .'</td>';
+        // Assuming $user->documentName contains the document name
+        echo '<td><button class="view-button" onclick="openDocument(\'' . $user->document . '\')">View Document</button></td>';
+        // echo '<td> <button class="view-button" onclick="viewDocument(' . $user->id . ')">View Document</button></td>';
+        echo '<td> <button class="accept-button" onclick="acceptUser(' . $user->id . ')">Accept</button> <button class="decline-button" onclick="declineUser(' . $user->id . ')">Decline</button></td>';
+        echo '</tr>';
+        $count++;
+    }
+} else {
+    echo '<tr><td colspan="6">No requests available</td></tr>';
+}
+?>
+    
+                   
                 </tbody>
             </table>
         </div>
 
         <div class="more-content">
-            <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
+            <button class="next-page-btn"  id="moreBtn">More Bookings <i class='bx bx-chevron-right'></i></button>
         </div>
 
     </main>

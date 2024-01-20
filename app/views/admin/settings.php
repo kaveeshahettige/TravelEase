@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/settings.css">
-    <title>Business admin Settings</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
+    <title>TravelEase</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -14,16 +17,16 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img src="<?php echo URLROOT; ?>/images/admin/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Admin</span>
+            <span class="user-name"><?php echo ucfirst($data['fname']); ?></span>
         </div>
         
         <div class="search-bar">
-            <form action="#" method="GET">
-                <input type="text" placeholder="Find a Setting">
-                <button type="submit">Search</button>
-            </form>
-        </div>
-        <ul>
+    <form id="searchForm" action="#" method="GET">
+        <input type="text" id="searchInput" placeholder="Find a Setting">
+        <button type="submit">Search</button>
+    </form>
+    </div>
+        <ul id="navList">
             <li><a href="<?php echo URLROOT; ?>admin/index" ><i class='bx bxs-dashboard bx-sm'></i> Overview</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/request" ><i class='bx bxs-book bx-sm'></i> Request</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/traveler" ><i class='bx bx-child bx-sm'></i></i> Traveler</a></li>
@@ -99,7 +102,7 @@
                     <div class="basic-info-content">
                         <h2>Change Password</h2>
                             <a href="<?php echo URLROOT; ?>admin/adminpassword">
-                                <button  class ="edit-button">Edit</button>
+                                <button  class ="edit-button">Change</button>
                             </a>
                     </div>
                 </div>
@@ -111,7 +114,7 @@
             <div class="basic-info-content">
             <h2>Profile Deletion</h2>
             <a href="">
-            <button class ="delete-button">Delete</button></a>
+            <button class ="delete-button" onclick="return adminDelete();">Delete</button></a>
             </div>
         </div>
     </div>
