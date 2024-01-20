@@ -26,7 +26,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
             <div class="rightcontent">
-            <li><a href="<?php echo URLROOT?>travelerDashboard/index"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
+            <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
             <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
             </div>
         </ul>
@@ -49,29 +49,35 @@
             </div>
         </div>
     </section>
+
     <section class="main2">
         <div class="topbar">
-        <?php if (!empty($data['serviceProviderName']) && !empty($data['location'])): ?>
+        <?php if (!empty($data['booking'])): ?>
             <span id="upcoming">Upcoming Trips</span>
             <?php endif; ?>
             <button id="plantrip">Plan New Trip</button>
         </div>
+        
         <div class="main2trip">
-    <?php if (!empty($data['serviceProviderName']) && !empty($data['location'])): ?>
+    <?php if (!empty($data['booking'])): ?>
+        <?php foreach ($data['bookingDetailsArray'] as $element): ?>
         <div class="main2img1content">
-            <div><img src="<?php echo URLROOT ?>images/<?php echo $data['picture'] ?>" alt=""></div>
+            
+            <div><img src="<?php echo URLROOT ?>images/rooms/<?php echo $element['furtherBookingDetails']->image ?>" alt=""></div>
             <div class="c1"> 
                 <div>
-                    <p style="font-size: 30px; margin: 0; font-weight: bold;"><?php echo $data['serviceProviderName'] ?></p>
-                    <p><?php echo $data['location'] ?></p>
+                    <p style="font-size: 30px; margin: 0; font-weight: bold;"><?php echo ucfirst($data['booking']->fname)?></p>
+                    <p><?php echo $data['mainbookingDetails']->city ?></p>
                 </div>
-                <div> <button id="viewbooking" onclick="viewBooking(<?php echo $data['serviceProviderID']; ?>)">View</button></div>
+                <div> <button id="viewbooking" onclick="viewBooking(<?php echo $data['serviceProviderID']; ?>,<?php echo  $element['bookingIDs']; ?>)">View</button></div>
             </div>
         </div>
-    <!--  <?//php else: ?> 
-        <p>No upcoming trips</p> -->
+        <?php endforeach; ?>
     <?php endif; ?>
+    
 </div>
+
+        
 
            
         </div>

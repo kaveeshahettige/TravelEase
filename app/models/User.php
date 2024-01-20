@@ -434,10 +434,19 @@ public function updatePicture($data){
 
     public function findBookingAvailable($id){
 
-        $this->db->query('SELECT * from bookings where user_id=:id');
+        $this->db->query('SELECT bookings.*, users.*
+        FROM bookings
+        INNER JOIN users ON bookings.serviceProvider_id = users.id
+        WHERE bookings.user_id = :id;
+        ');
         $this->db->bind(':id',$id);
     
-        $data=$this->db->single();
+        ///////////////////////
+//this should change as set of data not a single
+
+        //////////
+        //resultSet()
+        $data=$this->db->resultSet();
     
         //check row
         if($this->db->rowCount()>0){
@@ -489,6 +498,50 @@ public function updatePicture($data){
             }
         }
     }
+
+    //   findBookingFurtherDetail
+    public function findBookingFurtherDetail($booking){
+        if($booking->type=='3'){
+            $this->db->query('SELECT * from hotel_rooms where room_id=:id');
+            $this->db->bind(':id',$booking->room_id);
+        
+            $data=$this->db->single();
+        
+            //check row
+            if($this->db->rowCount()>0){
+                return $data;
+            }else{
+                return null;
+            }
+        }
+        else if($booking->type=='4'){
+            $this->db->query('SELECT * from vehicles where vehicle_id=:id');
+            $this->db->bind(':id',$booking->vehicle_id);
+        
+            $data=$this->db->single();
+        
+            //check row
+            if($this->db->rowCount()>0){
+                return $data;
+            }else{
+                return null;
+            }
+        }
+        else if($booking->type=='5'){
+            $this->db->query('SELECT * from packages where package_id=:id');
+            $this->db->bind(':id',$booking->package_id);
+        
+            $data=$this->db->single();
+        
+            //check row
+            if($this->db->rowCount()>0){
+                return $data;
+            }else{
+                return null;
+            }
+        }
+    }
+
 
     // getRandomServiceProviders
     public function getRandomServiceProviders(){
@@ -547,6 +600,22 @@ public function updatePicture($data){
         $row = $this->db->single();
          if($this->db->rowcount()>0){
             return $row->count;
+         }
+         else{
+            return false;
+        }
+    }
+
+    //findBooking($Bid)
+    public function findBooking($Bid){
+        $this->db->query('SELECT bookings.*, users.*
+        FROM bookings
+        INNER JOIN users ON bookings.serviceProvider_id = users.id
+        WHERE bookings.booking_id = :id;');
+        $this->db->bind(':id', $Bid);
+        $booking = $this->db->single();
+        if($this->db->rowcount()>0){
+            return $booking;
          }
          else{
             return false;

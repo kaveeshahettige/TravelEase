@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">    <title>Hotel Bookings</title>
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">    
+    <title>TravelEase</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -96,7 +97,7 @@
                     <th>Service Provider</th>
                     <th>Start Date</th>
                     <th>End Date</th>
-                    <th>Action</th>
+                   
                 </tr>
                 </thead>
                 <tbody>

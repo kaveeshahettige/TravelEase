@@ -1,6 +1,6 @@
-function viewBooking($id) {
+function viewBooking($Sid,$Bid) {
   // Set the new URL you want to navigate to
-  const newPageURL = `bookingdetails/${$id}`; // Replace with your desired URL
+  const newPageURL = `bookingdetails/${$Sid}/${$Bid}`; // Replace with your desired URL
 
   // Use window.location to navigate to the new page
   window.location.href = newPageURL;
