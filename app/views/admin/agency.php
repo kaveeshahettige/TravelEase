@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/agency.css">
-    <title>Business Financial Management</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
+    <title></title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT; ?>/images/admin/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -14,7 +16,7 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img src="<?php echo URLROOT; ?>/images/admin/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Admin</span>
+            <span class="user-name"><?php echo ucfirst($data['fname'])?></span>
         </div>
         
         <div class="search-bar">
@@ -57,7 +59,7 @@
             <!-- Total Request Box -->
             <div class="box">
                 <h2>Total Travel Agencies</h2>
-                <p>800</p>
+                <p><?php echo $data['no'] ?></p>
             </div>
         
 
@@ -79,41 +81,39 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Travel Agencies Name</th>
-                        <th>Registered Number</th>
-                        <th>Provider Name</th>
+                        <th>Registration Number</th>
+                        <th>Hotel Name</th>
+                        <!-- <th>Provider Name</th> -->
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                         
-                    <tr>
-                        <td>1</td>
-                        <td>Travel Agency 1</td>
-                        <td>00001</td>
-                        <td>Wikum Preethika</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Travel Agency 2</td>
-                        <td>00002</td>
-                        <td>Kaveesha Hettige</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Travel Agency 3</td>
-                        <td>00003</td>
-                        <td>Dilanga Niroshan</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>   
+                <?php
+$count = 1;
+
+if (!empty($data['agency']) && is_array($data['agency'])) {
+    foreach ($data['agency'] as $user) {
+        echo '<tr class="t-row">';
+        echo '<td>' . $count . '</td>';
+        echo '<td>' . $user->id . '</td>';
+        echo '<td>' . ucfirst($user->fname) . '  ' . ucfirst($user->lname) . '</td>';
+        echo '<td><button class="view-button">View</button>&nbsp;
+            <button onclick="deleteAgency(' . $user->id . ')" class="view-button">Delete</button></td>';
+        echo '</tr>';
+        $count++;
+    }
+} else {
+    echo '<tr><td colspan="4">No data available</td></tr>';
+}
+?>
+
                 </tbody>
             </table>
         </div>
 
         <div class="more-content">
-            <button class="next-page-btn">More<i class='bx bx-chevron-right'></i></button>
+            <button class="next-page-btn" id="moreBtn">More Agencies<i class='bx bx-chevron-right'></i></button>
         </div>
 
     </main>

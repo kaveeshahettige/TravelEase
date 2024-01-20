@@ -4,17 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>css/travelerDashboard/style.css">
-    <title>  Dashboard</title>
+    <title>Dashboard</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>images/TravelEase_logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="<?php echo URLROOT?>js/travelerDashboard/script.js"></script>
 </head>
 <body>
     <nav class="left-menu">
         <div class="user-profile">
-            <img src="<?php echo URLROOT?>images/5.jpg" alt="User Profile Photo">
-            <span class="user-name"><?php echo $data['fname']."   ".$data['lname']?></span>
+            <img style="cursor: pointer;" src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo" onclick="gotoHome()"> 
+            <span class="user-name" style="font-weight: bold;"><?php echo $data['fname']." ".$data['lname']?></span>
+
         </div>
         
         <div class="search-bar">
@@ -27,7 +29,7 @@
             
         <ul>
             <li><a href="<?php echo URLROOT?>travelerDashboard/index/<?php echo $_SESSION['user_id']?>" class="active"><i class='bx bxs-dashboard bx-sm'></i> Overview</a></li>
-            <li><a href=""><i class='bx bxs-book bx-sm'></i> Bookings</a></li>
+            <li><a href="<?php echo URLROOT?>travelerDashboard/bookings/<?php echo $_SESSION['user_id']?>"><i class='bx bxs-book bx-sm'></i> Bookings</a></li>
             <li><a href=""><i class='bx bxs-package bx-sm'></i></i> Payments</a></li>
             <li><a href=""><i class='bx bxs-report bx-sm'></i> Notifications</a></li>
             <li><a href=""><i class='bx bx-line-chart bx-sm'></i> Previous Trips</a></li>
@@ -53,12 +55,12 @@
                 <div class="item4">
                     <div class="profile-card">
                         <div class="profilepicture">
-                            <img src="<?php echo URLROOT?>images/5.jpg" alt="profile Photo">
+                        <img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> 
                         </div>
                         <div class="profileinfo">
-                            <h2><?php echo $_SESSION['user_fname']."  ".$_SESSION['user_lname']?></h2>
-                            <p><?php echo $_SESSION['user_email']?></p>
-                            <p>Registration Number: <?php echo $_SESSION['user_id']?></p>
+                            <h1><?php echo $_SESSION['user_fname']."  ".$_SESSION['user_lname']?></h1>
+                            <h4 style="font-weight:bold"><?php echo $_SESSION['user_email']?></h4>
+                            <h4 style="font-weight:bold">Registration Number: <?php echo $_SESSION['user_id']?></h4>
                             
                         </div>
                     </div>
