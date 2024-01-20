@@ -624,6 +624,7 @@ public function updatePicture($data){
             return false;
         }
     }
+    
 
 
 
