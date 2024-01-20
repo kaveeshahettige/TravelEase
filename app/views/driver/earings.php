@@ -41,121 +41,121 @@
         </div> -->
     </nav>
     <main>
-        <div class="logo-container">
-            <img src="<?php echo URLROOT; ?>/images/driver/TravelEase.png" alt="TravelEase Logo">
-            <span class="logo-text">TravelEase</span>
+    <div class="logo-container">
+    <img src="<?php echo URLROOT; ?>/images/driver/TravelEase.png" alt="TravelEase Logo">
+    <span class="logo-text">TravelEase</span>
+</div>
+
+<div class="dashboard-content">
+    <h1>Earnings and Payments</h1>
+</div>
+
+<div class="dashboard-sub-content">
+    <div class="top-boxes">
+        <!-- Total Earnings Box -->
+        <div class="box">
+            <h2>Total Earnings</h2>
+            <p>Rs. <?= isset($totalEarnings) ? number_format($totalEarnings, 2) : '0.00' ?></p>
         </div>
-
-         <div class="dashboard-content">
-            <h1>Earings and Payments</h1>
+        <div class="box">
+            <h2>Last Payment</h2>
+            <p></p>
         </div>
+    </div>
+</div>
 
-        <div class="dashboard-sub-content">
-            <div class="top-boxes">
-    <!-- Total Bookings Box -->
-                <div class="box">
-                    <h2>Total Earnings</h2>
-                    <p>$8,750</p>
-                </div>
-            
-                <!-- Ongoing Bookings Box -->
-                <div class="box">
-                    <h2>Last Payout</h2>
-                    <p>September 30, 2023</p>
-                </div>
 
-            </div>
-            </div>
-       
-        <div class="table-content">
-        <h2>Earnings Summary</h2>
-            <table class="booking-table">
-                <thead>
+
+<div class="table-content">
+    <h2>Earnings Summary</h2>
+    <table class="booking-table">
+        <thead>
+            <tr>
+                <th>Time Period</th>
+                <th>Earnings</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $weeklyEarnings = 0;
+            $monthlyEarnings = 0;
+            if (!empty($data['payments'])) {
+                var_dump($data['totalEarnings']);
+                foreach ($data['payments'] as $payment) {
+                    // Assuming your date format is Y-m-d
+                    $paymentDate = new DateTime($payment->end_date);
+
+                    // Check if the payment date falls within the current week
+                    $currentWeek = (new DateTime())->format("W");
+                    if ($paymentDate->format("W") == $currentWeek) {
+                        $weeklyEarnings += $payment->earnings;
+                    }
+
+                    // Check if the payment date falls within the current month
+                    $currentMonth = (new DateTime())->format("m");
+                    if ($paymentDate->format("m") == $currentMonth) {
+                        $monthlyEarnings += $payment->earnings;
+                    }
+                }
+            }
+            ?>
+            <tr>
+                <td>Weekly</td>
+                <td>Rs. <?php echo number_format($weeklyEarnings, 2); ?></td>
+                <td><button class="view-button">View</button></td>
+            </tr>
+            <tr>
+                <td>Monthly</td>
+                <td>Rs. <?php echo number_format($monthlyEarnings, 2); ?></td>
+                <td><button class="view-button">View</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+<div class="table-content">
+    <h2>Payment History</h2>
+    <table class="booking-table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Trip ID</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if (!empty($data['payments'])) {
+                $counter = 1;
+                foreach ($data['payments'] as $payment) :
+            ?>
                     <tr>
-                        <th>No</th>
-                        <th>Time Period</th>
-                        <th>Earnings</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                        
-                    <tr>
-                        <td>1</td>
-                        <td>Daily</td>
-                        <td>$250</td>
+                        <td><?php echo $counter; ?></td>
+                        <td><?php echo $payment->end_date; ?></td>
+                        <td>Rs. <?php echo number_format($payment->earnings, 2); ?></td>
+                        <td><?php echo $payment->trip_id; ?></td>
                         <td><button class="view-button">View</button></td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Weekly</td>
-                        <td>$1,500</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Monthly</td>
-                        <td>$6,000</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>   
-                </tbody>
-            </table>
-        </div>
+            <?php
+                    $counter++;
+                endforeach;
+            } else {
+                echo '<tr><td colspan="5">No payment history available.</td></tr>';
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
 
-        <div class="dashboard-sub-content">
-            <div class="top-boxes">
-    <!-- Total Bookings Box -->
+<div class="more-content">
+    <button class="next-page-btn">More Payments <i class='bx bx-chevron-right'></i></button>
+</div>
 
-                <!-- Customers Box -->
-                <div class="box">
-                    <h2>Last Payment</h2>
-                    <p>$100 on September 1, 2023</p>
-                </div>
-            </div>
-            </div>
-
-        <div class="table-content">
-            <h2>Payment History</h2>
-                <table class="booking-table">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>Transaction ID</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                            
-                        <tr>
-                            <td>1</td>
-                            <td>2023-09-01</td>
-                                <td>$100</td>
-                                <td>TXN12345</td>
-                            <td><button class="view-button">View</button></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>2023-08-25</td>
-                                <td>$75</td>
-                                <td>TXN67890</td>
-                            <td><button class="view-button">View</button></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>2023-09-01</td>
-                                <td>$100</td>
-                                <td>TXN12345</td>
-                            <td><button class="view-button">View</button></td>
-                        </tr>   
-                    </tbody>
-                </table>
-            </div>
-    
-            <div class="more-content">
-                <button class="next-page-btn">More Payments <i class='bx bx-chevron-right'></i></button>
-            </div>
 
     </main>
 </body>

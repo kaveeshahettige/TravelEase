@@ -6,6 +6,58 @@ body, ul {
     font-family: "Poppins", sans-serif;
 }
 
+
+.upload-container {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#fuel-type{
+    cursor: pointer;
+    /* padding: 10px 15px; */
+    background-color: #FFDB8B;
+    color: #000000;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+
+
+}
+#year{
+    cursor: pointer;
+    /* padding: 10px 15px; */
+    background-color: #FFDB8B;
+    color: #000000;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+
+
+}
+#file-input {
+    display: none;
+}
+
+/* Style the label directly */
+#file-label {
+    cursor: pointer;
+    padding: 10px 15px;
+    background-color: #FFDB8B;
+    color: #fff;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    
+}
+
+#file-label:hover {
+    background-color: #FFDB8B;
+}
+
+
 /* Left menu styles */
 .left-menu {
     background-color: #FFDB8B;
