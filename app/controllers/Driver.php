@@ -58,43 +58,24 @@ class Driver extends Controller{
     public function bookings() {
         $user_id = $_SESSION['user_id'];
         $column = isset($_GET['column']) ? $_GET['column'] : 'trip_id';
-
     
         // Check if the sort parameter is set in the URL
         $sort = isset($_GET['sort']) ? $_GET['sort'] : 'asc';
-
     
         // Determine the sorting order based on the current order
         $newSort = ($sort === 'asc') ? 'desc' : 'asc';
     
         // Get pending bookings and sort by the specified column
-        $pendingBookings = $this->TravelsModel->getPendingBookingsSorted($column, $newSort);
-
-        // Get accepted bookings
-        $acceptedbookings = $this->TravelsModel->acceptedbookings($user_id);
-
         $pendingBookings = $this->TravelsModel->getPendingBookingsSorted($column, $newSort,$user_id);
     
         $acceptedbookings = $this->TravelsModel->getAcceptedBookingsSorted($column, $newSort, $user_id);
     
         // Get completed bookings
-        $completedbookings = $this->TravelsModel->completedbookings($user_id);
-
+        $completedbookings = $this->TravelsModel->getCompletedBookingsSorted($column, $newSort, $user_id);
+    
         // Handle update status form submission
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $bookingId = $_POST['booking_id'];
-            $status = $_POST['status'];
-
-            // Debugging statements in the controller
-            echo "Controller - Booking ID: " . $bookingId . "<br>";
-            echo "Controller - Status: " . $status . "<br>";
-
-            $result = $this->TravelsModel->updateBookingStatus($bookingId, $status);
-
-            // Debugging statements after the model call
-            echo "Controller - Result from Model: " . ($result ? 'Success' : 'Failure') . "<br>";
-
             $action = $_POST['status'];
     
             $TravelsModel = $this->loadModel('Travel');
@@ -103,21 +84,16 @@ class Driver extends Controller{
             $result = $TravelsModel->updateBookingStatus($bookingId, $action);
     
             if ($result) {
-                // Status updated successfully, you can redirect or do additional actions
-                header("Location: " . URLROOT . "/driver/bookings");
                 // Successful update, you may redirect or perform additional actions
                 // For example, redirect back to the bookings page
                 header('Location: ' . URLROOT . '/driver/bookings');
                 exit();
             } else {
-                // Handle the case where the update fails
-                // You might want to display an error message or take other actions
                 // Handle update failure
                 // You may display an error message or redirect to an error page
                 echo "Error updating booking status";
             }
         }
-
     
         // Assign the data to be passed to the view
         $data = [
@@ -127,7 +103,6 @@ class Driver extends Controller{
             'sort' => $newSort, // Include the sort order in the data
             'column' => $column, // Include the current column in the data
         ];
-
     
         // Load the view
         $this->view('driver/bookings', $data);
@@ -291,7 +266,6 @@ class Driver extends Controller{
         
                 $this->view('driver/vehiclereg');
             }
-            
             
             public function morebookingdetails(){
                 $this->view('driver/morebookingdetails');

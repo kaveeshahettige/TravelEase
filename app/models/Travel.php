@@ -170,11 +170,6 @@ class Travel{
  
                 
 
-        public function acceptedbookings($user_id){
-            $this->db->query('SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = "accepted"');
-            $this->db->bind(':user_id', $user_id);
-            $results = $this->db->resultSet();
-        }
         // public function acceptedbookings($user_id){
         //     $this->db->query('SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = "accepted"');
         //     $this->db->bind(':user_id', $user_id);
@@ -182,12 +177,6 @@ class Travel{
         //     return $results;
         // }
 
-        public function completedbookings($user_id){
-            $this->db->query('SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = "completed"');
-            $this->db->bind(':user_id', $user_id);
-            $results = $this->db->resultSet();
-            return $results;
-        }
         // public function completedbookings($user_id){
         //     $this->db->query('SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = "completed"');
         //     $this->db->bind(':user_id', $user_id);
@@ -195,11 +184,6 @@ class Travel{
         //     return $results;
         // }
 
-        public function getPendingBookings($user_id){
-            $this->db->query('SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = "pending"');
-            $this->db->bind(':user_id', $user_id);
-            $results = $this->db->resultSet();
-        }
         // public function getPendingBookings($user_id){
         //     $this->db->query('SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = "pending"');
         //     $this->db->bind(':user_id', $user_id);
@@ -245,26 +229,6 @@ class Travel{
             }
         }
 
-        public function updateBookingStatus($bookingId, $status) {
-            // Validate $status to prevent SQL injection (you may use a whitelist approach)
-            $allowedStatus = ['accepted', 'decline'];
-            if (!in_array($status, $allowedStatus)) {
-                $status = 'pending'; // Default to pending if an invalid status is provided
-            }
-        
-            // Debugging statements
-            var_dump($bookingId); // Check the value of bookingId
-            var_dump($status);    // Check the value of status
-        
-            // Update the booking status
-            $this->db->query("UPDATE vehicle_bookings SET status = :status WHERE trip_id = :trip_id");
-            $this->db->bind(':trip_id', $bookingId); // Use $bookingId instead of $trip_id
-            $this->db->bind(':status', $status);
-        
-            // Execute the query
-            return $this->db->execute();
-        }
-        
  // Update the booking status
  public function updateBookingStatus($bookingId, $action) {
     $status = '';
@@ -300,7 +264,6 @@ class Travel{
         
         
 
-        public function getPendingBookingsDateSorted($column, $order) {
        
 
         public function getPendingBookingsSorted($column,$order,$user_id) {
@@ -309,28 +272,21 @@ class Travel{
             if (!in_array($column, $allowedColumns)) {
                 $column = 'trip_id'; // Default to trip_id if an invalid column is provided
             }
-    
 
             // Validate $order to prevent SQL injection (you may use a whitelist approach)
             $allowedOrders = ['asc', 'desc'];
             if (!in_array($order, $allowedOrders)) {
                 $order = 'asc'; // Default to asc if an invalid order is provided
             }
-    
-            $this->db->query("SELECT * FROM vehicle_bookings WHERE status = 'pending' ORDER BY $column $order");
-            return $this->db->resultSet();
 
          // $this->db->query("SELECT * FROM vehicle_bookings  WHERE status = 'pending' ORDER BY $column $order");
          $this->db->query("SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = 'pending' ORDER BY $column $order");
          $this->db->bind(':user_id', $user_id);
          return $this->db->resultSet();
         }
-        
 
-        public function getPendingBookingsSorted($column,$order) {
         public function getAcceptedBookingsSorted($column,$order,$user_id) {
             // Validate $column to prevent SQL injection (you may use a whitelist approach)
-            $allowedColumns = ['trip_id', 'start_date', 'end_date', 'pickup_location', 'dropoff_location', 'passenger_count'];
             $allowedColumns = ['trip_id', 'start_date', 'end_date', 'pickup_location', 'dropoff_location', 'passenger_count', 'earnings'];
             if (!in_array($column, $allowedColumns)) {
                 $column = 'trip_id'; // Default to trip_id if an invalid column is provided
@@ -341,7 +297,6 @@ class Travel{
             if (!in_array($order, $allowedOrders)) {
                 $order = 'asc'; // Default to asc if an invalid order is provided
             }
-
             $this->db->query("SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = 'accepted' ORDER BY $column $order");
             $this->db->bind(':user_id', $user_id);
             return $this->db->resultSet();
