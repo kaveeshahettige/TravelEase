@@ -220,87 +220,54 @@ class Driver extends Controller{
           $this->view('driver/vehiclepassword');
                }
 
-    public function vehiclereg()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Initialize these variables
-            $vehPhoto = $insPhoto = $regPhoto = null;
-    
-            // Check if images were uploaded
-            if (!empty($_FILES['images']['name'])) {
-                $uploadDirectory = STOREROOT; // Use the constant directly
-                
-                // Loop through each uploaded file
-                foreach ($_FILES['images']['name'] as $key => $fileName) {
-                    $tempFilePath = $_FILES['images']['tmp_name'][$key];
-                    $destinationFilePath = $uploadDirectory . $fileName;
-    
-                    if (move_uploaded_file($tempFilePath, $destinationFilePath)) {
-                        // File has been successfully moved to the specified directory
-                        // You can store the file path in the database or perform other actions
+               public function vehiclereg() {
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $data = [
+                        'brand' => $_POST['brand'],
+                        'model' => $_POST['model'],
+                        'plate_number' => $_POST['plate_number'],
+                        'fuel_type' => $_POST['fuel_type'],
+                        'year' => $_POST['year'],
+                        'seating_capacity' => $_POST['seating_capacity'],
+                        'user_id' => $_SESSION['user_id'],
+                        'ac_type' => $_POST['ac_type'],
+                        'description' => $_POST['description'],
+                    ];
+        
+                    $imageFiles = [
+                        'vehi_img1' => $_FILES['vehi_img1'],
+                        'vehi_img2' => $_FILES['vehi_img2'],
+                        'vehi_img3' => $_FILES['vehi_img3'],
+                        'vehi_img4' => $_FILES['vehi_img4'],
+                        'insurance' => $_FILES['insurance'],
+                        'registration' => $_FILES['registration'],
+                        'revenue' => $_FILES['revenue'],
+                    ];
+        
+                    // Now, save this data to the database using your model
+                    $travelModel = $this->model('Travel');
+        
+                    if ($travelModel->vehiclereg($data, $imageFiles)) {
+                        redirect('driver/vehicle');
                     } else {
-                        // Handle file upload error
+                        // Handle data save failure
+                        $this->view('driver/vehiclereg', ['error' => 'Failed to save data']);
+                        return;
                     }
+                } else {
+                    // Handle other cases, such as GET requests
                 }
+        
+                $this->view('driver/vehiclereg');
             }
-    
-            // Retrieve text data
-            $data = [
-                'brand' => $_POST['brand'],
-                'model' => $_POST['model'],
-                'plate_number' => $_POST['plate_number'],
-                'fuel_type' => $_POST['fuel_type'],
-                'year' => $_POST['year'],
-                'seating_capacity' => $_POST['seating_capacity'],
-                'user_id' => $_SESSION['user_id'], 
-                // 'owner_id' => $_SESSION['user_id'], // This is the user ID of the logged in user
-
-                'ac_type' => $_POST['ac_type'],
-                //    'veh_photo' => $vehPhoto,
-                // 'ins_number' => $_POST['ins_number'],
-                // 'ins_name' => $_POST['ins_name'],
-                // 'start_date' => $_POST['start_date'],
-                // 'end_date' => $_POST['end_date'],
-                'description' => $_POST['description'],
-                //    'ins_photo' => $insPhoto,
-                //    'reg_photo' => $regPhoto,
-            ];
-    
-            // Now, save this data to the database using your model
-            $travelModel = $this->model('Travel');
-            if ($travelModel->vehiclereg($data)) {
-                redirect ('driver/vehicle');
-            } else {
-                // Data save failed, handle the error
-            }
-        } else {
-            // Handle other cases, such as GET requests
-        }
-    
-        $this->view('driver/vehiclereg');
-    }
+            
+            
+            
+               
 
 
-    public function testupload(){
-        $this->view('driver/testupload');
-    }
-    
-    // Define the handleFileUpload function outside the method
-    private function handleFileUpload($fileInputName, $uploadDirectory)
-    {
-        if (isset($_FILES[$fileInputName]) && $_FILES[$fileInputName]['error'] === UPLOAD_ERR_OK) {
-            $tempFile = $_FILES[$fileInputName]['tmp_name'];
-            $targetFile = $uploadDirectory . $_FILES[$fileInputName]['name'];
-    
-            if (move_uploaded_file($tempFile, $targetFile)) {
-                return $_FILES[$fileInputName]['name'];
-            }
-        }
-    
-        return null; 
-    }
-
-               public function vehicledelete($id){
-                $data=$this->travelModel->vehicledelete($id);
+         public function vehicledelete($id){
+                $data=$this->TravelsModel->vehicledelete($id);
+                $this->view('driver/vehicle',$data);
                             }
             }         
