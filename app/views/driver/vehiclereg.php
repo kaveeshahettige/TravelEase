@@ -49,18 +49,9 @@
              
             <div id="base">
                 <div id="form">
-                    <form class="registration-form" action="<?php echo URLROOT ?>driver/vehiclereg" method="POST" enctype="multipart/form-data">
+                <form class="registration-form" action="<?php echo URLROOT ?>driver/vehiclereg"  method="POST" enctype="multipart/form-data">
                    
-                    <!-- <div>
-                    <label for="vehicleOwner">Are you the current owner of this vehicle as per the certificate of registration?</label>
-                    <div class="radio-buttons">
-                    <input type="radio" id="yes" name="vehicleOwner" value="yes">
-                    <label for="yes">Yes</label>
-
-                    <input type="radio" id="no" name="vehicleOwner" value="no">
-                    <label for="no">No</label>
-                </div>
-                   </div>  -->
+                   
                         <h2>Vehicle Details</h2>
 
                         <div class="form-group">
@@ -128,66 +119,60 @@
                 <label for="description">Description :</label>
                 <textarea id="description" name="description" rows="4" required></textarea>
 
-                    <h2 style="padding-left:40px;">Take a photo of your Vehicle</h2>
+     
+                <h2 style="padding-left:40px;">Take a photo of your Vehicle</h2>
                     <div class="upload-container">
-                    <div class="form-group">
-                    <label id="file-label" for="file-input">Vehicle Photo</label>
-                <input type="file" id="file-input" />
+                        <div class="form-group">
+                            <label for="vehi_img1">Vehicle Photo 1</label>
+                            <input type="file" id="vehi_img1" name="vehi_img1" />
+
+                            <label for="vehi_img2">Vehicle Photo 2</label>
+                            <input type="file" id="vehi_img2" name="vehi_img2" />
+
+                            <label for="vehi_img3">Vehicle Photo 3</label>
+                            <input type="file" id="vehi_img3" name="vehi_img3" />
+
+                            <label for="vehi_img4">Vehicle Photo 4</label>
+                            <input type="file" id="vehi_img4" name="vehi_img4" />
+                        </div>
                     </div>
-                </div>
-            
                
                 
 
                     <h2 style="padding-left:40px;">Take a photo of your Vehicle Insurance</h2>
-
-                    
-
-                    <p style="padding-left:30px;">If the vehicle owner name on the vehicle documents is different from mine, then I hereby confirm that I have the vehicle owner's consent to drive this vehicle on the TravelEase Platform. This declaration can be treated as a No-Objection Certificate and releases TravelEase from any legal obligations and consequences.</p>
-
                     <div class="upload-container">
-                    <div class="form-group">
-                    <label id="file-label" for="file-input">Insurance Photo</label>
-                <input type="file" id="file-input" />
+                        <div class="form-group">
+                            <label for="insurance">Insurance Photo</label>
+                            <input type="file" id="insurance" name="insurance" />
+                        </div>
                     </div>
-                </div>
-                
-                
-                    
 
-
-                    
-                    <!-- Registation details -->
-
+                    <!-- Registration details -->
                     <h2 style="padding-left:40px;">Take a photo of your Vehicle Registration Document</h2>
                     <div class="upload-container">
-                    <div class="form-group">
-                    <label id="file-label" for="file-input">Registation card Photo</label>
-                <input type="file" id="file-input" />
-                    
-                </div></div>
+                        <div class="form-group">
+                            <label for="registration">Registration card Photo</label>
+                            <input type="file" id="registration" name="registration" />
+                        </div>
+                    </div>
 
-
-                    <p style="padding-left:30px;">If the vehicle owner name on the vehicle documents is different from mine, then I hereby confirm that I have the vehicle owner's consent to drive this vehicle on the TravelEase Platform. This declaration can be treated as a No-Objection Certificate and releases TravelEase from any legal obligations and consequences.</p>
-                    
                     <h2 style="padding-left:40px;">Take a photo of your Revenue License</h2>
                     <div class="upload-container">
-                    <div class="form-group">
-                    <label id="file-label" for="file-input">Revenue License Photo</label>
-                <input type="file" id="file-input" />
-                    
-                </div></div>
+                        <div class="form-group">
+                            <label for="revenue">Revenue License Photo</label>
+                            <input type="file" id="revenue" name="revenue" />
+                        </div>
+                    </div>
+
                     <p style="padding-left:30px;">If the vehicle owner name on the vehicle documents is different from mine, then I hereby confirm that I have the vehicle owner's consent to drive this vehicle on the TravelEase Platform. This declaration can be treated as a No-Objection Certificate and releases TravelEase from any legal obligations and consequences.</p>
-                
-                    
-                    <div >
-                            <div class="baseButtons">
-                                <button id="cancelBut">Cancel</button>
-                                <button id="saveBut" type="submit">Save</button>
-                            </div>
-                
-                </div>
-            </form>
+
+                    <div>
+                        <div class="baseButtons">
+                            <button id="cancelBut">Cancel</button>
+                            <button id="saveBut" type="submit">Save</button>
+                        </div>
+                    </div>
+</form>
 
                 
                 </div>

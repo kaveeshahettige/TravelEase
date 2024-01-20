@@ -24,36 +24,88 @@ class Travel{
         }
     }
 
-    public function vehiclereg($data){
-        {
-            $this->db->query('INSERT INTO vehicles (brand, model, plate_number, fuel_type, year,seating_capacity,ac_type,description,user_id) VALUES (:brand, :model, :plate_number, :fuel_type, :year,:seating_capacity,:ac_type,:description,:user_id) ');
+    public function vehiclereg($data, $imageFiles) {
+        // Save vehicle details to the database
+        $this->db->query('INSERT INTO vehicles (user_id, brand, model, plate_number, fuel_type, year, seating_capacity, ac_type, description, vehi_img1, vehi_img2, vehi_img3, vehi_img4, insurance, registration, revenue) VALUES (:user_id, :brand, :model, :plate_number, :fuel_type, :year, :seating_capacity, :ac_type, :description, :vehi_img1, :vehi_img2, :vehi_img3, :vehi_img4, :insurance, :registration, :revenue)');
+        
+        // Bind parameters
+        $this->db->bind(':user_id', $data['user_id']);
+        $this->db->bind(':brand', $data['brand']);
+        $this->db->bind(':model', $data['model']);
+        $this->db->bind(':plate_number', $data['plate_number']);
+        $this->db->bind(':fuel_type', $data['fuel_type']);
+        $this->db->bind(':year', $data['year']);
+        $this->db->bind(':seating_capacity', $data['seating_capacity']);
+        $this->db->bind(':ac_type', $data['ac_type']);
+        $this->db->bind(':description', $data['description']);
     
-            $this->db->bind(':brand', $data['brand']);
-            $this->db->bind(':model', $data['model']);
-            $this->db->bind(':plate_number', $data['plate_number']);
-            $this->db->bind(':fuel_type', $data['fuel_type']);
-            $this->db->bind(':year', $data['year']);
-            $this->db->bind(':seating_capacity', $data['seating_capacity']);
-            $this->db->bind(':ac_type', $data['ac_type']);
-            $this->db->bind(':user_id', $data['user_id']);
-            $this->db->bind(':description', $data['description']);
-
-            // $this->db->bind(':veh_photo', $data['veh_photo']);
-            // $this->db->bind(':ins_number', $data['ins_number']);
-            // $this->db->bind(':ins_name', $data['ins_name']);
-            // $this->db->bind(':start_date', $data['start_date']);
-            // $this->db->bind(':end_date', $data['end_date']);
-           
-            // $this->db->bind(':ins_photo', $data['ins_photo']);
-            // $this->db->bind(':reg_photo', $data['reg_photo']);
+        // Process and save images
+        $imagePaths = $this->processAndSaveImages($data['user_id'], $imageFiles);
     
-            if ($this->db->execute()) {
-                return true;
-            } else {
-                return false;
-            }
+        // Bind image paths to database parameters
+        $this->db->bind(':vehi_img1', $imagePaths[0]);
+        $this->db->bind(':vehi_img2', $imagePaths[1]);
+        $this->db->bind(':vehi_img3', $imagePaths[2]);
+        $this->db->bind(':vehi_img4', $imagePaths[3]);
+        $this->db->bind(':insurance', $imagePaths[4]);
+        $this->db->bind(':registration', $imagePaths[5]);
+        $this->db->bind(':revenue', $imagePaths[6]);
+    
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
         }
     }
+    
+    private function processAndSaveImages($userId, $imageFiles) {
+        $imagePaths = [];
+        
+        $uploadDir = __DIR__ . "/../public/uploads/vehicle_doc/";
+        
+        $fileTypes = [
+            'vehi_img1' => 'Vehicle Photo 1',
+            'vehi_img2' => 'Vehicle Photo 2',
+            'vehi_img3' => 'Vehicle Photo 3',
+            'vehi_img4' => 'Vehicle Photo 4',
+            'insurance' => 'Insurance Photo',
+            'registration' => 'Registation card Photo',
+            'revenue' => 'Revenue License Photo',
+        ];
+    
+        foreach ($fileTypes as $key => $label) {
+            if (isset($imageFiles[$key]) && $imageFiles[$key]['error'] === UPLOAD_ERR_OK) {
+                $originalName = $imageFiles[$key]['name'];
+                $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+                $newFileName = "{$userId}_{$key}_{$originalName}";
+    
+                // Construct the destination path correctly
+                $destination = $uploadDir . $newFileName;
+    
+                // Add a numeric suffix if the file already exists
+                $j = 1;
+                while (file_exists($destination)) {
+                    $newFileName = "{$userId}_{$key}_{$j}_{$originalName}";
+                    $destination = $uploadDir . $newFileName;
+                    $j++;
+                }
+    
+                // Correctly concatenate paths and move the uploaded file
+                if (move_uploaded_file($imageFiles[$key]['tmp_name'], $destination)) {
+                    $imagePaths[] = $newFileName;
+                } else {
+                    // Handle error if file move fails
+                    $imagePaths[] = ''; // Add an empty string as a placeholder for the failed image
+                }
+            } else {
+                // Add an empty string as a placeholder for missing images
+                $imagePaths[] = '';
+            }
+        }
+    
+        return $imagePaths;
+    }
+    
 
     public function vehicleDetails($user_id) {
         $this->db->query('SELECT * FROM vehicles WHERE user_id=:user_id');
@@ -236,6 +288,7 @@ class Travel{
             return $this->db->resultSet();
         }
 
+       
 
         
         
