@@ -108,3 +108,52 @@ function handleButtonClick(action) {
     const message = `${action} event on ${selectedDateElement.innerText}.`;
     availabilityInfoElement.innerText = message;
 }
+
+function handleDateSelection() {
+    var selectedDate = document.getElementById('selectedDate').value;
+    var checkAvailabilityBtn = document.getElementById('checkAvailabilityBtn');
+
+    if (selectedDate) {
+        checkAvailabilityBtn.disabled = false;
+    } else {
+        checkAvailabilityBtn.disabled = true;
+    }
+}
+
+// Function to validate the form before submission
+function validateForm() {
+    var selectedDate = document.getElementById('selectedDate').value;
+
+    if (!selectedDate) {
+        alert("Please select a date.");
+        return false;
+    }
+
+    return true;
+}
+
+// Attach the function to the change event of the date input (assuming you have a date input)
+// Adjust this according to how your date is selected (e.g., through a date picker)
+document.getElementById('selectedDate').addEventListener('change', handleDateSelection);
+
+// Initial call to set the initial button state
+handleDateSelection();
+
+function makeAvailable(roomId) {
+    updateRoomStatus('make_available', roomId);
+}
+
+function makeUnavailable(roomId) {
+    updateRoomStatus('make_unavailable', roomId);
+}
+
+function deleteRoom(roomId) {
+    updateRoomStatus('delete_room', roomId);
+}
+
+function updateRoomStatus(action, roomId) {
+    // Use AJAX to send the request to the controller
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `index.php?action=updateRoomStatus&roomId=${roomId}&action=${action}`, true);
+    xhr.send();
+}

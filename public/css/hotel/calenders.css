@@ -1,88 +1,79 @@
+/* Calendar Container */
 .calendar-container {
     font-family: 'Poppins', sans-serif;
-    background-color: #ffffff;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    background-color: #fffdf8;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    max-width: 80%;
+    margin: 20px auto;
+    /*margin-left: 300px;*/
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    max-width: 40%;
-    margin: 20px;
-    margin-left: 300px;
 }
 
-.calendar-content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
+/* Calendar Header */
 .calendar-header {
+    background-color:#FFCC5B;
+    color: #000000;
+    padding: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #F9B314;
-    color: #fff;
-    padding: 20px; /* Increase padding for larger header */
+    font-weight: bold;
 }
 
 .calendar-header button {
     background: none;
     border: none;
     color: #fff;
-    font-size: 24px; /* Increase font size for navigation buttons */
+    font-size: 20px;
     cursor: pointer;
 }
 
 #current-month-year {
-    font-size: 24px; /* Increase font size for month-year */
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px; /* Increase margin for better spacing */
+    font-size: 20px;
 }
 
+/* Calendar Days */
 .calendar-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 2px; /* Increase gap between days */
-    padding: 20px; /* Increase padding for days container */
+    gap: 10px;
+    padding: 15px;
 }
 
+/* Day Cell */
 .day {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 60px; /* Increase height for each day */
+    height: 60px;
     cursor: pointer;
     position: relative;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.day:hover {
+    background-color:#FFCC5B;
+    color: #fff;
 }
 
 .day-number {
-    font-size: 20px; /* Increase font size for day numbers */
+    font-size: 18px;
 }
 
 .selected-day {
-    background-color: #F9B314;
+    background-color:#FFCC5B;
     color: #fff;
 }
 
 .empty-cell {
-    background-color: #f4f4f4;
+    background-color: #fff7e4;
 }
 
+/* Date Info Container */
 .date-info-container {
     display: flex;
     flex-direction: column;
@@ -97,37 +88,48 @@
 
 #availability-content {
     font-family: 'Poppins', sans-serif;
-    width: 100%; /* Make the availability content full width */
-    padding: 20px; /* Increase padding for better spacing */
-    display: flex;
-    flex-direction: column;
-    background-color: #f9f9f9;
-    align-items: center;
+    width: 100%;
+    padding: 20px;
+    background-color: #FFCC5B;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
     margin-top: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    font-weight: bold;
 }
 
 #availability-info {
-    font-size: 18px; /* Adjust font size for availability info */
+    font-size: 18px;
+    margin-bottom: 10px;
+    align-items: center;
 }
 
+/* Calendar Buttons */
 .calendar-buttons {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .calendar-buttons button {
-    background-color:#F9B314;
-    color: #fff;
+    background-color: #fcf9f9;
+    color: #805700;
     border: none;
-    padding: 15px;
-    border-radius: 8px;
+    padding: 12px 20px;
+    border-radius: 6px;
     cursor: pointer;
     margin: 0 10px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Added box-shadow to the transition */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .calendar-buttons button:hover {
-    background-color: #F9B314;
+    background-color: #eae5e5;
+}
+
+/* Media Query for Responsive Design */
+@media screen and (max-width: 768px) {
+    .calendar-container {
+        flex-direction: column;
+    }
 }

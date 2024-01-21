@@ -44,6 +44,10 @@ class Businessmanager extends Controller{
     public function settings(){
         $this->view('businessmanager/settings');
     }
+    public function navigation(){
+        $this->view('businessmanager/navigation');
+    }
+
     
 
 }

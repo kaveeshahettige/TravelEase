@@ -1,0 +1,83 @@
+/* Room Table Content Styles */
+.room-content {
+    padding-left: 275px;
+    margin-right: 20px;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
+}
+
+/* Room Table Styles */
+.room-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.room-table th, .room-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.room-table th {
+    background-color: #f2f2f2;
+}
+
+/* Style for the Make Unavailable button */
+.btn-make-unavailable {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn-make-unavailable:hover {
+    background-color: #218838;
+}
+
+/* Style for the Delete Unavailable button */
+.btn-delete-unavailable {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 10px; /* Adjust margin as needed */
+}
+
+.btn-delete-unavailable:hover {
+    background-color: #c82333;
+}
+
+
+
+@media screen and (max-width: 768px) {
+    .room-content {
+        padding-left: 10px;
+        margin-right: 10px; /* Adjust margin as needed */
+        text-align: center;
+    }
+
+    .room-table {
+        font-size: 14px;
+    }
+
+    .room-table th, .room-table td {
+        padding: 8px;
+    }
+
+    /* Hide the table headers on mobile */
+    .room-table th {
+        display: none;
+    }
+
+    .btn-make-unavailable,
+    .btn-delete-unavailable {
+        padding: 6px 12px;
+        margin-top: 10px; /* Add margin between buttons */
+        margin-left: 0; /* Reset margin for the second button */
+    }
+}

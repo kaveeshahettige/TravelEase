@@ -3,39 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/reviews.css">    <title>Hotel Reviews</title>
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/reviews.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
+    <title>Hotel Reviews</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-    <nav class="left-menu">
-        <div class="user-profile">
-            <img src="<?= isset($_SESSION['user_profile_picture']) ? $_SESSION['user_profile_picture'] : '../Images/wikum.jpg'; ?> " alt="User Profile Photo">
-            <span class="user-name"><?=$_SESSION['user_fname']?></span>
-        </div>
-        
-        <div class="search-bar">
-            <form action="#" method="GET">
-                <input type="text" placeholder="Find a Setting">
-                <button type="submit">Search</button>
-            </form>
-        </div>
-        <ul>
-            <li><a href="<?php echo URLROOT; ?>hotel/index" class="nav-button "><i class='bx bxs-info-circle bx-tada-hover bx-sm bx-fw'></i> Dashboard</a></li>
-            <li><a href="<?php echo URLROOT; ?>hotel/bookings" class="nav-button "><i class='bx bxs-book bx-sm bx-fw'></i> Bookings</a></li>
-            <li><a href="<?php echo URLROOT; ?>hotel/calender" class="nav-button "><i class='bx bxs-calendar bx-sm bx-fw'></i> Availability</a></li>
-            <li><a href="<?php echo URLROOT; ?>hotel/gallery" class="nav-button "><i class='bx bx-images bx-sm bx-fw'></i> Notifications</a></li>
-            <li><a href="<?php echo URLROOT; ?>hotel/revenue" class="nav-button "><i class='bx bxs-wallet bx-sm bx-fw'></i> Revenue</a></li>
-            <li><a href="<?php echo URLROOT; ?>hotel/reviews" class="nav-button active"><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
-            <li><a href="<?php echo URLROOT; ?>hotel/settings" class="nav-button "><i class='bx bxs-cog bx-sm bx-fw'></i> Settings</a></li>
-        </ul>
-        <div class="logout">
-            <a href="<?php echo URLROOT?>users/logout" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
-        </div>
-        
-    </nav>
+<?php
+$activePage = 'hotel/reviews'; // Set the active page dynamically based on your logic
+include 'navigation.php';
+?>
     <main>
         <div class="logo-container">
             <img src="<?php echo URLROOT; ?>/images/hotel/TravelEase.png" alt="TravelEase Logo">
@@ -86,7 +66,7 @@
         <div class="review-content">
             <?php
             $reviews = $data["reviews"];
-//            var_dump($reviews);
+//           var_dump($reviews);
             foreach ($reviews as $review): ?>
                 <div class="review-box">
                     <div class="review-sub-content">
