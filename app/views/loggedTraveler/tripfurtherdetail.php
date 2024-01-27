@@ -33,76 +33,146 @@
     </div>
 
     <section class="bookingResultm1">
+    <?php if ($data['type']==3): ?>
+        
         <div class="view">
             <div class="bookingtitles"><h1><?php echo ucfirst($data['serviceProviderName'])?></h1>
-                <h5>Booking details</h5>
+                <h5>Hotel details</h5>
             </div>
             <div class="images">
                 <div class="mainimage">
                     <img src="<?php echo URLROOT?>/images/4.jpg" alt="">
                 </div>
-                <div class="submimages">
+                <!-- <div class="submimages">
                     <div><img src="<?php echo URLROOT?>/images/yala2.jpg" alt=""></div>
                     <div><img src="<?php echo URLROOT?>/images/yala3.jpg" alt=""></div>
                 </div>
                 <div class="submimages">
                     <div><img src="<?php echo URLROOT?>/images/yala4.jpg" alt=""></div>
                     <div><img src="<?php echo URLROOT?>/images/yala5.jpg" alt=""></div>
-                </div>
+                </div> -->
 
             </div>
             <div class="des">
-                <h5 style="margin: 0px;">Description</h5>
-                <p><?php echo $data['description'] ? ucfirst($data['description']) : '-----'; ?></p> 
+                <h5 style="margin: 0px;">About</h5>
+                <p><?php echo $data['bookingDetails']->description ? ucfirst($data['bookingDetails']->description) : '-----'; ?></p> 
             </div> 
+            <!-- <?php echo var_dump($data['rooms']) ?> -->
             <div class="bookingdetails">
                 <div class="leftdiv">
-                    <!-- <div class="ldiv1">
-                        <div class="booking-label">Booking:</div>
-                        <div class="booking-value"><?php echo ucfirst($data['serviceProviderName'])?></div>
-                    </div> -->
                     <div class="ldiv1">
-                        <div class="booking-label">Service provider:</div>
+                        <div class="booking-label">Hotel name:</div>
                         <div class="booking-value"><?php echo ucfirst($data['serviceProviderName'])?></div>
                     </div>
                     <div class="ldiv1">
-                        <div class="booking-label">District:</div>
-                        <div class="booking-value"><?php echo ucfirst($data['location'])?></div>
+                        <div class="booking-label">Hotel type:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->hotel_type)?></div>
                     </div>
-                    
-                    <!-- <div class="ldiv1">
-                        <div class="booking-label">Cancellation eligibility:</div>
-                        <div class="booking-value">Available</div>
-                    </div>  -->
+                    <div class="ldiv1">
+                        <div class="booking-label">Address:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->street_address)?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">City:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->city)?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Province:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->state_province)?></div>
+                    </div>
                 </div>
 
                 <div class="rightdiv">
-                    <div class="ldiv1">
-                        <div class="booking-label">Price:</div>
-                        <div class="booking-value">50 000 Rupees(...)</div>
+                <div class="ldiv1">
+                        <div class="booking-label">Email:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['email'])?></div>
                     </div>
                     <div class="ldiv1">
-                        <div class="booking-label">Contact details :</div>
-                        <div class="booking-value"><?php echo $data['serviceProvideNumber']?></div>
+                        <div class="booking-label">Facebook:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->facebook)?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Twitter:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->twitter)?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Instargram:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->instagram)?></div>
                     </div>
                     <!-- <div class="ldiv1">
-                        <div class="booking-label">Start date:</div>
-                        <div class="booking-value">10/3/2023</div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">End date:</div>
-                        <div class="booking-value">10/6/2023</div>
-                    </div>  -->
+                        <div class="booking-label">Availble rooms:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->instagram)?></div>
+                    </div> -->
+                    
                 </div>
+                
 
             </div>
-            <div class="delbuttonContain">
+            <?php if ($data['type']==3): ?>
+    <div>
+    <h2 style="text-align: center;">Available rooms</h2>
+
+            <table class="booking-table">
+                <thead>
+                    <tr>
+                        <!-- <th>No</th> -->
+                        <th>Room ID</th>
+                        <th>Room type</th>
+                        <th>About</th>
+                        <th>price</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                
+            <?php
+$count = 1;
+
+if (!empty($data['rooms']) && is_array($data['rooms'])) {
+    foreach ($data['rooms'] as $room) {
+        echo '<tr class="t-row">';
+        // echo '<td>' . $count . '</td>';
+        echo '<td>' . $room->room_id . '</td>';
+        echo '<td>' . $room->roomType . '</td>';
+        echo '<td>' . $room->description . '</td>';
+        echo '<td>' . $room->price . '</td>';
+        echo '</td>';
+        echo '<td><button class="view-button" onclick="booking(' . $data['type'] . ',' . $room->room_id . ')">Book Now</button></td>';
+         echo '</tr>';
+        $count++;
+    }
+} else {
+    echo '<tr><td colspan="6">No Rooms available right now</td></tr>';
+}
+?>
+</tbody>
+            </table>
+   
+            </div>
+            <?php elseif ($data['type']==4): ?>
+                type =4
+            <?php elseif ($data['type']==5): ?>
+                type =5
+            <?php endif; ?>
+
+
+            
+            <?php elseif ($data['type']==4): ?>
+                type =4
+            <?php elseif ($data['type']==5): ?>
+                type =5
+            <?php endif; ?>
+            <!-- <div class="delbuttonContain">
                 
                 <div><button id="delbutton" onclick="booking()">Book Now</button></div>
                 
-            </div>
+            </div> -->
         </div>
     </section>
+    <section style="margin:50px">
+    
+    </section>
+   
     
     
   

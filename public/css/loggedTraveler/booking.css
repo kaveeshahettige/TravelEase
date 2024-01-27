@@ -112,9 +112,9 @@ body{
     margin-top: 10px;
 }
 .bookingResultm1  .images{
-    display: grid;
+    /* display: grid;
    grid-template-columns: 49% 25% 25%;
-   column-gap: 1%;
+   column-gap: 1%; */
 }
  .images .mainimage img{
     max-width: 100%;
@@ -135,7 +135,7 @@ body{
 .des{
     width:90%;
     font-size:20px;
-    background-color:#fdfaf3;
+    background-color:#f2f2f2;
     padding: 7px 2px 7px 2px;
 }
 
@@ -160,14 +160,14 @@ body{
     padding: 20px 20px;
     
 }
-.bookingdetails .ldiv1:hover{
+/* .bookingdetails .ldiv1:hover{
     display: flex;
     flex-direction: row;
     padding: 20px 20px;
-    background-color: #fdfaf3;
+    background-color: #F9B314;
     border-radius: 10px;
     
-}
+} */
 .booking-label {
     color: #605D5D;
     padding-right: 20px;
@@ -218,4 +218,42 @@ body{
 
 .delbuttonContain button{
     margin-right: 50px;
+}
+
+.table-content {
+    padding-left: 275px;
+    margin-right: 20px;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
+}
+
+.booking-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.booking-table th, .booking-table td {
+    padding: 20px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.booking-table th {
+    background-color: #f2f2f2;
+}
+
+/* Style for the "View" button */
+.view-button {
+    background-color: #F9B314;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.view-button:hover {
+    background-color: #FFDB8B;
 }

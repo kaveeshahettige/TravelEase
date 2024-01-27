@@ -1,5 +1,5 @@
 body {
-    font-family: 'Poppins', sans-serif; /* Change font to Poppins */
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
@@ -12,32 +12,34 @@ body {
 .payment-container {
     display: flex;
     width: 80%;
+    justify-content: space-between; /* Distribute space between payment-box and booking-box */
 }
 
-.payment-box {
-    flex: 2;
+.payment-box,
+.booking-box {
     background-color: #fff;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
     overflow: hidden;
-    margin: 0 10px;
     padding: 25px;
     margin-bottom: 30px;
-    margin-top: 300px;
     transition: transform 0.3s ease-in-out;
+    flex: 0 0 48%; /* Adjust the width of payment-box and booking-box as needed */
 }
 
 .booking-box {
+   
     flex: 1;
     background-color: #fff;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
     overflow: hidden;
-    margin: 0 10px;
+    margin: 0 100px;
     padding: 25px;
     margin-bottom: 30px;
     margin-top: 300px;
     transition: transform 0.3s ease-in-out;
+    
 }
 
 .payment-box:hover,
@@ -80,7 +82,7 @@ input[type="number"] {
     max-width: 100%;
     height: auto;
     border-radius: 5px;
-    margin-bottom: 10px; /
+    margin-bottom: 10px;
 }
 
 .buttons {
@@ -112,3 +114,30 @@ input[type="number"] {
     margin-bottom: 10px;
     text-align: right; 
 }
+
+.maincontainer{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.maincontainer h1{
+    margin-top: 0px;
+}
+
+.hotel-details {
+    flex: 1;
+    text-align: left; /* Center the content horizontally */
+}
+
+.image-container {
+    display: inline-block; /* Make the container inline-block to center the image */
+}
+
+.image-container img {
+    max-width: 40%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: block; /* Remove any residual inline display */
+    margin: 0 auto; /* Center the image horizontally */
+}
+

@@ -8,62 +8,97 @@
     <title>Payment</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
 </head>
-<body>
-    <div class="payment-container">
-        <div class="payment-box">
+<body style="margin-top:10%">
+    <div class="payment-container" >
+        <!-- <div class="payment-box">
             <h2>Payment Information</h2>
             <div class="payment-gateway">
                 <h3>Card Payment</h3>
-                <form>
+                <form action="<?php echo URLROOT ?>loggedTraveler/bookingpayment/<?php echo $data['furtherBookingDetails']->type . '/' . $data['furtherBookingDetails']->room_id ?>" method="POST">
                     <label for="cardholderName">Cardholder Name:</label>
-                    <input type="text" id="cardholderName" name="cardholderName" placeholder="Kaveesha Hettige" required>
+                    <input type="text" id="cardholderName" name="cardholderName" value="<?php echo $data['user']->fname." ".$data['user']->lname?>" required>
 
                     <label for="cardNumber">Card Number:</label>
-                    <input type="text" id="cardNumber" name="cardNumber" placeholder="XXXX XXXX XXXX XXXX" required>
+                    <input type="text" id="cardNumber" name="cardNumber" placeholder="XXXX XXXX XXXX XXXX" >
 
                     <div class="expiration-date">
                         <label for="expirationMonth">Expiry Month:</label>
-                        <input type="number" id="expirationMonth" name="expirationMonth" placeholder="MM" min="1" max="12" required>
+                        <input type="number" id="expirationMonth" name="expirationMonth" placeholder="MM" min="1" max="12" >
 
                         <label for="expirationYear">Expiry Year:</label>
-                        <input type="number" id="expirationYear" name="expirationYear" placeholder="YYYY" min="2023" required>
+                        <input type="number" id="expirationYear" name="expirationYear" placeholder="YYYY" min="2023" >
                     </div>
 
                     <label for="cvv">CVV:</label>
-                    <input type="text" id="cvv" name="cvv" placeholder="XXX" required>
+                    <input type="text" id="cvv" name="cvv" placeholder="XXX" >
 
                     <!-- Payment and Cancel buttons added -->
-                    <div class="buttons">
+                    <!-- <div class="buttons">
                         <button type="submit" class="payment-button">Make Payment</button>
-                        <button type="button" class="cancel-button">Cancel</button>
+                        <button type="reset" class="cancel-button">Cancel</button>
                     </div>
                 </form>
             </div>
-        </div>
-        <div class="booking-box">
-            <h2>Booking Information</h2>
+        </div> --> -->
+        
+    <div class="booking-box">
+        <!-- <?php echo var_dump($data['furtherBookingDetails'])?> -->
+            <h2 style=" text-align: center;">Booking Information</h2>
             <div class="hotel-details">
-                <img src="<?php echo URLROOT?>/images/hotelroom.jpg" alt="Hotel Image">
-                <p class="total">Total: Rs. 15,000</p>
-                <div class="guest-info">
-                    <p><strong>Full Name:</strong> Kaveesha Hettige</p>
-                    <p><strong>Email Address:</strong> user@example.com</p>
-                    <p><strong>Phone Number:</strong> +94 701548956</p>
-                </div>
 
-                <div class="reservation-details">
-                    <p><strong>Check-in Date:</strong> January 1, 2023</p>
-                    <p><strong>Check-out Date:</strong> January 5, 2023</p>
-                    <p><strong>Number of Rooms:</strong> 1</p>
-                    <p><strong>Number of Adults:</strong> 2</p>
-                    <p><strong>Number of Children:</strong> 0</p>
-                </div>
-
-                <div class="special-requests">
-                    <p><strong>Special Requests:</strong> No special requests</p>
-                </div>
+            <div class="image-container">
+        <img src="<?php echo URLROOT ?>/images/<?php echo $data['furtherBookingDetails']->image ?>" alt="room Image">
+    </div>
+                
+            <div class="maincontainer">
+            <div>
+                    
+                    <div class="reservation-details">
+                        <p><strong>Check-in Date:</strong> January 1, 2023</p>
+                        <p><strong>Check-out Date:</strong> January 5, 2023</p>
+                    </div>
+    
+                    <div class="reservation-details">
+                        <p><strong>Room ID:</strong> <?php echo $data['furtherBookingDetails']->room_id ?></p>
+                        <p><strong>Number of Beds:</strong> <?php echo $data['furtherBookingDetails']->numOfBeds ?> </p>
+                        <p><strong>About:</strong> <?php echo $data['furtherBookingDetails']->description ?></p>
+                        <p><strong>AC availability:</strong> <?php echo $data['furtherBookingDetails']->acAvailability ?></p>
+                        <p><strong>TV availability:</strong> <?php echo $data['furtherBookingDetails']->tvAvailability ?></p>
+                        <p><strong>Wifi availability:</strong> <?php echo $data['furtherBookingDetails']->wifiAvailability ?></p>
+                    </div>
+                    <div class="reservation-details">
+                        <p><strong>Cancellation policy:</strong> <?php echo $data['furtherBookingDetails']->cancellationPolicy ?> </p>
+                        <p><strong>Smoking policy:</strong> <?php echo $data['furtherBookingDetails']->smokingPolicy ?></p>
+                        <p><strong>Pet policy:</strong> <?php echo $data['furtherBookingDetails']->petPolicy ?></p>
+                    </div>
+                    </div>
+                    
+    
+                    <!-- <div class="special-requests">
+                        <p><strong>Special Requests:</strong> No special requests</p>
+                    </div> -->
+                    <div class="guest-info">
+                        <p><strong>Your Full Name: </strong><?php echo $data['user']->fname." ".$data['user']->lname?></p>
+                        <p><strong>Your Email Address:</strong> <?php echo $data['user']->email?></p>
+                        <p><strong>Your Phone Number:</strong><?php echo $data['user']->number?></p>
+                        <br>
+                        <p ><strong>Total :  <?php echo $data['furtherBookingDetails']->price ?></strong></p>
+                <form action="<?php echo URLROOT ?>loggedTraveler/dopayment/<?php echo $data['furtherBookingDetails']->type . '/' . $data['furtherBookingDetails']->room_id ?>">
+        <div class="buttons">
+                        <button type="submit" class="payment-button">Make Payment</button>
+                    </div>
+        </form>
+                        
+                    </div>
+                    
             </div>
+           
+                
+            </div>
+           
         </div>
+        
+        
     </div>
 </body>
 </html>

@@ -49,33 +49,42 @@
             </div>
         </div>
     </section>
-
     <section class="main2">
         <div class="topbar">
-        <?php if (!empty($data['booking'])): ?>
+        <?php if (!empty($data['bookingDetailsArray'])): ?>
             <span id="upcoming">Upcoming Trips</span>
             <?php endif; ?>
             <button id="plantrip">Plan New Trip</button>
         </div>
         
-        <div class="main2trip">
-    <?php if (!empty($data['booking'])): ?>
-        <?php foreach ($data['bookingDetailsArray'] as $element): ?>
-        <div class="main2img1content">
-            
-            <div><img src="<?php echo URLROOT ?>images/rooms/<?php echo $element['furtherBookingDetails']->image ?>" alt=""></div>
-            <div class="c1"> 
-                <div>
-                    <p style="font-size: 30px; margin: 0; font-weight: bold;"><?php echo ucfirst($data['booking']->fname)?></p>
-                    <p><?php echo $data['mainbookingDetails']->city ?></p>
+        <div class="main2trip-container">
+    <div class="main2trip">
+        <?php if (!empty($data['bookingDetailsArray'])): ?>
+            <?php foreach ($data['bookingDetailsArray'] as $element): ?>
+                <div class="main2img1content">
+                    <?php $serviceProviderID = $element['serviceProviderID'];?>
+                    <div style="width: 510px; height: 400px; overflow: hidden;">
+                        <img src="<?php echo URLROOT ?>images/rooms/<?php echo $element['furtherBookingDetails']->image ?>" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="c1"> 
+                        <div>
+                            <?php if (!empty($element['serviceProviderName'])): ?>
+                                <p style="font-size: 30px; margin: 0; font-weight: bold;"><?php echo ucfirst($element['serviceProviderName'])?></p>
+                            <?php endif; ?>
+                            <?php if (!empty($element['mainbookingDetails']->city)): ?>
+                                <p><?php echo $element['mainbookingDetails']->city ?></p>
+                            <?php endif; ?>
+                        </div>
+                        <div>
+                            <button id="viewbooking" onclick="viewBooking(<?php echo $serviceProviderID; ?>, <?php echo $element['bookingIDs']; ?>)">View</button>
+                        </div>
+                    </div>
                 </div>
-                <div> <button id="viewbooking" onclick="viewBooking(<?php echo $data['serviceProviderID']; ?>,<?php echo  $element['bookingIDs']; ?>)">View</button></div>
-            </div>
-        </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
-    
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
 </div>
+
 
         
 
