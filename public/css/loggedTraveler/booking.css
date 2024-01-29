@@ -257,3 +257,54 @@ body{
 .view-button:hover {
     background-color: #FFDB8B;
 }
+
+/* Style for the "search" button */
+.search-button {
+    background-color: #F9B314;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-button:hover {
+    background-color: #FFDB8B;
+}
+
+
+/* Adjust the styles based on your design requirements */
+
+.search-section {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f7f7f7;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.date-picker {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+}
+
+.date-picker label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.date-picker input {
+    padding: 10px 50px ;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+
+
+

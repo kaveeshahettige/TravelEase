@@ -31,7 +31,7 @@
                 </div>
         </ul>
     </div>
-
+    <!-- <?php echo var_dump($data['bookingDetails'])?> -->
     <section class="bookingResultm1">
     <?php if ($data['type']==3): ?>
         
@@ -108,8 +108,28 @@
                 
 
             </div>
-            <?php if ($data['type']==3): ?>
+            <!-- //// -->
+            <div class="search-section">
+            <div class="date-picker">
+                <label for="checkin">Check-In:</label>
+                <input type="date" id="checkin" name="checkin" required>
+            </div>
+            <div class="date-picker">
+                <label for="checkout">Check-Out:</label>
+                <input type="date" id="checkout" name="checkout" required>
+            </div>
+            <button class="search-button" id="search-button" data-hotel-id="<?php echo $data['bookingDetails']->hotel_id; ?>" onclick="searchRooms(event)">Search</button>
+
+
+        </div>
+
+
+
+
+            <!-- /// -->
+            
     <div>
+    <?php if ($data['type']==3): ?>
     <h2 style="text-align: center;">Available rooms</h2>
 
             <table class="booking-table">
@@ -123,7 +143,7 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="available-rooms">
                 
             <?php
 $count = 1;
@@ -137,7 +157,7 @@ if (!empty($data['rooms']) && is_array($data['rooms'])) {
         echo '<td>' . $room->description . '</td>';
         echo '<td>' . $room->price . '</td>';
         echo '</td>';
-        echo '<td><button class="view-button" onclick="booking(' . $data['type'] . ',' . $room->room_id . ')">Book Now</button></td>';
+        // echo '<td><button class="view-button" onclick="booking(' . $data['type'] . ',' . $room->room_id . ')">Book Now</button></td>';
          echo '</tr>';
         $count++;
     }

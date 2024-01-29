@@ -48,3 +48,31 @@ function Tripdetails(id) {
         zoom: 8
     });
 }
+
+
+///////////////////
+
+function searchRooms(event) {
+  event.preventDefault(); // Prevent the default form submission behavior
+
+  var checkinDate = document.getElementById('checkin').value;
+  var checkoutDate = document.getElementById('checkout').value;
+  var hotelId = document.getElementById('search-button').dataset.hotelId;
+
+    console.log("Checkin Date:", checkinDate);
+    console.log("Checkout Date:", checkoutDate);
+    console.log("Hotel ID:", hotelId);
+  // You may want to perform some validation on the input dates
+
+  // Send a request to the server to fetch available rooms based on the dates
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+          // Update the table with the fetched data
+          document.getElementById('available-rooms').innerHTML = xhr.responseText;
+      }
+  };
+  xhr.open('GET', 'http://localhost/TravelEase//LoggedTraveler/fetchAvailableRooms?action=fetchAvailableRooms&checkin=' + checkinDate + '&checkout=' + checkoutDate + '&hotelid=' + hotelId, true);
+  xhr.send();
+}
+

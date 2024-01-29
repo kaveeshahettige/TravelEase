@@ -747,7 +747,32 @@ public function getLastBooking(){
     }
 }
     
-        
+//findAvailableRooms($checkinDate, $checkoutDate)
+public function findAvailableRooms($checkinDate, $checkoutDate,$hotelid){
+    // sid should e added
+    $this->db->query('SELECT *
+    FROM hotel_rooms
+    WHERE room_id NOT IN (
+        SELECT room_id
+        FROM bookings
+        WHERE startDate <= :checkinDate
+        AND endDate >= :checkoutDate
+    )
+    AND hotel_id = :hotelid;
+    
+');
+
+    $this->db->bind(':checkinDate', $checkinDate);
+    $this->db->bind(':checkoutDate', $checkoutDate);
+    $this->db->bind(':hotelid', $hotelid);
+    $rooms = $this->db->resultSet();
+    if($this->db->rowcount()>0){
+        return $rooms;
+     }
+     else{
+        return false;
+    }
+}
 
 }
 

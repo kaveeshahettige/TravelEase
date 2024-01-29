@@ -165,7 +165,7 @@ $data = [
       $user=$this->userModel->findUserDetail($_SESSION['user_id']);
       //main booking details from service provider table(hotel,travelagncy,package tables)
       $bookingDetails = $servicProvider ? $this->userModel->findBookingDetail($servicProvider->type, $Sid) : null;
-      $rooms=$this->userModel->findRooms($bookingDetails->hotel_id);
+      $rooms=$bookingDetails?$this->userModel->findRooms($bookingDetails->hotel_id) : null;
       $data=[
         'email' => $servicProvider ? $servicProvider->email : null,
         'serviceProviderName' => $servicProvider ? $servicProvider->fname . ' ' . $servicProvider->lname : null,
@@ -192,7 +192,7 @@ $data = [
     \Stripe\Stripe::setApiKey($stripe_secret_key);
     $checkout_session = \Stripe\Checkout\Session::create([
         'mode' => 'payment',
-        'success_url' => 'http://localhost/TravelEase/LoggedTraveler/index',
+        'success_url' => "http://localhost/TravelEase/bookingpayment/{$type}/{$serviceid}",
         'line_items' => [[
             'quantity' => 1,
             'price_data' => [
@@ -225,7 +225,43 @@ $data = [
     header("Location: " . $checkout_session->url);
 }
 
+//fetchAvailableRooms
+public function fetchAvailableRooms()
+{
+  error_log("fetchAvailableRooms function is executed");
+  $checkinDate = $_GET['checkin'];
+  $checkoutDate = $_GET['checkout'];
+  $hotelId = $_GET['hotelid'];
+
+  // var_dump($checkinDate, $checkoutDate, $hotelId);
+    ////
+    // $servicProvider = $this->userModel->findUserDetail($Sid);
+    $rooms = $this->userModel->findAvailableRooms($checkinDate, $checkoutDate, $hotelId);
+    // $bookingDetails = $servicProvider ? $this->userModel->findBookingDetail(3, $Sid) : null;
+
+    $html = '';
+    if (!empty($rooms) && is_array($rooms)) {
+        foreach ($rooms as $room) {
+            $html .= '<tr class="t-row">';
+            $html .= '<td>' . $room->room_id . '</td>';
+            $html .= '<td>' . $room->roomType . '</td>';
+            $html .= '<td>' . $room->description . '</td>';
+            $html .= '<td>' . $room->price . '</td>';
+            $html .= '<td><button class="view-button" >Book Now</button></td>';
+            $html .= '</tr>';
+        }
+    } else {
+        $html = '<tr><td colspan="6">No Rooms available right now</td></tr>';
+    }
+
+    echo $html;
+    exit;
     
+
+    
+
+    
+}
 }
 
 

@@ -45,14 +45,14 @@
                 <img src="<?php echo URLROOT . '/images/' . $data['furtherBookingDetails']->image; ?>" alt="">
 
                 </div>
-                <div class="submimages">
+                <!-- <div class="submimages">
                     <div><img src="<?php echo URLROOT . '/images/' . $data['furtherBookingDetails']->image; ?>" alt=""></div>
                     <div><img src="<?php echo URLROOT . '/images/' . $data['furtherBookingDetails']->image; ?>" alt=""></div>
                 </div>
                 <div class="submimages">
                     <div><img src="<?php echo URLROOT . '/images/' . $data['furtherBookingDetails']->image; ?>" alt=""></div>
                     <div><img src="<?php echo URLROOT . '/images/' . $data['furtherBookingDetails']->image; ?>" alt=""></div>
-                </div>
+                </div> -->
 
             </div>
            
@@ -377,7 +377,7 @@
                 <div class="emergencydata">In Emergency: <?php echo $data['mainbookingDetails']->manager_phone_number." - ". $data['mainbookingDetails']->manager_name?></div>
                 <?php if ($data['cancellationEligibility'] == "Available"): ?>
     <div>
-        <button id="delbutton" onclick="deleteBooking()">Delete Trip</button>
+        <button id="delbutton" onclick="deleteBooking()">Cancel Trip</button>
     </div>
 <?php endif; ?>
 
