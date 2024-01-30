@@ -54,8 +54,8 @@
             <div>
                     
                     <div class="reservation-details">
-                        <p><strong>Check-in Date:</strong> January 1, 2023</p>
-                        <p><strong>Check-out Date:</strong> January 5, 2023</p>
+                        <p><strong>Check-in Date : </strong>  <?php echo $data['checkinDate'] ?></p>
+                        <p><strong>Check-out Date : </strong>  <?php echo $data['checkoutDate'] ?></p>
                     </div>
     
                     <div class="reservation-details">
@@ -83,7 +83,7 @@
                         <p><strong>Your Phone Number:</strong><?php echo $data['user']->number?></p>
                         <br>
                         <p ><strong>Total :  <?php echo $data['furtherBookingDetails']->price ?></strong></p>
-                <form action="<?php echo URLROOT ?>loggedTraveler/dopayment/<?php echo $data['furtherBookingDetails']->type . '/' . $data['furtherBookingDetails']->room_id ?>">
+                <form action="<?php echo URLROOT ?>loggedTraveler/dopayment/<?php echo $data['furtherBookingDetails']->type . '/' . $data['furtherBookingDetails']->room_id.'/'.$data['checkinDate'].'/'.$data['checkoutDate'] ?>">
         <div class="buttons">
                         <button type="submit" class="payment-button">Make Payment</button>
                     </div>

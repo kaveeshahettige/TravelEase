@@ -25,10 +25,12 @@ function viewBooking($Sid,$Bid) {
   kbutton1.addEventListener("click", plan);
   /////////////////////////
 
-  function booking(type, id) {
+  function booking(type, id, checkinDate, checkoutDate) {
+    console.log("Booking Type:", type, "ID:", id, "Check-in:", checkinDate, "Check-out:", checkoutDate);
     // Change the URL to the desired destination, and append the type and id
-    window.open("http://localhost/TravelEase/LoggedTraveler/bookingpayment/" + type + "/" + id, "_blank");
+    window.open("http://localhost/TravelEase/LoggedTraveler/bookingpayment/" + type + "/" + id + "/" + checkinDate + "/" + checkoutDate, "_blank");
 }
+
 
 
 

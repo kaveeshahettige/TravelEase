@@ -565,17 +565,18 @@ public function updatePicture($data){
     //checkCancellationEligibility($booking->id)
     public function checkCancellationEligibility($id){
         $this->db->query('SELECT * FROM bookings WHERE booking_id = :id');
-        $this->db->bind(':id', $id);
-        $booking = $this->db->single();
-        $today = date("Y-m-d");
-        $checkInDate = $booking->startDate;
-        $diff = strtotime($checkInDate) - strtotime($today);
-        $days = abs(round($diff / 86400));
-        if ($days >= 7) {
-            return "Unavailable";
-        } else {
-            return "Available";
-        }
+$this->db->bind(':id', $id);
+$booking = $this->db->single();
+$today = date("Y-m-d");
+$bookingDate = $booking->bookingDate; // Change to use the correct attribute name
+$diff = strtotime($today) - strtotime($bookingDate); // Change the order of substraction
+$days = round($diff / 86400); // Use round without abs to allow negative values
+if ($days > 7) { // Change the condition to check if $days is greater than 7
+    return "Unavailable";
+} else {
+    return "Available";
+}
+
     }
 
     //findMyBooking
@@ -694,8 +695,8 @@ public function addBooking($transactionData){
     $this->db->query('INSERT INTO bookings (user_id, serviceProvider_id, startDate, endDate, room_id) VALUES (:user_id, :serviceProvider_id, :startDate, :endDate, :room_id)');
     $this->db->bind(':user_id', $transactionData['user']->id);
     $this->db->bind(':serviceProvider_id', $transactionData['furtherBookingDetails']->id);   
-    $this->db->bind(':startDate', $currentDate);//this date should be changed
-    $this->db->bind(':endDate', $currentDate);//this date should be changed
+    $this->db->bind(':startDate', $transactionData['checkinDate']);
+    $this->db->bind(':endDate', $transactionData['checkoutDate']);
     $this->db->bind(':room_id', $transactionData['furtherBookingDetails']->room_id);
 
     }elseif($transactionData->type==4){
@@ -755,10 +756,11 @@ public function findAvailableRooms($checkinDate, $checkoutDate,$hotelid){
     WHERE room_id NOT IN (
         SELECT room_id
         FROM bookings
-        WHERE startDate <= :checkinDate
-        AND endDate >= :checkoutDate
+        WHERE startDate <= :checkoutDate
+        AND endDate >= :checkinDate
     )
     AND hotel_id = :hotelid;
+    
     
 ');
 
@@ -773,6 +775,53 @@ public function findAvailableRooms($checkinDate, $checkoutDate,$hotelid){
         return false;
     }
 }
+
+
+//addUnavailabilty
+public function addUnavailabilty($transactionData){
+    $this->db->query('INSERT INTO room_availability (room_id, startDate,endDate) VALUES (:room_id, :startDate,:endDate)');
+    $this->db->bind(':room_id',$transactionData['furtherBookingDetails']->room_id);
+    $this->db->bind(':startDate', $transactionData['checkinDate']);
+    $this->db->bind(':endDate', $transactionData['checkoutDate']);
+
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+   
+}
+
+
+
+
+// Inside your User model class
+
+// public function storeCheckoutSessionId($checkoutSessionId, $userId)
+// {
+//     $this->db->query('UPDATE users SET checkout_session_id = :checkoutSessionId WHERE id = :userId');
+//     $this->db->bind(':checkoutSessionId', $checkoutSessionId);
+//     $this->db->bind(':userId', $userId);
+
+//     return $this->db->execute();
+// }
+
+// public function getCheckoutSessionId($userId)
+// {
+//     $this->db->query('SELECT checkout_session_id FROM users WHERE id = :userId');
+//     $this->db->bind(':userId', $userId);
+
+//     return $this->db->single()->checkout_session_id;
+// }
+
+// public function clearCheckoutSessionId($userId)
+// {
+//     $this->db->query('UPDATE users SET checkout_session_id = NULL WHERE id = :userId');
+//     $this->db->bind(':userId', $userId);
+
+//     return $this->db->execute();
+// }
+
 
 }
 

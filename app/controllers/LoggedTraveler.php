@@ -145,7 +145,7 @@ $data = [
       ];
       $this->view('loggedTraveler/bookingdetails',$data);
     }
-    public function bookingpayment($type,$serviceid){
+    public function bookingpayment($type,$serviceid,$checkinDate,$checkoutDate){
 
       $id = $_SESSION['user_id'];
         $user=$this->userModel->findUserDetail($id);
@@ -154,6 +154,8 @@ $data = [
         $data=[
           'furtherBookingDetails' => $furtherBookingDetails,
           'user' => $user,
+          'checkinDate'=>$checkinDate,
+          'checkoutDate'=>$checkoutDate,
         ];
         $this->view('loggedTraveler/bookingpayment',$data);
       
@@ -179,7 +181,7 @@ $data = [
     }
 
     //dopayment
-    public function dopayment($type, $serviceid)
+    public function dopayment($type, $serviceid,$checkinDate,$checkoutDate)
 {
     $id = $_SESSION['user_id'];
     $user = $this->userModel->findUserDetail($id);
@@ -192,7 +194,7 @@ $data = [
     \Stripe\Stripe::setApiKey($stripe_secret_key);
     $checkout_session = \Stripe\Checkout\Session::create([
         'mode' => 'payment',
-        'success_url' => "http://localhost/TravelEase/bookingpayment/{$type}/{$serviceid}",
+        'success_url' => "http://localhost/TravelEase/loggedTraveler/paymentSuccessful",
         'line_items' => [[
             'quantity' => 1,
             'price_data' => [
@@ -211,6 +213,8 @@ $data = [
         'user'=>$user,
         'furtherBookingDetails' => $furtherBookingDetails,
         'transaction_id' => $checkout_session->payment_intent,
+        'checkinDate'=>$checkinDate,
+        'checkoutDate'=>$checkoutDate,
         // Add any other relevant transaction details
     ];
 
@@ -219,11 +223,94 @@ $data = [
     $this->userModel->addBooking($transactionData);
     $lastBooking=$this->userModel->getLastBooking();
     $this->userModel->addPaymentDetails($transactionData,$lastBooking->booking_id);
+    $this->userModel->addUnavailabilty($transactionData);
 
     // Redirect the user to the Checkout session URL
     http_response_code(303);
     header("Location: " . $checkout_session->url);
 }
+
+// public function dopayment($type, $serviceid, $checkinDate, $checkoutDate)
+// {
+//     $id = $_SESSION['user_id'];
+//     $user = $this->userModel->findUserDetail($id);
+//     $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($type, $serviceid);
+
+//     require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+//     $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
+
+//     \Stripe\Stripe::setApiKey($stripe_secret_key);
+//     $checkout_session = \Stripe\Checkout\Session::create([
+//         'mode' => 'payment',
+//         'success_url' => "http://localhost/TravelEase/bookingpayment/{$type}/{$serviceid}",
+//         'line_items' => [[
+//             'quantity' => 1,
+//             'price_data' => [
+//                 'currency' => 'lkr',
+//                 'unit_amount' => $furtherBookingDetails->price * 100,
+//                 'product_data' => [
+//                     'name' => $furtherBookingDetails->description,
+//                 ],
+//             ],
+//         ]],
+//         'cancel_url' => 'https://example.com/cancel',
+//     ]);
+
+//     // Store the session ID in your database for later reference
+//     $this->userModel->storeCheckoutSessionId($checkout_session->id,$id);
+
+//     // Redirect the user to the Checkout session URL
+//     http_response_code(303);
+//     header("Location: " . $checkout_session->url);
+// }
+
+// // Add a separate endpoint to handle the successful payment
+// public function handleSuccessfulPayment($type, $serviceid)
+// {
+//     $id = $_SESSION['user_id'];
+//     $user = $this->userModel->findUserDetail($id);
+//     $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($type, $serviceid);
+
+//     require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+//     $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
+
+//     \Stripe\Stripe::setApiKey($stripe_secret_key);
+
+//     // Retrieve the session ID from your database
+//     $checkout_session_id = $this->userModel->getCheckoutSessionId($user->id);
+
+//     // Retrieve the Checkout session to verify the payment
+//     $checkout_session = \Stripe\Checkout\Session::retrieve($checkout_session_id);
+
+//     // Verify that the payment is successful
+//     if ($checkout_session->payment_intent && $checkout_session->payment_intent->status === 'succeeded') {
+//         // Update your database with the confirmed payment details
+//         $transactionData = [
+//             'user' => $user,
+//             'furtherBookingDetails' => $furtherBookingDetails,
+//             'transaction_id' => $checkout_session->payment_intent,
+//             'checkinDate' => $checkinDate,
+//             'checkoutDate' => $checkoutDate,
+//             // Add any other relevant transaction details
+//         ];
+
+//         // Update the booking table, payment details, and unavailability
+//         $this->userModel->addBooking($transactionData);
+//         $lastBooking = $this->userModel->getLastBooking();
+//         $this->userModel->addPaymentDetails($transactionData, $lastBooking->booking_id);
+//         $this->userModel->addUnavailabilty($transactionData);
+        
+//         // Clear the stored session ID after processing the successful payment
+//         $this->userModel->clearCheckoutSessionId($user->id);
+
+//         // Redirect or show a success message to the user
+//         header("Location: http://localhost/TravelEase/bookingpayment/{$type}/{$serviceid}");
+//     } else {
+//         // Handle the case where the payment was not successful
+//         header("Location: /error-page");
+//     }
+// }
+
 
 //fetchAvailableRooms
 public function fetchAvailableRooms()
@@ -236,10 +323,11 @@ public function fetchAvailableRooms()
   // var_dump($checkinDate, $checkoutDate, $hotelId);
     ////
     // $servicProvider = $this->userModel->findUserDetail($Sid);
-    $rooms = $this->userModel->findAvailableRooms($checkinDate, $checkoutDate, $hotelId);
+    
     // $bookingDetails = $servicProvider ? $this->userModel->findBookingDetail(3, $Sid) : null;
 
     $html = '';
+    $rooms = $this->userModel->findAvailableRooms($checkinDate, $checkoutDate, $hotelId);
     if (!empty($rooms) && is_array($rooms)) {
         foreach ($rooms as $room) {
             $html .= '<tr class="t-row">';
@@ -247,7 +335,7 @@ public function fetchAvailableRooms()
             $html .= '<td>' . $room->roomType . '</td>';
             $html .= '<td>' . $room->description . '</td>';
             $html .= '<td>' . $room->price . '</td>';
-            $html .= '<td><button class="view-button" >Book Now</button></td>';
+            $html .= '<td><button class="view-button" onclick="booking(3, ' . $room->room_id . ', \'' . $checkinDate . '\', \'' . $checkoutDate . '\')">Book Now</button></td>';
             $html .= '</tr>';
         }
     } else {
@@ -256,11 +344,12 @@ public function fetchAvailableRooms()
 
     echo $html;
     exit;
-    
+     
+}
 
-    
-
-    
+public function paymentSuccessful(){
+  $data=[];
+  $this->view('loggedTraveler/paymentSuccessful',$data);
 }
 }
 
