@@ -1,23 +1,27 @@
 <?php
-class Hotels{
+class Hotels
+{
 
     public string $hotel;
     public string $roomType;
 
     private $db;
 
-    public function __construct(){
-        $this->db =new Database;
+    public function __construct()
+    {
+        $this->db = new Database;
     }
 
-    public function getHotel() {
+    public function getHotel()
+    {
         $this->db->query('SELECT * FROM hotel_rooms');
         $results = $this->db->resultSet();
 
         return $results;
     }
 
-    public function getHotelRooms($hotel_id) {
+    public function getHotelRooms($hotel_id)
+    {
         $this->db->query('SELECT * FROM hotel_rooms WHERE hotel_id = :hotel_id');
         $this->db->bind(':hotel_id', $hotel_id);
         $roomData = $this->db->resultSet();
@@ -30,9 +34,8 @@ class Hotels{
         }
     }
 
-
-
-    public function updateHotelInfo($userId, $hotelData) {
+    public function updateHotelInfo($userId, $hotelData)
+    {
         $this->db->query('UPDATE hotel SET 
         hotel_name = :hotelName, 
         hotel_type = :hotelType, 
@@ -98,7 +101,7 @@ class Hotels{
             $lastInsertedRoomId = $result->max_room_id;
 
             // Generate the registration_number
-            $registrationNumber = 'TE-H' . str_pad($lastInsertedRoomId+1, 2, '0', STR_PAD_LEFT);
+            $registrationNumber = 'TE-H' . str_pad($lastInsertedRoomId + 1, 2, '0', STR_PAD_LEFT);
 
             // Add the registration_number to the $roomData array
             $roomData['registration_number'] = $registrationNumber;
@@ -134,19 +137,18 @@ class Hotels{
         }
     }
 
-
-
-    public function findrooms($room_id){
+    public function findrooms($room_id)
+    {
         $this->db->query('SELECT * from hotel_rooms WHERE room_id = :room_id ');
         $this->db->bind(':room_id', $room_id);
-        $roomData=$this->db->resultSet();
-//        print_r($roomData);
+        $roomData = $this->db->resultSet();
+        //        print_r($roomData);
         //check row
-        if($this->db->rowCount()>0){
-//            echo "hi";
-//            print_r($roomData);
+        if ($this->db->rowCount() > 0) {
+            //            echo "hi";
+            //            print_r($roomData);
             return $roomData[0];
-        }else{
+        } else {
             return null;
         }
     }
@@ -189,14 +191,14 @@ class Hotels{
     }
 
 
-
-    public function deleterooms($room_id){
+    public function deleterooms($room_id)
+    {
         $this->db->query('DELETE FROM hotel_rooms WHERE room_id = :room_id');
         // Bind values
         $this->db->bind(':room_id', $room_id);
 
         // Execute
-        if($this->db->execute()){
+        if ($this->db->execute()) {
             return true;
         } else {
             return false;
@@ -219,7 +221,8 @@ class Hotels{
         }
     }
 
-    public function getBookingsByHotel($hotel_id) {
+    public function getBookingsByHotel($hotel_id)
+    {
         $this->db->query('SELECT b.*, u.fname, u.profile_picture, hr.roomType 
                       FROM bookings b
                       JOIN users u ON b.user_id = u.id
@@ -231,7 +234,8 @@ class Hotels{
         return $this->db->resultSet();
     }
 
-    public function getReviews($hotel_id) {
+    public function getReviews($hotel_id)
+    {
         $this->db->query('SELECT r.*, u.fname, u.profile_picture
                           FROM `reviews` r
                           JOIN users u ON r.user_id = u.id
@@ -241,9 +245,8 @@ class Hotels{
         return $this->db->resultSet();
     }
 
-
-
-    public function insertPdf($filename, $userId) {
+    public function insertPdf($filename, $userId)
+    {
         $this->db->query('UPDATE users SET document = :filename WHERE id = :userId');
         $this->db->bind(':filename', $filename);
         $this->db->bind(':userId', $userId);
@@ -256,7 +259,8 @@ class Hotels{
         }
     }
 
-    public function updateProfilePicture($userId, $filename) {
+    public function updateProfilePicture($userId, $filename)
+    {
         $this->db->query('UPDATE users SET profile_picture = :filename WHERE id = :userId');
         $this->db->bind(':filename', $filename);
         $this->db->bind(':userId', $userId);
@@ -269,7 +273,8 @@ class Hotels{
         }
     }
 
-    public function getUserById($user_id) {
+    public function getUserById($user_id)
+    {
         $this->db->query('SELECT * FROM users WHERE id = :user_id');
         $this->db->bind(':user_id', $user_id);
 
@@ -284,8 +289,77 @@ class Hotels{
         return $this->db->single();
     }
 
+    public function getNotifications($user_id)
+    {
+        $sql = 'SELECT * FROM notifications WHERE user_id = :user_id ORDER BY created_at DESC LIMIT 0, 25';
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $user_id);
+
+        try {
+            return $this->db->resultSet();
+        } catch (Exception $e) {
+            // Log or handle the exception
+            echo 'Error: ' . $e->getMessage();
+            return [];
+        }
+    }
+
+    public function markAsRead($notification_id)
+    {
+        $this->db->query('UPDATE notifications SET is_read = true WHERE id = :notification_id');
+        $this->db->bind(':notification_id', $notification_id);
+
+        return $this->db->execute();
+    }
+
+    public function insertRoomStatus($room_id, $date)
+    {
+        // Prepare and execute the SQL query to insert room availability
+        $sql = "INSERT INTO room_availability (room_id, date) VALUES (:room_id, :date)";
+        $this->db->query($sql);
+        $this->db->bind(':room_id', $room_id);
+        $this->db->bind(':date', $date);
+
+        // Execute the query
+        if ($this->db->execute()) {
+            return true; // Return true if the insertion was successful
+        } else {
+            return false; // Return false if the insertion failed
+        }
+    }
+
+    public function deleteRoomStatus($room_id, $date)
+    {
+        // Prepare and execute the SQL query to delete room availability
+        $sql = "DELETE FROM room_availability WHERE room_id = :room_id AND date = :date";
+        $this->db->query($sql);
+        $this->db->bind(':room_id', $room_id);
+        $this->db->bind(':date', $date);
+
+        // Execute the query
+        if ($this->db->execute()) {
+            return true; // Return true if the deletion was successful
+        } else {
+            return false; // Return false if the deletion failed
+        }
+    }
 
 
+    public function getUnavailableRooms($date)
+    {
+        $sql = "SELECT * FROM room_availability WHERE date = :date";
+        $this->db->query($sql);
+        $this->db->bind(':date', $date);
+
+        // Execute the query
+        try {
+            return $this->db->resultSet();
+        } catch (Exception $e) {
+            // Log or handle the exception
+            echo 'Error: ' . $e->getMessage();
+            return [];
+        }
+    }
 
 
 }

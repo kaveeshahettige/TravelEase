@@ -13,7 +13,7 @@
 </head>
 <body>
 <?php
-$activePage = 'hotel/settings'; // Set the active page dynamically based on your logic
+$activePage = 'hotel/settings'; 
 include 'navigation.php';
 ?>
     <main>
@@ -34,11 +34,23 @@ include 'navigation.php';
                     <?php
 ////                    $userData = $data;
 //                    $hotelData = $data2['hotelData'];
+                    /**
+                     * @param stdClass $add
+                     * @param stdClass $profile_picture
+                     *
+                     * **/
+
+
+                    $hotelData= $data['basicInfo']['hotelData'];
+                    $userData= $data['basicInfo']['userData'];
+                    $profile_picture = $userData->profile_picture;
                     ?>
                     <!-- Rectangle 1: Basic Info -->
                     <div class="basic-info-content">
                         <div class="center-image" onclick="openPopup()">
-                            <img id="profile-picture" src="<?= isset($_SESSION['user_profile_picture']) ? $_SESSION['user_profile_picture'] : '../Images/wikum.jpg'; ?>" alt="Profile Picture">
+<!--                            <img id="profile-picture" src="--><?php //= $userData['profile_picture']? $hotelData->profile_picture : '../Images/wikum.jpg'; ?><!--" alt="Profile Picture">-->
+
+                            <p><?= $hotelData->add ?></p>
                             <div class="edit-icon">&#9998;</div>
                         </div>
                         <div class="hotel-details">
@@ -48,7 +60,7 @@ include 'navigation.php';
                             <h6>Email</h6>
                             <p><?=$_SESSION['user_email']?></p>
                             <h6>Location</h6>
-<!--                            <p>--><?php //echo $hotelData['add']; ?><!-- </p>-->
+                            <p><?=$hotelData->add ?> </p>
                         </div>
                         <a href="<?php echo URLROOT; ?>hotel/hoteledit">
                             <button class="edit-button">Edit</button>
@@ -125,7 +137,7 @@ include 'navigation.php';
                             $roomCount = $data;
                             //                print_r($data);
                             ?>
-                            <p><?php echo $roomCount['roomCount']; ?></p>
+                            <p><?php echo $data['roomCount']; ?></p>
                         </div>
                         <a href="<?php echo URLROOT; ?>hotel/addrooms">
                             <button  class ="edit-button">Add</button>

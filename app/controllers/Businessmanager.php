@@ -48,6 +48,4 @@ class Businessmanager extends Controller{
         $this->view('businessmanager/navigation');
     }
 
-    
-
 }

@@ -62,14 +62,28 @@ function createDayCell(date) {
     return cell;
 }
 
+function getFormattedDateStringForSQL(date) {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+}
+
+
 function handleDayClick(date) {
     const selectedDateElement = document.getElementById("selected-date");
+    const selectedDateInput = document.getElementById("selectedDate");
     const availabilityInfoElement = document.getElementById("availability-info");
 
+    const formattedDateForSQL = getFormattedDateStringForSQL(date);
+
     selectedDateElement.innerText = getFormattedDateString(date);
+    selectedDateInput.value = formattedDateForSQL;
     // Add logic here to fetch and display availability information for the selected date
     availabilityInfoElement.innerText = "Availability: Available";
 }
+
 
 function getFormattedDateString(date) {
     const options = { weekday: "short", day: "numeric" };
@@ -151,9 +165,82 @@ function deleteRoom(roomId) {
     updateRoomStatus('delete_room', roomId);
 }
 
-function updateRoomStatus(action, roomId) {
-    // Use AJAX to send the request to the controller
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', `index.php?action=updateRoomStatus&roomId=${roomId}&action=${action}`, true);
-    xhr.send();
+
+function handleFormSubmit() {
+    // var selectedDate = document.getElementById('selectedDate').value;
+    // if (!selectedDate) {
+    //     alert('Please select a date.');
+    //     return false; // Prevent form submission
+    // }
 }
+
+function updateRoomStatus(room_id, date) {
+    // Prepare the data to send
+    console.log(room_id, date);
+    var requestData = {
+        room_id: room_id,
+        date: date
+    };
+    const form = new FormData();
+    form.append('room_id', room_id);
+    form.append('date', date);
+
+    // Make an AJAX request
+    fetch(
+        'http://localhost/TravelEase/hotel/updateRoomStatus',
+        {
+            method: 'POST',
+            body: form
+        }
+    )
+        .then(async function(response) {
+            if (response.ok) {
+                const data =await response.json();
+                console.log(data);
+                console.log('Room status updated successfully');
+                window.location.reload();
+            } else {
+                console.error('Error updating room status:', response);
+            }
+        })
+        .catch(function(error) {
+            console.error('Error updating room status:', error);
+        }
+    )
+}
+
+function deleteRoomStatus(room_id,date) {
+    // Prepare the data to send
+    var requestData = {
+        room_id: room_id,
+        date: date
+    };
+    const form = new FormData();
+    form.append('room_id', room_id);
+    form.append('date', date);
+
+    console.log(room_id,date);
+    // Make an AJAX request
+    fetch(
+        'http://localhost/TravelEase/hotel/deleteRoomStatus',
+        {
+            method: 'POST',
+            body: form
+        }
+    )
+        .then(async function(response) {
+            if (response.ok) {
+                const data =await response.json();
+                console.log('Room Status deleted successfully');
+                window.location.reload();
+            } else {
+                console.error('Error deleting room: 1', response);
+            }
+        })
+        .catch(function(error) {
+            console.error('Error deleting room:', error);
+        }
+    )
+}
+
+
