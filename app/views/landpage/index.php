@@ -43,10 +43,12 @@
                 <img src="<?php echo URLROOT?>/images/1.png" alt="image" width="100%" height="100%">
             </div>
         </div>
-        <div class="searchbar1" >
-            <input type="text" class="search-input" placeholder="Places to go,Things to do,Hotels....">
-            <button class="search-button"  id="searchbut" onclick="clickSearch()">Search</button>
+        <form action="<?php echo URLROOT?>Landpage/searchPage" method="GET">
+        <div class="searchbar1">
+            <input type="text" class="search-input" name="location" placeholder="Place you want to go..." required>
+            <button type="submit" class="search-button">Search</button>
         </div>
+        </form>
         <br>
     </section>
     <section class="main2">

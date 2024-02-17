@@ -390,3 +390,25 @@ border: none;
 
 
 /*////////////////////////*/
+
+.main2 {
+    margin-top: 30px; /* Adjusted margin-top */
+    display: grid;
+    margin-left: 30px;
+    grid-template-rows: 5% 45% 45%;
+    height: auto; /* Changed to auto to adjust based on content */
+}
+
+.main4 {
+    display: grid;
+    grid-template-rows: 80% 20%;
+    /* margin-bottom: 0px; */ /* This line can be removed */
+    height: auto; /* Changed to auto to adjust based on content */
+}
+
+.main2images .main2img1content:hover{
+    display: grid;
+    grid-template-rows: 65% 10%;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+
+}

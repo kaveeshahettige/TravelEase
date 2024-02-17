@@ -26,7 +26,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport" id="selected">Transport Providers</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
             <div class="rightcontent">
-                <li><a href="<?php echo URLROOT?>travelerDashboard/index"><img src="<?php echo URLROOT?>/images/5.jpg" alt="Profile Picture"></a></li>
+            <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
                 <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
                 </div>
         </ul>
@@ -62,61 +62,8 @@
                 </div>
                 
             </div>
-            <div class="main2img2content">
-                <div><img src="<?php echo URLROOT?>images/car 2.jpg" alt=""></div>
-                <div class="c2">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Tropical Trekking Trips</p>
-                        <p>Galle</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-            <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c3">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold"> Horizons Travel</p>
-                        <p>Colombo</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
         </div>
-        <div class="main2images" id="div2">
-            <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/car 4.jpg" alt=""></div>
-                <div class="c1"> 
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Cinnamon Spice Adventures</p>
-                        <p>Mathara</p>
-                    </div>
-                    <div> <button>Book Now</button></div>
-                </div>
-                
-            </div>
-            <div class="main2img2content">
-                <div><img src="<?php echo URLROOT?>images/car 5.jpg" alt=""></div>
-                <div class="c2">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Oceanic Quest Journeys</p>
-                        <p>Yala</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-            <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c3">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Lush Landscapes
-</p>
-                        <p>Sigiriya</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-        </div>
+        
     </section>
     <section class="main4">
         <div class="main4img">

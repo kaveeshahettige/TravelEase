@@ -128,6 +128,9 @@ font-size: 40px;
     max-width: 100%;
     height: 100%;
 }
+#map {
+    height: 100%; /* Set the height to 100% to fill the parent container */
+}
 
 .resultsPage1_1 .Buttons button{
     padding: 10px 30px;

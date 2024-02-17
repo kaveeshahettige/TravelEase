@@ -31,7 +31,7 @@
                 </div>
         </ul>
     </div>
-    <!-- <?php echo var_dump($data['bookingDetails'])?> -->
+    
     <section class="bookingResultm1">
     <?php if ($data['type']==3): ?>
         
@@ -41,7 +41,7 @@
             </div>
             <div class="images">
                 <div class="mainimage">
-                    <img src="<?php echo URLROOT?>/images/4.jpg" alt="">
+                <img src="<?php echo URLROOT ?>/images/<?php echo $data['hotel_image'] ?>" alt="">
                 </div>
                 <!-- <div class="submimages">
                     <div><img src="<?php echo URLROOT?>/images/yala2.jpg" alt=""></div>

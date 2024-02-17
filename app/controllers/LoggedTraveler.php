@@ -74,11 +74,24 @@ $data = [
       $this->view('loggedTraveler/index',$data);
     }
     public function hotel(){
-      $data=[];
+      
+    // $location = $_POST['location'];
+    $id = $_SESSION['user_id'];
+    $user = $this->userModel->findUserDetail($id);
+      $hotels=$this->userModel->getRandomHotels();
+
+      $data=[
+        'profile_picture' => $user ? $user->profile_picture : null, // Add the profile picture to the data array
+        'hotels'=>$hotels,
+      ];
       $this->view('loggedTraveler/hotel',$data);
     }
     public function transport(){
-      $data=[];
+      $id = $_SESSION['user_id'];
+    $user = $this->userModel->findUserDetail($id);
+      $data=[
+        'profile_picture' => $user ? $user->profile_picture : null,
+      ];
       $this->view('loggedTraveler/transport',$data);
     }
     public function package(){
@@ -173,6 +186,7 @@ $data = [
         'serviceProviderName' => $servicProvider ? $servicProvider->fname . ' ' . $servicProvider->lname : null,
         'profile_picture' => $user ? $user->profile_picture : null,
         'serviceProvideNumber'=>$servicProvider ? $servicProvider->number : null,
+        'hotel_image'=>$servicProvider?$servicProvider->profile_picture:null,
         'type' => $servicProvider ? $servicProvider->type : null,
         'bookingDetails' => $bookingDetails,
         'rooms'=>$rooms,
@@ -351,7 +365,53 @@ public function paymentSuccessful(){
   $data=[];
   $this->view('loggedTraveler/paymentSuccessful',$data);
 }
+
+//removeBooking
+public function cancelBooking($bookingId)
+{
+    $cancel = $this->userModel->cancelBooking($bookingId);
+    ///////////////below should be developed///////////
+    //system user should be refunded
+    //service provider should be notified about the bookingg cancellation
+    //should remove the unavailabilty
+
+    if ($cancel) {
+        // Booking cancellation successful
+        echo '<script>alert("Trip has been cancelled. You will be refunded.");';
+        echo 'window.location.href = "/Travelease/loggedTraveler/index";</script>';
+    } else {
+        // Booking cancellation failed
+        echo '<script>alert("Failed to cancel the trip. Please try again.");';
+        echo 'window.location.href = "/Travelease/loggedTraveler/index";</script>';
+    }
 }
 
+//serachhotels
+public function searchHotels()
+{
+    // Check if the request method is POST
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Perform the search operation
+        $location = $_POST['location'];
+        $user = $this->userModel->findUserDetail($_SESSION['user_id']);
+        $hotels = $this->userModel->findHotels($location);
+
+        // Pass the search results to the view and load it
+        $data = [
+            'hotels' => $hotels,
+            'profile_picture' => $user ? $user->profile_picture : null,
+            'location' => $location,
+        ];
+        $this->view('loggedTraveler/hotel', $data);
+        exit; // Ensure that script execution stops after loading the view
+    } else {
+        // If the request method is not POST, redirect to a different URL
+        header('Location: /TravelEase/loggedTraveler'); // Redirect to the main page or another appropriate URL
+        exit; // Ensure that script execution stops after the redirect
+    }
+}
+
+
+}
 
 

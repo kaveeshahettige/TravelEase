@@ -440,7 +440,10 @@ public function updatePicture($data){
         $this->db->query('SELECT bookings.*, users.*
         FROM bookings
         INNER JOIN users ON bookings.serviceProvider_id = users.id
-        WHERE bookings.user_id = :id;
+        WHERE bookings.user_id = :id
+        AND bookings.bookingCondition != "cancelled"
+        AND bookings.enddate > CURDATE();
+        
         ');
         $this->db->bind(':id',$id);
     
@@ -549,7 +552,7 @@ public function updatePicture($data){
     // getRandomServiceProviders
     public function getRandomServiceProviders(){
                                         //4,5 should be removed and approval should be added
-        $this->db->query('SELECT * FROM users WHERE type NOT IN (0, 1, 2,4,5) /*AND approval = 1*/ ORDER BY RAND() LIMIT 3');
+        $this->db->query('SELECT * FROM users WHERE type NOT IN (0,1,2,4,5) /*AND approval = 1*/ ORDER BY RAND() LIMIT 6');
     
     
         $data=$this->db->resultSet();
@@ -822,6 +825,99 @@ public function addUnavailabilty($transactionData){
 //     return $this->db->execute();
 // }
 
+//cancelBooking($booking_id)
+public function cancelBooking($booking_id){
+    $this->db->query('UPDATE bookings SET bookingCondition = :condition WHERE booking_id = :booking_id');
+    $this->db->bind(':condition', 'cancelled');
+    $this->db->bind(':booking_id', $booking_id);
 
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+//findPlaces($location)
+public function findPlaces($location) {
+    $this->db->query('SELECT places.*
+    FROM places
+    INNER JOIN cities ON places.city_id = cities.id
+    WHERE cities.city LIKE :location');
+
+    
+
+    $this->db->bind(':location', '%' . $location . '%');
+
+    $result = $this->db->resultSet();
+
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+//findCitydetails($location)
+public function findCitydetails($location) {
+    $this->db->query('SELECT * FROM cities WHERE city LIKE :location');
+    $this->db->bind(':location', '%' . $location . '%');
+    $result = $this->db->single();
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+//findHotels($location);
+//have to rewrite
+public function findHotels($location) {
+
+    $this->db->query('SELECT * FROM hotel
+    JOIN users ON hotel.user_id = users.id
+    WHERE hotel.city LIKE :location;
+    ');
+    $this->db->bind(':location', '%' . $location . '%');
+    $result = $this->db->resultSet();
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+
+}
+
+//getAllHotels
+public function getAllHotels() {
+    $this->db->query('SELECT * FROM hotel
+    JOIN users ON hotel.user_id = users.id
+    ');
+    $result = $this->db->resultSet();
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+//getRandomHotels
+public function getRandomHotels(){
+$this->db->query('SELECT h.*,u.* 
+FROM users u
+JOIN hotel h ON u.id = h.user_id
+WHERE u.type NOT IN (0, 1, 2, 4, 5) /*AND u.approval = 1*/
+ORDER BY RAND() 
+LIMIT 6;
+');   
+$data=$this->db->resultSet();
+
+//check row
+if($this->db->rowCount()>0){
+    return $data;
+}else{
+    return null;
+}
+}
 }
 

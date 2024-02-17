@@ -43,13 +43,13 @@ function Tripdetails(id) {
 
   /////////////////////
 
-  function initMap() {
-    // Map initialization code here
-    var map = new google.maps.Map(document.querySelector('.map'), {
-        center: { lat: 6.0329, lng: 80.2168 },
-        zoom: 8
-    });
-}
+//   function initMap() {
+//     // Map initialization code here
+//     var map = new google.maps.Map(document.querySelector('.map'), {
+//         center: { lat: 6.0329, lng: 80.2168 },
+//         zoom: 8
+//     });
+// }
 
 
 ///////////////////
@@ -77,4 +77,81 @@ function searchRooms(event) {
   xhr.open('GET', 'http://localhost/TravelEase//LoggedTraveler/fetchAvailableRooms?action=fetchAvailableRooms&checkin=' + checkinDate + '&checkout=' + checkoutDate + '&hotelid=' + hotelId, true);
   xhr.send();
 }
+
+
+///////////////
+//deleteBooking()
+
+function deleteBooking(bookingid) {
+  // Corrected implementation
+  window.location.href = `../../cancelBooking/${bookingid}`;
+}
+
+
+
+    // Initialize the map
+    // var map = L.map('map').setView([7.8731, 80.7718], 12); // Set the initial coordinates and zoom level
+
+    // // Add OpenStreetMap tile layer
+    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     attribution: '© OpenStreetMap contributors'
+    // }).addTo(map);
+
+    // Add markers for your places
+    // <?php foreach ($data['places'] as $place) : ?>
+    //     L.marker([<?php echo $place->latitude; ?>, <?php echo $place->longitude; ?>])
+    //         .addTo(map)
+    //         .bindPopup("<b><?php echo $place->place_name; ?></b><br><?php echo $place->place_description; ?>");
+    // <?php endforeach; ?>
+
+
+    //////
+    function clickSearchHotel() {
+      // Get the location input value
+      var location = $('#locationInput').val();
+
+      // Send an AJAX request to your controller
+      $.ajax({
+          type: 'POST',
+          url: 'http://localhost/TravelEase/loggedTraveler/searchHotels', // Replace with your controller URL
+          data: { location: location },
+          success: function (response) {
+              // Handle the response from the server
+              console.log(response);
+          },
+          error: function (error) {
+              // Handle the error
+              console.error(error);
+          }
+      });
+  }
+
+  /////////////
+
+  $(document).ready(function() {
+    // Handle form submission with AJAX
+    $('#searchForm').submit(function(event) {
+        // Prevent default form submission
+        event.preventDefault();
+        
+        // Get the search query
+        var location = $('#locationInput').val();
+
+        // Make AJAX request
+        $.ajax({
+            type: 'POST',
+            url: '<?php echo URLROOT ?>LoggedTraveler/searchHotels',
+            data: { location: location },
+            success: function(response) {
+                // Update the DOM with the new data
+                $('.main2').html(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle errors
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+
 
