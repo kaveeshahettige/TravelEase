@@ -75,7 +75,7 @@ $hotel_chunks = array_chunk($data['hotels'], 3);
                             <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $hotel->fname; ?></p>
                             <p><?php echo $hotel->city ?></p>
                         </div>
-                        <div><button onclick="Tripdetails(<?= $hotel->user_id?>)">Book Now</button></div>
+                        <div><button onclick="Tripdetails(<?= $hotel->user_id?>)">View</button></div>
                     </div>
                 </div>
             <?php endforeach; ?>

@@ -663,7 +663,13 @@ public function findBookingDetailByServiceid($type,$id){
         }
     }
     else if($type=='4'){
-        $this->db->query('SELECT * from vehicles where vehicle_id=:id');
+        $this->db->query('SELECT vehicles.*, users.*
+        FROM vehicles
+        JOIN travelagency ON vehicles.agency_id = travelagency.agency_id
+        JOIN users ON travelagency.user_id = users.id
+        WHERE vehicles.vehicle_id = :id
+        ');
+
         $this->db->bind(':id',$id);
     
         $data=$this->db->single();
@@ -702,12 +708,12 @@ public function addBooking($transactionData){
     $this->db->bind(':endDate', $transactionData['checkoutDate']);
     $this->db->bind(':room_id', $transactionData['furtherBookingDetails']->room_id);
 
-    }elseif($transactionData->type==4){
+    }elseif($transactionData['furtherBookingDetails']->type==4){
         $this->db->query('INSERT INTO bookings (user_id, serviceProvider_id, startDate, endDate, vehicle_id) VALUES (:user_id, :serviceProvider_id, :startDate, :endDate, :vehicle_id)');
         $this->db->bind(':user_id', $transactionData['user']->id);
         $this->db->bind(':serviceProvider_id', $transactionData['furtherBookingDetails']->id);   
-        $this->db->bind(':startDate', $currentDate);
-        $this->db->bind(':endDate', $currentDate);
+        $this->db->bind(':startDate', $transactionData['checkinDate']);
+        $this->db->bind(':endDate', $transactionData['checkoutDate']);
         $this->db->bind(':vehicle_id', $transactionData['furtherBookingDetails']->vehicle_id);
 
     }elseif($transactionData->type==5){
@@ -737,6 +743,19 @@ public function addPaymentDetails($transactionData,$booking_id){
             return false;
         }
        
+}
+//addPaymentDetailsVehicles
+public function addPaymentDetailsVehicles($transactionData,$booking_id,$price){
+    $this->db->query('INSERT INTO payments (booking_id, amount) VALUES (:booking_id, :amount)');
+    $this->db->bind(':booking_id',$booking_id);
+    $this->db->bind(':amount', $price);
+
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+   
 }
 
 //getLastBooking
@@ -919,5 +938,96 @@ if($this->db->rowCount()>0){
     return null;
 }
 }
+
+//getRandomAgencies
+public function getRandomAgencies(){
+    $this->db->query('SELECT t.*,u.* 
+FROM users u
+JOIN travelagency t ON u.id = t.user_id
+WHERE u.type NOT IN (0, 1, 2, 3, 5) /*AND u.approval = 1*/
+ORDER BY RAND() 
+LIMIT 6;
+');   
+$data=$this->db->resultSet();
+
+//check row
+if($this->db->rowCount()>0){
+    return $data;
+}else{
+    return null;
+}
+
+}
+
+//findNoOfVehicles($id)
+public function findNoOfVehicles($id){
+    $this->db->query('SELECT COUNT(*) AS count FROM vehicles WHERE agency_id = :id');
+    $this->db->bind(':id', $id);
+    $row = $this->db->single();
+     if($this->db->rowcount()>0){
+        return $row->count;
+     }
+     else{
+        return false;
+    }
+}
+
+
+//findVehicles($bookingDetails->agency_id)
+public function findVehicles($id){
+    $this->db->query('SELECT * FROM vehicles WHERE agency_id = :id');
+    $this->db->bind(':id', $id);
+    $result = $this->db->resultSet();
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+//findAvailableVehicles($pickupDate, $pickupTime, $dropoffDate, $dropoffTime, $agencyId);
+public function findAvailableVehicles($pickupDate, $dropoffDate, $agencyId) {
+    $this->db->query('SELECT * FROM vehicles
+    WHERE vehicle_id NOT IN (
+        SELECT vehicle_id
+        FROM vehicle_bookings
+        WHERE start_date <= :dropoffDate
+        AND end_date >= :pickupDate
+    )
+    AND agency_id = :agencyId;
+    ');
+    $this->db->bind(':pickupDate', $pickupDate);
+    $this->db->bind(':dropoffDate', $dropoffDate);
+    $this->db->bind(':agencyId', $agencyId);
+    $result = $this->db->resultSet();
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+//addVehicleBooking
+public function addVehicleBooking($transactionData) {
+    // Convert the pickup time to the correct format (if needed)
+    $pickupTime = date('H:i:s', strtotime($transactionData['pickupTime']));
+
+    // Prepare and execute the SQL query
+    $this->db->query('INSERT INTO vehicle_bookings(vehicle_id, start_date, end_date, start_time) VALUES (:vehicle_id, :start_date, :end_date, :start_time)');
+    $this->db->bind(':vehicle_id', $transactionData['furtherBookingDetails']->vehicle_id);  
+    $this->db->bind(':start_date', $transactionData['checkinDate']);
+    $this->db->bind(':end_date', $transactionData['checkoutDate']);
+    $this->db->bind(':start_time', $pickupTime);
+
+    // Execute the query
+    if($this->db->execute()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
 }
 

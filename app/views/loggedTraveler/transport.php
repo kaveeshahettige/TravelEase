@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/styletr.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
-    <script src="./scripttr.js"></script>
+    <script src="<?php echo URLROOT?>/js/loggedTraveler/script.js"></script>
     <style>
 
     </style>
@@ -36,33 +36,49 @@
             <img src="<?php echo URLROOT?>/images/tr.jpg" alt="">
         </div>
         <div class="main1searchbar">
-            <div class="search">
-                <div class="search1"><input type="text" placeholder="Location: "></div>
-                <div class="search2">Pick-up Date:<input type="date" placeholder="Check in Date"></div>
-                <div class="search3">Drop-off Date:<input type="date" placeholder="Check out Date"></div>
-                <div class="search4"><button id="searchbtn" onclick="clickSearchTransport()">Search</button></div>
-            </div>
+        <div class="search">
+    <div class="search1"><input type="text" placeholder="Location: "></div>
+    <div class="search2">Pick-up Date:<input type="date" placeholder="Pick-up Date"></div>
+    <div class="search3">Time:<input type="time" placeholder="Pick-up Time"></div>
+    <div class="search4">Drop-off Date:<input type="date" placeholder="Drop-off Date"></div>
+    <div class="search5">Time:<input type="time" placeholder="Drop-off Time"></div>
+    <div class="search6"><button id="searchbtn" onclick="clickSearchTransport()">Search</button></div>
+</div>
+
         </div>
     </section>
+    <!-- <?php echo var_dump($data) ?> -->
+    <?php 
+$agency_chunks = array_chunk($data['agencies'], 3);
+?>
     <section class="main2">
         <div class="main2buttons">
             <button id="but1">All</button>
             <button class="but2_3" id="mostPopularButton">Most Popular</button>
             <button class="but2_3"  id="topRatedButton">Top-Rated</button>
         </div>
+
+        <?php if (!empty($data['agencies']) && is_array($data['agencies'])): ?>
         <div class="main2images" id="div1">
+        <?php foreach ($data['agencies'] as $agency): ?>
             <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/car 1.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT ?>images/<?php echo $agency->profile_picture; ?>" alt=""></div>
                 <div class="c1"> 
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Sri Lankan Adventures</p>
-                        <p>Hambantota</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $agency->fname; ?></p>
+                        <p><?php echo $agency->city; ?></p>
                     </div>
-                    <div> <button>Book Now</button></div>
+                    <div> <button onclick="Tripdetails(<?= $agency->user_id?>)">View</button></div>
                 </div>
                 
             </div>
+            <?php endforeach; ?>
         </div>
+        <?php elseif (empty($data['agencies'])): ?>
+        <p>No transport agencies available.</p>
+    <?php else: ?>
+        <p>Error retrieving transport agency data.</p>
+    <?php endif; ?>
         
     </section>
     <section class="main4">

@@ -41,7 +41,7 @@
             </div>
             <div class="images">
                 <div class="mainimage">
-                <img src="<?php echo URLROOT ?>/images/<?php echo $data['hotel_image'] ?>" alt="">
+                <img src="<?php echo URLROOT ?>/images/<?php echo $data['service_image'] ?>" alt="">
                 </div>
                 <!-- <div class="submimages">
                     <div><img src="<?php echo URLROOT?>/images/yala2.jpg" alt=""></div>
@@ -166,27 +166,145 @@ if (!empty($data['rooms']) && is_array($data['rooms'])) {
 }
 ?>
 </tbody>
+<?php endif; ?>
             </table>
    
             </div>
-            <?php elseif ($data['type']==4): ?>
-                type =4
-            <?php elseif ($data['type']==5): ?>
-                type =5
-            <?php endif; ?>
+            <?php elseif ($data['type'] == 4): ?>
+                <div class="view">
+            <div class="bookingtitles"><h1><?php echo ucfirst($data['serviceProviderName'])?></h1>
+                <h5>Agency details</h5>
+            </div>
+            <div class="images">
+                <div class="mainimage">
+                <img src="<?php echo URLROOT ?>/images/<?php echo $data['service_image'] ?>" alt="">
+                </div>
 
-
+            </div>
+            <div class="des">
+                <h5 style="margin: 0px;">About</h5>
+                <p><?php echo $data['bookingDetails']->description ? ucfirst($data['bookingDetails']->description) : '-----'; ?></p> 
+            </div> 
             
-            <?php elseif ($data['type']==4): ?>
-                type =4
-            <?php elseif ($data['type']==5): ?>
-                type =5
-            <?php endif; ?>
-            <!-- <div class="delbuttonContain">
+            <div class="bookingdetails">
+                <div class="leftdiv">
+                    <div class="ldiv1">
+                        <div class="booking-label">Agency name:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['serviceProviderName'])?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">No of vehicles:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['NoVehicles'])?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Address:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->address)?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">City:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->city)?></div>
+                    </div>
+                </div>
+
+                <div class="rightdiv">
+                <div class="ldiv1">
+                        <div class="booking-label">Email:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['email'])?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Facebook:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->facebook)?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Twitter:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->twitter)?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Instargram:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->instagram)?></div>
+                    </div>
+                    <!-- <div class="ldiv1">
+                        <div class="booking-label">Availble rooms:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->instagram)?></div>
+                    </div> -->
+                    
+                </div>
                 
-                <div><button id="delbutton" onclick="booking()">Book Now</button></div>
-                
+
+            </div>
+            <!-- //// -->
+            <div class="search-section">
+            <div class="date-picker">
+                <label for="pickup">Pickup date:</label>
+                <input type="date" id="pickup" name="pickup" required>
+            </div>
+            <div class="date-picker">
+                <label for="ptime">Pickup Time:</label>
+                <input type="time" id="ptime" name="ptime" required>
+            </div>
+            <div class="date-picker">
+                <label for="dropoff">Dropoff date:</label>
+                <input type="date" id="dropoff" name="dropoff" required>
+            </div>
+            <!-- <div class="date-picker">
+                <label for="dtime">Time:</label>
+                <input type="time" id="dtime" name="dtime" required>
             </div> -->
+            <button class="search-button" id="search-button" data-agency-id="<?php echo $data['bookingDetails']->agency_id; ?>" onclick="searchVehicles(event)">Search</button>
+
+
+        </div>
+        <div>
+    <?php if ($data['type']==4): ?>
+    <h2 style="text-align: center;">Available vehicles</h2>
+
+            <table class="booking-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Plate Number</th>
+                        <th>Fuel Type</th>
+                        <th>Year</th>
+                        <th>Seating Capacity</th>
+                        <th></th>
+                        
+                    </tr>
+                </thead>
+                <tbody id="available-vehicles">
+                
+            <?php
+$count = 1;
+
+if (!empty($data['vehicles']) && is_array($data['vehicles'])) {
+    foreach ($data['vehicles'] as $vehicle) {
+        echo '<tr class="t-row">';
+         echo '<td>' . $count . '</td>';
+        echo '<td>' . $vehicle->brand . '</td>';
+        echo '<td>' . $vehicle->model . '</td>';
+        echo '<td>' . $vehicle->plate_number . '</td>';
+        echo '<td>' . $vehicle->fuel_type . '</td>';
+        echo '<td>' . $vehicle->year . '</td>';
+        echo '<td>' . $vehicle->seating_capacity . '</td>';
+        echo '</td>';
+        // echo '<td><button class="view-button" onclick="booking(' . $data['type'] . ',' . $room->room_id . ')">Book Now</button></td>';
+         echo '</tr>';
+        $count++;
+    }
+} else {
+    echo '<tr><td colspan="6">No vehicles available right now</td></tr>';
+}
+?>
+</tbody>
+<?php endif; ?>
+            </table>
+   
+            </div>
+        
+    <?php elseif ($data['type'] == 5): ?>
+        type 5
+    <?php endif; ?>
         </div>
     </section>
     <section style="margin:50px">

@@ -25,11 +25,43 @@ function viewBooking($Sid,$Bid) {
   kbutton1.addEventListener("click", plan);
   /////////////////////////
 
-  function booking(type, id, checkinDate, checkoutDate) {
-    console.log("Booking Type:", type, "ID:", id, "Check-in:", checkinDate, "Check-out:", checkoutDate);
-    // Change the URL to the desired destination, and append the type and id
-    window.open("http://localhost/TravelEase/LoggedTraveler/bookingpayment/" + type + "/" + id + "/" + checkinDate + "/" + checkoutDate, "_blank");
+//   function booking(type, id, checkinDate, checkoutDate) {
+//     console.log("Booking Type:", type, "ID:", id, "Check-in:", checkinDate, "Check-out:", checkoutDate);
+//     if(type==4){
+//       var pickupTime = document.getElementById('pickupTime').value;
+//     }
+    
+//     // Change the URL to the desired destination, and append the type and id
+//     window.open("http://localhost/TravelEase/LoggedTraveler/bookingpayment/" + type + "/" + id + "/" + checkinDate + "/" + checkoutDate, "_blank");
+// }
+
+function booking(type, id, checkinDate, checkoutDate) {
+  console.log("Booking Type:", type, "ID:", id, "Check-in:", checkinDate, "Check-out:", checkoutDate);
+  var pickupTime = ''; // Initialize pickupTime variable
+  
+  if (type == 4) {
+      pickupTime = document.getElementById('pickupTime').value; // Get pickupTime value only when type is 4
+  }
+  
+  // Construct the URL to include the pickupTime conditionally
+  var url = "http://localhost/TravelEase/LoggedTraveler/bookingpayment/" + type + "/" + id + "/" + checkinDate + "/" + checkoutDate;
+  if (type == 4) {
+      url += "/" + pickupTime; // Append pickupTime to the URL only when type is 4
+  }
+  
+  // Open the URL in a new window
+  window.open(url, "_blank");
 }
+
+
+/*
+function booking(type, id, checkinDate, checkoutDate) {
+    console.log("Booking Type:", type, "ID:", id, "Check-in:", checkinDate, "Check-out:", checkoutDate);
+    var pickupTime = document.getElementById('pickupTime').value;
+    // Change the URL to the desired destination, and append the type, id, checkinDate, checkoutDate, and pickupTime
+    window.open("http://localhost/TravelEase/LoggedTraveler/bookingpayment/" + type + "/" + id + "/" + checkinDate + "/" + checkoutDate + "/" + pickupTime, "_blank");
+}
+*/
 
 
 
@@ -153,5 +185,29 @@ function deleteBooking(bookingid) {
         });
     });
 });
+
+
+///////////////////////
+function searchVehicles(event) {
+  event.preventDefault(); // Prevent the default form submission behavior
+
+  var pickupDate = document.getElementById('pickup').value;
+  var pickupTime = document.getElementById('ptime').value;
+  var dropoffDate = document.getElementById('dropoff').value;
+  // var dropoffTime = document.getElementById('dtime').value;
+  var agencyId = document.getElementById('search-button').dataset.agencyId;
+
+  // Send a request to the server to fetch available vehicles based on the dates
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+          // Update the table with the fetched data
+          document.getElementById('available-vehicles').innerHTML = xhr.responseText;
+      }
+  };
+  xhr.open('GET', 'http://localhost/TravelEase//LoggedTraveler/fetchAvailableVehicles?action=fetchAvailableVehicles&pickupDate=' + pickupDate + '&pickupTime=' + pickupTime + '&dropoffDate=' + dropoffDate + '&agencyId=' + agencyId, true);
+  xhr.send();
+}
+
 
 

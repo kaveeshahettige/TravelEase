@@ -32,14 +32,14 @@
                     <label for="cvv">CVV:</label>
                     <input type="text" id="cvv" name="cvv" placeholder="XXX" >
 
-                    <!-- Payment and Cancel buttons added -->
+                    Payment and Cancel buttons added -->
                     <!-- <div class="buttons">
                         <button type="submit" class="payment-button">Make Payment</button>
                         <button type="reset" class="cancel-button">Cancel</button>
                     </div>
                 </form>
             </div>
-        </div> --> -->
+        </div> --> 
         
     <div class="booking-box">
         <!-- <?php echo var_dump($data['furtherBookingDetails'])?> -->
@@ -47,17 +47,15 @@
             <div class="hotel-details">
 
             <div class="image-container">
-        <img src="<?php echo URLROOT ?>/images/<?php echo $data['furtherBookingDetails']->image ?>" alt="room Image">
+        <img src="<?php echo URLROOT ?>/images/<?php echo $data['furtherBookingDetails']->image ?>" alt="Image">
+        <!-- <?php echo $data['furtherBookingDetails']->image ?> -->
     </div>
                 
             <div class="maincontainer">
             <div>
                     
-                    <div class="reservation-details">
-                        <p><strong>Check-in Date : </strong>  <?php echo $data['checkinDate'] ?></p>
-                        <p><strong>Check-out Date : </strong>  <?php echo $data['checkoutDate'] ?></p>
-                    </div>
-    
+                    
+                    <?php if ($data['type'] == 3): ?>
                     <div class="reservation-details">
                         <p><strong>Room ID:</strong> <?php echo $data['furtherBookingDetails']->room_id ?></p>
                         <p><strong>Number of Beds:</strong> <?php echo $data['furtherBookingDetails']->numOfBeds ?> </p>
@@ -71,7 +69,20 @@
                         <p><strong>Smoking policy:</strong> <?php echo $data['furtherBookingDetails']->smokingPolicy ?></p>
                         <p><strong>Pet policy:</strong> <?php echo $data['furtherBookingDetails']->petPolicy ?></p>
                     </div>
-                    </div>
+                    <?php elseif ($data['type'] == 4): ?>
+    <div class="reservation-details">
+        <p><strong>Brand:</strong> <?php echo $data['furtherBookingDetails']->brand ?> </p>
+        <p><strong>Model:</strong> <?php echo $data['furtherBookingDetails']->model ?></p>
+        <p><strong>Plate Number:</strong> <?php echo $data['furtherBookingDetails']->plate_number ?></p>
+        <p><strong>Fuel Type:</strong> <?php echo $data['furtherBookingDetails']->fuel_type ?></p>
+        <p><strong>Year:</strong> <?php echo $data['furtherBookingDetails']->year ?></p>
+        <p><strong>Seating Capacity:</strong> <?php echo $data['furtherBookingDetails']->seating_capacity ?></p>
+        
+    </div>
+<?php else: ?>
+    <p>No details available for this type.</p>
+<?php endif; ?>
+            </div>
                     
     
                     <!-- <div class="special-requests">
@@ -79,15 +90,51 @@
                     </div> -->
                     <div class="guest-info">
                         <p><strong>Your Full Name: </strong><?php echo $data['user']->fname." ".$data['user']->lname?></p>
-                        <p><strong>Your Email Address:</strong> <?php echo $data['user']->email?></p>
-                        <p><strong>Your Phone Number:</strong><?php echo $data['user']->number?></p>
-                        <br>
-                        <p ><strong>Total :  <?php echo $data['furtherBookingDetails']->price ?></strong></p>
-                <form action="<?php echo URLROOT ?>loggedTraveler/dopayment/<?php echo $data['furtherBookingDetails']->type . '/' . $data['furtherBookingDetails']->room_id.'/'.$data['checkinDate'].'/'.$data['checkoutDate'] ?>">
-        <div class="buttons">
-                        <button type="submit" class="payment-button">Make Payment</button>
+                        <p><strong> Email Address:</strong> <?php echo $data['user']->email?></p>
+                        <p><strong> Phone Number:</strong><?php echo $data['user']->number?></p>
+                        
+                        <?php if ($data['type'] == 4): ?>
+                            <div class="reservation-details">
+                        <p><strong> Pick-up Date : </strong>  <?php echo $data['checkinDate'] ?></p>
+                        <p><strong> Drop-off Date : </strong>  <?php echo $data['checkoutDate'] ?></p>
+                        <p><strong> Pickup time:</strong> <?php echo $data['pickupTime']?></p>
+
                     </div>
-        </form>
+
+                         <?php elseif($data['type'] == 3):?>
+                            <div class="reservation-details">
+                        <p><strong>Check-in Date : </strong>  <?php echo $data['checkinDate'] ?></p>
+                        <p><strong>Check-out Date : </strong>  <?php echo $data['checkoutDate'] ?></p>
+                    </div>
+                            
+                          <?php else: ?>
+                          
+                          <?php endif;?>
+                        <br>
+                        <?php if ($data['type'] == 4): ?>
+                            <div class="driver-selection">
+                            
+                            <strong>With Driver   </strong><input type="checkbox" id="withDriver" name="withDriver" value="1"> &nbsp&nbsp&nbsp&nbsp&nbsp
+                            <strong>Without Driver   </strong><input type="checkbox" id="withoutDriver" name="withoutDriver" value="0">
+                        </div>
+                            <p ><strong>Total :  <?php echo $data['price'] ?></strong></p>
+                            
+                            
+                            <form action="<?php echo URLROOT ?>loggedTraveler/dopaymentVehicles/<?php echo $data['type'] . '/' . $data['furtherBookingDetails']->vehicle_id.'/'.$data['checkinDate'].'/'.$data['checkoutDate'].'/'.$data['pickupTime'].'/'.$data['price']?>">
+                            <div class="buttons">
+                                <button type="submit" class="payment-button">Make Payment</button>
+                            </div>
+                        </form>
+                        <?php else: ?>
+                        <p ><strong>Total :  <?php echo $data['furtherBookingDetails']->price ?></strong></p>
+                        <form action="<?php echo URLROOT ?>loggedTraveler/dopayment/<?php echo $data['furtherBookingDetails']->type . '/' . $data['furtherBookingDetails']->room_id.'/'.$data['checkinDate'].'/'.$data['checkoutDate'] ?>">
+                            <div class="buttons">
+                                <button type="submit" class="payment-button">Make Payment</button>
+                            </div>
+                        </form>
+                        <?php endif; ?>
+
+                
                         
                     </div>
                     
