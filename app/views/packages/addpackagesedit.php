@@ -36,19 +36,6 @@
                 <button type="submit">Search</button>
             </form>
         </div>
-<<<<<<< Updated upstream
-        
-            
-        <ul>
-            <li><a href="../../Dashboard/Packages-dashboard.html" class="nav-button"><i class='bx bxs-info-circle bx-tada-hover bx-sm bx-fw'></i> Dashboard</a></li>
-            <li><a href="../../Availability/Packages-availability.html" class="nav-button"><i class='bx bxs-book bx-sm bx-fw'></i> Availability</a></li>
-            <li><a href="../../Bookings/Packages-bookings.html" class="nav-button"><i class='bx bxs-calendar bx-sm bx-fw'></i>Bookings</a></li>
-            <li><a href="../../Gallery/Packages-gallery.html" class="nav-button"><i class='bx bx-images bx-sm bx-fw'></i> Gallery</a></li>
-            <li><a href="../../Revenue/Packages-revenue.html" class="nav-button"><i class='bx bxs-wallet bx-sm bx-fw'></i> Revenue</a></li>
-            <li><a href="../../Packages/Packages.html" class="nav-button"><i class='bx bxs-star bx-sm bx-fw'></i> Packages</a></li>
-            <li><a href="../../Review/Packages-review.html" class="nav-button"><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
-            <li><a href="add-packages.html" class="nav-button active"><i class='bx bxs-cog bx-sm bx-fw'></i> Settings</a></li>
-=======
 
 
         <ul>
@@ -60,55 +47,32 @@
             <li><a href="<?php echo URLROOT;?>packages/packages" class="nav-button"><i class= 'bx bxs-package bx-sm'></i> Packages</a></li>
             <li><a href="<?php echo URLROOT;?>packages/review" class="nav-button"><i class='bx bxs-star bx-sm bx-fw'></i> Review</a></li>
             <li><a href="<?php echo URLROOT;?>packages/settings" class="nav-button active"><i class='bx bxs-cog bx-sm bx-fw'></i> Settings</a></li>
->>>>>>> Stashed changes
         </ul>  
         
         
         <div class="logout">
-<<<<<<< Updated upstream
-            <a href="#" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
-=======
             <a href="<?php echo URLROOT;?>users/logout" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
->>>>>>> Stashed changes
         </div>
     </nav>
     <main>
         <div class="logo-container">
-<<<<<<< Updated upstream
-            <img src="../settings images/TravelEase.png" alt="TravelEase Logo">
-=======
             <img src="<?php echo URLROOT;?>images/packages/TravelEase.png" alt="TravelEase Logo">
->>>>>>> Stashed changes
             <span class="logo-text">TravelEase</span>
         </div>
         <div class="dashboard-content">
             <div><h1>Settings</h1> </div>
-<<<<<<< Updated upstream
-             
-=======
-
->>>>>>> Stashed changes
             <div id="base">
                 <h3 style="padding-left:20px;">Add Packages</h3>
                 <div id="form">
                     <form class="registration-form" action="" method="POST">
                         <div>
                             <div class="form-group">
-<<<<<<< Updated upstream
-                                
-                                <label for="packageName">Package Name</label>
-                                <input type="text" id="PackageName" name="PackageName" required>
-                                 
-                            </div>
-                        
-=======
 
                                 <label for="packageName">Package Name</label>
                                 <input type="text" id="PackageName" name="PackageName" required>
 
                             </div>
 
->>>>>>> Stashed changes
                             <div class="form-group">
                                 <label for="PackageType">Package Type</label>
                                 <select id="PackageType" name="PackageType">
@@ -120,11 +84,6 @@
                                 </select>
                             </div>
                         </div>
-<<<<<<< Updated upstream
-                        
-=======
-
->>>>>>> Stashed changes
 
 
 
@@ -132,15 +91,9 @@
                         <div>
                             <div class="form-group">
                                 <label for="Package Duration">Package Duration(days)</label>
-<<<<<<< Updated upstream
-                                <input type="numbers" id="Duration" name="Package Duration(days)" required>
-                            </div>
-                        
-=======
                                 <input type="number" id="Duration" name="duration" required>
                             </div>
 
->>>>>>> Stashed changes
                             <div class="form-group">
                                 <label for="TransportProvider">Transport Provider</label>
                                 <select id="TransportProvider" name="TransportProvider">
@@ -155,11 +108,6 @@
 
 
 
-<<<<<<< Updated upstream
-                        
-=======
-
->>>>>>> Stashed changes
                         <div>
                             <div class="form-group">
                                 <label for="AccomadationProvider">Accomadation Provider</label>
@@ -168,15 +116,6 @@
                                   <option value="Hotel 2">Hotel 2</option>
                                   <option value="Hotel 3">Hotel 3</option>
                                   <option value="Hotel 4">Hotel 4</option>
-<<<<<<< Updated upstream
-                                  
-                                </select>
-                            </div> 
-                            <div class="form-group">
-                                <label for="price">Price of Package</label>
-                                <input type="PriceOfPackage" id="PriceOfPackage" name="PriceOfPackage" required>
-                            </div> 
-=======
 
                                 </select>
                             </div>
@@ -184,7 +123,6 @@
                                 <label for="price">Price of Package</label>
                                 <input type="number" id="PriceOfPackage" name="PriceOfPackage" required>
                             </div>
->>>>>>> Stashed changes
                         </div>
 
 
@@ -201,21 +139,14 @@
                                   <option value="Nuwara Eliya">Nuwara Eliya</option>
                                   <option value="Trincomalee">Trincomalee</option>
                                   <option value="Jaffna">Jaffna</option>
+                                  <option value="Mathale">Mathale</option>
                                   <option value="other">other</option>
                                 </select>
-<<<<<<< Updated upstream
-                            </div> 
-                            <div  class="form-group">
-                                <label for="PackageImages">Package Images:</label>
-                                <input type="file" id="PackageImages" name="PackageImages[]" accept="image/*">
-                            </div>                           
-=======
                             </div>
                             <div  class="form-group">
                                 <label for="PackageImages">Package Images:</label>
                                 <input type="file" id="PackageImages" name="PackageImages[]" accept="image/*">
                             </div>
->>>>>>> Stashed changes
                         </div>
 
 
@@ -226,15 +157,9 @@
                             <div class="form-group">
                                 <label for="PackageDescription">Package Description:</label>
                                 <textarea id="PackageDescription" name="PackageDescription" rows="4"></textarea>
-<<<<<<< Updated upstream
-                            </div>   
-
-                                                     
-=======
                             </div>
 
 
->>>>>>> Stashed changes
                         </div>
 
 
@@ -246,18 +171,6 @@
                                 <button id="saveBut" type="submit">Save</button>
                             </div>
                         </div>
-<<<<<<< Updated upstream
-                       
-                        
-                    
-                    
-                    
-                    </form>
-                </div>
-            </div>
-           
-            
-=======
 
 
 
@@ -268,7 +181,6 @@
             </div>
 
 
->>>>>>> Stashed changes
         </div>
     </main>
 </body>

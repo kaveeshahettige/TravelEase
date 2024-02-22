@@ -3,15 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< Updated upstream
-    <link rel="stylesheet" href="<?php echo URLROOT;?>/Css/Packages/bookings.css">
-    <title>Guiding Packages Bookings</title>
-    <link rel="icon" type="image/x-icon" href="./Images/TravelEase.png">
-=======
     <link rel="stylesheet" href="<?php echo URLROOT;?>/css/Packages/bookings.css">
     <title>Guiding Packages Bookings</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT;?>images/packages/TravelEase.png">
->>>>>>> Stashed changes
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -19,13 +13,8 @@
 <body>
     <nav class="left-menu">
         <div class="user-profile">
-<<<<<<< Updated upstream
-            <img src="Bookings images/Uththara.jpg" alt="Profile Photo">
-            <span class="user-name">Uththara Samadhi</span>
-=======
             <img src="<?php echo URLROOT;?>images/packages/Uththara.jpg" alt="Profile Photo">
             <span class="user-name"><?=$_SESSION['user_fname']?></span>
->>>>>>> Stashed changes
         </div>
         
         <div class="search-bar">
@@ -41,15 +30,6 @@
             <li><a href="<?php echo URLROOT;?>packages/bookings" class="nav-button active"><i class='bx bxs-book bx-sm bx-fw'></i> Bookings</a></li>
             <li><a href="<?php echo URLROOT;?>packages/gallery" class="nav-button"><i class='bx bx-images bx-sm bx-fw'></i> Gallery</a></li>
             <li><a href="<?php echo URLROOT;?>packages/revenue" class="nav-button"><i class='bx bxs-wallet bx-sm bx-fw'></i> Revenue</a></li>
-<<<<<<< Updated upstream
-            <li><a href="<?php echo URLROOT;?>packages/Packages" class="nav-button"><i class= 'bx bxs-package bx-sm'></i> Packages</a></li>
-            <li><a href="<?php echo URLROOT;?>packages/review" class="nav-button"><i class='bx bxs-star bx-sm bx-fw'></i> Review</a></li>
-            <li><a href="<?php echo URLROOT;?>packages/settings" class="nav-button"><i class='bx bxs-cog bx-sm bx-fw'></i> Settings</a></li>
-        </ul>
-        
-        <div class="logout">
-            <a href="#" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
-=======
             <li><a href="<?php echo URLROOT;?>packages/packages" class="nav-button"><i class= 'bx bxs-package bx-sm'></i> Packages</a></li>
             <li><a href="<?php echo URLROOT;?>packages/review" class="nav-button"><i class='bx bxs-star bx-sm bx-fw'></i> Review</a></li>
             <li><a href="<?php echo URLROOT;?>packages/settings" class="nav-button "><i class='bx bxs-cog bx-sm bx-fw'></i> Settings</a></li>
@@ -58,7 +38,6 @@
         
         <div class="logout">
             <a href="<?php echo URLROOT;?>users/logout" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
->>>>>>> Stashed changes
         </div>
     </nav>
     <main>
