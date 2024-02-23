@@ -43,10 +43,9 @@
     </nav>
     <main>
         <div class="logo-container">
-<<<<<<< Updated upstream
-            <img src="../settings images/Logo.png" alt="TravelEase Logo">
-=======
             <img src="<?php echo URLROOT;?>images/packages/Logo.png" alt="TravelEase Logo">
+            <span class="logo-text">TravelEase</span>
+        </div>
         <div class="dashboard-content">
              
             <div id="base">
