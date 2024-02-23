@@ -3,15 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< Updated upstream
-    <link rel="stylesheet" href="css/add-packages-edit.css">
-    <title>Packages-Add packages</title>
-    <link rel="icon" type="image/x-icon" href="../Images/TravelEase.png">
-=======
     <link rel="stylesheet" href="<?php echo URLROOT?>css/packages/add-packages-edit.css">
     <title>Packages-Add packages</title>
-    <link rel="icon" type="image/x-icon" href="<?php echo URLROOT;?>images/packages/TravelEase.png">
->>>>>>> Stashed changes
+    <link rel="icon" type="image/x-icon" href="<?php echo URLROOT;?>images/packages/Logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -19,23 +13,16 @@
 <body>
     <nav class="left-menu">
         <div class="user-profile">
-<<<<<<< Updated upstream
-            <img src="../settings images/Uththara.jpg" alt="User Profile Photo">
-            <span class="user-name">Uththara Samadhi</span>
-        </div>
-        
-=======
-            <img src="<?php echo URLROOT;?>images/packages/Uththara.jpg" alt="User Profile Photo">
+
+        <img src="<?php echo URLROOT;?>images/packages/uththara.jpg" alt="User Profile Photo">
             <span class="user-name"><?=$_SESSION['user_fname']?></span>
         </div>
-
->>>>>>> Stashed changes
+        
         <div class="search-bar">
             <form action="#" method="GET">
                 <input type="text" placeholder="Find a Setting">
                 <button type="submit">Search</button>
             </form>
-        </div>
 
 
         <ul>
@@ -78,9 +65,9 @@
                                 <select id="PackageType" name="PackageType">
                                   <option value="Solo">Solo</option>
                                   <option value="Couple">Couple</option>
-                                  <option value="Family">Family</option>
+                                  <!-- <option value="Family">Family</option>
                                   <option value="Group">Group</option>
-                                  <option value="Other">Other</option>
+                                  <option value="Other">Other</option> -->
                                 </select>
                             </div>
                         </div>

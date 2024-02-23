@@ -42,11 +42,7 @@
     </nav>
     <main>
         <div class="logo-container">
-<<<<<<< Updated upstream
-            <img src="../Bookings/Bookings images/TravelEase.png" alt="TravelEase Logo">
-=======
             <img src="<?php echo URLROOT;?>images/packages/TravelEase.png" alt="TravelEase Logo">
->>>>>>> Stashed changes
             <span class="logo-text">TravelEase</span>
         </div>
         
@@ -58,11 +54,7 @@
         <div class="top-boxes">
             <!-- Small Image Boxes -->
             <div class="img-box">
-<<<<<<< Updated upstream
-                <img src="Bookings images/image1.jpg" alt="hotel Image">
-=======
                 <img src="<?php echo URLROOT;?>images/packages/dashboard.jpg" alt="hotel Image">
->>>>>>> Stashed changes
             </div>
            
 
@@ -140,8 +132,4 @@
 
     </main>
 </body>
-<<<<<<< Updated upstream
 </html>
-=======
-</html>
->>>>>>> Stashed changes

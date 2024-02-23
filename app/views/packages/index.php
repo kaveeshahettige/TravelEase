@@ -3,15 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< Updated upstream
-    <link rel="stylesheet" href="Css/Packages-dashboard.css">
-    <title>Hotel Dashboard</title>
-    <link rel="icon" type="image/x-icon" href="./Images/TravelEase.png">
-=======
     <link rel="stylesheet" href="<?php echo URLROOT;?>css/packages/Packages-dashboard.css">
     <title>Hotel Dashboard</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT;?>images/packages/TravelEase.png">
->>>>>>> Stashed changes
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -19,13 +13,8 @@
 <body>
     <nav class="left-menu">
         <div class="user-profile">
-<<<<<<< Updated upstream
-            <img src="dashboard images/profile.png" alt="User Profile Photo">
-            <span class="user-name">Package Name</span>
-=======
             <img src="<?php echo URLROOT;?>images/packages/profile.png" alt="User Profile Photo">
             <span class="user-name"><?=$_SESSION['user_fname']?></span>
->>>>>>> Stashed changes
         </div>
         
         <div class="search-bar">
@@ -34,22 +23,6 @@
                 <button type="submit">Search</button>
             </form>
         </div>
-<<<<<<< Updated upstream
-        
-        <ul>
-            <li><a href="Packages-dashboard.html" class="nav-button active"><i class= 'bx bxs-dashboard bx-sm'></i> Dashboard</a></li>
-            <li><a href="../Availability/Packages-availability.html" class="nav-button"><i class='bx bxs-calendar bx-sm bx-fw'></i> Availability</a></li>
-            <li><a href="../Bookings/Packages-bookings.html" class="nav-button"><i class= 'bx bxs-book bx-sm bx-fw'></i> Bookings</a></li>
-            <li><a href="../Gallery/Packages-gallery.html" class="nav-button"><i class='bx bx-images bx-sm bx-fw'></i> Gallery</a></li>
-            <li><a href="../Revenue/Packages-revenue.html" class="nav-button"><i class= 'bx bxs-wallet bx-sm bx-fw'></i> Revenue</a></li>
-            <li><a href="../Packages/Packages.html" class="nav-button"><i class='bx bxs-package bx-sm'></i> Packages</a></li>
-            <li><a href="../Review/Packages-review.html" class="nav-button"><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
-            <li><a href="../Settings/Packages-settings.html" class="nav-button"><i class='bx bxs-cog bx-sm bx-fw'></i> Settings</a></li>
-        </ul>
-        
-        <div class="logout">
-            <a href="#" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
-=======
 
         <ul>
             <li><a href="<?php echo URLROOT;?>packages/index" class="nav-button active"><i class='bx bxs-dashboard bx-sm'></i> Dashboard</a></li>
@@ -65,16 +38,11 @@
         
         <div class="logout">
             <a href="<?php echo URLROOT;?>users/logout" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
->>>>>>> Stashed changes
         </div>
     </nav>
     <main>
         <div class="logo-container">
-<<<<<<< Updated upstream
-            <img src="Images/TravelEase.png" alt="TravelEase Logo">
-=======
             <img src="<?php echo URLROOT;?>images/packages/TravelEase.png" alt="TravelEase Logo">
->>>>>>> Stashed changes
             <span class="logo-text">TravelEase</span>
         </div>
         
@@ -86,11 +54,7 @@
         <div class="top-boxes">
             <!-- Small Image Boxes -->
             <div class="img-box">
-<<<<<<< Updated upstream
-                <img src="Images/dashboard.jpg" alt="hotel Image">
-=======
                 <img src="<?php echo URLROOT;?>images/packages/dashboard.jpg" alt="hotel Image">
->>>>>>> Stashed changes
             </div>
            
 
