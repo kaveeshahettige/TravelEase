@@ -138,9 +138,7 @@
                                   <option value="Kandy">Kandy</option>
                                   <option value="Nuwara Eliya">Nuwara Eliya</option>
                                   <option value="Trincomalee">Trincomalee</option>
-                                  <option value="Jaffna">Jaffna</option>
-                                  <option value="Mathale">Mathale</option>
-                                  <option value="other">other</option>
+                                  
                                 </select>
                             </div>
                             <div  class="form-group">
