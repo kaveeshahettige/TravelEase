@@ -139,3 +139,91 @@ input[type="number"] {
     margin: 0 auto; /* Center the image horizontally */
 }
 
+
+/* //////////// */
+    /* Style for checkbox container */
+    .driver-selection {
+        margin-bottom: 20px;
+    }
+
+    /* Style for checkbox labels */
+    .driver-selection strong {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+
+    /* Style for checkboxes */
+    .driver-selection input[type="checkbox"] {
+        display: none; /* Hide the default checkbox */
+    }
+
+    /* Style for custom checkboxes */
+    .driver-selection input[type="checkbox"] + label {
+        display: inline-block;
+        cursor: pointer;
+        position: relative;
+        padding-left: 25px; /* Adjust according to your design */
+        margin-right: 20px;
+        vertical-align: middle;
+    }
+
+    /* Style for checkbox tick */
+    .driver-selection input[type="checkbox"] + label:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        border: 2px solid #333; /* Border color */
+        background-color: #fff; /* Background color */
+        border-radius: 3px;
+    }
+
+    /* Style for checked state */
+    .driver-selection input[type="checkbox"]:checked + label:before {
+        background-color: #55a630; /* Change color when checked */
+        border-color: #55a630; /* Change border color when checked */
+    }
+
+    /* Style for checkbox tick icon */
+    .driver-selection input[type="checkbox"] + label:after {
+        content: '\2714'; /* Unicode character for checkmark */
+        font-size: 12px;
+        position: absolute;
+        top: 50%;
+        left: 4px;
+        transform: translateY(-50%);
+        color: #fff; /* Checkmark color */
+        visibility: hidden;
+    }
+
+    /* Style for checked state of tick icon */
+    .driver-selection input[type="checkbox"]:checked + label:after {
+        visibility: visible;
+    }
+
+    /* Style for buttons */
+    .buttons {
+        margin-top: 10px;
+    }
+
+    .payment-button, .cancel-button {
+        padding: 10px 20px;
+        background-color: #55a630;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .payment-button:hover, .cancel-button:hover {
+        background-color: #3f7d20;
+    }
+
+
+
+

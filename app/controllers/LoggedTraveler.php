@@ -169,7 +169,7 @@ $data = [
         $furtherBookingDetails=$this->userModel->findBookingDetailByServiceid($type,$serviceid);
         if ($type == 4) {
           // Calculate the number of days between check-in and check-out dates
-          $numDays = (strtotime($checkoutDate) - strtotime($checkinDate)) / (60 * 60 * 24); 
+          $numDays = (strtotime($checkoutDate) - strtotime($checkinDate)) / (60 * 60 * 24)+1; 
           // Calculate the total price for the booking
           $price = $furtherBookingDetails->priceperday * $numDays;
 
@@ -227,54 +227,92 @@ $data = [
     }
 
     //dopayment for hotels
-    public function dopayment($type, $serviceid,$checkinDate,$checkoutDate)
-{
-    $id = $_SESSION['user_id'];
-    $user = $this->userModel->findUserDetail($id);
-    // from service provider table(hotel, travel agency, package tables)
-    $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($type, $serviceid);
-
-    require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
-    $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
-
-    \Stripe\Stripe::setApiKey($stripe_secret_key);
-    $checkout_session = \Stripe\Checkout\Session::create([
-        'mode' => 'payment',
-        'success_url' => "http://localhost/TravelEase/loggedTraveler/paymentSuccessful",
-        'line_items' => [[
-            'quantity' => 1,
-            'price_data' => [
-                'currency' => 'lkr',
-                'unit_amount' => $furtherBookingDetails->price * 100,
-                'product_data' => [
-                    'name' => $furtherBookingDetails->description,
-                ],
-            ],
-        ]],
-        'cancel_url' => 'https://example.com/cancel',
-    ]);
-
-    // After successful payment, update the database with transaction details
-    $transactionData = [
-        'user'=>$user,
-        'furtherBookingDetails' => $furtherBookingDetails,
-        'transaction_id' => $checkout_session->payment_intent,
-        'checkinDate'=>$checkinDate,
-        'checkoutDate'=>$checkoutDate,
-        // Add any other relevant transaction details
-    ];
-
-    // Assuming you have a method in your model to update the database with transaction details
-    //add to booking table
-    $this->userModel->addBooking($transactionData);
-    $lastBooking=$this->userModel->getLastBooking();
-    $this->userModel->addPaymentDetails($transactionData,$lastBooking->booking_id);
-    $this->userModel->addUnavailabilty($transactionData);
-
-    // Redirect the user to the Checkout session URL
-    http_response_code(303);
-    header("Location: " . $checkout_session->url);
-}
+    public function dopayment($type, $serviceid, $checkinDate, $checkoutDate) {
+      // Retrieve user details
+      $id = $_SESSION['user_id'];
+      $user = $this->userModel->findUserDetail($id);
+  
+      // Retrieve booking details
+      $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($type, $serviceid);
+  
+      // Construct transaction data
+      $transactionData = [
+          'user' => $user,
+          'furtherBookingDetails' => $furtherBookingDetails,
+          'checkinDate' => $checkinDate,
+          'checkoutDate' => $checkoutDate,
+          // Add any other relevant transaction details
+      ];
+  
+      // Create a Stripe Checkout session
+      require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+      $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
+      \Stripe\Stripe::setApiKey($stripe_secret_key);
+      $checkout_session = \Stripe\Checkout\Session::create([
+          'mode' => 'payment',
+          'success_url' => "http://localhost/TravelEase/loggedTraveler/paymentSuccessful/3",
+          'line_items' => [[
+              'quantity' => 1,
+              'price_data' => [
+                  'currency' => 'lkr',
+                  'unit_amount' => $furtherBookingDetails->price * 100,
+                  'product_data' => [
+                      'name' => $furtherBookingDetails->description,
+                  ],
+              ],
+          ]],
+          'cancel_url' => 'https://example.com/cancel',
+      ]);
+  
+      // Store the Stripe Checkout session ID in the transaction data
+      $transactionData['stripe_session_id'] = $checkout_session->id;
+  
+      // Store the transaction data in the session or database for retrieval in the paymentSuccessful() function
+      $_SESSION['transaction_data'] = $transactionData;
+  
+      // Redirect the user to the Stripe Checkout session URL
+      http_response_code(303);
+      header("Location: " . $checkout_session->url);
+  }
+  
+  public function paymentSuccessful($type) {
+      // Check if transaction data exists in the session
+      if (isset($_SESSION['transaction_data'])) {
+          // Retrieve transaction data from the session
+          $transactionData = $_SESSION['transaction_data'];
+  
+          // Add the transaction data to the database based on the type
+          if ($type == 3) {
+              $this->userModel->addBooking($transactionData);
+              $lastBooking = $this->userModel->getLastBooking();
+              $this->userModel->addPaymentDetails($transactionData, $lastBooking->booking_id);
+              $this->userModel->addUnavailability($transactionData);
+          } elseif ($type == 4) {
+              // Retrieve driver and price from transaction data
+              $driver = $transactionData['driver'];
+              $price = $transactionData['price'];
+  
+              // Add to booking table
+              $this->userModel->addBooking($transactionData);
+              $lastBooking = $this->userModel->getLastBooking();
+              $this->userModel->addVehicleBooking($transactionData, $driver); // Booking to vehicle booking table
+              $this->userModel->addPaymentDetailsVehicles($transactionData, $lastBooking->booking_id, $price);
+          }
+  
+          // Optionally, you can pass data to the view if needed
+          $data = [
+              // Add any data you want to pass to the view
+          ];
+  
+          // Load the view for the payment successful page
+          $this->view('loggedTraveler/paymentSuccessful', $data);
+      } else {
+          // Handle the case where transaction data is missing
+          // Redirect the user to an error page or perform any other action as needed
+      }
+  }
+  
+  
 
 // public function dopayment($type, $serviceid, $checkinDate, $checkoutDate)
 // {
@@ -393,10 +431,8 @@ public function fetchAvailableRooms()
      
 }
 
-public function paymentSuccessful(){
-  $data=[];
-  $this->view('loggedTraveler/paymentSuccessful',$data);
-}
+
+
 
 //removeBooking
 public function cancelBooking($bookingId)
@@ -504,7 +540,7 @@ $html .= '<input type="hidden" id="pickupTime" value="' . $pickupTime . '">';
 
 
 //dopaymentVehicles
-public function dopaymentVehicles($type, $serviceid, $checkinDate, $checkoutDate,$pickupTime,$price)
+public function dopaymentVehicles($type, $serviceid, $checkinDate, $checkoutDate,$pickupTime,$price,$driver)
 {
     $id = $_SESSION['user_id'];
     $user = $this->userModel->findUserDetail($id);
@@ -512,13 +548,25 @@ public function dopaymentVehicles($type, $serviceid, $checkinDate, $checkoutDate
     //from vehicles
     $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($type,$serviceid);
 
+    // After successful payment, update the database with transaction details
+    $transactionData = [
+      'user' => $user,
+      'furtherBookingDetails' => $furtherBookingDetails,
+      // 'transaction_id' => $checkout_session->payment_intent,
+      'checkinDate' => $checkinDate,
+      'checkoutDate' => $checkoutDate,
+      'pickupTime' => $pickupTime,
+      // Add any other relevant transaction details
+  ];
+
+
     require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
     $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
 
     \Stripe\Stripe::setApiKey($stripe_secret_key);
     $checkout_session = \Stripe\Checkout\Session::create([
         'mode' => 'payment',
-        'success_url' => "http://localhost/TravelEase/loggedTraveler/paymentSuccessful",
+        'success_url' => "http://localhost/TravelEase/loggedTraveler/paymentSuccessful/4",
         'line_items' => [[
             'quantity' => 1,
             'price_data' => [
@@ -532,32 +580,46 @@ public function dopaymentVehicles($type, $serviceid, $checkinDate, $checkoutDate
         'cancel_url' => 'https://example.com/cancel',
     ]);
 
-    // After successful payment, update the database with transaction details
-    $transactionData = [
-        'user' => $user,
-        'furtherBookingDetails' => $furtherBookingDetails,
-        'transaction_id' => $checkout_session->payment_intent,
-        'checkinDate' => $checkinDate,
-        'checkoutDate' => $checkoutDate,
-        'pickupTime' => $pickupTime,
-        // Add any other relevant transaction details
-    ];
+    // Store the Stripe Checkout session ID in the transaction data
+    $transactionData['stripe_session_id'] = $checkout_session->id;
 
-    // Assuming you have a method in your model to update the database with transaction details
-    //add to booking table
-    //////
-     $this->userModel->addBooking($transactionData);
-     $lastBooking = $this->userModel->getLastBooking();
-     $this->userModel->addVehicleBooking($transactionData);//booking to vehicle booking table
-    $this->userModel->addPaymentDetailsVehicles($transactionData, $lastBooking->booking_id,$price);
-    //////////////
+    // Store the transaction data in the session or database for retrieval in the paymentSuccessful() function
+    $_SESSION['transaction_data'] = $transactionData;
 
-    // Redirect the user to the Checkout session URL
+    // Redirect the user to the Stripe Checkout session URL
     http_response_code(303);
     header("Location: " . $checkout_session->url);
 
 
 }
+
+//fetchPriceWithDriver
+public function fetchPriceWithDriver()
+{
+    $driverType = isset($_GET['driverType']) ? $_GET['driverType'] : null;
+    $vehicleId = isset($_GET['vehicleId']) ? $_GET['vehicleId'] : null;
+    $days=isset($_GET['days']) ? $_GET['days'] : null;
+
+    if ($driverType !== null && $vehicleId !== null) {
+        $vehicleDetail = $this->userModel->fetchPriceByDriverTypeAndVehicleId($vehicleId);
+        $price=($vehicleDetail->withDriverPerDay+$vehicleDetail->priceperday)*$days;
+        if ($price !== false) {
+            header('Content-Type: application/json'); // Set response header
+            echo json_encode(['price' => $price]);
+            return;
+        }
+    }
+
+    http_response_code(500);
+    header('Content-Type: application/json'); // Set response header
+    echo json_encode(['error' => 'Failed to fetch price']);
+}
+
+
+
+
+
+
 }
 
 

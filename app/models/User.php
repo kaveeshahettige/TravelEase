@@ -1008,16 +1008,17 @@ public function findAvailableVehicles($pickupDate, $dropoffDate, $agencyId) {
 }
 
 //addVehicleBooking
-public function addVehicleBooking($transactionData) {
+public function addVehicleBooking($transactionData,$driver) {
     // Convert the pickup time to the correct format (if needed)
     $pickupTime = date('H:i:s', strtotime($transactionData['pickupTime']));
 
     // Prepare and execute the SQL query
-    $this->db->query('INSERT INTO vehicle_bookings(vehicle_id, start_date, end_date, start_time) VALUES (:vehicle_id, :start_date, :end_date, :start_time)');
+    $this->db->query('INSERT INTO vehicle_bookings(vehicle_id, start_date, end_date, start_time,withDriver) VALUES (:vehicle_id, :start_date, :end_date, :start_time, :withDriver)');
     $this->db->bind(':vehicle_id', $transactionData['furtherBookingDetails']->vehicle_id);  
     $this->db->bind(':start_date', $transactionData['checkinDate']);
     $this->db->bind(':end_date', $transactionData['checkoutDate']);
     $this->db->bind(':start_time', $pickupTime);
+    $this->db->bind(':withDriver', $driver);
 
     // Execute the query
     if($this->db->execute()) {
@@ -1027,7 +1028,32 @@ public function addVehicleBooking($transactionData) {
     }
 }
 
+//fetchPriceByDriverTypeAndVehicleId($driverType, $vehicleId)
+public function fetchPriceByDriverTypeAndVehicleId($vehicleId) {
+    $this->db->query('SELECT * FROM vehicles WHERE vehicle_id = :vehicleId');
+    $this->db->bind(':vehicleId', $vehicleId);
+    $result = $this->db->single();
+    // $price = $result->withDriverPerDay;
+    if ($this->db->rowCount() > 0) {
+        return  $result;;
+    } else {
+        return false;
+    }
+}
 
+
+//addUnavailability for hotels
+public function addUnavailability($transactionData){
+    $this->db->query('INSERT INTO room_availability(room_id, startDate, endDate) VALUES (:room_id, :startDate, :endDate)');
+    $this->db->bind(':room_id', $transactionData['furtherBookingDetails']->room_id);
+    $this->db->bind(':startDate', $transactionData['checkinDate']);
+    $this->db->bind(':endDate', $transactionData['checkoutDate']);
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+}
 
 }
 

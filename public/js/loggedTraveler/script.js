@@ -210,4 +210,71 @@ function searchVehicles(event) {
 }
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('withDriver').addEventListener('change', function() {
+        handleCheckboxClick('withDriver', this.checked);
+    });
+});
+
+function handleCheckboxClick(checkboxId, vehicleId, days) {
+  // Determine the driver type based on the checkbox ID
+  const driverType = checkboxId === 'withDriver' ? 'withDriver' : 'withoutDriver';
+  
+  // Check the clicked checkbox
+  document.getElementById(checkboxId).checked = true;
+
+  // Uncheck the other checkbox
+  const otherCheckboxId = checkboxId === 'withDriver' ? 'withoutDriver' : 'withDriver';
+  document.getElementById(otherCheckboxId).checked = false;
+
+  // Fetch the updated price
+  fetchUpdatedPrice(driverType, vehicleId, days);
+  updateFormAction(driverType, vehicleId, days);
+}
+
+
+function fetchUpdatedPrice(driverType, vehicleId, days) {
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+              const response = JSON.parse(xhr.responseText);
+              const updatedPrice = response.price;
+              document.getElementById('totalPrice').innerHTML = '<strong>Total : ' + updatedPrice + '</strong>';
+              handlePriceUpdate(updatedPrice);
+          } else {
+              console.error('Error fetching price: ' + xhr.status);
+              document.getElementById('totalPrice').innerHTML = '<strong>Error fetching price</strong>'; // Display error message to the user
+          }
+      }
+  };
+
+  // Construct the URL with the parameters as query parameters
+  let url;
+  if (driverType === 'withDriver') {
+      url = 'http://localhost/TravelEase/LoggedTraveler/fetchPriceWithDriver?driverType=' + encodeURIComponent(driverType) + '&vehicleId=' + encodeURIComponent(vehicleId) + '&days=' + encodeURIComponent(days);
+  } else {
+      // Use the initial price value for withoutDriver
+      const initialPrice = parseFloat(document.getElementById('totalPrice').dataset.initialPrice);
+      document.getElementById('totalPrice').innerHTML = '<strong>Total: ' + initialPrice + '</strong>';
+      handlePriceUpdate(initialPrice);
+      return;
+  }
+
+  xhr.open('GET', url, true);
+  xhr.send();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 

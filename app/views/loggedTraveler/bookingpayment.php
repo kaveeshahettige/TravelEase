@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <title>Payment</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
+    <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
 </head>
 <body style="margin-top:10%">
     <div class="payment-container" >
@@ -112,15 +113,52 @@
                           <?php endif;?>
                         <br>
                         <?php if ($data['type'] == 4): ?>
+                            <?php
+$date1 = strtotime($data['checkinDate']);
+$date2 = strtotime($data['checkoutDate']);
+$diffTime = abs($date2 - $date1) + (60 * 60 * 24);
+$daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
+?>
+
                             <div class="driver-selection">
-                            
-                            <strong>With Driver   </strong><input type="checkbox" id="withDriver" name="withDriver" value="1"> &nbsp&nbsp&nbsp&nbsp&nbsp
-                            <strong>Without Driver   </strong><input type="checkbox" id="withoutDriver" name="withoutDriver" value="0">
-                        </div>
-                            <p ><strong>Total :  <?php echo $data['price'] ?></strong></p>
-                            
-                            
-                            <form action="<?php echo URLROOT ?>loggedTraveler/dopaymentVehicles/<?php echo $data['type'] . '/' . $data['furtherBookingDetails']->vehicle_id.'/'.$data['checkinDate'].'/'.$data['checkoutDate'].'/'.$data['pickupTime'].'/'.$data['price']?>">
+                            <strong>With Driver</strong>
+        <input type="checkbox" id="withDriver" name="withDriver" value="1" onclick="handleCheckboxClick('withDriver', '<?php echo htmlspecialchars($data['furtherBookingDetails']->vehicle_id, ENT_QUOTES, 'UTF-8') ?>', <?php echo $daysD; ?>)">
+        <label for="withDriver"></label>
+
+    <strong>Without Driver</strong>
+    <input type="checkbox" id="withoutDriver" name="withoutDriver" value="0" checked onclick="handleCheckboxClick('withoutDriver', '<?php echo htmlspecialchars($data['furtherBookingDetails']->vehicle_id, ENT_QUOTES, 'UTF-8') ?>', <?php echo $daysD; ?>)">
+    <label for="withoutDriver"></label>
+</div>
+<p id="totalPrice" data-initial-price="<?php echo htmlspecialchars($data['price'], ENT_QUOTES, 'UTF-8') ?>"><strong>Total : <?php echo htmlspecialchars($data['price'], ENT_QUOTES, 'UTF-8') ?></strong></p>
+
+
+<script>
+function updateFormAction(driverType, vehicleId, days, updatedPrice) {
+    const form = document.getElementById('paymentForm');
+    if (driverType === 'withDriver') {
+    const driver = 1;
+    // Construct the URL with updated price and set it as the form action
+    form.action = '<?php echo URLROOT ?>loggedTraveler/dopaymentVehicles/' + '<?php echo $data['type'] . '/' . $data['furtherBookingDetails']->vehicle_id?>' + '/' + '<?php echo $data['checkinDate'].'/'.$data['checkoutDate'].'/'.$data['pickupTime']?>' + '/' + updatedPrice+'/'+driver;
+} else {
+    const driver = 0;
+        // Use the initial price for withoutDriver and set it as the form action
+        const initialPrice = parseFloat(document.getElementById('totalPrice').dataset.initialPrice);
+        form.action = '<?php echo URLROOT ?>loggedTraveler/dopaymentVehicles/' + '<?php echo $data['type'] . '/' . $data['furtherBookingDetails']->vehicle_id?>' + '/' + '<?php echo $data['checkinDate'].'/'.$data['checkoutDate'].'/'.$data['pickupTime']?>' + '/' + initialPrice+'/'+driver;
+}
+
+}
+function handlePriceUpdate(updatedPrice) {
+    const driverType = document.getElementById('withDriver').checked ? 'withDriver' : 'withoutDriver';
+    const vehicleId = '<?php echo htmlspecialchars($data['furtherBookingDetails']->vehicle_id, ENT_QUOTES, 'UTF-8') ?>';
+    const days = <?php echo $daysD; ?>;
+    
+    // Update the form action with the updated price
+    updateFormAction(driverType, vehicleId, days, updatedPrice);
+}
+</script>
+
+     
+<form id="paymentForm" action="<?php echo URLROOT ?>loggedTraveler/dopaymentVehicles/<?php echo $data['type'] . '/' . $data['furtherBookingDetails']->vehicle_id.'/'.$data['checkinDate'].'/'.$data['checkoutDate'].'/'.$data['pickupTime'].'/'.$data['price']?>/0" method="POST">
                             <div class="buttons">
                                 <button type="submit" class="payment-button">Make Payment</button>
                             </div>
