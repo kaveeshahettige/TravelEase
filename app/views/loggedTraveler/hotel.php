@@ -52,10 +52,6 @@
 <?php 
 // echo var_dump($data['hotels']);
 $hotel_chunks = array_chunk($data['hotels'], 3);
-
-
-
-
 ?>
     </section>
     <section class="main2" id="S1">

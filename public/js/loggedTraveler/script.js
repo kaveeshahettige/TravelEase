@@ -53,6 +53,26 @@ function booking(type, id, checkinDate, checkoutDate) {
   window.open(url, "_blank");
 }
 
+/////////
+function bookingV(type, id, checkinDate, checkoutDate, pickupTime) {
+  console.log("Booking Type:", type, "ID:", id, "Check-in:", checkinDate, "Check-out:", checkoutDate, "Pickup Time:", pickupTime);
+  // var pickupTime = ''; // Initialize pickupTime variable
+  
+  // if (type == 4) {
+  //     pickupTime = document.getElementById('pickupTime').value; // Get pickupTime value only when type is 4
+  // }
+  
+  // Construct the URL to include the pickupTime conditionally
+  var url = "http://localhost/TravelEase/LoggedTraveler/bookingpayment/" + type + "/" + id + "/" + checkinDate + "/" + checkoutDate+"/"+pickupTime;
+  
+  
+  // Open the URL in a new window
+  window.open(url, "_blank");
+}
+
+
+///////
+
 
 /*
 function booking(type, id, checkinDate, checkoutDate) {

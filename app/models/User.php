@@ -1055,5 +1055,32 @@ public function addUnavailability($transactionData){
     }
 }
 
+//findVehicles($location, $checkinDate, $checkoutDate)
+public function findVehiclesByLocation($location, $checkinDate, $checkoutDate) {
+    $this->db->query('
+    SELECT * 
+    FROM vehicles
+    JOIN travelagency ON vehicles.agency_id = travelagency.agency_id
+    JOIN users ON travelagency.user_id = users.id
+    WHERE (travelagency.city LIKE :location OR travelagency.city = \'All Island\')
+    AND vehicle_id NOT IN (
+        SELECT vehicle_id
+        FROM vehicle_bookings
+        WHERE start_date <= :checkoutDate
+        AND end_date >= :checkinDate
+    );
+');
+
+    $this->db->bind(':location', '%' . $location . '%');
+    $this->db->bind(':checkinDate', $checkinDate);
+    $this->db->bind(':checkoutDate', $checkoutDate);
+    $result = $this->db->resultSet();
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
 }
 

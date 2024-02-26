@@ -480,6 +480,37 @@ public function searchHotels()
 }
 
 
+//searchVehicles
+public function searchVehicles()
+{
+    // Check if the request method is POST
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Perform the search operation
+        $location = $_POST['location'];
+        $checkinDate = $_POST['pickupdate'];
+        $checkinTime = $_POST['pickuptime'];
+        $checkoutDate = $_POST['dropoffdate'];
+        $user = $this->userModel->findUserDetail($_SESSION['user_id']);
+        $vehicles = $this->userModel->findVehiclesByLocation($location, $checkinDate, $checkoutDate);
+
+        // Pass the search results to the view and load it
+        $data = [
+            'vehicles' => $vehicles,
+            'profile_picture' => $user ? $user->profile_picture : null,
+            'location' => $location,
+            'checkinDate' => $checkinDate,
+            'checkinTime' => $checkinTime,
+            'checkoutDate' => $checkoutDate,
+        ];
+        $this->view('loggedTraveler/searchVehicles', $data);
+        exit; // Ensure that script execution stops after loading the view
+    } else {
+        // If the request method is not POST, redirect to a different URL
+        header('Location: /TravelEase/loggedTraveler'); // Redirect to the main page or another appropriate URL
+        exit; // Ensure that script execution stops after the redirect
+    }
+}
+
 
 //fetchAvailableVehicles
 public function fetchAvailableVehicles()

@@ -98,7 +98,7 @@ body{
 }
 .main1searchbar .search{
     display: grid;
-    grid-template-columns: 25% 20% 10% 20% 10% 15%;
+    grid-template-columns: 28% 26% 10% 26% 10%;
     width: 80%;
     margin-left: 10%;
     margin-top: 40px;
@@ -410,11 +410,13 @@ border: none;
     display: grid;
     grid-template-rows: 65% 10%;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
-
 }
 
 /* ///////// */
-.search input {
+
+.search input[type="text"],
+.search input[type="date"],
+.search input[type="time"] {
     border: none;
     outline: none;
     padding-left: 20px;
@@ -435,7 +437,6 @@ input[type="text"] {
 .search .search2,
 .search .search3,
 .search .search4,
-.search .search5,
 .search .search6 {
     border-right: 2px solid black;
     display: flex;
@@ -463,3 +464,5 @@ input[type="text"] {
     height:90%;
     padding: 0px;
 }
+
+

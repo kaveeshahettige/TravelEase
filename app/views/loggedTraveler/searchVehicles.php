@@ -38,10 +38,10 @@
         <form action="<?php echo URLROOT ?>loggedTraveler/searchVehicles" method="POST">
         <div class="main1searchbar">
         <div class="search">
-    <div class="search1"><input type="text" placeholder="Location: " name="location"></div>
-    <div class="search2">Pick-up Date:<input type="date" placeholder="Pick-up Date" name="pickupdate"></div>
-    <div class="search3">Time:<input type="time" placeholder="Pick-up Time" name="pickuptime"></div>
-    <div class="search4">Drop-off Date:<input type="date" placeholder="Drop-off Date" name="dropoffdate"></div>
+    <div class="search1"><input type="text" placeholder="Location: <?php echo $data['location']; ?>" name="location"></div>
+    <div class="search2">Pick-up Date:<br><?php echo $data['checkinDate']; ?><input type="date" placeholder="Pick-up Date:" name="pickupdate"></div>
+    <div class="search3">Time:<br><?php echo $data['checkinTime']; ?><input id="pickupTime" type="time" placeholder="Pick-up Time:" name="pickuptime"></div>
+    <div class="search4">Drop-off Date:<br><?php echo $data['checkoutDate']; ?><input type="date" placeholder="Drop-off Date" name="dropoffdate"></div>
     <div class="search6"><button id="searchbtn">Search</button></div>
     <!-- <div class="search6"><button id="searchbtn" onclick="clickSearchTransport()">Search</button></div> -->
 </div>
@@ -53,7 +53,7 @@
     </section>
     <!-- <?php echo var_dump($data) ?> -->
     <?php 
-$agency_chunks = array_chunk($data['agencies'], 3);
+$agency_chunks = array_chunk($data['vehicles'], 3);
 ?>
     <section class="main2">
         <div class="main2buttons">
@@ -62,17 +62,18 @@ $agency_chunks = array_chunk($data['agencies'], 3);
             <button class="but2_3"  id="topRatedButton">Top-Rated</button>
         </div>
 
-        <?php if (!empty($data['agencies']) && is_array($data['agencies'])): ?>
+        <?php if (!empty($data['vehicles']) && is_array($data['vehicles'])): ?>
         <div class="main2images" id="div1">
-        <?php foreach ($data['agencies'] as $agency): ?>
+        <?php foreach ($data['vehicles'] as $vehicles): ?>
             <div class="main2img1content">
-                <div><img src="<?php echo URLROOT ?>images/<?php echo $agency->profile_picture; ?>" alt=""></div>
+                <div><img src="<?php echo URLROOT ?>images/<?php echo $vehicles->image; ?>" alt=""></div>
                 <div class="c1"> 
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $agency->fname; ?></p>
-                        <p><?php echo $agency->city; ?></p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $vehicles->brand . ' ' .ucfirst( $vehicles->model)?></p>
+                        <p><?php echo $vehicles->city; ?></p>
                     </div>
-                    <div> <button onclick="Tripdetails(<?= $agency->user_id?>)">View</button></div>
+                    <div><button onclick="bookingV(4, <?php echo $vehicles->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>','<?php echo $data['checkinTime']; ?>')">View</button></div>
+                    <!-- <div> <button onclick="Tripdetails(<?= $vehicles->user_id?>)">View</button></div> -->
                 </div>
                 
             </div>
