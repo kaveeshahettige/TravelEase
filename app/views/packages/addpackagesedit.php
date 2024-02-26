@@ -62,9 +62,9 @@
                             <div class="form-group">
                                 <label for="PackageType">Package Type</label>
                                 <select id="PackageType" name="PackageType">
-                                  <option value="Solo">Solo</option>
+                                  <!-- <option value="Solo">Solo</option>
                                   <option value="Couple">Couple</option>
-                                  <option value="Family">Family</option>
+                                  <option value="Family">Family</option> -->
                                   
                                   
                                 </select>
