@@ -38,10 +38,10 @@
         <form action="<?php echo URLROOT ?>loggedTraveler/searchVehicles" method="POST">
         <div class="main1searchbar">
         <div class="search">
-    <div class="search1"><input type="text" placeholder="Location: <?php echo $data['location']; ?>" name="location"></div>
-    <div class="search2">Pick-up Date:<br><?php echo $data['checkinDate']; ?><input type="date" placeholder="Pick-up Date:" name="pickupdate"></div>
-    <div class="search3">Time:<br><?php echo $data['checkinTime']; ?><input id="pickupTime" type="time" placeholder="Pick-up Time:" name="pickuptime"></div>
-    <div class="search4">Drop-off Date:<br><?php echo $data['checkoutDate']; ?><input type="date" placeholder="Drop-off Date" name="dropoffdate"></div>
+    <div class="search1"><input type="text" placeholder="Location: <?php echo $data['location']; ?>" name="location" value="<?php echo $data['location']; ?>"></div>
+    <div class="search2">Pick-up Date:<br><?php echo $data['checkinDate']; ?><input type="date" placeholder="Pick-up Date:" name="pickupdate" value="<?php echo $data['checkinDate']; ?>"></div>
+    <div class="search3">Time:<br><?php echo $data['checkinTime']; ?><input id="pickupTime" type="time" placeholder="Pick-up Time:" name="pickuptime" value="<?php echo $data['checkinTime']; ?>"></div>
+    <div class="search4">Drop-off Date:<br><?php echo $data['checkoutDate']; ?><input type="date" placeholder="Drop-off Date" name="dropoffdate" value="<?php echo $data['checkoutDate']; ?>"></div>
     <div class="search6"><button id="searchbtn">Search</button></div>
     <!-- <div class="search6"><button id="searchbtn" onclick="clickSearchTransport()">Search</button></div> -->
 </div>

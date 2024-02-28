@@ -78,6 +78,16 @@
         <p><strong>Fuel Type:</strong> <?php echo $data['furtherBookingDetails']->fuel_type ?></p>
         <p><strong>Year:</strong> <?php echo $data['furtherBookingDetails']->year ?></p>
         <p><strong>Seating Capacity:</strong> <?php echo $data['furtherBookingDetails']->seating_capacity ?></p>
+        <p><strong>Air Condition:</strong> 
+<?php 
+if ($data['furtherBookingDetails']->ac_type  == 1) {
+    echo "Available";
+} else {
+    echo "Not Available";
+}
+?>
+</p>
+
         
     </div>
 <?php else: ?>

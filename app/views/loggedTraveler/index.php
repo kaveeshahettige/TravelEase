@@ -54,7 +54,7 @@
         <?php if (!empty($data['bookingDetailsArray'])): ?>
             <span id="upcoming">Upcoming Trips</span>
             <?php endif; ?>
-            <button id="plantrip">Plan New Trip</button>
+            <button id="plantrip" onclick="planNewTrip()">Plan New Trip</button>
         </div>
         
         <div class="main2trip-container">
@@ -64,7 +64,11 @@
                 <div class="main2img1content">
                     <?php $serviceProviderID = $element['serviceProviderID'];?>
                     <div style="width: 510px; height: 400px; overflow: hidden;">
+                    <?php if ($element['type'] == 3): ?>
                         <img src="<?php echo URLROOT ?>images/rooms/<?php echo $element['furtherBookingDetails']->image ?>" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                        <?php elseif ($element['type'] == 4): ?>
+                        <img src="<?php echo URLROOT ?>images/<?php echo $element['furtherBookingDetails']->image ?>" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                        <?php endif; ?>
                     </div>
                     <div class="c1"> 
                         <div>

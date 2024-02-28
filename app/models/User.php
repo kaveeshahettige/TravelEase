@@ -1082,5 +1082,162 @@ public function findVehiclesByLocation($location, $checkinDate, $checkoutDate) {
     }
 }
 
+//findVehiclePrice($Bid) from payments
+public function findVehiclePrice($Bid){
+    $this->db->query('SELECT amount FROM payments WHERE booking_id = :id');
+    $this->db->bind(':id', $Bid);
+    $amount = $this->db->single();
+    if ($this->db->rowCount() > 0) {
+        return $amount;
+    } else {
+        return false;
+    }
+
+}
+
+//findDriverAvilability($Bid)
+public function findDriverAvilability($Bid){
+    $this->db->query('
+    SELECT 
+    vb.*
+FROM 
+    vehicle_bookings AS vb
+JOIN 
+    bookings AS b ON b.vehicle_id = vb.vehicle_id
+WHERE 
+    b.booking_id = :Bid
+    AND b.startDate = vb.start_date
+    AND b.endDate = vb.end_date;
+
+    ');
+    $this->db->bind(':Bid', $Bid); // Corrected binding parameter
+    $driver = $this->db->single();
+    if ($this->db->rowCount() > 0) {
+        return $driver;
+    } else {
+        return false;
+    }
+}
+
+//countUpcomingTrips($id)
+public function countUpcomingTrips($id){
+    $this->db->query('SELECT COUNT(*) AS count FROM bookings WHERE user_id = :id AND startDate > CURDATE()');
+    $this->db->bind(':id', $id);
+    $row = $this->db->single();
+     if($this->db->rowcount()>0){
+        return $row->count;
+     }
+     else{
+        return false;
+    }
+}
+
+//monthlyPayment($id)
+public function monthlyPayment($id){
+    $this->db->query('SELECT SUM(amount) AS total FROM payments WHERE booking_id IN (SELECT booking_id FROM bookings WHERE user_id = :id AND MONTH(startDate) = MONTH(CURDATE()) AND YEAR(startDate) = YEAR(CURDATE()))');
+    $this->db->bind(':id', $id);
+    $row = $this->db->single();
+     if($this->db->rowcount()>0){
+        return $row->total;
+     }
+     else{
+        return false;
+    }
+}
+
+//countPayment($id)
+public function countPayment($id){
+    $this->db->query('SELECT COUNT(*) AS count FROM payments WHERE booking_id IN (SELECT booking_id FROM bookings WHERE user_id = :id)');
+    $this->db->bind(':id', $id);
+    $row = $this->db->single();
+     if($this->db->rowcount()>0){
+        return $row->count;
+     }
+     else{
+        return false;
+    }
+}
+
+//findPayment($id)
+public function findPayment($id){
+    $this->db->query('SELECT * FROM payments JOIN bookings ON payments.booking_id = bookings.booking_id
+    WHERE bookings.user_id = :id');
+    $this->db->bind(':id', $id);
+    $payments = $this->db->resultSet();
+     if($this->db->rowcount()>0){
+        return $payments;
+     }
+     else{
+        return false;
+    }
+}
+
+//getRandomPackages()
+public function getRandomPackages(){
+    $this->db->query('SELECT p.*,u.* 
+    FROM users u
+    JOIN guides p ON u.id = p.user_id
+    WHERE u.type NOT IN (0, 1, 2, 3, 4) /*AND u.approval = 1*/
+    ORDER BY RAND() 
+    LIMIT 6;
+    ');   
+    $data=$this->db->resultSet();
+    
+    //check row
+    if($this->db->rowCount()>0){
+        return $data;
+    }else{
+        return null;
+    }
+    
+    }
+
+    //findPackages($location)
+//     public function findPackages($location) {
+//         $this->db->query('SELECT * FROM packages
+//         JOIN packageprovider ON packages.provider_id = packageprovider.provider_id
+//         JOIN users ON packageprovider.user_id = users.id
+//         WHERE (packageprovider.city LIKE :location OR packageprovider.city = \'All Island\');
+//         ');
+//         $this->db->bind(':location', '%' . $location . '%');
+//         $result = $this->db->resultSet();
+//         if ($this->db->rowCount() > 0) {
+//             return $result;
+//         } else {
+//             return false;
+//         }
+//     }
+
+//     //findPackagePrice($Bid) from payments
+//     public function findPackagePrice($Bid){
+//         $this->db->query('SELECT amount FROM payments WHERE booking_id = :id');
+//         $this->db->bind(':id', $Bid);
+//         $amount = $this->db->single();
+//         if ($this->db->rowCount() > 0) {
+//             return $amount;
+//         } else {
+//             return false;
+//         }
+    
+//     }
+
+//     //findPackageDetails($id)
+//     public function findPackageDetails($id){
+//         $this->db->query('SELECT * FROM packages WHERE package_id = :id');
+//         $this->db->bind(':id', $id);
+//         $result = $this->db->single();
+//         if ($this->db->rowCount() > 0) {
+//             return $result;
+//         } else {
+//             return false;
+//         }
+//     }
+
+//     //findPackageProvider($id)
+//     public function findPackageProvider($id){
+//         $this->db->query('SELECT * FROM packageprovider WHERE user_id = :id');
+//         $this->db->bind(':id', $id);
+
+// }
 }
 
