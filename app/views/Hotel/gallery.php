@@ -13,6 +13,9 @@
 </head>
 <body>
 <?php
+$userData= $data['basicInfo']['userData'];
+?>
+<?php
 $activePage = 'hotel/gallery'; // Set the active page dynamically based on your logic
 include 'navigation.php';
 ?>

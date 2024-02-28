@@ -13,6 +13,9 @@
 </head>
 <body>
 <?php
+$userData= $data['basicInfo']['userData'];
+?>
+<?php
 $activePage = 'hotel/reviews'; // Set the active page dynamically based on your logic
 include 'navigation.php';
 ?>
@@ -57,11 +60,39 @@ include 'navigation.php';
         <div class="search-content">
             <div class="review-search">
                 <input type="text" id="review-search" placeholder="Search for Reviews">
-                <button onclick="filterBookings()">
+                <button onclick="filterReviews()">
                     <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
                 </button>
             </div>
         </div>
+
+
+        <script>
+            function filterReviews() {
+                var input, filter, reviews, reviewBoxes, userName, reviewText, i, txtUserName, txtReviewText;
+                input = document.getElementById("review-search");
+                filter = input.value.toUpperCase();
+                reviews = document.querySelector(".review-content");
+                reviewBoxes = reviews.getElementsByClassName("review-box");
+
+                for (i = 0; i < reviewBoxes.length; i++) {
+                    userName = reviewBoxes[i].getElementsByTagName("h2")[0];
+                    reviewText = reviewBoxes[i].getElementsByClassName("review-text")[0];
+                    if (userName && reviewText) {
+                        txtUserName = userName.textContent || userName.innerText;
+                        txtReviewText = reviewText.textContent || reviewText.innerText;
+                        if (txtUserName.toUpperCase().indexOf(filter) > -1 || txtReviewText.toUpperCase().indexOf(filter) > -1) {
+                            reviewBoxes[i].style.display = "";
+                        } else {
+                            reviewBoxes[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        </script>
+
+
+
 
         <div class="review-content">
             <?php

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/hotel/settingssub.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
-    <title>Hotel - Add Rooms</title>
+    <title>Package - Update Packages</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -15,10 +15,7 @@
 
 <body>
 <?php
-//$userData= $data['basicInfo']['userData'];
-//?>
-<?php
-$activePage = 'hotel/settings'; // Set the active page dynamically based on your logic
+$activePage = 'packages/settings'; // Set the active page dynamically based on your logic
 include 'navigation.php';
 ?>
 <main>

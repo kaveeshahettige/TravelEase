@@ -12,9 +12,16 @@ class Hotel extends Controller
         $this->hotelsModel = $this->model('Hotels');
     }
 
+    public function navigation()
+    {
+        $data = ['basicInfo' => $this->basicInfo(), 'roomCount' => $this->roomCount()];
+        $this->view('hotel/navigation', $data);
+    }
+
     public function index()
     {
-        $this->view('hotel/index');
+        $data = ['basicInfo' => $this->basicInfo(), 'roomCount' => $this->roomCount()];
+        $this->view('hotel/index',$data);
     }
 
     public function Calender()
@@ -22,6 +29,7 @@ class Hotel extends Controller
 
         $data = [
             'selectedDate' => '2012-12-07',
+            'basicInfo' => $this->basicInfo(),
         ];
 
         $this->view('hotel/calender', $data);
@@ -60,40 +68,51 @@ class Hotel extends Controller
             'roomData' => $roomData,
             'date' => $date,
             'unavailableRooms' => $unavailableRoomsIds,
+            'basicInfo' => $this->basicInfo(),
         ];
 
         // Load the view
         $this->view('hotel/availablerooms', $data);
     }
 
-
-
-
-
     public function bookings()
     {
         $bookingData = $this->getBookingsData();
-        $data["bookingData"] = $bookingData;
+        $data=[
+            'bookingData' => $bookingData,
+            'basicInfo' => $this->basicInfo(),
+            ];
         // Pass the data to the view
-        $this->view('hotel/bookings', ['bookingData' => $bookingData]);
+        $this->view('hotel/bookings',$data);
     }
+
 
     public function gallery()
     {
         $notifications = $this->getnotifications();
-        $data["notifications"] = $notifications;
+        $data=[
+            'notifications' => $notifications,
+            'basicInfo' => $this->basicInfo(),
+        ];
         $this->view('hotel/gallery', $data);
     }
 
     public function revenue()
     {
-        $this->view('hotel/revenue');
+        $data=[
+            'basicInfo' => $this->basicInfo(),
+        ];
+        $this->view('hotel/revenue', $data);
     }
 
     public function reviews()
     {
         $reviews = $this->getReviewsData();
-        $data["reviews"] = $reviews;
+        $data=[
+            'reviews' => $reviews,
+            'basicInfo' => $this->basicInfo(),
+        ];
+
         $this->view('hotel/reviews', $data);
     }
 
@@ -117,6 +136,7 @@ class Hotel extends Controller
 
         $data = [
             'roomData' => $roomData,
+            'basicInfo' => $this->basicInfo(),
         ];
 
         $this->view('hotel/addrooms', $data);
@@ -125,8 +145,13 @@ class Hotel extends Controller
     public function addroomsedit()
     {
         $roomData = $this->hotelsModel->getHotel();
-        $data["roomData"] = $roomData;
-        $this->view('hotel/addroomsedit');
+
+        $data = [
+            'roomData' => $roomData,
+            'basicInfo' => $this->basicInfo(),
+        ];
+
+        $this->view('hotel/addroomsedit', $data);
     }
 
     public function updateroom()
@@ -146,7 +171,9 @@ class Hotel extends Controller
 
     public function hotelpassword()
     {
-        $this->view('hotel/hotelpassword');
+        $data = $this->basicInfo();
+
+        $this->view('hotel/hotelpassword', $data);
     }
 
     public function hoteladdrooms($room_id)

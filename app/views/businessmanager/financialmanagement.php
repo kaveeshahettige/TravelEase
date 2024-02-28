@@ -62,57 +62,45 @@ include 'navigation.php';
         
         <div class="table-content">
                 <h2>All Transactions</h2>
-                    <table class="transaction-table">
-                        <thead>
-                            <tr>
-                                <th>Service Provider</th>
-                                <th>Amount</th>
-                                <th>Date</th>
-                                <th>Account Number</th>
-                                <th>Payment Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                                
-                            <tr>
-                                <td><div class="service-provider-info">
-                                    <img src="<?php echo URLROOT?>/images/wikum.jpg" alt="Service Provider Photo">
-                                    <span>Wikum Preethika</span>
-                                </div></td>
-                                <td>5000 LKR</td>
-                                <td>2023-09-25</td>
-                                <td>1234567890</td>
-                                <td class="pending">Pending</td>
-                                <td><button class="view-button">View</button></td>
-                            </tr>
+            <table class="transaction-table">
+                <thead>
+                <tr>
+                    <th>Service Provider</th>
+                    <th>Total Amount</th>
+                    <th>To Paid</th>
+                    <th>Booking Date</th>
+                    <th>Account Number</th>
+                    <th>Payment Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $transactions = $data['transactionData'];
+                foreach ($transactions as $transaction): ?>
+                    <tr>
+                        <td>
+                            <div class="service-provider-info">
+                                <img src="<?php echo $transaction->profile_picture ?>" alt="Service Provider Photo">
+                                <span><?php echo $transaction->service_provider_name; ?></span>
+                            </div>
+                        </td>
+                        <td><?php echo $transaction->amount; ?> LKR</td>
+                        <td><?php echo ($transaction->amount * 0.85); ?> LKR</td>
+                        <td><?php echo date('Y-m-d', strtotime($transaction->date)); ?></td>
+                        <td><?php echo $transaction->account_number; ?></td>
 
-                            <tr>
-                                <td><div class="service-provider-info">
-                                    <img src="<?php echo URLROOT?>/images/wikum.jpg" alt="Service Provider Photo">
-                                    <span>Wikum Preethika</span>
-                                </div></td>
-                                <td>5000 LKR</td>
-                                <td>2023-09-25</td>
-                                <td>1234567890</td>
-                                <td class="pending">Pending</td>
-                                <td><button class="view-button">View</button></td>
-                            </tr>
+                        <td class="<?php echo strtolower($transaction->payment_status); ?>">
+                            <?php echo ($transaction->payment_status == 'Paid') ? 'Paid' : 'Pending'; ?>
+                        </td>
 
-                            <tr>
-                                <td><div class="service-provider-info">
-                                    <img src="<?php echo URLROOT?>/images/wikum.jpg" alt="Service Provider Photo">
-                                    <span>Wikum Preethika</span>
-                                </div></td>
-                                <td>5000 LKR</td>
-                                <td>2023-09-25</td>
-                                <td>1234567890</td>
-                                <td class="approved">Approved</td>
-                                <td><button class="view-button">View</button></td>
-                            </tr>
-                
-                        </tbody>
-                    </table>
+
+                        <td><button class="view-button" onclick="openPopup(<?php echo $transaction->transaction_id; ?>)">View</button></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+
         </div>
 
     </main>

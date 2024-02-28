@@ -12,17 +12,59 @@
 </head>
 <body>
 <nav class="left-menu">
+
+    <?php
+    $userData= $data['basicInfo']['userData'];
+    ?>
+
     <div class="user-profile">
-        <img src="<?= isset($_SESSION['user_profile_picture']) ? $_SESSION['user_profile_picture'] : '../Images/wikum.jpg'; ?> " alt="User Profile Photo">
+        <img src="<?= isset($userData->profile_picture) ? $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="User Profile Photo">
         <span class="user-name"><?=$_SESSION['user_fname']?></span>
     </div>
 
     <div class="search-bar">
-        <form action="#" method="GET">
-            <input type="text" placeholder="Find a Setting">
+        <form id="searchForm" action="#" method="GET">
+            <input type="text" id="searchInput" placeholder="Find a Setting">
             <button type="submit">Search</button>
         </form>
     </div>
+
+    <script>
+        // Check if the search form exists before adding event listener
+        var searchForm = document.getElementById("searchForm");
+        if (searchForm) {
+            searchForm.addEventListener("submit", function(event) {
+                event.preventDefault(); // Prevent default form submission behavior
+
+                // Get the search input value
+                var searchValue = document.getElementById("searchInput").value.trim().toLowerCase();
+
+                // Perform search logic based on the current page
+                var currentPage = window.location.pathname; // Get the current page URL
+
+                // Perform different search actions based on the current page
+                switch (currentPage) {
+                    case "/hotel/bookings":
+                        // Search logic for bookings page
+                        alert("Searching bookings for: " + searchValue);
+                        break;
+                    case "/hotel/calender":
+                        // Search logic for calendar page
+                        alert("Searching availability for: " + searchValue);
+                        break;
+                    case "/hotel/gallery":
+                        // Search logic for gallery page
+                        alert("Searching gallery for: " + searchValue);
+                        break;
+                    // Add more cases for other pages as needed
+                    default:
+                        // Default search logic if page-specific logic is not defined
+                        alert("Searching on: " + currentPage + " for: " + searchValue);
+                }
+            });
+        }
+    </script>
+
 
     <!-- left_menu.php -->
     <?php

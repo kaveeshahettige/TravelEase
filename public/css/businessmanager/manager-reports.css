@@ -35,6 +35,25 @@ a.active, a:active {
     border: 2px solid #F9B314;
 }
 
+.filter-option input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 2px solid #F9B314;
+}
+
+button#generate-report-btn {
+    padding: 10px 20px;
+    background-color: #F9B314;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button#generate-report-btn:hover {
+    background-color: #ffd997;
+}
 
 
 

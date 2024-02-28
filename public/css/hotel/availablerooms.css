@@ -24,10 +24,11 @@
 }
 
 /* Style for the Make Unavailable button */
+/* Style for the Make Unavailable button */
 .btn-make-unavailable {
-    background-color: #28a745;
-    color: #fff;
-    border: none;
+    background-color: #fff;
+    color: #28a745;
+    border: 1px solid #28a745;
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
@@ -35,22 +36,25 @@
 
 .btn-make-unavailable:hover {
     background-color: #218838;
+    color: #fff;
 }
 
-/* Style for the Delete Unavailable button */
-.btn-delete-unavailable {
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
+/* Style for the Delete button */
+.btn-make-available {
+    background-color: #fff;
+    color: #dc3545; /* Text color */
+    border: 1px solid #dc3545; /* Red border */
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
     margin-left: 10px; /* Adjust margin as needed */
 }
 
-.btn-delete-unavailable:hover {
-    background-color: #c82333;
+.btn-make-available:hover {
+    background-color: #dc3545;
+    color: #fff;
 }
+
 
 
 

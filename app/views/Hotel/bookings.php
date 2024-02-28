@@ -12,6 +12,9 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
+<?php
+$userData= $data['basicInfo']['userData'];
+?>
     <?php
         $activePage = 'hotel/bookings'; // Set the active page dynamically based on your logic
         include 'navigation.php';
@@ -57,13 +60,55 @@
         </div>
 
         <div class="search-content">
-        <div class="booking-search">
-            <input type="text" id="booking-search" placeholder="Search for Boookings">
-            <button onclick="filterBookings()">
-                <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
-            </button>
+            <div class="booking-search">
+                <input type="text" id="booking-search" placeholder="Enter Name or Room Type">
+                <input type="date" id="start-date" placeholder="Start Date">
+                <input type="date" id="end-date" placeholder="End Date">
+                <button onclick="filterBookings()">
+                    <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
+                </button>
+            </div>
         </div>
-        </div>
+
+        <script>
+            function filterBookings() {
+                var input, filter, startDate, endDate, table, tr, tdGuestName, tdRoomType, tdStartDate, tdEndDate, i, txtGuestName, txtRoomType;
+                input = document.getElementById("booking-search");
+                filter = input.value.toUpperCase();
+                startDate = document.getElementById("start-date").value;
+                endDate = document.getElementById("end-date").value;
+                table = document.querySelector(".booking-table");
+                tr = table.getElementsByTagName("tr");
+
+                for (i = 0; i < tr.length; i++) {
+                    tdGuestName = tr[i].getElementsByTagName("td")[1]; // Index 1 for Guest Name column
+                    tdRoomType = tr[i].getElementsByTagName("td")[4]; // Index 4 for Room Type column
+                    tdStartDate = tr[i].getElementsByTagName("td")[2]; // Index 2 for Check-in Date column
+                    tdEndDate = tr[i].getElementsByTagName("td")[3]; // Index 3 for Check-out Date column
+
+                    if (tdGuestName && tdRoomType) {
+                        txtGuestName = tdGuestName.textContent || tdGuestName.innerText;
+                        txtRoomType = tdRoomType.textContent || tdRoomType.innerText;
+                        if ((txtGuestName.toUpperCase().indexOf(filter) > -1 || txtRoomType.toUpperCase().indexOf(filter) > -1) &&
+                            (compareDates(startDate, tdStartDate.textContent.trim()) && compareDates(tdEndDate.textContent.trim(), endDate))) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+
+            function compareDates(start, end) {
+                if (!start || !end) return true;
+                var startDate = new Date(start);
+                var endDate = new Date(end);
+                return startDate <= endDate;
+            }
+        </script>
+
+
+
 
         <div class="table-content">
             <h2>Booking Details</h2>
@@ -87,8 +132,8 @@
                     <tr>
                         <td><?php echo $key + 1; ?></td>
                         <td><?php echo $booking->fname; ?></td>
-                        <td><?php echo $booking->startDate; ?></td>
-                        <td><?php echo $booking->endDate; ?></td>
+                        <td><?php echo date("Y-m-d", strtotime($booking->startDate)); ?></td>
+                        <td><?php echo date("Y-m-d", strtotime($booking->endDate)); ?></td>
                         <td><?php echo $booking->roomType; ?></td>
                         <td>
                             <button class="view-button" onclick="openPopup(); updatePopupDetails('<?php echo $booking->profile_picture; ?>','<?php echo $booking->fname; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->roomType; ?>')">

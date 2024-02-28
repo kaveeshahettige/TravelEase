@@ -67,53 +67,35 @@ include 'navigation.php';
             <h2>All Packages</h2>
                 <table class="booking-table">
                     <thead>
-                        <tr>
-                            <th>Package Name</th>
-                            <th>Package Owner</th>
-                            <th>Description</th>
-                            <th>Location</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
+                    <tr>
+                        <th>No</th>
+                        <th>Package Name</th>
+<!--                        <th>Package Owner</th>-->
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
                     </thead>
                     <tbody>
-                            
+                    <?php
+                    $packages = $data['packageData'];
+                    foreach ($packages as $key => $package): ?>
                         <tr>
-                            <td>Aqua Adventure</td>
-                            <td>Wikum Preethika</td>
-                            <td>Exploration of underwater life</td>
-                            <td>Galle</td>
-                            <td>25000 LKR</td>
-                            <td class="pending">Pending</td>
+                            <td><?php echo $key + 1; ?></td>
+                            <td><?php echo $package->name; ?></td>
+<!--                            <td>--><?php //echo $package->owner; ?><!--</td>-->
+                            <td><?php echo $package->description; ?></td>
+                            <td><?php echo $package->Location; ?></td>
+                            <td><?php echo $package->Price; ?> LKR</td>
                             <td>
-                                <button class="view-button">View</button>
+                                <button class="view-button" onclick="openPopup(<?php echo $package['id']; ?>)">View</button>
                             </td>
                         </tr>
-                        <tr>
-                            <td>Aqua Adventure</td>
-                            <td>Wikum Preethika</td>
-                            <td>Exploration of underwater life</td>
-                            <td>Galle</td>
-                            <td>25000 LKR</td>
-                            <td class="pending">Pending</td>
-                            <td>
-                                <button class="view-button">View</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Aqua Adventure</td>
-                            <td>Wikum Preethika</td>
-                            <td>Exploration of underwater life</td>
-                            <td>Galle</td>
-                            <td>25000 LKR</td>
-                            <td class="approved">Approved</td>
-                            <td>
-                                <button class="view-button">View</button>
-                            </td>
-                        </tr>   
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
+
             </div>
     
             <div class="more-content">

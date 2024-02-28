@@ -16,6 +16,9 @@
 </head>
 
 <body>
+<?php
+$userData= $data['basicInfo']['userData'];
+?>
     <?php
     $activePage = 'hotel/calender'; // Set the active page dynamically based on your logic
     include 'navigation.php';
@@ -73,7 +76,6 @@
                                     </button>
 <!--                                    deleteroomStatus-->
                                     <button class="btn btn-make-available" onclick="deleteRoomStatus(<?php echo $hotel_rooms->room_id; ?>, '<?php echo $data['date']; ?>')">
-                                        <?php echo $hotel_rooms->room_id; ?> <?php echo $data['date']; ?>
                                         <i class='bx bx-trash'></i>
                                     </button>
                                 </td>

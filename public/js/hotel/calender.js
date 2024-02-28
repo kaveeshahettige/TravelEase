@@ -234,7 +234,7 @@ function deleteRoomStatus(room_id,date) {
                 console.log('Room Status deleted successfully');
                 window.location.reload();
             } else {
-                console.error('Error deleting room: 1', response);
+                console.error('Error deleting room: ', response);
             }
         })
         .catch(function(error) {

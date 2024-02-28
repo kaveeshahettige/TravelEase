@@ -18,6 +18,9 @@
 </head>
 
 <body>
+<?php
+$userData= $data['basicInfo']['userData'];
+?>
     <?php
     $activePage = 'hotel/calender';
     include 'navigation.php';
@@ -73,15 +76,13 @@
                 </div>
                 <div class="availability-content" id="availability-content">
                     <div id="selected-date"></div>
-                    <div id="availability-info"></div>
+<!--                    <div id="availability-info"></div>-->
                     <div class="calendar-buttons">
                         <div class="calendar-buttons">
                             <div class="calendar-buttons">
 
                                 <form id="availabilityForm" action="<?= URLROOT?>/hotel/availablerooms" method="get" onsubmit="return handleFormSubmit()">
                                     <input type="hidden" name="action" value="check_availability">
-
-
                                     <input name="date" type="hidden" id="selectedDate" value="<?php
                                     echo htmlspecialchars($data["selectedDate"]); ?>">
                                     <button type="submit" id="checkAvailabilityBtn" disabled>Check Availability</button>

@@ -47,23 +47,35 @@
     display: flex;
     align-items: center;
     margin-top: 20px;
+    /*border: 2px solid #ccc;*/
+    padding: 10px;
+    margin-right:80px;
 }
 
 /* Search Input Styles */
 .search-content {
-    padding-left: 550px;
+    padding-left: 300px;
     padding-top: 5px;
     font-family: "Poppins", sans;
 }
 
-.booking-search input[type="text"] {
+.booking-search input[type="text"],
+.booking-search input[type="date"] {
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 0.5px solid #ccc;
     border-radius: 5px;
     outline: none;
     font-size: 16px;
-    width: 500px;
+    width: 300px; /* Adjust width as needed */
+    margin-right: 10px; /* Add some spacing between input fields */
 }
+
+.booking-search input[type="text"]:focus,
+.booking-search input[type="date"]:focus {
+    border-color: #FFDB8B; /* Change border color on focus */
+    /*box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); !* Add a slight shadow on focus *!*/
+}
+
 
 /* Search Button Styles */
 .booking-search button {
@@ -198,5 +210,17 @@
     .more-content {
         padding-left: 200px;
         text-align: center;
+    }
+
+    .booking-search{
+        border: none;
+    }
+
+    .booking-search input[type="text"] {
+        width: 500px; /* Adjusted width for larger screens */
+    }
+
+    .booking-search input[type="date"] {
+        display: none; /* Hide the date input field */
     }
 }

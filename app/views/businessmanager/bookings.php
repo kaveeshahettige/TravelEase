@@ -70,34 +70,63 @@ include 'navigation.php';
                     <tr>
                         <th>No</th>
                         <th>Guest Name</th>
-                        <th>Service</th>
+                        <th>Service Type</th>
+                        <th>Service Name</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                        
+                <?php
+                $bookings = $data["bookingData"];
+                foreach ($bookings as $key => $booking):
+                    ?>
+
                     <tr>
-                        <td>1</td>
-                        <td>Wikum Preethika</td>
-                        <td>Hotel</td>
-                        <td>Full Paid</td>
-                        <td><button class="view-button">View</button></td>
+                        <td><?php echo $key + 1; ?></td>
+                        <td><?php echo $booking->user_fname; ?></td>
+                        <td><?php
+                            switch ($booking->provider_type) {
+                                case 0:
+                                    echo "Admin";
+                                    break;
+                                case 1:
+                                    echo "Traveler";
+                                    break;
+                                case 2:
+                                    echo "Business Manager";
+                                    break;
+                                case 3:
+                                    echo "Hotel";
+                                    break;
+                                case 4:
+                                    echo "Transport Provider";
+                                    break;
+                                case 5:
+                                    echo "Guide";
+                                    break;
+                                default:
+                                    echo "Unknown";
+                                    break;
+                            }
+                            ?></td>
+                        <td><?php echo $booking->provider_fname; ?></td>
+                        <td><?php echo !empty($booking->payment_id) ? "Paid" : "Not Paid"; ?></td>
+                        <td>
+                            <button class="view-button" onclick="openPopup(); updatePopupDetails(
+                                    '<?php echo $booking->user_profile_picture; ?>',
+                                    '<?php echo $booking->user_fname; ?>',
+                                    '<?php echo $booking->provider_type; ?>',
+                                    '<?php echo $booking->provider_fname; ?>',
+                                    '<?php echo !empty($booking->payment_id) ? "Paid" : "Not Paid"; ?>'
+                                    )">
+                                <i class='bx bx-show'></i>
+                            </button>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Kaveesha Hettige</td>
-                        <td>Transporation provider</td>
-                        <td>Full Paid</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Dilanga</td>
-                        <td>Package</td>
-                        <td>Full Paid</td>
-                        <td><button class="view-button">View</button></td>
-                    </tr>   
+
+                <?php endforeach; ?>
+
                 </tbody>
             </table>
         </div>
@@ -106,6 +135,21 @@ include 'navigation.php';
             <button class="next-page-btn">See More <i class='bx bx-chevron-right'></i></button>
         </div>
 
+        <div class="popup" id="popup">
+            <div class="popup-content">
+                <span class="close" onclick="closePopup()">&times;</span>
+                <!-- Add details about the booking here -->
+                <h2>Booking Details</h2>
+                <div id="profile-picture" class="profile-picture"></div>
+                <p id="guestName">Guest Name: </p>
+                <p id="providerType">Provider Type: </p>
+                <p id="providerName">Provider Name: </p>
+                <p id="paymentStatus">Payment Status: </p>
+                <!-- Add more details as needed -->
+            </div>
+        </div>
+
+        <script src= "<?php echo URLROOT?>/public/js/businessmanager/bookings.js"></script>
        
     </main>
 </body>

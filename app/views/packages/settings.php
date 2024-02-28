@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/settings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
-    <title>Hotel Settings</title>
+    <title>Package Settings</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -13,43 +13,32 @@
 </head>
 <body>
 <?php
-$activePage = 'hotel/settings'; 
+$activePage = 'packages/settings'; // Set the active page dynamically based on your logic
 include 'navigation.php';
 ?>
-    <main>
-        <div class="logo-container">
-            <img src="<?php echo URLROOT?>/images/hotel/TravelEase.png" alt="TravelEase Logo">
-            <span class="logo-text">TravelEase</span>
-        </div>
+<main>
+    <div class="logo-container">
+        <img src="<?php echo URLROOT?>/images/hotel/TravelEase.png" alt="TravelEase Logo">
+        <span class="logo-text">TravelEase</span>
+    </div>
 
-        <div class="dashboard-content">
-            <h1>Settings</h1>
-        </div>
+    <div class="dashboard-content">
+        <h1>Settings</h1>
+    </div>
 
-        <div class="settings-subcontent">
+    <div class="settings-subcontent">
         <div class="content-container">
             <div class="left-content">
 
                 <div class="rectangle">
                     <?php
-////                    $userData = $data;
-//                    $hotelData = $data2['hotelData'];
-                    /**
-                     * @param stdClass $add
-                     * @param stdClass $profile_picture
-                     *
-                     * **/
-
-
-                    $hotelData= $data['basicInfo']['hotelData'];
-                    $userData= $data['basicInfo']['userData'];
-//                    var_dump($userData);
-                    $profile_picture = $userData->profile_picture;
+                    ////                    $userData = $data;
+                    //                    $hotelData = $data2['hotelData'];
                     ?>
                     <!-- Rectangle 1: Basic Info -->
                     <div class="basic-info-content">
                         <div class="center-image" onclick="openPopup()">
-                        <img id="profile-picture" src="<?= isset($userData->profile_picture) ? $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="User Profile Photo">
+                            <img id="profile-picture" src="<?= isset($_SESSION['user_profile_picture']) ? $_SESSION['user_profile_picture'] : '../Images/wikum.jpg'; ?>" alt="Profile Picture">
                             <div class="edit-icon">&#9998;</div>
                         </div>
                         <div class="hotel-details">
@@ -59,9 +48,9 @@ include 'navigation.php';
                             <h6>Email</h6>
                             <p><?=$_SESSION['user_email']?></p>
                             <h6>Location</h6>
-                            <p><?=$hotelData->add ?> </p>
+                            <!--                            <p>--><?php //echo $hotelData['add']; ?><!-- </p>-->
                         </div>
-                        <a href="<?php echo URLROOT; ?>hotel/hoteledit">
+                        <a href="<?php echo URLROOT; ?>packages/packagesedit">
                             <button class="edit-button">Edit</button>
                         </a>
                     </div>
@@ -97,9 +86,9 @@ include 'navigation.php';
                     <div class="basic-info-content">
                         <h2>Change Password</h2>
                         <!-- Add change password form here -->
-                            <a href="<?php echo URLROOT; ?>hotel/hotelpassword">
-                                <button  class ="edit-button">Edit</button>
-                            </a>
+                        <a href="<?php echo URLROOT; ?>packages/packagespassword">
+                            <button  class ="edit-button">Edit</button>
+                        </a>
                     </div>
                 </div>
 
@@ -136,9 +125,9 @@ include 'navigation.php';
                             $roomCount = $data;
                             //                print_r($data);
                             ?>
-                            <p><?php echo $data['roomCount']; ?></p>
+                            <p><?php echo $roomCount['roomCount']; ?></p>
                         </div>
-                        <a href="<?php echo URLROOT; ?>hotel/addrooms">
+                        <a href="<?php echo URLROOT; ?>packages/addpackages">
                             <button  class ="edit-button">Add</button>
                         </a>
                     </div>
@@ -152,12 +141,12 @@ include 'navigation.php';
                         <a href="<?php echo URLROOT; ?>hotel/hoteledit">
                             <button class ="delete-button">Delete</button></a>
                     </div>
+                </div>
+
             </div>
 
         </div>
-
-        </div>
     </div>
-    </main>
+</main>
 </body>
 </html>
