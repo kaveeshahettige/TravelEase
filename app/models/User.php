@@ -440,7 +440,10 @@ public function updatePicture($data){
         $this->db->query('SELECT bookings.*, users.*
         FROM bookings
         INNER JOIN users ON bookings.serviceProvider_id = users.id
-        WHERE bookings.user_id = :id;
+        WHERE bookings.user_id = :id
+        AND bookings.bookingCondition != "cancelled"
+        AND bookings.enddate > CURDATE();
+        
         ');
         $this->db->bind(':id',$id);
     
@@ -548,8 +551,8 @@ public function updatePicture($data){
 
     // getRandomServiceProviders
     public function getRandomServiceProviders(){
-
-        $this->db->query('SELECT * FROM users WHERE type NOT IN (0, 1, 2) /*AND approval = 1*/ ORDER BY RAND() LIMIT 3');
+                                        //4,5 should be removed and approval should be added
+        $this->db->query('SELECT * FROM users WHERE type NOT IN (0,1,2,4,5) /*AND approval = 1*/ ORDER BY RAND() LIMIT 6');
     
     
         $data=$this->db->resultSet();
@@ -565,17 +568,18 @@ public function updatePicture($data){
     //checkCancellationEligibility($booking->id)
     public function checkCancellationEligibility($id){
         $this->db->query('SELECT * FROM bookings WHERE booking_id = :id');
-        $this->db->bind(':id', $id);
-        $booking = $this->db->single();
-        $today = date("Y-m-d");
-        $checkInDate = $booking->startDate;
-        $diff = strtotime($checkInDate) - strtotime($today);
-        $days = abs(round($diff / 86400));
-        if ($days >= 7) {
-            return "Unavailable";
-        } else {
-            return "Available";
-        }
+$this->db->bind(':id', $id);
+$booking = $this->db->single();
+$today = date("Y-m-d");
+$bookingDate = $booking->bookingDate; // Change to use the correct attribute name
+$diff = strtotime($today) - strtotime($bookingDate); // Change the order of substraction
+$days = round($diff / 86400); // Use round without abs to allow negative values
+if ($days > 7) { // Change the condition to check if $days is greater than 7
+    return "Unavailable";
+} else {
+    return "Available";
+}
+
     }
 
     //findMyBooking
@@ -625,9 +629,458 @@ public function updatePicture($data){
         }
     }
     
+//findRooms
+public function findRooms($id){
+    $this->db->query('SELECT * FROM hotel_rooms WHERE hotel_id = :id');
+    $this->db->bind(':id', $id);
+    $rooms = $this->db->resultSet();
+    if($this->db->rowcount()>0){
+        return $rooms;
+     }
+     else{
+        return false;
+    }
+}
+//find services by service id
+public function findBookingDetailByServiceid($type,$id){
+    
+    if($type=='3'){
+        $this->db->query('SELECT hotel_rooms.*, users.*
+        FROM hotel_rooms
+        JOIN hotel ON hotel_rooms.hotel_id = hotel.hotel_id
+        JOIN users ON hotel.user_id = users.id
+        WHERE hotel_rooms.room_id = :id;
+        ');
+        $this->db->bind(':id',$id);
+    
+        $data=$this->db->single();
+    
+        //check row
+        if($this->db->rowCount()>0){
+            return $data;
+        }else{
+            return null;
+        }
+    }
+    else if($type=='4'){
+        $this->db->query('SELECT vehicles.*, users.*
+        FROM vehicles
+        JOIN travelagency ON vehicles.agency_id = travelagency.agency_id
+        JOIN users ON travelagency.user_id = users.id
+        WHERE vehicles.vehicle_id = :id
+        ');
+
+        $this->db->bind(':id',$id);
+    
+        $data=$this->db->single();
+    
+        //check row
+        if($this->db->rowCount()>0){
+            return $data;
+        }else{
+            return null;
+        }
+    }
+    else if($type=='5'){
+        $this->db->query('SELECT * from packages where package_id=:id');
+        $this->db->bind(':id',$id);
+    
+        $data=$this->db->single();
+    
+        //check row
+        if($this->db->rowCount()>0){
+            return $data;
+        }else{
+            return null;
+        }
+    }
+}
+
+//addBooking($transactionData);
+public function addBooking($transactionData){
+    $currentDate = date('Y-m-d');  //this is a dummy
+//need more changes
+    if($transactionData['furtherBookingDetails']->type==3){
+    $this->db->query('INSERT INTO bookings (user_id, serviceProvider_id, startDate, endDate, room_id) VALUES (:user_id, :serviceProvider_id, :startDate, :endDate, :room_id)');
+    $this->db->bind(':user_id', $transactionData['user']->id);
+    $this->db->bind(':serviceProvider_id', $transactionData['furtherBookingDetails']->id);   
+    $this->db->bind(':startDate', $transactionData['checkinDate']);
+    $this->db->bind(':endDate', $transactionData['checkoutDate']);
+    $this->db->bind(':room_id', $transactionData['furtherBookingDetails']->room_id);
+
+    }elseif($transactionData['furtherBookingDetails']->type==4){
+        $this->db->query('INSERT INTO bookings (user_id, serviceProvider_id, startDate, endDate, vehicle_id) VALUES (:user_id, :serviceProvider_id, :startDate, :endDate, :vehicle_id)');
+        $this->db->bind(':user_id', $transactionData['user']->id);
+        $this->db->bind(':serviceProvider_id', $transactionData['furtherBookingDetails']->id);   
+        $this->db->bind(':startDate', $transactionData['checkinDate']);
+        $this->db->bind(':endDate', $transactionData['checkoutDate']);
+        $this->db->bind(':vehicle_id', $transactionData['furtherBookingDetails']->vehicle_id);
+
+    }elseif($transactionData->type==5){
+        $this->db->query('INSERT INTO bookings (user_id, serviceProvider_id, startDate, endDate, package_id) VALUES (:user_id, :serviceProvider_id, :startDate, :endDate, :package_id)');
+        $this->db->bind(':user_id', $transactionData['user']->id);
+        $this->db->bind(':serviceProvider_id', $transactionData['furtherBookingDetails']->id);   
+        $this->db->bind(':startDate', $currentDate);
+        $this->db->bind(':endDate', $currentDate);
+        $this->db->bind(':package_id', $transactionData['furtherBookingDetails']->package_id);
+    }
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+//addPaymentDetails($transactionData);
+public function addPaymentDetails($transactionData,$booking_id){
+        $this->db->query('INSERT INTO payments (booking_id, amount) VALUES (:booking_id, :amount)');
+        $this->db->bind(':booking_id',$booking_id);
+        $this->db->bind(':amount', $transactionData['furtherBookingDetails']->price);
+
+        if($this->db->execute()){
+            return true;
+        }else{
+            return false;
+        }
+       
+}
+//addPaymentDetailsVehicles
+public function addPaymentDetailsVehicles($transactionData,$booking_id,$price){
+    $this->db->query('INSERT INTO payments (booking_id, amount) VALUES (:booking_id, :amount)');
+    $this->db->bind(':booking_id',$booking_id);
+    $this->db->bind(':amount', $price);
+
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+   
+}
+
+//getLastBooking
+public function getLastBooking(){
+    $this->db->query('SELECT * FROM bookings ORDER BY booking_id DESC LIMIT 1');
+    $booking = $this->db->single();
+    if($this->db->rowcount()>0){
+        return $booking;
+     }
+     else{
+        return false;
+    }
+}
+    
+//findAvailableRooms($checkinDate, $checkoutDate)
+public function findAvailableRooms($checkinDate, $checkoutDate,$hotelid){
+    // sid should e added
+    $this->db->query('SELECT *
+    FROM hotel_rooms
+    WHERE room_id NOT IN (
+        SELECT room_id
+        FROM bookings
+        WHERE startDate <= :checkoutDate
+        AND endDate >= :checkinDate
+    )
+    AND hotel_id = :hotelid;
+    
+    
+');
+
+    $this->db->bind(':checkinDate', $checkinDate);
+    $this->db->bind(':checkoutDate', $checkoutDate);
+    $this->db->bind(':hotelid', $hotelid);
+    $rooms = $this->db->resultSet();
+    if($this->db->rowcount()>0){
+        return $rooms;
+     }
+     else{
+        return false;
+    }
+}
+
+
+//addUnavailabilty
+public function addUnavailabilty($transactionData){
+    $this->db->query('INSERT INTO room_availability (room_id, startDate,endDate) VALUES (:room_id, :startDate,:endDate)');
+    $this->db->bind(':room_id',$transactionData['furtherBookingDetails']->room_id);
+    $this->db->bind(':startDate', $transactionData['checkinDate']);
+    $this->db->bind(':endDate', $transactionData['checkoutDate']);
+
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+   
+}
 
 
 
 
+// Inside your User model class
+
+// public function storeCheckoutSessionId($checkoutSessionId, $userId)
+// {
+//     $this->db->query('UPDATE users SET checkout_session_id = :checkoutSessionId WHERE id = :userId');
+//     $this->db->bind(':checkoutSessionId', $checkoutSessionId);
+//     $this->db->bind(':userId', $userId);
+
+//     return $this->db->execute();
+// }
+
+// public function getCheckoutSessionId($userId)
+// {
+//     $this->db->query('SELECT checkout_session_id FROM users WHERE id = :userId');
+//     $this->db->bind(':userId', $userId);
+
+//     return $this->db->single()->checkout_session_id;
+// }
+
+// public function clearCheckoutSessionId($userId)
+// {
+//     $this->db->query('UPDATE users SET checkout_session_id = NULL WHERE id = :userId');
+//     $this->db->bind(':userId', $userId);
+
+//     return $this->db->execute();
+// }
+
+//cancelBooking($booking_id)
+public function cancelBooking($booking_id){
+    $this->db->query('UPDATE bookings SET bookingCondition = :condition WHERE booking_id = :booking_id');
+    $this->db->bind(':condition', 'cancelled');
+    $this->db->bind(':booking_id', $booking_id);
+
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+//findPlaces($location)
+public function findPlaces($location) {
+    $this->db->query('SELECT places.*
+    FROM places
+    INNER JOIN cities ON places.city_id = cities.id
+    WHERE cities.city LIKE :location');
+
+    
+
+    $this->db->bind(':location', '%' . $location . '%');
+
+    $result = $this->db->resultSet();
+
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+//findCitydetails($location)
+public function findCitydetails($location) {
+    $this->db->query('SELECT * FROM cities WHERE city LIKE :location');
+    $this->db->bind(':location', '%' . $location . '%');
+    $result = $this->db->single();
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+//findHotels($location);
+//have to rewrite
+public function findHotels($location) {
+
+    $this->db->query('SELECT * FROM hotel
+    JOIN users ON hotel.user_id = users.id
+    WHERE hotel.city LIKE :location;
+    ');
+    $this->db->bind(':location', '%' . $location . '%');
+    $result = $this->db->resultSet();
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
+    }
 
 }
+
+//getAllHotels
+public function getAllHotels() {
+    $this->db->query('SELECT * FROM hotel
+    JOIN users ON hotel.user_id = users.id
+    ');
+    $result = $this->db->resultSet();
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+//getRandomHotels
+public function getRandomHotels(){
+$this->db->query('SELECT h.*,u.* 
+FROM users u
+JOIN hotel h ON u.id = h.user_id
+WHERE u.type NOT IN (0, 1, 2, 4, 5) /*AND u.approval = 1*/
+ORDER BY RAND() 
+LIMIT 6;
+');   
+$data=$this->db->resultSet();
+
+//check row
+if($this->db->rowCount()>0){
+    return $data;
+}else{
+    return null;
+}
+}
+
+//getRandomAgencies
+public function getRandomAgencies(){
+    $this->db->query('SELECT t.*,u.* 
+FROM users u
+JOIN travelagency t ON u.id = t.user_id
+WHERE u.type NOT IN (0, 1, 2, 3, 5) /*AND u.approval = 1*/
+ORDER BY RAND() 
+LIMIT 6;
+');   
+$data=$this->db->resultSet();
+
+//check row
+if($this->db->rowCount()>0){
+    return $data;
+}else{
+    return null;
+}
+
+}
+
+//findNoOfVehicles($id)
+public function findNoOfVehicles($id){
+    $this->db->query('SELECT COUNT(*) AS count FROM vehicles WHERE agency_id = :id');
+    $this->db->bind(':id', $id);
+    $row = $this->db->single();
+     if($this->db->rowcount()>0){
+        return $row->count;
+     }
+     else{
+        return false;
+    }
+}
+
+
+//findVehicles($bookingDetails->agency_id)
+public function findVehicles($id){
+    $this->db->query('SELECT * FROM vehicles WHERE agency_id = :id');
+    $this->db->bind(':id', $id);
+    $result = $this->db->resultSet();
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+//findAvailableVehicles($pickupDate, $pickupTime, $dropoffDate, $dropoffTime, $agencyId);
+public function findAvailableVehicles($pickupDate, $dropoffDate, $agencyId) {
+    $this->db->query('SELECT * FROM vehicles
+    WHERE vehicle_id NOT IN (
+        SELECT vehicle_id
+        FROM vehicle_bookings
+        WHERE start_date <= :dropoffDate
+        AND end_date >= :pickupDate
+    )
+    AND agency_id = :agencyId;
+    ');
+    $this->db->bind(':pickupDate', $pickupDate);
+    $this->db->bind(':dropoffDate', $dropoffDate);
+    $this->db->bind(':agencyId', $agencyId);
+    $result = $this->db->resultSet();
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+//addVehicleBooking
+public function addVehicleBooking($transactionData,$driver) {
+    // Convert the pickup time to the correct format (if needed)
+    $pickupTime = date('H:i:s', strtotime($transactionData['pickupTime']));
+
+    // Prepare and execute the SQL query
+    $this->db->query('INSERT INTO vehicle_bookings(vehicle_id, start_date, end_date, start_time,withDriver) VALUES (:vehicle_id, :start_date, :end_date, :start_time, :withDriver)');
+    $this->db->bind(':vehicle_id', $transactionData['furtherBookingDetails']->vehicle_id);  
+    $this->db->bind(':start_date', $transactionData['checkinDate']);
+    $this->db->bind(':end_date', $transactionData['checkoutDate']);
+    $this->db->bind(':start_time', $pickupTime);
+    $this->db->bind(':withDriver', $driver);
+
+    // Execute the query
+    if($this->db->execute()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//fetchPriceByDriverTypeAndVehicleId($driverType, $vehicleId)
+public function fetchPriceByDriverTypeAndVehicleId($vehicleId) {
+    $this->db->query('SELECT * FROM vehicles WHERE vehicle_id = :vehicleId');
+    $this->db->bind(':vehicleId', $vehicleId);
+    $result = $this->db->single();
+    // $price = $result->withDriverPerDay;
+    if ($this->db->rowCount() > 0) {
+        return  $result;;
+    } else {
+        return false;
+    }
+}
+
+
+//addUnavailability for hotels
+public function addUnavailability($transactionData){
+    $this->db->query('INSERT INTO room_availability(room_id, startDate, endDate) VALUES (:room_id, :startDate, :endDate)');
+    $this->db->bind(':room_id', $transactionData['furtherBookingDetails']->room_id);
+    $this->db->bind(':startDate', $transactionData['checkinDate']);
+    $this->db->bind(':endDate', $transactionData['checkoutDate']);
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+//findVehicles($location, $checkinDate, $checkoutDate)
+public function findVehiclesByLocation($location, $checkinDate, $checkoutDate) {
+    $this->db->query('
+    SELECT * 
+    FROM vehicles
+    JOIN travelagency ON vehicles.agency_id = travelagency.agency_id
+    JOIN users ON travelagency.user_id = users.id
+    WHERE (travelagency.city LIKE :location OR travelagency.city = \'All Island\')
+    AND vehicle_id NOT IN (
+        SELECT vehicle_id
+        FROM vehicle_bookings
+        WHERE start_date <= :checkoutDate
+        AND end_date >= :checkinDate
+    );
+');
+
+    $this->db->bind(':location', '%' . $location . '%');
+    $this->db->bind(':checkinDate', $checkinDate);
+    $this->db->bind(':checkoutDate', $checkoutDate);
+    $result = $this->db->resultSet();
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+}
+

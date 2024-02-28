@@ -212,26 +212,34 @@ input[type="text"] {
     border-radius: 20px;
     cursor: pointer;
 }
+/* //////did new modifiactions to scroll from here//// */
 /*-------- main2 trips planned --------*/
-.main2trip{
-    align-items: center;
-    display: grid;
-    grid-template-columns:33% 33% 33%;
-    
-    
+.main2trip-container {
+    overflow-x: auto; /* Enable horizontal scrolling */
+    max-height: 100vh; /* Set a maximum height */
 }
 
-.main2trip .main2img1content{
+.main2trip {
+    align-items: center;
     display: grid;
-    grid-template-rows: 80% 20%;;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); /* Adjust the minmax values as needed */
+    gap: 20px; /* Adjust the gap between items as needed */
+}
+
+.main2trip .main2img1content {
+    display: grid;
+    grid-template-rows: 80% 20%;
     margin: 2%;
 }
-.main2trip .main2img1content:hover{
+
+.main2trip .main2img1content:hover {
     display: grid;
-    grid-template-rows: 80% 20%;;
+    grid-template-rows: 80% 20%;
     margin: 2%;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
 }
+/* ////////////// to here///////////////// */
+
 .main2trip img{
     width: 100%;
     height:auto;

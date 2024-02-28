@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/styletr.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
-    <script src="./scripttr.js"></script>
+    <script src="<?php echo URLROOT?>/js/loggedTraveler/script.js"></script>
     <style>
 
     </style>
@@ -26,7 +26,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport" id="selected">Transport Providers</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
             <div class="rightcontent">
-                <li><a href="<?php echo URLROOT?>travelerDashboard/index"><img src="<?php echo URLROOT?>/images/5.jpg" alt="Profile Picture"></a></li>
+            <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
                 <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
                 </div>
         </ul>
@@ -35,88 +35,55 @@
         <div class="main1img">
             <img src="<?php echo URLROOT?>/images/tr.jpg" alt="">
         </div>
+        <form action="<?php echo URLROOT ?>loggedTraveler/searchVehicles" method="POST">
         <div class="main1searchbar">
-            <div class="search">
-                <div class="search1"><input type="text" placeholder="Location: "></div>
-                <div class="search2">Pick-up Date:<input type="date" placeholder="Check in Date"></div>
-                <div class="search3">Drop-off Date:<input type="date" placeholder="Check out Date"></div>
-                <div class="search4"><button id="searchbtn" onclick="clickSearchTransport()">Search</button></div>
-            </div>
+        <div class="search">
+    <div class="search1"><input type="text" placeholder="Location: " name="location"></div>
+    <div class="search2">Pick-up Date:<input type="date" placeholder="Pick-up Date" name="pickupdate"></div>
+    <div class="search3">Time:<input type="time" placeholder="Pick-up Time" name="pickuptime"></div>
+    <div class="search4">Drop-off Date:<input type="date" placeholder="Drop-off Date" name="dropoffdate"></div>
+    <div class="search6"><button id="searchbtn">Search</button></div>
+    <!-- <div class="search6"><button id="searchbtn" onclick="clickSearchTransport()">Search</button></div> -->
+</div>
+
         </div>
+
+        </form>
+        
     </section>
+    <!-- <?php echo var_dump($data) ?> -->
+    <?php 
+$agency_chunks = array_chunk($data['agencies'], 3);
+?>
     <section class="main2">
         <div class="main2buttons">
             <button id="but1">All</button>
             <button class="but2_3" id="mostPopularButton">Most Popular</button>
             <button class="but2_3"  id="topRatedButton">Top-Rated</button>
         </div>
+
+        <?php if (!empty($data['agencies']) && is_array($data['agencies'])): ?>
         <div class="main2images" id="div1">
+        <?php foreach ($data['agencies'] as $agency): ?>
             <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/car 1.jpg" alt=""></div>
+                <div><img src="<?php echo URLROOT ?>images/<?php echo $agency->profile_picture; ?>" alt=""></div>
                 <div class="c1"> 
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Sri Lankan Adventures</p>
-                        <p>Hambantota</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $agency->fname; ?></p>
+                        <p><?php echo $agency->city; ?></p>
                     </div>
-                    <div> <button>Book Now</button></div>
+                    <div> <button onclick="Tripdetails(<?= $agency->user_id?>)">View</button></div>
                 </div>
                 
             </div>
-            <div class="main2img2content">
-                <div><img src="<?php echo URLROOT?>images/car 2.jpg" alt=""></div>
-                <div class="c2">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Tropical Trekking Trips</p>
-                        <p>Galle</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-            <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c3">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold"> Horizons Travel</p>
-                        <p>Colombo</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
-        <div class="main2images" id="div2">
-            <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/car 4.jpg" alt=""></div>
-                <div class="c1"> 
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Cinnamon Spice Adventures</p>
-                        <p>Mathara</p>
-                    </div>
-                    <div> <button>Book Now</button></div>
-                </div>
-                
-            </div>
-            <div class="main2img2content">
-                <div><img src="<?php echo URLROOT?>images/car 5.jpg" alt=""></div>
-                <div class="c2">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Oceanic Quest Journeys</p>
-                        <p>Yala</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-            <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c3">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Lush Landscapes
-</p>
-                        <p>Sigiriya</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-        </div>
+        <?php elseif (empty($data['agencies'])): ?>
+        <p>No transport agencies available.</p>
+    <?php else: ?>
+        <p>Error retrieving transport agency data.</p>
+    <?php endif; ?>
+        
     </section>
     <section class="main4">
         <div class="main4img">

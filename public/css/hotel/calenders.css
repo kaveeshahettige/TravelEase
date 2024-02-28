@@ -1,0 +1,128 @@
+/* Calendar Container */
+.calendar-container {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    max-width: 800px;
+    margin: 20px auto;
+    overflow: hidden;
+}
+
+/* Calendar Header */
+.calendar-header {
+    background-color: #FFCC5B;
+    color: #333;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.calendar-header button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+#current-month-year {
+    font-size: 20px;
+}
+
+/* Calendar Days */
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    padding: 20px;
+}
+
+/* Day Cell */
+.day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    cursor: pointer;
+    position: relative;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.day:hover {
+    background-color: #FFCC5B;
+    color: #fff;
+}
+
+.day-number {
+    font-size: 18px;
+}
+
+.selected-day {
+    background-color: #FFCC5B;
+    color: #fff;
+}
+
+.empty-cell {
+    background-color: #fff;
+}
+
+/* Date Info Container */
+.date-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#selected-date {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+#availability-content {
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+    padding: 20px;
+    background-color: #FFCC5B;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin-top: 20px;
+    overflow: hidden;
+    font-weight: bold;
+    color: #333;
+}
+
+#availability-info {
+    font-size: 18px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+/* Calendar Buttons */
+.calendar-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.calendar-buttons button {
+    background-color: #FFCC5B;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-buttons button:hover {
+    background-color: #FFAA00;
+}

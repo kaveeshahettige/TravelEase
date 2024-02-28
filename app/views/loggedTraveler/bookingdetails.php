@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/booking.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
-    <script src="./script.js"></script>
+    <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
     <style>
 
     </style>
@@ -31,7 +31,7 @@
                 </div>
         </ul>
     </div>
-    
+    <!-- <?php echo var_dump($data['booking'])?> -->
     <section class="bookingResultm1">
     
         <?php if ($data['type']==3): ?>
@@ -45,14 +45,14 @@
                 <img src="<?php echo URLROOT . '/images/' . $data['furtherBookingDetails']->image; ?>" alt="">
 
                 </div>
-                <div class="submimages">
+                <!-- <div class="submimages">
                     <div><img src="<?php echo URLROOT . '/images/' . $data['furtherBookingDetails']->image; ?>" alt=""></div>
                     <div><img src="<?php echo URLROOT . '/images/' . $data['furtherBookingDetails']->image; ?>" alt=""></div>
                 </div>
                 <div class="submimages">
                     <div><img src="<?php echo URLROOT . '/images/' . $data['furtherBookingDetails']->image; ?>" alt=""></div>
                     <div><img src="<?php echo URLROOT . '/images/' . $data['furtherBookingDetails']->image; ?>" alt=""></div>
-                </div>
+                </div> -->
 
             </div>
            
@@ -377,7 +377,7 @@
                 <div class="emergencydata">In Emergency: <?php echo $data['mainbookingDetails']->manager_phone_number." - ". $data['mainbookingDetails']->manager_name?></div>
                 <?php if ($data['cancellationEligibility'] == "Available"): ?>
     <div>
-        <button id="delbutton" onclick="deleteBooking()">Delete Trip</button>
+    <button id="delbutton" onclick="deleteBooking('<?php echo $data['booking']->booking_id; ?>')">Cancel Trip</button>
     </div>
 <?php endif; ?>
 

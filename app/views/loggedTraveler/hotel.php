@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/styleh.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
-    <script src="./scripth.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="<?php echo URLROOT?>/js/loggedTraveler/script.js"></script>
     <style>
 
     </style>
@@ -27,7 +28,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
             <div class="rightcontent">
-                <li><a href="<?php echo URLROOT?>travelerDashboard/index"><img src="<?php echo URLROOT?>/images/5.jpg" alt="Profile Picture"></a></li>
+            <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
                 <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
                 </div>
         </ul>
@@ -36,222 +37,64 @@
         <div class="main1img">
             <img src="<?php echo URLROOT?>/images/7.1.jpg" alt="">
         </div>
-        <div class="main1searchbar" >
-            <div class="search">
-               
-                <div class="search1"><input type="text" placeholder="Location: "></div>
-                <div class="search2">Check in Date:<input type="date" placeholder="Check in Date"></div>
-                <div class="search3">Check out Date:<input type="date" placeholder="Check out Date"></div>
-                <div class="search4"> <button id="searchbtn" onclick="clickSearchHotel()">Search</button></div>
-            </div>
+        <div class="main1searchbar">
+    <form action="<?php echo URLROOT ?>loggedTraveler/searchHotels" method="POST">
+        <div class="search">
+        <div class="search1">
+    <input type="text" name="location" id="locationInput" placeholder=" <?php echo isset($data['location']) ? $data['location'] : 'Location:'; ?>">
         </div>
+
+            <div class="search4"><button type="submit" id="searchbtn">Search</button></div>
+        </div>
+    </form>
+</div>
+
+<?php 
+// echo var_dump($data['hotels']);
+$hotel_chunks = array_chunk($data['hotels'], 3);
+?>
     </section>
     <section class="main2" id="S1">
-        <div class="main2buttons">
-            <button id="but1">All</button>
-            <button class="but2_3" id="mostPopularButton">Most Popular</button>
-            <button class="but2_3" id="topRatedButton">Top-Rated</button>
-        </div>
+    <div class="main2buttons">
+        <button id="but1">All</button>
+        <button class="but2_3" id="mostPopularButton">Most Popular</button>
+        <button class="but2_3" id="topRatedButton">Top-Rated</button>
+    </div>
+
+    <?php if (!empty($data['hotels']) && is_array($data['hotels'])): ?>
         <div class="main2images" id="div1">
-            <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/hotel 6.jpg" alt=""></div>
-                <div class="c1"> 
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Serene Shores Retreat</p>
-                        <p>Hambantota</p>
+            <?php foreach ($data['hotels'] as $hotel): ?>
+                <div class="main2img1content">
+                    <div><img src="<?php echo URLROOT ?>images/<?php echo $hotel->profile_picture; ?>" alt=""></div>
+                    <div class="c1">
+                        <div>
+                            <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $hotel->fname; ?></p>
+                            <p><?php echo $hotel->city ?></p>
+                        </div>
+                        <div><button onclick="Tripdetails(<?= $hotel->user_id?>)">View</button></div>
                     </div>
-                    <div> <button>Book Now</button></div>
                 </div>
-                
-            </div>
-            <div class="main2img2content" >
-                <div><img src="<?php echo URLROOT?>images/hotel 7.jpg" alt=""></div>
-                <div class="c2">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Island Breeze Inn</p>
-                        <p>Galle</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-            <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/hotel 8.jpg" alt=""></div>
-                <div class="c3">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Ceylon Grand Oasis</p>
-                        <p>Kandy</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
-        <div class="main2images" id="div2">
-            <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/hotel 9.jpg" alt=""></div>
-                <div class="c1"> 
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Sri Lankan Splendor Hotel</p>
-                        <p>Jaffna</p>
-                    </div>
-                    <div> <button>Book Now</button></div>
-                </div>
-                
-            </div>
-            <div class="main2img2content">
-                <div><img src="<?php echo URLROOT?>images/hotel 10.jpg" alt=""></div>
-                <div class="c2">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Golden Sands Beachfront</p>
-                        <p>Ampara</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-            <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/hotel 11.jpg" alt=""></div>
-                <div class="c3">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Jungle Oasis Lodge</p>
-                        <p>Galle</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-        </div>
-        <div class="main2images" id="div3" style="display:none">
-            <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c1"> 
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div> <button>Book Now</button></div>
-                </div>
-                
-            </div>
-            <div class="main2img2content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c2">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-            <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c3">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-        </div>
-        <div class="main2images" id="div4" style="display: none;">
-            <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c1"> 
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div> <button>Book Now</button></div>
-                </div>
-                
-            </div>
-            <div class="main2img2content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c2">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-            <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c3">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-        </div>
-        <div class="main2images" id="div5" style="display:none">
-            <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c1"> 
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div> <button>Book Now</button></div>
-                </div>
-                
-            </div>
-            <div class="main2img2content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c2">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-            <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c3">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-        </div>
-        <div class="main2images" id="div6" style="display: none;">
-            <div class="main2img1content">
-                <div><img src="./assets/4.jpg" alt=""></div>
-                <div class="c1"> 
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div> <button>Book Now</button></div>
-                </div>
-                
-            </div>
-            <div class="main2img2content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c2">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-            <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
-                <div class="c3">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-        </div>
-        
-    </section>
+    <?php elseif (empty($data['hotels'])): ?>
+        <p>No hotels available.</p>
+    <?php else: ?>
+        <p>Error retrieving hotel data.</p>
+    <?php endif; ?>
+</section>
+<script>
+        // JavaScript code to scroll to section with ID "S1"
+        window.onload = function() {
+            // Check if the current URL matches the desired URL
+            if (window.location.href === 'http://localhost/TravelEase/loggedTraveler/searchHotels') {
+                // Scroll to the section with ID "S1"
+                document.getElementById('locationInput').scrollIntoView();
+            }
+        };
+    </script>
+
+
+
     <section class="main4">
         <div class="main4img">
             <img src="<?php echo URLROOT?>images/5.jpg" alt="">
