@@ -92,6 +92,12 @@ function Tripdetails(id) {
   window.location.href = `tripfurtherdetail/${id}`;
 }
 
+//planNewTrip
+function planNewTrip() {
+  window.location.href = `plantrip`;
+
+}
+
 
   /////////////////////
 

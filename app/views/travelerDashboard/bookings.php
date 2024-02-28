@@ -9,11 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="<?php echo URLROOT?>js/travelerDashboard/script.js"></script>
 </head>
 <body>
     <nav class="left-menu">
         <div class="user-profile">
-        <img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo">
+        <img style="cursor: pointer;" src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo" onclick="gotoHome()"> 
             <span class="user-name"><?php echo $data['fname']."   ".$data['lname']?></span>
         </div>
         
@@ -94,9 +96,10 @@
                 <tr>
                     <th>No</th>
                     <th>Booking ID</th>
-                    <th>Service Provider</th>
+                    <th>Booking</th>
                     <th>Start Date</th>
                     <th>End Date</th>
+                    <th>Booking Date</th>
                    
                 </tr>
                 </thead>
@@ -114,6 +117,7 @@ if (!empty($data['mybooking']) && is_array($data['mybooking'])) {
         echo '<td>' .$booking->fname.' '.$booking->lname.'</td>';
         echo '<td>' . $booking->startDate . '</td>';
         echo '<td>' . $booking->endDate . '</td>';
+        echo '<td>' . date('Y-m-d', strtotime($booking->bookingDate)) . '</td>';
         echo '</tr>';
         $count++;
     }

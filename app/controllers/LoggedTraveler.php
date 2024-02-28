@@ -23,12 +23,14 @@ foreach ($bookings as $booking) {
   $mainbookingDetails = $booking ? $this->userModel->findBookingDetail($booking->type, $booking->serviceProvider_id) : null;
 
 
+
   $bookingDetailsArray[] = [
     'furtherBookingDetails' => $furtherbookingDetails,
     'mainbookingDetails' => $mainbookingDetails, 
     'bookingIDs' => $booking->booking_id,
     'serviceProviderID' => $booking->serviceProvider_id,
     'serviceProviderName' => $booking->fname,
+    'type'=>$booking->type,
 
 ];
 }
@@ -98,7 +100,13 @@ $data = [
       $this->view('loggedTraveler/transport',$data);
     }
     public function package(){
-      $data=[];
+      $id = $_SESSION['user_id'];
+    $user = $this->userModel->findUserDetail($id);
+    $packages=$this->userModel->getRandomPackages();
+      $data=[
+        'profile_picture' => $user ? $user->profile_picture : null,
+        'packages'=>$packages,  
+      ];
       $this->view('loggedTraveler/package',$data);
      }
     public function searchAll(){
@@ -146,6 +154,12 @@ $data = [
             
       //   ];
     // }
+    $vehicleprice=null;
+    $driver=null;
+    if($serviceProvider->type==4){
+      $vehicleprice=$this->userModel->findVehiclePrice($Bid);
+      $driver=$this->userModel->findDriverAvilability($Bid);
+    }
     
       $data=[
         'serviceProviderName' => $serviceProvider ? $serviceProvider->fname . ' ' . $serviceProvider->lname : null,
@@ -158,6 +172,8 @@ $data = [
         'furtherBookingDetails' => $furtherbookingDetails,
         'booking' => $booking,
         'cancellationEligibility' => $cancellationEligibility,
+        'vehicleprice'=>$vehicleprice?$vehicleprice:null,
+        'driver'=>$driver?$driver:null,
       ];
       $this->view('loggedTraveler/bookingdetails',$data);
     }
@@ -209,6 +225,11 @@ $data = [
         $rooms=null;
         $NoVehicles=$bookingDetails?$this->userModel->findNoOfVehicles($bookingDetails->agency_id) : null;
         $vehicles=$bookingDetails?$this->userModel->findVehicles($bookingDetails->agency_id) : null;
+      }else if($servicProvider->type==5){
+        $rooms=null;
+        $NoVehicles=0;
+        $vehicles=null;
+        //$packages=$bookingDetails?$this->userModel->findPackages($bookingDetails->) : null
       }
       
       $data=[
@@ -646,7 +667,10 @@ public function fetchPriceWithDriver()
     echo json_encode(['error' => 'Failed to fetch price']);
 }
 
-
+public function plantrip(){
+  $data=[];
+  $this->view('loggedTraveler/plantrip',$data);
+ }
 
 
 
