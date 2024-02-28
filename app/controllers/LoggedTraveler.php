@@ -12,17 +12,25 @@ class LoggedTraveler extends Controller{
     $user = $this->userModel->findUserDetail($id);
     $bookings = $this->userModel->findBookingAvailable($id);
 // $serviceProvider = $booking ? $this->userModel->findUserDetail($booking->serviceProvider_id) : null;
- $furtherBookingDetailsArray=[];
+// Ensure $bookings is an array
+if (!is_array($bookings)) {
+  $bookings = []; // Initialize $bookings as an empty array
+} 
+$bookingDetailsArray=[];
 foreach ($bookings as $booking) {
    //this is from room, vehicle, or package tables
    $furtherbookingDetails = $bookings ? $this->userModel->findBookingFurtherDetail($booking) : null;
   $mainbookingDetails = $booking ? $this->userModel->findBookingDetail($booking->type, $booking->serviceProvider_id) : null;
 
 
+
   $bookingDetailsArray[] = [
     'furtherBookingDetails' => $furtherbookingDetails,
     'mainbookingDetails' => $mainbookingDetails, 
     'bookingIDs' => $booking->booking_id,
+    'serviceProviderID' => $booking->serviceProvider_id,
+    'serviceProviderName' => $booking->fname,
+    'type'=>$booking->type,
 
 ];
 }
@@ -45,11 +53,10 @@ $data = [
     'fname' => $user ? $user->fname : null,
     'number' => $user ? $user->number : null,
     'profile_picture' => $user ? $user->profile_picture : null,
-    'serviceProviderID' => $booking ? $booking->serviceProvider_id : null,
-    'location' => $mainbookingDetails ? $mainbookingDetails->city : null,
-    'mainbookingDetails'=>$mainbookingDetails,
+    // 'serviceProviderID' => $booking ? $booking->serviceProvider_id : null,
+    
     // 'bookingDetails' => $bookingDetails,
-    'booking' => $booking,
+    
     // 'picture' => $bookingDetails ? $bookingDetails->picture : null,
     'randomServiceProvider1Location'=>$service1Details ? $service1Details->city : null,
     'randomServiceProvider1Id'=>$service1Details ? $service1Details->user_id : null,
@@ -69,15 +76,37 @@ $data = [
       $this->view('loggedTraveler/index',$data);
     }
     public function hotel(){
-      $data=[];
+      
+    // $location = $_POST['location'];
+    $id = $_SESSION['user_id'];
+    $user = $this->userModel->findUserDetail($id);
+    $hotels=$this->userModel->getRandomHotels();
+
+      $data=[
+        'profile_picture' => $user ? $user->profile_picture : null, // Add the profile picture to the data array
+        'hotels'=>$hotels,
+      ];
       $this->view('loggedTraveler/hotel',$data);
     }
     public function transport(){
-      $data=[];
+      $id = $_SESSION['user_id'];
+    $user = $this->userModel->findUserDetail($id);
+    $agencies=$this->userModel->getRandomAgencies();
+
+      $data=[
+        'profile_picture' => $user ? $user->profile_picture : null,
+        'agencies'=>$agencies,
+      ];
       $this->view('loggedTraveler/transport',$data);
     }
     public function package(){
-      $data=[];
+      $id = $_SESSION['user_id'];
+    $user = $this->userModel->findUserDetail($id);
+    $packages=$this->userModel->getRandomPackages();
+      $data=[
+        'profile_picture' => $user ? $user->profile_picture : null,
+        'packages'=>$packages,  
+      ];
       $this->view('loggedTraveler/package',$data);
      }
     public function searchAll(){
@@ -125,6 +154,12 @@ $data = [
             
       //   ];
     // }
+    $vehicleprice=null;
+    $driver=null;
+    if($serviceProvider->type==4){
+      $vehicleprice=$this->userModel->findVehiclePrice($Bid);
+      $driver=$this->userModel->findDriverAvilability($Bid);
+    }
     
       $data=[
         'serviceProviderName' => $serviceProvider ? $serviceProvider->fname . ' ' . $serviceProvider->lname : null,
@@ -137,29 +172,509 @@ $data = [
         'furtherBookingDetails' => $furtherbookingDetails,
         'booking' => $booking,
         'cancellationEligibility' => $cancellationEligibility,
+        'vehicleprice'=>$vehicleprice?$vehicleprice:null,
+        'driver'=>$driver?$driver:null,
       ];
       $this->view('loggedTraveler/bookingdetails',$data);
     }
-    public function bookingpayment(){
-      $data=[];
-      $this->view('loggedTraveler/bookingpayment',$data);
+    public function bookingpayment($type,$serviceid,$checkinDate,$checkoutDate,$pickupTime = null){
+
+      $id = $_SESSION['user_id'];
+        $user=$this->userModel->findUserDetail($id);
+        //from service provider table(hotel,travelagncy,pacjage tables)
+        $furtherBookingDetails=$this->userModel->findBookingDetailByServiceid($type,$serviceid);
+        if ($type == 4) {
+          // Calculate the number of days between check-in and check-out dates
+          $numDays = (strtotime($checkoutDate) - strtotime($checkinDate)) / (60 * 60 * 24)+1; 
+          // Calculate the total price for the booking
+          $price = $furtherBookingDetails->priceperday * $numDays;
+
+          if ($pickupTime !== null) {
+            $pickupTime = date("g:i A", strtotime($pickupTime));       
+        }
+      }
+      
+      $data = [
+        'furtherBookingDetails' => $furtherBookingDetails,
+        'user' => $user,
+        'checkinDate' => $checkinDate,
+        'checkoutDate' => $checkoutDate,
+        'type' => $type,
+        'pickupTime' => $pickupTime ? $pickupTime : ''
+    ];
+    
+    if ($type == 4) {
+        $data['price'] = $price ? $price : 0;
     }
+    
+        $this->view('loggedTraveler/bookingpayment',$data);
+      
+    }
+
     public function tripfurtherdetail($Sid){
+
       $servicProvider=$this->userModel->findUserDetail($Sid);
       $user=$this->userModel->findUserDetail($_SESSION['user_id']);
+      //main booking details from service provider table(hotel,travelagncy,package tables)
       $bookingDetails = $servicProvider ? $this->userModel->findBookingDetail($servicProvider->type, $Sid) : null;
+      if($servicProvider->type==3){
+        $rooms=$bookingDetails?$this->userModel->findRooms($bookingDetails->hotel_id) : null;
+        $vehicles=null;
+        $NoVehicles=0;
+      }else if($servicProvider->type==4){
+        $rooms=null;
+        $NoVehicles=$bookingDetails?$this->userModel->findNoOfVehicles($bookingDetails->agency_id) : null;
+        $vehicles=$bookingDetails?$this->userModel->findVehicles($bookingDetails->agency_id) : null;
+      }else if($servicProvider->type==5){
+        $rooms=null;
+        $NoVehicles=0;
+        $vehicles=null;
+        //$packages=$bookingDetails?$this->userModel->findPackages($bookingDetails->) : null
+      }
+      
       $data=[
+        'email' => $servicProvider ? $servicProvider->email : null,
         'serviceProviderName' => $servicProvider ? $servicProvider->fname . ' ' . $servicProvider->lname : null,
-        'location' => $bookingDetails ? $bookingDetails->location : null,
         'profile_picture' => $user ? $user->profile_picture : null,
         'serviceProvideNumber'=>$servicProvider ? $servicProvider->number : null,
-        'description' => $bookingDetails ? $bookingDetails->description : null,
+        'service_image'=>$servicProvider?$servicProvider->profile_picture:null,
+        'type' => $servicProvider ? $servicProvider->type : null,
+        'bookingDetails' => $bookingDetails,
+        'rooms'=>$rooms?$rooms:null,
+        'NoVehicles'=>$NoVehicles?$NoVehicles:0,
+        'vehicles'=>$vehicles?$vehicles:null,
       ];
       $this->view('loggedTraveler/tripfurtherdetail',$data);
     }
 
+    //dopayment for hotels
+    public function dopayment($type, $serviceid, $checkinDate, $checkoutDate) {
+      // Retrieve user details
+      $id = $_SESSION['user_id'];
+      $user = $this->userModel->findUserDetail($id);
+  
+      // Retrieve booking details
+      $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($type, $serviceid);
+  
+      // Construct transaction data
+      $transactionData = [
+          'user' => $user,
+          'furtherBookingDetails' => $furtherBookingDetails,
+          'checkinDate' => $checkinDate,
+          'checkoutDate' => $checkoutDate,
+          // Add any other relevant transaction details
+      ];
+  
+      // Create a Stripe Checkout session
+      require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+      $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
+      \Stripe\Stripe::setApiKey($stripe_secret_key);
+      $checkout_session = \Stripe\Checkout\Session::create([
+          'mode' => 'payment',
+          'success_url' => "http://localhost/TravelEase/loggedTraveler/paymentSuccessful/3",
+          'line_items' => [[
+              'quantity' => 1,
+              'price_data' => [
+                  'currency' => 'lkr',
+                  'unit_amount' => $furtherBookingDetails->price * 100,
+                  'product_data' => [
+                      'name' => $furtherBookingDetails->description,
+                  ],
+              ],
+          ]],
+          'cancel_url' => 'https://example.com/cancel',
+      ]);
+  
+      // Store the Stripe Checkout session ID in the transaction data
+      $transactionData['stripe_session_id'] = $checkout_session->id;
+  
+      // Store the transaction data in the session or database for retrieval in the paymentSuccessful() function
+      $_SESSION['transaction_data'] = $transactionData;
+  
+      // Redirect the user to the Stripe Checkout session URL
+      http_response_code(303);
+      header("Location: " . $checkout_session->url);
+  }
+  
+  public function paymentSuccessful($type) {
+      // Check if transaction data exists in the session
+      if (isset($_SESSION['transaction_data'])) {
+          // Retrieve transaction data from the session
+          $transactionData = $_SESSION['transaction_data'];
+  
+          // Add the transaction data to the database based on the type
+          if ($type == 3) {
+              $this->userModel->addBooking($transactionData);
+              $lastBooking = $this->userModel->getLastBooking();
+              $this->userModel->addPaymentDetails($transactionData, $lastBooking->booking_id);
+              $this->userModel->addUnavailability($transactionData);
+          } elseif ($type == 4) {
+              // Retrieve driver and price from transaction data
+              $driver = $transactionData['driver'];
+              $price = $transactionData['price'];
+  
+              // Add to booking table
+              $this->userModel->addBooking($transactionData);
+              $lastBooking = $this->userModel->getLastBooking();
+              $this->userModel->addVehicleBooking($transactionData, $driver); // Booking to vehicle booking table
+              $this->userModel->addPaymentDetailsVehicles($transactionData, $lastBooking->booking_id, $price);
+          }
+  
+          // Optionally, you can pass data to the view if needed
+          $data = [
+              // Add any data you want to pass to the view
+          ];
+  
+          // Load the view for the payment successful page
+          $this->view('loggedTraveler/paymentSuccessful', $data);
+      } else {
+          // Handle the case where transaction data is missing
+          // Redirect the user to an error page or perform any other action as needed
+      }
+  }
+  
+  
+
+// public function dopayment($type, $serviceid, $checkinDate, $checkoutDate)
+// {
+//     $id = $_SESSION['user_id'];
+//     $user = $this->userModel->findUserDetail($id);
+//     $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($type, $serviceid);
+
+//     require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+//     $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
+
+//     \Stripe\Stripe::setApiKey($stripe_secret_key);
+//     $checkout_session = \Stripe\Checkout\Session::create([
+//         'mode' => 'payment',
+//         'success_url' => "http://localhost/TravelEase/bookingpayment/{$type}/{$serviceid}",
+//         'line_items' => [[
+//             'quantity' => 1,
+//             'price_data' => [
+//                 'currency' => 'lkr',
+//                 'unit_amount' => $furtherBookingDetails->price * 100,
+//                 'product_data' => [
+//                     'name' => $furtherBookingDetails->description,
+//                 ],
+//             ],
+//         ]],
+//         'cancel_url' => 'https://example.com/cancel',
+//     ]);
+
+//     // Store the session ID in your database for later reference
+//     $this->userModel->storeCheckoutSessionId($checkout_session->id,$id);
+
+//     // Redirect the user to the Checkout session URL
+//     http_response_code(303);
+//     header("Location: " . $checkout_session->url);
+// }
+
+// // Add a separate endpoint to handle the successful payment
+// public function handleSuccessfulPayment($type, $serviceid)
+// {
+//     $id = $_SESSION['user_id'];
+//     $user = $this->userModel->findUserDetail($id);
+//     $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($type, $serviceid);
+
+//     require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+//     $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
+
+//     \Stripe\Stripe::setApiKey($stripe_secret_key);
+
+//     // Retrieve the session ID from your database
+//     $checkout_session_id = $this->userModel->getCheckoutSessionId($user->id);
+
+//     // Retrieve the Checkout session to verify the payment
+//     $checkout_session = \Stripe\Checkout\Session::retrieve($checkout_session_id);
+
+//     // Verify that the payment is successful
+//     if ($checkout_session->payment_intent && $checkout_session->payment_intent->status === 'succeeded') {
+//         // Update your database with the confirmed payment details
+//         $transactionData = [
+//             'user' => $user,
+//             'furtherBookingDetails' => $furtherBookingDetails,
+//             'transaction_id' => $checkout_session->payment_intent,
+//             'checkinDate' => $checkinDate,
+//             'checkoutDate' => $checkoutDate,
+//             // Add any other relevant transaction details
+//         ];
+
+//         // Update the booking table, payment details, and unavailability
+//         $this->userModel->addBooking($transactionData);
+//         $lastBooking = $this->userModel->getLastBooking();
+//         $this->userModel->addPaymentDetails($transactionData, $lastBooking->booking_id);
+//         $this->userModel->addUnavailabilty($transactionData);
+        
+//         // Clear the stored session ID after processing the successful payment
+//         $this->userModel->clearCheckoutSessionId($user->id);
+
+//         // Redirect or show a success message to the user
+//         header("Location: http://localhost/TravelEase/bookingpayment/{$type}/{$serviceid}");
+//     } else {
+//         // Handle the case where the payment was not successful
+//         header("Location: /error-page");
+//     }
+// }
+
+
+//fetchAvailableRooms
+public function fetchAvailableRooms()
+{
+  error_log("fetchAvailableRooms function is executed");
+  $checkinDate = $_GET['checkin'];
+  $checkoutDate = $_GET['checkout'];
+  $hotelId = $_GET['hotelid'];
+
+  // var_dump($checkinDate, $checkoutDate, $hotelId);
+    ////
+    // $servicProvider = $this->userModel->findUserDetail($Sid);
     
+    // $bookingDetails = $servicProvider ? $this->userModel->findBookingDetail(3, $Sid) : null;
+
+    $html = '';
+    $rooms = $this->userModel->findAvailableRooms($checkinDate, $checkoutDate, $hotelId);
+    if (!empty($rooms) && is_array($rooms)) {
+        foreach ($rooms as $room) {
+            $html .= '<tr class="t-row">';
+            $html .= '<td>' . $room->room_id . '</td>';
+            $html .= '<td>' . $room->roomType . '</td>';
+            $html .= '<td>' . $room->description . '</td>';
+            $html .= '<td>' . $room->price . '</td>';
+            $html .= '<td><button class="view-button" onclick="booking(3, ' . $room->room_id . ', \'' . $checkinDate . '\', \'' . $checkoutDate . '\')">View</button></td>';
+            $html .= '</tr>';
+        }
+    } else {
+        $html = '<tr><td colspan="6">No Rooms available right now</td></tr>';
+    }
+
+    echo $html;
+    exit;
+     
 }
 
+
+
+
+//removeBooking
+public function cancelBooking($bookingId)
+{
+    $cancel = $this->userModel->cancelBooking($bookingId);
+    ///////////////below should be developed///////////
+    //system user should be refunded
+    //service provider should be notified about the bookingg cancellation
+    //should remove the unavailabilty
+
+    if ($cancel) {
+        // Booking cancellation successful
+        echo '<script>alert("Trip has been cancelled. You will be refunded.");';
+        echo 'window.location.href = "/Travelease/loggedTraveler/index";</script>';
+    } else {
+        // Booking cancellation failed
+        echo '<script>alert("Failed to cancel the trip. Please try again.");';
+        echo 'window.location.href = "/Travelease/loggedTraveler/index";</script>';
+    }
+}
+
+//serachhotels
+public function searchHotels()
+{
+    // Check if the request method is POST
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Perform the search operation
+        $location = $_POST['location'];
+        $user = $this->userModel->findUserDetail($_SESSION['user_id']);
+        $hotels = $this->userModel->findHotels($location);
+
+        // Pass the search results to the view and load it
+        $data = [
+            'hotels' => $hotels,
+            'profile_picture' => $user ? $user->profile_picture : null,
+            'location' => $location,
+        ];
+        $this->view('loggedTraveler/hotel', $data);
+        exit; // Ensure that script execution stops after loading the view
+    } else {
+        // If the request method is not POST, redirect to a different URL
+        header('Location: /TravelEase/loggedTraveler'); // Redirect to the main page or another appropriate URL
+        exit; // Ensure that script execution stops after the redirect
+    }
+}
+
+
+//searchVehicles
+public function searchVehicles()
+{
+    // Check if the request method is POST
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Perform the search operation
+        $location = $_POST['location'];
+        $checkinDate = $_POST['pickupdate'];
+        $checkinTime = $_POST['pickuptime'];
+        $checkoutDate = $_POST['dropoffdate'];
+        $user = $this->userModel->findUserDetail($_SESSION['user_id']);
+        $vehicles = $this->userModel->findVehiclesByLocation($location, $checkinDate, $checkoutDate);
+
+        // Pass the search results to the view and load it
+        $data = [
+            'vehicles' => $vehicles,
+            'profile_picture' => $user ? $user->profile_picture : null,
+            'location' => $location,
+            'checkinDate' => $checkinDate,
+            'checkinTime' => $checkinTime,
+            'checkoutDate' => $checkoutDate,
+        ];
+        $this->view('loggedTraveler/searchVehicles', $data);
+        exit; // Ensure that script execution stops after loading the view
+    } else {
+        // If the request method is not POST, redirect to a different URL
+        header('Location: /TravelEase/loggedTraveler'); // Redirect to the main page or another appropriate URL
+        exit; // Ensure that script execution stops after the redirect
+    }
+}
+
+
+//fetchAvailableVehicles
+public function fetchAvailableVehicles()
+{
+    // Log that the function is executed
+    error_log("fetchAvailableVehicles function is executed");
+
+    // Retrieve parameters from the GET request
+    $pickupDate = $_GET['pickupDate'];
+    $pickupTime = $_GET['pickupTime'];
+    $dropoffDate = $_GET['dropoffDate'];
+    // $dropoffTime = $_GET['dropoffTime'];
+    $agencyId = $_GET['agencyId'];
+
+    // Retrieve available vehicles from the model
+    $vehicles = $this->userModel->findAvailableVehicles($pickupDate, $dropoffDate, $agencyId);
+
+
+
+    // Start building the HTML response
+    $html = '<tbody>';
+
+    // Initialize counter
+    $count = 1;
+
+    // Check if vehicles are found
+    if (!empty($vehicles) && is_array($vehicles)) {
+        // Iterate over each vehicle and construct HTML
+        foreach ($vehicles as $vehicle) {
+            $html .= '<tr class="t-row">';
+            $html .= '<td>' . $count . '</td>';
+            $html .= '<td>' . $vehicle->brand . '</td>';
+            $html .= '<td>' . $vehicle->model . '</td>';
+            $html .= '<td>' . $vehicle->plate_number . '</td>';
+            $html .= '<td>' . $vehicle->fuel_type . '</td>';
+            $html .= '<td>' . $vehicle->year . '</td>';
+            $html .= '<td>' . $vehicle->seating_capacity . '</td>';
+            // Construct the button to book the vehicle
+            //hidden input to take pickyptime
+$html .= '<input type="hidden" id="pickupTime" value="' . $pickupTime . '">';
+            
+            $html .= '<td><button class="view-button" onclick="booking(4, ' . $vehicle->vehicle_id . ', \'' . $pickupDate . '\', \'' . $dropoffDate . '\')">View</button></td>';
+            $html .= '</tr>';
+            $count++;
+        }
+    } else {
+        // If no vehicles are found, display a message
+        $html .= '<tr><td colspan="7">No Vehicles available right now</td></tr>';
+    }
+
+    // Complete the HTML response
+    $html .= '</tbody>';
+
+    // Output HTML and exit
+    echo $html;
+    exit; 
+}
+
+
+//dopaymentVehicles
+public function dopaymentVehicles($type, $serviceid, $checkinDate, $checkoutDate,$pickupTime,$price,$driver)
+{
+    $id = $_SESSION['user_id'];
+    $user = $this->userModel->findUserDetail($id);
+
+    //from vehicles
+    $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($type,$serviceid);
+
+    // After successful payment, update the database with transaction details
+    $transactionData = [
+      'user' => $user,
+      'furtherBookingDetails' => $furtherBookingDetails,
+      // 'transaction_id' => $checkout_session->payment_intent,
+      'checkinDate' => $checkinDate,
+      'checkoutDate' => $checkoutDate,
+      'pickupTime' => $pickupTime,
+      // Add any other relevant transaction details
+  ];
+
+
+    require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+    $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
+
+    \Stripe\Stripe::setApiKey($stripe_secret_key);
+    $checkout_session = \Stripe\Checkout\Session::create([
+        'mode' => 'payment',
+        'success_url' => "http://localhost/TravelEase/loggedTraveler/paymentSuccessful/4",
+        'line_items' => [[
+            'quantity' => 1,
+            'price_data' => [
+                'currency' => 'lkr',
+                'unit_amount' => $price * 100,
+                'product_data' => [
+                    'name' => $furtherBookingDetails->description,
+                ],
+            ],
+        ]],
+        'cancel_url' => 'https://example.com/cancel',
+    ]);
+
+    // Store the Stripe Checkout session ID in the transaction data
+    $transactionData['stripe_session_id'] = $checkout_session->id;
+
+    // Store the transaction data in the session or database for retrieval in the paymentSuccessful() function
+    $_SESSION['transaction_data'] = $transactionData;
+
+    // Redirect the user to the Stripe Checkout session URL
+    http_response_code(303);
+    header("Location: " . $checkout_session->url);
+
+
+}
+
+//fetchPriceWithDriver
+public function fetchPriceWithDriver()
+{
+    $driverType = isset($_GET['driverType']) ? $_GET['driverType'] : null;
+    $vehicleId = isset($_GET['vehicleId']) ? $_GET['vehicleId'] : null;
+    $days=isset($_GET['days']) ? $_GET['days'] : null;
+
+    if ($driverType !== null && $vehicleId !== null) {
+        $vehicleDetail = $this->userModel->fetchPriceByDriverTypeAndVehicleId($vehicleId);
+        $price=($vehicleDetail->withDriverPerDay+$vehicleDetail->priceperday)*$days;
+        if ($price !== false) {
+            header('Content-Type: application/json'); // Set response header
+            echo json_encode(['price' => $price]);
+            return;
+        }
+    }
+
+    http_response_code(500);
+    header('Content-Type: application/json'); // Set response header
+    echo json_encode(['error' => 'Failed to fetch price']);
+}
+
+public function plantrip(){
+  $data=[];
+  $this->view('loggedTraveler/plantrip',$data);
+ }
+
+
+
+
+}
 
 

@@ -1,173 +1,12 @@
-/* Global styles */
-body, ul {
-    margin: 0;
-    padding: 0;
-    font-family: "Poppins", sans-serif;
-}
-
-/* Left menu styles */
-.left-menu {
-    background-color: #FFDB8B;
-    color: #000;
-    width: 250px;
-    height: 100vh;
-    position: fixed;
-    overflow-y: auto;
-    font-family: "Poppins", sans;
-}
-
-/* User profile styles */
-.user-profile {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-}
-
-.user-profile img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 10px;
-}
-
-.user-name {
-    font-weight: bold;
-}
-
-.search-bar {
-    text-align: center;
-    margin-top: 30px;
-}
-
-
-.search-bar form {
-    display: inline-block;
-    background-color: #f1f1f1;
-    border-radius: 25px;
-    padding: 5px;
-    box-shadow: 0px 1px 3px rgba(127, 127, 127, 0.2);
-}
-
-.search-bar input[type="text"] {
-    width: 80%; /* Use 100% width for responsiveness */
-    width: 15vh;
-    padding: 5px;
-    border: none;
-    border-radius: 25px;
-    outline: none;
-    background-color: #f1f1f1;
-    font-family: "Poppins", sans;
-}
-
-.search-bar button[type="submit"] {
-    background-color: #F9B314;
-    color: #ffffff;
-    padding: 4px 8px;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    margin-left: 10px;
-}
-
-/* Main content styles */
-main {
-    padding: 20px;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    margin-top: 20px;
-}
-
-li {
-    margin-bottom: 10px;
-}
-
-/* Styles for custom links */
-.nav-button {
-    text-decoration: none;
-    color: #000;
-    padding: 10px 20px;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    position: relative;
-    transition: background-color 0.3s;
-}
-
-.nav-button.active {
-    background-color: #F1F1F1;
-    font-weight: bold;
-    color: #F9B314;
-}
-
-.nav-button.active::before, .nav-button:active::before, .nav-button:hover::before {
-    content: "";
-    border-left: 4px solid #F9B314;
-    height: 100%;
-    position: absolute;
-    left: 0;
-}
-
-.nav-button i {
-    margin-right: 10px; /* Add spacing between icon and text */
-}
-
-
-.logout {
-    position: absolute;
-    padding: 0;
-    margin: 0;
-    bottom: 20px;   
-    width: 100%;
-}
-
-
-/* Logo container styles */
-.logo-container {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    align-items: center;
-}
-
-
-.logo-container img {
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-    margin-top: 0%;
-}
-
-.logo-text {
-    margin-left: 10px;
-    font-weight: bold;
-    font-size: 18px;
-    color: #000;
-    font-family: "Caveat", cursive;
-}
-
-.dashboard-content {
-    display: flex;
-    padding-left: 275px;
-    margin-right: 50px;
-    padding-top: 25px;
-}
-
-.dashboard-subcontent {
+/* Settings Subcontent */
+.settings-subcontent {
     padding-left: 250px;
     margin-right: auto;
-    padding-top: 15px;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
 }
 
-
-
-/* Define styles for rectangles */
-/* Center the content within the rectangle */
+/* Rectangle Container Styles */
 .rectangle {
     background-color: #fff;
     border: 0.5px solid #e9e7e7;
@@ -178,12 +17,13 @@ li {
     border-left: 10px solid #FFEFCC;
 }
 
-/* Center align the hotel details within the basic info */
+/* Center Align Basic Info Content */
 .basic-info-content {
     display: flex;
     flex-direction: column;
 }
 
+/* Center Image Styles */
 .center-image {
     display: flex;
     justify-content: center;
@@ -197,23 +37,23 @@ li {
     object-fit: cover;
 }
 
+/* Hotel Details Styles */
 .hotel-details {
     text-align: left;
 }
 
-/* Style the hotel name */
 .hotel-details h3 {
     font-size: 24px;
     margin: 0;
     font-weight: bold;
-    text-align: center; 
+    text-align: center;
 }
 
 .hotel-details h5 {
     font-size: 20px;
-    margin-top:0 ;
+    margin-top: 0;
     color: #605D5D;
-    text-align: center; 
+    text-align: center;
 }
 
 .hotel-details h6 {
@@ -225,15 +65,16 @@ li {
 
 .hotel-details p {
     margin: 5px 0;
-    font-weight:600;
+    font-weight: 600;
 }
 
+/* Rectangle Heading Styles */
 .rectangle h2 {
     font-size: 24px;
     margin-bottom: 10px;
 }
 
-/* Style the buttons */
+/* Buttons Styles */
 .edit-button {
     background-color: #FFDB8B;
     color: black;
@@ -245,7 +86,7 @@ li {
     margin-left: 450px;
 }
 
-.delete-button{
+.delete-button {
     background-color: #ff0000;
     color: black;
     padding: 10px 20px;
@@ -253,101 +94,115 @@ li {
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
-    margin-left: 1070px;
+    margin-left: 450px;
 }
 
-/* Left and Right Content */
+/* Content Container Styles */
 .content-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
+/* Left Content Styles */
 .left-content {
     flex: 1;
 }
 
+/* Right Content Styles */
 .right-content {
     flex: 1;
 }
 
-/* Default styles for the slideshow images */
+/* Default styles for slideshow images */
 .slideshow-image {
-    max-width: 100%; /* Ensure images don't exceed their container */
-    height: auto; /* Maintain the aspect ratio of the images */
+    max-width: 100%;
+    height: auto;
     margin-bottom: 10px;
+}
+
+/* Center Image Styles with Cursor */
+.center-image {
+    cursor: pointer;
+}
+
+/* Edit Icon Styles */
+.edit-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #fff;
+    padding: 5px;
+    border-radius: 50%;
+    display: none;
+    cursor: pointer;
+}
+
+/* Display Edit Icon on Rectangle Hover */
+.rectangle:hover .edit-icon {
+    display: block;
+}
+
+/* Popup Styles */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
 }
 
 /* Media Query for Responsive Design */
 @media screen and (max-width: 768px) {
-    .left-menu {
-        width: 135%;
-        height: auto;
-        position: static;
-        overflow-y: hidden;
-    }
-
-    main {
-        margin-left: 0;
-    }
-
-    .logo-container {
-        position: static;
-        text-align: center;
-    }
-
-    .search-bar button[type="submit"] {
-        padding: 10px 20px;
-    }
-
-    .nav-button {
-        padding:auto; /* Adjust padding for smaller screens */
-    }
-
-    .edit-button{
-        margin-left: auto;
-    }
-
-    .delete-button{
-        margin-left: auto;
-    }
-    
-    .logout {
-        position: static;
-        text-align: center;
-        margin-top: 20px;
-        width: 100%; 
-    }
-
-    .dashboard-content{
-        position: static;
-        text-align: center;
-    }
-    .dashboard-content {
-        flex: auto;
+    .settings-subcontent {
         padding-left: 20px;
-        text-align: center;
-    }
-    
-    .dashboard-content h1 {
-        font-size: 24px;
-    }
-
-    .dashboard-subcontent {
-        padding-left: 10px;
-        text-align: center;
-    }
-
-    .left-content,
-    .right-content {
-        flex: 1;
     }
 
     .rectangle {
         margin: 10px;
+        padding: 10px;
     }
 
+    /* Adjust Button Margins for Responsiveness */
+    .edit-button,
+    .delete-button {
+        margin-left: auto;
+        margin-top: 10px;
+    }
+
+    /* Make Both Content Sections Full Width in Small Screens */
+    .left-content,
+    .right-content {
+        width: 100%;
+    }
+
+    /* Adjust Right Content Direction for Responsiveness */
     .right-content {
         flex-direction: column;
+    }
+
+    /* Center Content in Column for Small Screens */
+    .content-container {
+        flex-direction: column;
+        align-items: center;
     }
 }

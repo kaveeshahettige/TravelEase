@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/manager-packages.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
     <title>Business Manager Packages</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -11,34 +12,10 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-    <nav class="left-menu">
-        <div class="user-profile">
-            <img src="<?php echo URLROOT?>/images/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
-        </div>
-        
-        <div class="search-bar">
-            <form action="#" method="GET">
-                <input type="text" placeholder="Find a Setting">
-                <button type="submit">Search</button>
-            </form>
-        </div>
-        
-            
-        <ul>
-            <li><a href="<?php echo URLROOT; ?>businessmanager/index" class="nav-button "><i class='bx bxs-dashboard bx-sm'></i> Overview</a></li>
-            <li><a href="<?php echo URLROOT; ?>businessmanager/bookings"class="nav-button"><i class='bx bxs-book bx-sm'></i> Bookings</a></li>
-            <li><a href="<?php echo URLROOT; ?>businessmanager/packages" class="nav-button active"><i class='bx bxs-package bx-sm'></i></i> Packages</a></li>
-            <li><a href="<?php echo URLROOT; ?>businessmanager/reports" class="nav-button"><i class='bx bxs-report bx-sm'></i> Reports</a></li>
-            <li><a href="<?php echo URLROOT; ?>businessmanager/financialmanagement" class="nav-button"><i class='bx bx-line-chart bx-sm'></i> Financial Management</a></li>
-            <li><a href="<?php echo URLROOT; ?>businessmanager/settings" class="nav-button"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-        </ul> 
-            
-            <div class="logout">
-                <a href="<?php echo URLROOT; ?>users/logout" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
-            </div>       
-
-    </nav>
+<?php
+$activePage = 'businessmanager/packages'; // Set the active page dynamically based on your logic
+include 'navigation.php';
+?>
     <main>
         <div class="logo-container">
             <img src="<?php echo URLROOT?>/images/TravelEase.png" alt="TravelEase Logo">
@@ -90,53 +67,35 @@
             <h2>All Packages</h2>
                 <table class="booking-table">
                     <thead>
-                        <tr>
-                            <th>Package Name</th>
-                            <th>Package Owner</th>
-                            <th>Description</th>
-                            <th>Location</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
+                    <tr>
+                        <th>No</th>
+                        <th>Package Name</th>
+<!--                        <th>Package Owner</th>-->
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
                     </thead>
                     <tbody>
-                            
+                    <?php
+                    $packages = $data['packageData'];
+                    foreach ($packages as $key => $package): ?>
                         <tr>
-                            <td>Aqua Adventure</td>
-                            <td>Wikum Preethika</td>
-                            <td>Exploration of underwater life</td>
-                            <td>Galle</td>
-                            <td>25000 LKR</td>
-                            <td class="pending">Pending</td>
+                            <td><?php echo $key + 1; ?></td>
+                            <td><?php echo $package->name; ?></td>
+<!--                            <td>--><?php //echo $package->owner; ?><!--</td>-->
+                            <td><?php echo $package->description; ?></td>
+                            <td><?php echo $package->Location; ?></td>
+                            <td><?php echo $package->Price; ?> LKR</td>
                             <td>
-                                <button class="view-button">View</button>
+                                <button class="view-button" onclick="openPopup(<?php echo $package['id']; ?>)">View</button>
                             </td>
                         </tr>
-                        <tr>
-                            <td>Aqua Adventure</td>
-                            <td>Wikum Preethika</td>
-                            <td>Exploration of underwater life</td>
-                            <td>Galle</td>
-                            <td>25000 LKR</td>
-                            <td class="pending">Pending</td>
-                            <td>
-                                <button class="view-button">View</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Aqua Adventure</td>
-                            <td>Wikum Preethika</td>
-                            <td>Exploration of underwater life</td>
-                            <td>Galle</td>
-                            <td>25000 LKR</td>
-                            <td class="approved">Approved</td>
-                            <td>
-                                <button class="view-button">View</button>
-                            </td>
-                        </tr>   
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
+
             </div>
     
             <div class="more-content">

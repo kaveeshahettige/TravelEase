@@ -388,3 +388,30 @@ input[type="text"] {
 
 
 /*////////////////////////*/
+.main2 {
+    margin-top: 30px; /* Adjusted margin-top */
+    display: grid;
+    margin-left: 30px;
+    grid-template-rows: 5% 45% 45%;
+    height: auto; /* Changed to auto to adjust based on content */
+}
+
+.main4 {
+    display: grid;
+    grid-template-rows: 80% 20%;
+    /* margin-bottom: 0px; */ /* This line can be removed */
+    height: auto; /* Changed to auto to adjust based on content */
+}
+
+
+
+.main2images .main2img1content {
+    display: grid;
+    height: 80%;
+    max-width: 600px; /* Set maximum width */
+    max-height: 500px; /* Set maximum height */
+    grid-template-rows: 65% 10%;
+    margin: 2%;
+    margin-top: 0px;
+
+}

@@ -99,9 +99,9 @@ body{
 
 .main1searchbar .search{
     display: grid;
-    grid-template-columns: 25% 34% 34% 7%;
-    width: 80%;
-    margin-left: 10%;
+    grid-template-columns: 85% 15%;
+    width: 60%;
+    margin-left: 20%;
     margin-top: 40px;
     background-color: #FDFFFF;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
@@ -151,7 +151,7 @@ input[type="text"] {
     padding-left: 5px;
 }
 .search .search1{
-    border-right: 2px solid black;
+    /* border-right: 2px solid black; */
 }
 .search .search2{
     border-right: 2px solid black;
@@ -393,3 +393,18 @@ input[type="text"] {
 
 
 /*////////////////////////*/
+
+.main2 {
+    margin-top: 30px; /* Adjusted margin-top */
+    display: grid;
+    margin-left: 30px;
+    grid-template-rows: 5% 45% 45%;
+    height: auto; /* Changed to auto to adjust based on content */
+}
+
+.main4 {
+    display: grid;
+    grid-template-rows: 80% 20%;
+    /* margin-bottom: 0px; */ /* This line can be removed */
+    height: auto; /* Changed to auto to adjust based on content */
+}

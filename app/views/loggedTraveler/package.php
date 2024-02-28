@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/stylepa.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
-    <script src="./scriptpa.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="<?php echo URLROOT?>/js/loggedTraveler/script.js"></script>
     <style>
 
     </style>
@@ -26,7 +27,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/package" id="selected">Packages</a></li>
             <div class="rightcontent">
-                <li><a href="<?php echo URLROOT?>travelerDashboard/index"><img src="<?php echo URLROOT?>/images/5.jpg" alt="Profile Picture"></a></li>
+            <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
                 <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
                 </div>
         </ul>
@@ -44,79 +45,38 @@
             </div>
         </div>
     </section>
-    <section class="main2">
-        <div class="main2buttons">
-            <button id="but1">All</button>
-            <button class="but2_3" id="mostPopularButton">Most Popular</button>
-            <button class="but2_3" id="topRatedButton">Top-Rated</button>
-        </div>
+    
+    <section class="main2" id="S1">
+    <div class="main2buttons">
+        <button id="but1">All</button>
+        <button class="but2_3" id="mostPopularButton">Most Popular</button>
+        <button class="but2_3" id="topRatedButton">Top-Rated</button>
+    </div>
+
+    <?php if (!empty($data['packages']) && is_array($data['packages'])): ?>
         <div class="main2images" id="div1">
-            <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/package 1.jpg" alt=""></div>
-                <div class="c1"> 
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Island Exploration</p>
-                        <p>Galle</p>
-                    </div>
-                    <div> <button>Book Now</button></div>
-                </div>
-                
+    <?php foreach ($data['packages'] as $package): ?>
+        <div class="main2img1content">
+            <div class="image-container">
+                <img src="<?php echo URLROOT ?>images/<?php echo $package->image; ?>" alt="">
             </div>
-            <div class="main2img2content">
-                <div><img src="<?php echo URLROOT?>images/package 2.jpg" alt=""></div>
-                <div class="c2">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Ella Hill Country Escape</p>
-                        <p>Ella</p>
-                    </div>
-                    <div><button>Book Now</button></div>
+            <div class="c1">
+                <div>
+                    <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $package->fname; ?></p>
+                    <p><?php echo $package->city ?></p>
                 </div>
-            </div>
-            <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/jaffna.jpg" alt=""></div>
-                <div class="c3">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Jaffna Northern Odyssey</p>
-                        <p>Jaffna</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
+                <div><button onclick="Tripdetails(<?= $package->user_id?>)">View</button></div>
             </div>
         </div>
-        <div class="main2images" id="div2">
-            <div class="main2img1content">
-                <div><img src="<?php echo URLROOT?>images/package 3.jpg" alt=""></div>
-                <div class="c1"> 
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Trincomalee Tropical Paradise Expedition</p>
-                        <p>Trincomalee</p>
-                    </div>
-                    <div> <button>Book Now</button></div>
-                </div>
-                
-            </div>
-            <div class="main2img2content">
-                <div><img src="<?php echo URLROOT?>images/package 4.jpg" alt=""></div>
-                <div class="c2">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Galle Fort and Beyond Adventure </p>
-                        <p>Kandy</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-            <div class="main2img3content">
-                <div><img src="<?php echo URLROOT?>images/package 5.jpg" alt=""></div>
-                <div class="c3">
-                    <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Polonnaruwa and Minneriya Safari</p>
-                        <p>Hambantota</p>
-                    </div>
-                    <div><button>Book Now</button></div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <?php endforeach; ?>
+</div>
+
+    <?php elseif (empty($data['hotels'])): ?>
+        <p>No hotels available.</p>
+    <?php else: ?>
+        <p>Error retrieving hotel data.</p>
+    <?php endif; ?>
+</section>
     <section class="main4">
         <div class="main4img">
             <img src="<?php echo URLROOT?>images/5.jpg" alt="">
