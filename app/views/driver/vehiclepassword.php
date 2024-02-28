@@ -51,7 +51,7 @@
             <div id="base">
                 <h3 style="padding-left:20px;">Password</h3>
                 <div id="form">
-                    <form class="registration-form">
+                    <form action = "<?php echo URLROOT; ?>driver/vehiclepassword" method="POST" enctype="multipart/form-data" class="registration-form">
                         <div>
                             <div class="form-group">
                                 <label for="current-password">Current Password</label>

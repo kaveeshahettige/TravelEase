@@ -69,35 +69,37 @@
                         </div>
                      </div>
                 </div>
-                <form action="<?php echo URLROOT; ?>driver/process-form.php" method="POST" enctype="multipart/form-data">
-                <div class="rectangle">
-                <h2>Agency Detailes</h2>
+                <form action="<?php echo URLROOT; ?>driver/index" method="POST" enctype="multipart/form-data">
 
-                <lable for="agencyname">Agency Name:</lable>
-                <input type="text" id="agency_name" name="agency_name" required>
+    <div class="rectangle">
+        <h2>Agency Details</h2>
 
-                <label for="agencyAddress">Agency Address:</label>
-                <input type="text" id="address" name="address" required>
+        <label for="agency_name">Agency Name:</label>
+        <input type="text" id="agency_name" name="agency_name" required>
 
-                <label for="agencyRegNumber">Agency Registration Number:</label>
-                <input type="text" id="reg_number" name="reg_number" required>
-                
-                <label class="checkbox-label" for="terms">
-                <input type="checkbox" id="terms" name="terms" required>
-                I agree to the <a href="#">Terms and Conditions</a>
-</label>
-                    
-                
-                            
-                <button type="submit">Submit</button>          
-            
+        <label for="address">Agency Address:</label>
+        <input type="text" id="address" name="address" required>
 
-           
-           
-                    </div>
-</div>
-            </div>
-            </form>
+        <label for="reg_number">Agency Registration Number:</label>
+        <input type="text" id="reg_number" name="reg_number" required>
+
+        <label for="description">Agency Description:</label>
+        <textarea id="description" name="description" style="height: 30vh; max-height: 200px; min-height: 100px; width: 100%;" required></textarea>
+
+
+        <label for="location">Services Areas:</label>
+        <input type="text" id="location" name="location" required>
+        <label class="small-description">Please list all the islands or districts served by the agency.</label>
+
+        <label class="checkbox-label" for="terms">
+            <input type="checkbox" id="terms" name="terms" required>
+            I agree to the <a href="#">Terms and Conditions</a>
+        </label>
+
+        <button type="submit">Submit</button>          
+    </div>
+</form>
+
             <div class="rectangle">
                     <!-- Rectangle 3: Service Validation -->
                     <div class="basic-info-content">

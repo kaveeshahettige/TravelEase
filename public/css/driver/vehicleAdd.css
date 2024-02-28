@@ -1,10 +1,13 @@
+/* Existing styles */
+
 body, ul {
     margin: 0;
     padding: 0;
     font-family: "Poppins", sans-serif;
-}
-body{
-    background-color: #FBF9F3;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    margin: 0;
 }
 
 /* Left menu styles */
@@ -172,12 +175,12 @@ a.active, a:active {
     color: #F9B314; /* Change text color for active buttons */
 }
 
-.dashboard-content #base{
+.dashboard-content #base {
     background-color: #FFFFFF;
     padding-top: 0px;
 }
 
-.dashboard-content #base h3{
+.dashboard-content #base h3 {
     background-color: #F7F7F7;
     margin-top: 0px;
     padding: 5px 10px ;
@@ -189,43 +192,29 @@ a.active, a:active {
     margin: 20px;
 }
 
-.dashboard-content #base #form form div{
+.dashboard-content #base #form form div {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding-bottom: 15px;
 }
 
-.dashboard-content #base #form form div .form-group{
+.dashboard-content #base #form form div .form-group {
     display: flex;
     flex-direction: column;
 }
 
-.dashboard-content .form-group input{
+.dashboard-content .form-group input,
+.dashboard-content .form-group textarea,
+.dashboard-content .form-group select {
     width: 500px;
     height: 30px;
     border-radius: 10px;
     margin-top: 5px;
-    border:1px solid rgb(171, 169, 169);
+    border: 1px solid rgb(171, 169, 169);
 }
 
-.dashboard-content .form-group textarea{
-    width: 500px;
-    height: 100px;
-    border-radius: 10px;
-    margin-top: 5px;
-    border:1px solid rgb(171, 169, 169);
-}
-
-.dashboard-content .form-group select{
-    width: 500px;
-    height: 30px;
-    border-radius: 10px;
-    margin-top: 5px;
-    border:1px solid rgb(171, 169, 169);
-}
-
-.dashboard-content #base #form form button{
+.dashboard-content #base #form form button {
     width: 200px;
     height: 40px;
     background-color: #F9B314;
@@ -235,20 +224,12 @@ a.active, a:active {
     cursor: pointer;
 }
 
-.radio-buttons {
-    /* display: flex; */
-    align-items: center; /* Vertically align labels and buttons */
-    margin-bottom: 10px; /* Adjust spacing as needed */
-}
-
-.radio-buttons input[type="radio"] {
-    margin-right: 10px; /* Adjust spacing between buttons */
-}
-.dashboard-content .baseButtons{
+.dashboard-content .baseButtons {
     margin-left: auto;
+    padding-top: 20px;
 }
 
-.dashboard-content .baseButtons button{
+.dashboard-content .baseButtons button {
     padding: 10px 30px;
     border-radius: 10px;
     border: none;
@@ -257,37 +238,166 @@ a.active, a:active {
     cursor: pointer;
 }
 
-.dashboard-content .baseButtons #cancelBut{
-    border:2px solid #FFDB8B;
+.dashboard-content .baseButtons #cancelBut {
+    border: 2px solid #FFDB8B;
     margin-right: 20px;
 }
-.dashboard-content .baseButtons #saveBut{
+
+.dashboard-content .baseButtons #saveBut {
     background-color: #FFDB8B;
 }
-#file-input {
-    display: none;
+
+/* Simplified CSS for image upload part */
+/* 
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Style the label directly */
-#file-label {
-    cursor: pointer;
-    display: flex;
+.custom-file-upload {
+    position: relative;
+    overflow: hidden;
+    margin-top: 10px;
+    width: 150px;
+    height: 40px;
     background-color: #FFDB8B;
     color: #fff;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    display: inline-block;
-    margin-top: 10px;
+    border: none;
+    border-radius:.upload-container {
+ 5px;
+    font-size: 16px;
+    display: flex;
     justify-content: center;
-    
-    padding: 10px 30px;
-    font-weight: bold;
+    align-items: center;
     cursor: pointer;
-    
 }
 
-#file-label:hover {
+.custom-file-upload input[type="file"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+} */
+
+/* .upload-container {
+    margin-bottom: 20px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+}
+.custom-file-upload input[type="file"] {
+    display: none;
+}
+.custom-file-upload label {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    color: #333;
+}
+.custom-file-upload label:hover {
+    background-color: #f0f0f0;
+} */
+
+.error-message {
+    color: red;
+    display: none;
+    font-size: smaller;
+}
+
+input:invalid + .error-message {
+    display: block;
+}
+.container {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    grid-template-rows: repeat(3, 250px);
+    justify-content:center ;
+    align-items: center;
+    gap: 0.7rem;
+    /* flex-wrap: wrap; */
+}
+
+
+
+.uploadContainer {
+    width: 100%;
+    height: 100%;
+      display: flex;
+flex-direction: column !important;
+    /* margin: 20px; */;
+
+  }
+  
+  .imagePreview {
+
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ccc;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .uploadButton {
+    display: block;
+    padding: 10px 20px;
     background-color: #FFDB8B;
+    color: #000000;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    align-items: center;
+  }
+  
+  .imageUpload {
+    display: none;
+  }
+  /* Hide the default checkbox */
+input[type="checkbox"] {
+    /* display: none; */
+    /* position: absolute; */
+    /* opacity: 0; */
+    cursor: pointer;
+    margin: 10px;
+
 }
 
+/* Style the custom checkbox */
+.checkbox-custom {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #eee;
+    border-radius: 4px;
+    margin-right: 5px;
+    cursor: pointer;
+}
 
+/* Style the custom checkbox when checked */
+.checkbox-custom:checked + .checkbox-label::before {
+    content: '\2713';
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    line-height: 20px;
+}
+
+/* Style the checkbox label */
+.checkbox-label {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+/* Add some margin between checkboxes */
+.row label {
+    margin-right: 15px;
+}

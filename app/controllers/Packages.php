@@ -1,5 +1,6 @@
 <?php
 
+
 class Packages extends Controller
 {
 
@@ -80,7 +81,6 @@ class Packages extends Controller
         $packageData = [
             'package_id' => $package_id,
         ];
-
         $this->view('packages/addpackages', $packageData);
     }
 
@@ -262,4 +262,5 @@ class Packages extends Controller
 //            die('Something went wrong');
 //        }
 //    }
+>>>>>>> main
 }

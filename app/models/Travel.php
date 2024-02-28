@@ -5,11 +5,59 @@ class Travel{
     public function __construct(){
         $this->db=new Database;
     }
+    public function addAgency($agency_name, $reg_number, $address, $description, $location, $user_id) {
+        $this->db->query('INSERT INTO travelagency (agency_name, reg_number, address, description, location, user_id) VALUES (:agency_name, :reg_number, :address, :description, :location, :user_id)');
+        $this->db->bind(':agency_name', $agency_name);
+        $this->db->bind(':reg_number', $reg_number);
+        $this->db->bind(':address', $address);
+        $this->db->bind(':description', $description);
+        $this->db->bind(':location', $location);
+        $this->db->bind(':user_id', $user_id);
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+    public function changePassword($currentPassword, $newPassword, $userId) {
+        // Get the current password from the database
+        $this->db->query('SELECT password FROM users WHERE id = :id');
+        $this->db->bind(':id', $userId);
+        $row = $this->db->single();
+        
+        if ($row) {
+            $hashedPassword = $row->password;
+            
+            // Verify the current password
+            if (password_verify($currentPassword, $hashedPassword)) {
+                // Hash the new password
+                $newHashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+                
+                // Update the password in the database
+                $this->db->query('UPDATE users SET password = :password WHERE id = :id');
+                $this->db->bind(':password', $newHashedPassword);
+                $this->db->bind(':id', $userId);
+                
+                // Execute the query
+                if ($this->db->execute()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    
+    
     
     public function editvehicleDetail($data){
 
-        var_dump($data);
+        // var_dump($data);
 
         $this->db->query('SELECT * from vehicles where id=:id');
         $this->db->bind(':id',$data['vehicle_id']);
@@ -23,13 +71,46 @@ class Travel{
             return null;
         }
     }
-
-    public function vehiclereg($data, $imageFiles) {
+    // public function vehiclereg($data, $imageFiles, $agency_id) {
+    //     // Save vehicle details to the database
+    //     $this->db->query('INSERT INTO vehicles (agency_id, brand, model, plate_number, fuel_type, year, seating_capacity, ac_type, description, vehi_img1, vehi_img2, vehi_img3, vehi_img4, insurance, registration, revenue) VALUES (:agency_id, :brand, :model, :plate_number, :fuel_type, :year, :seating_capacity, :ac_type, :description, :vehi_img1, :vehi_img2, :vehi_img3, :vehi_img4, :insurance, :registration, :revenue)');
+        
+    //     // Bind parameters
+    //     $this->db->bind(':agency_id', $agency_id);
+    //     $this->db->bind(':brand', $data['brand']);
+    //     $this->db->bind(':model', $data['model']);
+    //     $this->db->bind(':plate_number', $data['plate_number']);
+    //     $this->db->bind(':fuel_type', $data['fuel_type']);
+    //     $this->db->bind(':year', $data['year']);
+    //     $this->db->bind(':seating_capacity', $data['seating_capacity']);
+    //     $this->db->bind(':ac_type', $data['ac_type']);
+    //     $this->db->bind(':description', $data['description']);
+    
+    //     // Process and save images
+    //     $imagePaths = $this->processAndSaveImages($agency_id, $imageFiles);
+    
+    //     // Bind image paths to database parameters
+    //     $this->db->bind(':vehi_img1', isset($imagePaths[0]) ? $imagePaths[0] : null);
+    //     $this->db->bind(':vehi_img2', isset($imagePaths[1]) ? $imagePaths[1] : null);
+    //     $this->db->bind(':vehi_img3', isset($imagePaths[2]) ? $imagePaths[2] : null);
+    //     $this->db->bind(':vehi_img4', isset($imagePaths[3]) ? $imagePaths[3] : null);
+    //     $this->db->bind(':insurance', isset($imagePaths[4]) ? $imagePaths[4] : null);
+    //     $this->db->bind(':registration', isset($imagePaths[5]) ? $imagePaths[5] : null);
+    //     $this->db->bind(':revenue', isset($imagePaths[6]) ? $imagePaths[6] : null);
+    
+    //     if ($this->db->execute()) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
+    public function vehiclereg($data, $imageFiles, $agency_id) {
         // Save vehicle details to the database
-        $this->db->query('INSERT INTO vehicles (user_id, brand, model, plate_number, fuel_type, year, seating_capacity, ac_type, description, vehi_img1, vehi_img2, vehi_img3, vehi_img4, insurance, registration, revenue) VALUES (:user_id, :brand, :model, :plate_number, :fuel_type, :year, :seating_capacity, :ac_type, :description, :vehi_img1, :vehi_img2, :vehi_img3, :vehi_img4, :insurance, :registration, :revenue)');
+        $this->db->query('INSERT INTO vehicles (agency_id, brand, model, plate_number, fuel_type, year, seating_capacity, ac_type,airbag,nav,tv,usb, description, vehi_img1, vehi_img2, vehi_img3, vehi_img4, insurance, registration, revenue) VALUES (:agency_id, :brand, :model, :plate_number, :fuel_type, :year, :seating_capacity, :ac_type,:airbag,:nav,:tv,:usb :description, :vehi_img1, :vehi_img2, :vehi_img3, :vehi_img4, :insurance, :registration, :revenue)');
         
         // Bind parameters
-        $this->db->bind(':user_id', $data['user_id']);
+        $this->db->bind(':agency_id', $agency_id);
+        $this->db->bind(':vehicle_type', $data['vehicle_type']);
         $this->db->bind(':brand', $data['brand']);
         $this->db->bind(':model', $data['model']);
         $this->db->bind(':plate_number', $data['plate_number']);
@@ -37,89 +118,89 @@ class Travel{
         $this->db->bind(':year', $data['year']);
         $this->db->bind(':seating_capacity', $data['seating_capacity']);
         $this->db->bind(':ac_type', $data['ac_type']);
+        $this->db->bind(':airbag', $data['airbag']);
+        $this->db->bind(':nav', $data['nav']);
+        $this->db->bind(':tv', $data['tv']);
+        $this->db->bind(':usb', $data['usb']);
         $this->db->bind(':description', $data['description']);
+        
     
         // Process and save images
-        $imagePaths = $this->processAndSaveImages($data['user_id'], $imageFiles);
+        $imagePaths = $this->processAndSaveImages($agency_id, $imageFiles);
     
         // Bind image paths to database parameters
-        $this->db->bind(':vehi_img1', $imagePaths[0]);
-        $this->db->bind(':vehi_img2', $imagePaths[1]);
-        $this->db->bind(':vehi_img3', $imagePaths[2]);
-        $this->db->bind(':vehi_img4', $imagePaths[3]);
-        $this->db->bind(':insurance', $imagePaths[4]);
-        $this->db->bind(':registration', $imagePaths[5]);
-        $this->db->bind(':revenue', $imagePaths[6]);
-    
-        if ($this->db->execute()) {
-            return true;
-        } else {
-            return false;
-        }
+        $this->db->bind(':vehi_img1', isset($imagePaths[0]) ? $imagePaths[0] : null);
+        $this->db->bind(':vehi_img2', isset($imagePaths[1]) ? $imagePaths[1] : null);
+        $this->db->bind(':vehi_img3', isset($imagePaths[2]) ? $imagePaths[2] : null);
+        $this->db->bind(':vehi_img4', isset($imagePaths[3]) ? $imagePaths[3] : null);
+        $this->db->bind(':insurance', isset($imagePaths[4]) ? $imagePaths[4] : null);
+        $this->db->bind(':registration', isset($imagePaths[5]) ? $imagePaths[5] : null);
     }
     
-    private function processAndSaveImages($userId, $imageFiles) {
+    
+    public function processAndSaveImages($userId, $imageFiles) {
+        $uploadDir = "public/images/driver/vehicles/";
+        
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+        
         $imagePaths = [];
         
-        $uploadDir = __DIR__ . "/../public/uploads/vehicle_doc/";
-        
-        $fileTypes = [
-            'vehi_img1' => 'Vehicle Photo 1',
-            'vehi_img2' => 'Vehicle Photo 2',
-            'vehi_img3' => 'Vehicle Photo 3',
-            'vehi_img4' => 'Vehicle Photo 4',
-            'insurance' => 'Insurance Photo',
-            'registration' => 'Registation card Photo',
-            'revenue' => 'Revenue License Photo',
-        ];
+        foreach ($imageFiles as $key => $imageFile) {
+            // Check if the file exists and is not empty
+            if ($imageFile['error'] === UPLOAD_ERR_OK && !empty($imageFile['tmp_name'])) {
+                // Generate unique filename to avoid overwriting
+                $fileName = uniqid() . '_' . basename($imageFile['name']);
+                $targetPath = $uploadDir . $fileName;
     
-        foreach ($fileTypes as $key => $label) {
-            if (isset($imageFiles[$key]) && $imageFiles[$key]['error'] === UPLOAD_ERR_OK) {
-                $originalName = $imageFiles[$key]['name'];
-                $extension = pathinfo($originalName, PATHINFO_EXTENSION);
-                $newFileName = "{$userId}_{$key}_{$originalName}";
-    
-                // Construct the destination path correctly
-                $destination = $uploadDir . $newFileName;
-    
-                // Add a numeric suffix if the file already exists
-                $j = 1;
-                while (file_exists($destination)) {
-                    $newFileName = "{$userId}_{$key}_{$j}_{$originalName}";
-                    $destination = $uploadDir . $newFileName;
-                    $j++;
-                }
-    
-                // Correctly concatenate paths and move the uploaded file
-                if (move_uploaded_file($imageFiles[$key]['tmp_name'], $destination)) {
-                    $imagePaths[] = $newFileName;
+                // Move the uploaded file to the destination directory
+                if (move_uploaded_file($imageFile['tmp_name'], $targetPath)) {
+                    // Add the path to the array
+                    $imagePaths[$key] = $targetPath;
                 } else {
-                    // Handle error if file move fails
-                    $imagePaths[] = ''; // Add an empty string as a placeholder for the failed image
+                    // Handle upload failure
+                    $imagePaths[$key] = null;
                 }
             } else {
-                // Add an empty string as a placeholder for missing images
-                $imagePaths[] = '';
+                // Handle empty or non-existent file
+                $imagePaths[$key] = null;
             }
         }
-    
+        
         return $imagePaths;
     }
     
+    
+    
 
-    public function vehicleDetails($user_id) {
-        $this->db->query('SELECT * FROM vehicles WHERE user_id=:user_id');
-        $this->db->bind(':user_id', $user_id);  
+    public function getAgencyId($user_id) {
+        $this->db->query('SELECT agency_id FROM travelagency WHERE user_id = :user_id');
+        $this->db->bind(':user_id', $user_id);
+        $row = $this->db->single();
+        
+        if ($row) {
+            return $row->agency_id;
+        } else {
+            return null;
+        }
+    }
+    
+    public function vehicleDetails($agency_id) {
+        $this->db->query('SELECT * FROM vehicles WHERE agency_id = :agency_id AND status = "1"');
+        $this->db->bind(':agency_id', $agency_id);
         $data = $this->db->resultSet();
         $data = json_decode(json_encode($data), true);
     
         // Check row
-        if($this->db->rowCount()>0){
+        if($this->db->rowCount() > 0){
             return $data;
         } else {
             return null;
         }
     }
+    
+    
     
 
     public function updatevehicle($data){
@@ -153,18 +234,19 @@ class Travel{
         }
         
     }
-    public function vehicledelete($id){
-        $this->db->query('DELETE FROM vehicles WHERE id = :id');
+    public function vehicleDelete($id){
+        $this->db->query('UPDATE vehicles SET status = 0 WHERE id = :id');
         // Bind values
         $this->db->bind(':id', $id);
-  
+      
         // Execute
         if($this->db->execute()){
             redirect('driver/vehicle');
         } else {
-          return false;
+            return false;
         }
-}
+    }
+    
 
       
  
@@ -184,12 +266,12 @@ class Travel{
         //     return $results;
         // }
 
-        // public function getPendingBookings($user_id){
-        //     $this->db->query('SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = "pending"');
-        //     $this->db->bind(':user_id', $user_id);
-        //     $results = $this->db->resultSet();
-        //     return $results;
-        // }
+        public function getPendingBookings($user_id){
+            $this->db->query('SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = "pending"');
+            $this->db->bind(':user_id', $user_id);
+            $results = $this->db->resultSet();
+            return $results;
+        }
         
         public function getReviews($user_id) {
             $this->db->query('SELECT * FROM vehicle_bookings WHERE agency_id = :user_id AND status = "completed" AND comments != ""');

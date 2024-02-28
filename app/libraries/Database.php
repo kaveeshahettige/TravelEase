@@ -60,7 +60,7 @@
   
       // Execute the prepared statement
       public function execute(){
-        return $this->stmt->execute();
+        return $this->stmt->execute();//This is line 63
       }
   
       // Get result set as array of objects
