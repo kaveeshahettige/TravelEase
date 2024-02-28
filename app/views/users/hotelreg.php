@@ -54,12 +54,7 @@
 
                 <label for="allocatedRooms">Number of Allocated Rooms:</label>
                 <input type="number" id="allocatedRooms" name="allocatedRooms" required>
-                
-                <!-- <label for="photos">Photos:</label>
-                <input type="file" id="photos" name="photos" accept="image/*" multiple required>  
-		
-		 <label for="license">License and Certifications:</label>
-                <input type="file" id="license" name="license" accept=".pdf,.doc,.docx" required> -->
+
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" <?php echo (!empty($data['password_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['password']; ?>">
                 <span class="invalid-feedback"><?php echo $data['password_err']; ?></span>

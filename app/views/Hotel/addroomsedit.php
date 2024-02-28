@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/hotel/settingssub.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
     <title>Hotel - Add Rooms</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -11,30 +12,13 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-<nav class="left-menu">
-    <div class="user-profile">
-        <img src="<?php echo URLROOT; ?>/images/hotel/wikum.jpg" alt="User Profile Photo">
-        <span class="user-name"><?=$_SESSION['user_fname']?></span>
-    </div>
-
-    <div class="search-bar">
-        <form action="#" method="GET">
-            <input type="text" placeholder="Find a Setting">
-            <button type="submit">Search</button>
-        </form>
-    </div>
-
-    <ul>
-        <li><a href="<?php echo URLROOT; ?>hotel/index" class="nav-button"><i class='bx bxs-info-circle bx-tada-hover bx-sm bx-fw'></i> Dashboard</a></li>
-        <li><a href="<?php echo URLROOT; ?>hotel/bookings" class="nav-button "><i class='bx bxs-book bx-sm bx-fw'></i> Bookings</a></li>
-        <li><a href="<?php echo URLROOT; ?>hotel/calender" class="nav-button "><i class='bx bxs-calendar bx-sm bx-fw'></i> Availability</a></li>
-        <li><a href="<?php echo URLROOT; ?>hotel/gallery" class="nav-button "><i class='bx bx-images bx-sm bx-fw'></i> Notifications</a></li>
-        <li><a href="<?php echo URLROOT; ?>hotel/revenue" class="nav-button "><i class='bx bxs-wallet bx-sm bx-fw'></i> Revenue</a></li>
-        <li><a href="<?php echo URLROOT; ?>hotel/reviews" class="nav-button "><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
-        <li><a href="<?php echo URLROOT; ?>hotel/settings" class="nav-button active "><i class='bx bxs-cog bx-sm bx-fw'></i> Settings</a></li>
-    </ul>
-
-</nav>
+<?php
+//$userData= $data['basicInfo']['userData'];
+//?>
+<?php
+$activePage = 'hotel/settings'; // Set the active page dynamically based on your logic
+include 'navigation.php';
+?>
 <main>
     <div class="logo-container">
         <img src="<?php echo URLROOT; ?>/images/hotel/TravelEase.png" alt="TravelEase Logo">
@@ -48,16 +32,14 @@
 
         <div id="base">
             <h3>Add Rooms</h3>
+            <!-- ... existing code ... -->
+
             <div id="form">
-                <form class="registration-form" action="" method="POST">
+                <form action="" method="POST" class="registration-form">
                     <div>
                         <div class="form-group">
                             <label for="roomType">Room Type</label>
-                            <select id="roomType" name="roomType">
-                                <option value="standard" >Standard</option>
-                                <option value="deluxe">Deluxe</option>
-                                <option value="suite">Suite</option>
-                            </select >
+                            <input type="text" id="roomType" name="roomType" placeholder="Enter Room Type" required>
                         </div>
 
                         <div class="form-group">
@@ -74,21 +56,77 @@
 
                         <div class="form-group">
                             <label for="price">Price (per night)</label>
-                            <input type="number" id="price" name="price" required >
+                            <input type="number" id="price" name="price" required>
                         </div>
 
-                        <div  class="form-group">
+                        <div class="form-group">
                             <label for="roomImages">Room Images:</label>
                             <input type="file" id="roomImages" name="roomImages[]" accept="image/*" multiple required>
+                        </div>
+                    </div>
+
+                    <!-- New attributes -->
+                    <div>
+                        <div class="form-group">
+                            <label for="acAvailability">AC Availability:</label>
+                            <select id="acAvailability" name="acAvailability">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tvAvailability">TV Availability:</label>
+                            <select id="tvAvailability" name="tvAvailability">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label for="wifiAvailability">WiFi Availability:</label>
+                            <select id="wifiAvailability" name="wifiAvailability">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="smokingPolicy">Smoking Policy:</label>
+                            <select id="smokingPolicy" name="smokingPolicy">
+                                <option value="smoking">Smoking</option>
+                                <option value="non-smoking">Non-Smoking</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label for="petPolicy">Pet Policy:</label>
+                            <select id="petPolicy" name="petPolicy">
+                                <option value="allowed">Allowed</option>
+                                <option value="not-allowed">Not Allowed</option>
+                            </select>
                         </div>
                     </div>
 
                     <div>
                         <div class="form-group">
                             <label for="roomDescription">Room Description:</label>
-                            <textarea id="roomDescription" name="roomDescription" rows="4" required ></textarea>
+                            <textarea id="roomDescription" name="roomDescription" rows="4" required></textarea>
                         </div>
                     </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label for="cancellationPolicy">Cancellation Policy:</label>
+                            <textarea id="cancellationPolicy" name="cancellationPolicy" rows="4" required></textarea>
+                        </div>
+                    </div>
+
 
 
                     <div>
@@ -97,6 +135,7 @@
                             <button id="saveBut" type="submit">Save</button>
                         </div>
                     </div>
+
                 </form>
             </div>
         </div>
