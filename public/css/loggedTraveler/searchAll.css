@@ -418,3 +418,18 @@ font-size: 40px;
     margin: 0 10px;
     transition: color 0.3s ease;
 }
+.pickupTimeField {
+    margin-bottom: 20px;
+}
+
+.pickupTimeField label {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.pickupTimeField input[type="time"] {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

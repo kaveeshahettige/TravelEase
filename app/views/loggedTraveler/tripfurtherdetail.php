@@ -139,7 +139,7 @@
                         <th>Room ID</th>
                         <th>Room type</th>
                         <th>About</th>
-                        <th>price</th>
+                        <th>price per day</th>
                         <th></th>
                     </tr>
                 </thead>

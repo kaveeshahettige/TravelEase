@@ -672,6 +672,66 @@ public function plantrip(){
   $this->view('loggedTraveler/plantrip',$data);
  }
 
+ //searchAllServices
+  public function searchAllServices()
+  {
+      // Check if the request method is POST
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+          // Perform the search operation
+          $location = $_POST['location'];
+          $checkinDate = $_POST['checkinDate'];
+          $checkoutDate = $_POST['checkoutDate'];
+          // $checkinDate = date('Y-m-d', strtotime($checkinDate));
+          // $checkoutDate = date('Y-m-d', strtotime($checkoutDate));
+
+          $city=$this->userModel->findCitydetails($location);
+      $places = $this->userModel->findPlaces($location);
+          $user = $this->userModel->findUserDetail($_SESSION['user_id']);
+          $hotels = $this->userModel->findAvailableHotelRooms($location, $checkinDate, $checkoutDate);
+          $vehicles = $this->userModel->findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate);
+          //$packages = $this->userModel->findPackages($location);
+
+
+          $vehiclePrices = []; // Array to hold prices for each vehicle
+if ($vehicles) {
+    foreach ($vehicles as $vehicle) {
+        // Assuming you have a method to find prices for a specific vehicle and dates
+        $prices = $this->userModel->findVehiclePrices($vehicle->vehicle_id);
+        //prices per data gap
+        $numDays = (strtotime($checkoutDate) - strtotime($checkinDate)) / (60 * 60 * 24)+1;
+        $totalPrice = $prices->priceperday * $numDays;
+        
+        // Add prices to the vehiclePrices array
+        $vehiclePrices[$vehicle->vehicle_id] = $totalPrice; // Assuming vehicle_id is unique
+    }
+} else {
+    echo "No vehicles available";
+}
+
+  
+          // Pass the search results to the view and load it
+          $data = [
+            'places' => $places,
+            'city' => $city, 
+              'hotelrooms' => $hotels,
+              // 'agencies' => $agencies,
+              // 'packages' => $packages,
+              'vehiclePrices'=>$vehiclePrices,
+              'vehicles' => $vehicles,
+              'profile_picture' => $user ? $user->profile_picture : null,
+              'location' => $location,
+              'checkinDate' => $checkinDate,
+              'checkoutDate' => $checkoutDate,
+          ];
+          $this->view('loggedTraveler/serachAllServices', $data);
+          exit; // Ensure that script execution stops after loading the view
+      } else {
+          // If the request method is not POST, redirect to a different URL
+          header('Location: /TravelEase/loggedTraveler'); // Redirect to the main page or another appropriate URL
+          exit; // Ensure that script execution stops after the redirect
+      }
+  }
+
 
 
 

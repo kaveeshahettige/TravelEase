@@ -1239,5 +1239,84 @@ public function getRandomPackages(){
 //         $this->db->bind(':id', $id);
 
 // }
+
+///
+
+//findAvailableHotelRooms($location, $checkinDate, $checkoutDate)
+public function findAvailableHotelRooms($location, $checkinDate, $checkoutDate) {
+    // Define the SQL query with placeholders
+    $query = '
+    SELECT * 
+    FROM hotel_rooms
+    JOIN hotel ON hotel_rooms.hotel_id = hotel.hotel_id
+    JOIN users ON hotel.user_id = users.id
+    WHERE (hotel.city LIKE :location)
+    AND room_id NOT IN (
+        SELECT room_id
+        FROM room_availability
+        WHERE startDate <= :checkoutDate
+        AND endDate >= :checkinDate
+    )';
+    
+    // Prepare and execute the SQL query
+    $this->db->query($query);
+    
+    // Bind parameters
+    $this->db->bind(':location', '%' . $location . '%'); // Use LIKE for partial match
+    $this->db->bind(':checkinDate', $checkinDate);
+    $this->db->bind(':checkoutDate', $checkoutDate);
+    
+    // Execute the query and fetch the results
+    $result = $this->db->resultSet();
+    
+    // Check if there are any results
+    if (!empty($result)) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+
+//findAvailableVehicles($location, $checkinDate, $checkoutDate)
+public function findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate) {
+    $this->db->query('
+    SELECT * 
+    FROM vehicles
+    JOIN travelagency ON vehicles.agency_id = travelagency.agency_id
+    JOIN users ON travelagency.user_id = users.id
+    WHERE (travelagency.city LIKE :location)
+    AND vehicle_id NOT IN (
+        SELECT vehicle_id
+        FROM vehicle_bookings
+        WHERE start_date <= :checkoutDate
+        AND end_date >= :checkinDate
+    );
+');
+    
+        $this->db->bind(':location', '%' . $location . '%');
+        $this->db->bind(':checkinDate', $checkinDate);
+        $this->db->bind(':checkoutDate', $checkoutDate);
+        $result = $this->db->resultSet();
+        if ($this->db->rowCount() > 0) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
+    //findVehiclePriceForDates($vehicle->vehicle_id)
+    public function findVehiclePrices($vehicleId) {
+        $this->db->query('SELECT * FROM vehicles WHERE vehicle_id = :vehicleId');
+        $this->db->bind(':vehicleId', $vehicleId);
+        $vehicle = $this->db->single();
+        if ($this->db->rowCount() > 0) {
+            return $vehicle;
+        } else {
+            return false;
+        }
+    }
+
+
 }
 

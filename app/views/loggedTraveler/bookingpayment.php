@@ -174,7 +174,14 @@ function handlePriceUpdate(updatedPrice) {
                             </div>
                         </form>
                         <?php else: ?>
-                        <p ><strong>Total :  <?php echo $data['furtherBookingDetails']->price ?></strong></p>
+                            <?php
+$date1 = strtotime($data['checkinDate']);
+$date2 = strtotime($data['checkoutDate']);
+$diffTime = abs($date2 - $date1) + (60 * 60 * 24);
+$daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
+$tot=$daysD* $data['furtherBookingDetails']->price;
+?>
+                        <p ><strong>Total :  <?php echo $tot?></strong></p>
                         <form action="<?php echo URLROOT ?>loggedTraveler/dopayment/<?php echo $data['furtherBookingDetails']->type . '/' . $data['furtherBookingDetails']->room_id.'/'.$data['checkinDate'].'/'.$data['checkoutDate'] ?>">
                             <div class="buttons">
                                 <button type="submit" class="payment-button">Make Payment</button>

@@ -40,13 +40,14 @@
             </div>
         </div>
         <div class="main1searchbar" >
-            <div class="search">
-               
-                <div class="search1"><input type="text" placeholder="Location: "></div>
-                <div class="search2">Check in Date:<input type="date" placeholder="Check in Date"></div>
-                <div class="search3">Check out Date:<input type="date" placeholder="Check out Date"></div>
-                <div class="search4"><button id="searchbtn" onclick="SearchAll()">  Search</button></div>
+        <form action="<?php echo URLROOT ?>loggedTraveler/searchAllServices" method="POST">
+            <div class="search">         
+                <div class="search1"><input type="text" placeholder="Location: " name="location"></div>
+                <div class="search2">Check in Date:<input type="date" placeholder="Check in Date" name="checkinDate"></div>
+                <div class="search3">Check out Date:<input type="date" placeholder="Check out Date" name="checkoutDate"></div>
+                <div class="search4"><button type="submit" id="searchbtn">  Search</button></div>
             </div>
+            </form>
         </div>
     </section>
     <section class="main2">
