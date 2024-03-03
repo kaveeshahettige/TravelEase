@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/landpage/plantrip.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
-    <script src="./script.js"></script>
+    <script src=""></script>
     <style>
 
     </style>
@@ -35,20 +35,19 @@
     <section class="plantipResultm1">
         <div class="form">
             <div><h1>Plan a New Trip</h1></div>
-            <form action="<?php echo URLROOT?>Landpage/searchPage">
+            <form action="<?php echo URLROOT?>loggedTraveler/plantrip" method="post"> 
                 <div class="wherediv">
                     <label for="where">Where to go?</label>
-                <input type="text" placeholder="eg. Galle/Kandy" required>
+                <input type="text" placeholder="eg. Galle/Kandy" name="location" required>
                 </div>
                 
                 
                 <div class="datediv">
-                    <label for="where">Dates(optional) :</label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <label for="where">Start Date</label>
-                <input type="date" placeholder="start">
-                <label for="where">End Date</label>
-                <input type="date" placeholder="end">
+                
+                <label for="where">Start Date</label>
+                <input type="date" placeholder="start" name="checkinDate">
+                <label for="where" id="enddate">End Date</label>
+                <input type="date" placeholder="end" name="checkoutDate">
                 </div>
                 <div class="buttondiv"><button id="startplan" type="submit">Start Planning</button></div>
             </form>

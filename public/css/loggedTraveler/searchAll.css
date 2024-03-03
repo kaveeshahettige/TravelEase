@@ -219,6 +219,7 @@ font-size: 40px;
     grid-template-rows: 65% 10%;
     margin: 2%;
     margin-top: 0px;
+    padding: 20px 0px ;
     
 }
 .main2images .main2img1content:hover{
@@ -433,3 +434,72 @@ font-size: 40px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+/* Styles for the modal */
+.modal {
+    display: none; /* Hide the modal by default */
+    position: fixed; /* Position the modal */
+    z-index: 1; /* Make sure it appears on top of other elements */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scrolling if needed */
+    background-color: rgba(0,0,0,0.5); /* Black background with transparency */
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* 80% width */
+}
+
+/* Close button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.continue-button {
+    position: fixed;
+    bottom: 20px; /* Adjust as needed to leave space from the bottom */
+    right: 20px; /* Adjust as needed to leave space from the right */
+    background-color: #007bff; /* Blue background color */
+    color: white; /* White text color */
+    border: none;
+    padding: 10px 20px; /* Adjust padding as needed */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.continue-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

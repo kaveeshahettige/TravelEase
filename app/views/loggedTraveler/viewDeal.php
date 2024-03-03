@@ -8,43 +8,22 @@
     <title>Payment</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
+    <style>
+        .total-value {
+    text-align: center;
+    font-size: 24px;
+    color: #333; /* Adjust the color as needed */
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+    </style>
 </head>
 <body style="margin-top:2%">
     <div class="payment-container" >
-        <!-- <div class="payment-box">
-            <h2>Payment Information</h2>
-            <div class="payment-gateway">
-                <h3>Card Payment</h3>
-                <form action="<?php echo URLROOT ?>loggedTraveler/bookingpayment/<?php echo $data['furtherBookingDetails']->type . '/' . $data['furtherBookingDetails']->room_id ?>" method="POST">
-                    <label for="cardholderName">Cardholder Name:</label>
-                    <input type="text" id="cardholderName" name="cardholderName" value="<?php echo $data['user']->fname." ".$data['user']->lname?>" required>
-
-                    <label for="cardNumber">Card Number:</label>
-                    <input type="text" id="cardNumber" name="cardNumber" placeholder="XXXX XXXX XXXX XXXX" >
-
-                    <div class="expiration-date">
-                        <label for="expirationMonth">Expiry Month:</label>
-                        <input type="number" id="expirationMonth" name="expirationMonth" placeholder="MM" min="1" max="12" >
-
-                        <label for="expirationYear">Expiry Year:</label>
-                        <input type="number" id="expirationYear" name="expirationYear" placeholder="YYYY" min="2023" >
-                    </div>
-
-                    <label for="cvv">CVV:</label>
-                    <input type="text" id="cvv" name="cvv" placeholder="XXX" >
-
-                    Payment and Cancel buttons added -->
-                    <!-- <div class="buttons">
-                        <button type="submit" class="payment-button">Make Payment</button>
-                        <button type="reset" class="cancel-button">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div> --> 
-        
     <div class="booking-box">
         <!-- <?php echo var_dump($data['furtherBookingDetails'])?> -->
-            <h2 style=" text-align: center;">Booking Information</h2>
+            <h2 style=" text-align: center;">Service Details</h2>
             <div class="hotel-details">
 
             <div class="image-container">
@@ -61,9 +40,6 @@
                         <p><strong>Room ID:</strong> <?php echo $data['furtherBookingDetails']->room_id ?></p>
                         <p><strong>Number of Beds:</strong> <?php echo $data['furtherBookingDetails']->numOfBeds ?> </p>
                         <p><strong>About:</strong> <?php echo $data['furtherBookingDetails']->description ?></p>
-                        <p><strong>AC availability:</strong> <?php echo $data['furtherBookingDetails']->acAvailability ?></p>
-                        <p><strong>TV availability:</strong> <?php echo $data['furtherBookingDetails']->tvAvailability ?></p>
-                        <p><strong>Wifi availability:</strong> <?php echo $data['furtherBookingDetails']->wifiAvailability ?></p>
                     </div>
                     <div class="reservation-details">
                         <p><strong>Cancellation policy:</strong> <?php echo $data['furtherBookingDetails']->cancellationPolicy ?> </p>
@@ -100,25 +76,14 @@ if ($data['furtherBookingDetails']->ac_type  == 1) {
                         <p><strong>Special Requests:</strong> No special requests</p>
                     </div> -->
                     <div class="guest-info">
-                        <p><strong>Your Full Name: </strong><?php echo $data['user']->fname." ".$data['user']->lname?></p>
-                        <p><strong> Email Address:</strong> <?php echo $data['user']->email?></p>
-                        <p><strong> Phone Number:</strong><?php echo $data['user']->number?></p>
                         
-                        <?php if ($data['type'] == 4): ?>
+                        <?php if ($data['type'] == 3): ?>
                             <div class="reservation-details">
-                        <p><strong> Pick-up Date : </strong>  <?php echo $data['checkinDate'] ?></p>
-                        <p><strong> Drop-off Date : </strong>  <?php echo $data['checkoutDate'] ?></p>
-                        <p><strong> Pickup time:</strong> <?php echo $data['pickupTime']?></p>
+                            <p><strong>AC availability:</strong> <?php echo $data['furtherBookingDetails']->acAvailability ?></p>
+                        <p><strong>TV availability:</strong> <?php echo $data['furtherBookingDetails']->tvAvailability ?></p>
+                        <p><strong>Wifi availability:</strong> <?php echo $data['furtherBookingDetails']->wifiAvailability ?></p>
 
                     </div>
-
-                         <?php elseif($data['type'] == 3):?>
-                            <div class="reservation-details">
-                        <p><strong>Check-in Date : </strong>  <?php echo $data['checkinDate'] ?></p>
-                        <p><strong>Check-out Date : </strong>  <?php echo $data['checkoutDate'] ?></p>
-                    </div>
-                            
-                          <?php else: ?>
                           
                           <?php endif;?>
                         <br>
@@ -139,7 +104,7 @@ $daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
     <input type="checkbox" id="withoutDriver" name="withoutDriver" value="0" checked onclick="handleCheckboxClick('withoutDriver', '<?php echo htmlspecialchars($data['furtherBookingDetails']->vehicle_id, ENT_QUOTES, 'UTF-8') ?>', <?php echo $daysD; ?>)">
     <label for="withoutDriver"></label>
 </div>
-<p id="totalPrice" data-initial-price="<?php echo htmlspecialchars($data['price'], ENT_QUOTES, 'UTF-8') ?>"><strong>Total : <?php echo htmlspecialchars($data['price'], ENT_QUOTES, 'UTF-8') ?></strong></p>
+<p class="total-value" id="totalPrice" data-initial-price="<?php echo htmlspecialchars($data['price'], ENT_QUOTES, 'UTF-8') ?>"><strong>Total : <?php echo htmlspecialchars($data['price'], ENT_QUOTES, 'UTF-8') ?>&nbsp LKR</strong></p>
 
 
 <script>
@@ -168,11 +133,11 @@ function handlePriceUpdate(updatedPrice) {
 </script>
 
      
-<form id="paymentForm" action="<?php echo URLROOT ?>loggedTraveler/dopaymentVehicles/<?php echo $data['type'] . '/' . $data['furtherBookingDetails']->vehicle_id.'/'.$data['checkinDate'].'/'.$data['checkoutDate'].'/'.$data['pickupTime'].'/'.$data['price']?>/0" method="POST">
+<!-- <form id="paymentForm" action="<?php echo URLROOT ?>loggedTraveler/dopaymentVehicles/<?php echo $data['type'] . '/' . $data['furtherBookingDetails']->vehicle_id.'/'.$data['checkinDate'].'/'.$data['checkoutDate'].'/'.$data['pickupTime'].'/'.$data['price']?>/0" method="POST">
                             <div class="buttons">
                                 <button type="submit" class="payment-button">Make Payment</button>
                             </div>
-                        </form>
+                        </form> -->
                         <?php else: ?>
                             <?php
 $date1 = strtotime($data['checkinDate']);
@@ -181,12 +146,9 @@ $diffTime = abs($date2 - $date1) + (60 * 60 * 24);
 $daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
 $tot=$daysD* $data['furtherBookingDetails']->price;
 ?>
-                        <p ><strong>Total :  <?php echo $tot?></strong></p>
-                        <form action="<?php echo URLROOT ?>loggedTraveler/dopayment/<?php echo $data['furtherBookingDetails']->type . '/' . $data['furtherBookingDetails']->room_id.'/'.$data['checkinDate'].'/'.$data['checkoutDate'] ?>">
-                            <div class="buttons">
-                                <button type="submit" class="payment-button">Make Payment</button>
-                            </div>
-                        </form>
+                        <p class="total-value"><strong>Total :  <?php echo $tot?>&nbsp LKR</strong></p>
+                        
+                        
                         <?php endif; ?>
 
                 

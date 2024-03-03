@@ -9,7 +9,7 @@
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
 </head>
-<body style="margin-top:2%">
+<body style="margin-top:10%">
     <div class="payment-container" >
         <!-- <div class="payment-box">
             <h2>Payment Information</h2>

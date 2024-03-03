@@ -277,7 +277,7 @@ function fetchUpdatedPrice(driverType, vehicleId, days) {
           if (xhr.status === 200) {
               const response = JSON.parse(xhr.responseText);
               const updatedPrice = response.price;
-              document.getElementById('totalPrice').innerHTML = '<strong>Total : ' + updatedPrice + '</strong>';
+              document.getElementById('totalPrice').innerHTML = '<strong>Total : ' + updatedPrice + '&nbsp;LKR</strong>';
               handlePriceUpdate(updatedPrice);
           } else {
               console.error('Error fetching price: ' + xhr.status);
@@ -293,7 +293,7 @@ function fetchUpdatedPrice(driverType, vehicleId, days) {
   } else {
       // Use the initial price value for withoutDriver
       const initialPrice = parseFloat(document.getElementById('totalPrice').dataset.initialPrice);
-      document.getElementById('totalPrice').innerHTML = '<strong>Total: ' + initialPrice + '</strong>';
+      document.getElementById('totalPrice').innerHTML = '<strong>Total : ' + initialPrice + '&nbsp;LKR</strong>';
       handlePriceUpdate(initialPrice);
       return;
   }
@@ -334,6 +334,245 @@ function bookingH(type, id, checkinDate, checkoutDate) {
   // Open the URL in a new window
   window.open(url, "_blank");
 }
+
+//openPopup
+
+// function openPopup(type, id, checkinDate, checkoutDate) {
+//   var pickupTime = document.getElementById('pickupTime').value;
+//   if (type == 4 && !pickupTime) {
+//       alert("Please enter pickup time.");
+//       return;
+//   }
+//   var popupContent = "Booking Type: " + type + "<br>ID: " + id + "<br>Check-in: " + checkinDate + "<br>Check-out: " + checkoutDate;
+//   if (type == 4) {
+//       popupContent += "<br>Pickup Time: " + pickupTime;
+//   }
+//   document.getElementById("popupContent").innerHTML = popupContent;
+//   document.getElementById("myModal").style.display = "block";
+// }
+
+// // Function to close the modal
+// function closeModal() {
+//   document.getElementById("myModal").style.display = "none";
+// }
+
+
+///
+function bookingHas(type, id, checkinDate, checkoutDate) {
+  console.log("Booking Type:", type, "ID:", id, "Check-in:", checkinDate, "Check-out:", checkoutDate);
+  var pickupTime = ''; // Initialize pickupTime variable
+
+  if (type == 4) {
+      pickupTime = document.getElementById('pickupTime').value; // Get pickupTime value only when type is 4
+  }
+
+  // Construct the URL to include the pickupTime conditionally
+  var url = "http://localhost/TravelEase/LoggedTraveler/viewDeal/" + type + "/" + id + "/" + checkinDate + "/" + checkoutDate;
+  if (type == 4) {
+      url += "/" + pickupTime; // Append pickupTime to the URL only when type is 4
+  }
+
+  // Open the URL in a pop-up modal
+  var modal = document.createElement('div');
+  modal.classList.add('modal');
+  modal.innerHTML = `
+      <div class="modal-content">
+          <span class="close" onclick="closeModal()">&times;</span>
+          <iframe src="${url}" frameborder="0"></iframe>
+      </div>
+  `;
+  document.body.appendChild(modal);
+
+  // Close the modal when the user clicks on the close button
+  function closeModal() {
+      document.body.removeChild(modal);
+  }
+}
+
+function closeModal() {
+  var modal = document.querySelector('.modal');
+  if (modal) {
+      modal.remove();
+  }
+}
+
+// Add event listeners for the close button
+document.addEventListener('click', function(event) {
+  if (event.target.classList.contains('close')) {
+      closeModal();
+  }
+});
+
+function addToCart(type, id, button) {
+  // Ensure that the button is defined
+  if (button) {
+      // Get the computed style of the button
+      var computedStyle = window.getComputedStyle(button);
+      // Get the background color from the computed style
+      var backgroundColor = computedStyle.backgroundColor;
+
+      // Check if the background color is green
+      if (backgroundColor === 'rgb(69, 160, 73)') { // Green color
+          // Change background color to red
+          button.style.backgroundColor = '#FF0000';
+          // Change the button text to 'Remove'
+          button.innerHTML = '&#x2212;&nbsp;Remove';
+
+          // Check if the type is related to vehicles
+          if (type === 4) {
+              // Retrieve the pickup time entered by the user
+              var pickupTime = document.getElementById('pickupTime').value;
+              // Check if pickup time is provided and not empty
+              if (pickupTime.trim() !== '') {
+                  // Proceed with adding the item to the cart
+                  addToCartBackend(type, id, true);
+                  // Optionally, you can display a confirmation message here
+                  // alert("Vehicle added to cart successfully!");
+              } else {
+                  // If pickup time is not provided, notify the user
+                  alert("Please enter a pickup time before adding the vehicle to the cart.");
+                  // Reset the button state to Cart
+                  button.style.backgroundColor = '#45a049';
+                  button.innerHTML = '&#x271A;&nbsp;Cart';
+                  // Return without adding the item to the cart
+                  return;
+              }
+          } else {
+              // For items other than vehicles, proceed with adding to cart without checking pickup time
+              addToCartBackend(type, id, true);
+          }
+
+      } else {
+          // Change background color to green
+          button.style.backgroundColor = '#45a049';
+          // Change the button text to 'Cart'
+          button.innerHTML = '&#x271A;&nbsp;Cart';
+          addToCartBackend(type, id, false);
+      }
+      // Implement the logic to add/remove the item to/from the cart here
+  }
+}
+
+function addToCartBackend(type, id, add) {
+  // Simulated cart storage
+  var cart = JSON.parse(localStorage.getItem('cart')) || {};
+
+  if (add) {
+      // Add item to cart
+      if (!cart[type]) {
+          cart[type] = [];
+      }
+      cart[type].push(id);
+      console.log('Adding item to cart:', type, id);
+  } else {
+      // Remove item from cart
+      if (cart[type]) {
+          var index = cart[type].indexOf(id);
+          if (index !== -1) {
+              cart[type].splice(index, 1);
+              console.log('Removing item from cart:', type, id);
+          }
+      }
+  }
+
+  // Update localStorage with the modified cart
+  localStorage.setItem('cart', JSON.stringify(cart));
+
+  // // Toggle checkout button visibility
+  // toggleCheckoutButton();
+}
+
+
+// function checkCart() {
+//   var cart = JSON.parse(localStorage.getItem('cart')) || {}; // Return empty object if cart is not available
+//   return Object.keys(cart).length > 0; // Check if there are any keys in the cart object
+// }
+
+
+
+// function toggleCheckoutButton() {
+//   var checkoutSection = document.getElementById('checkoutSection');
+//   if (checkCart()) {
+//       console.log("Items are in the cart. Showing checkout button.");
+//       checkoutSection.style.display = 'block';
+//   } else {
+//       console.log("No items in the cart. Hiding checkout button.");
+//       checkoutSection.style.display = 'none';
+//   }
+// }
+// function printCart() {
+//   var cart = JSON.parse(localStorage.getItem('cart')) || {}; // Parse the cart or initialize an empty object
+
+//   // Iterate over the keys of the cart object
+//   for (var key in cart) {
+//     if (cart.hasOwnProperty(key)) {
+//       console.log("Items in cart for type " + key + ":");
+//       // Iterate over the array of items for each key
+//       for (var i = 0; i < cart[key].length; i++) {
+//         console.log(cart[key][i]);
+//       }
+//     }
+//   }
+
+
+
+//continueToCheckout()
+//checkthis function cgeckindate and checkoutdate are wrongly printed in here
+function continueToCheckout(checkinDate,checkoutDate) {
+  // Retrieve cart data from localStorage
+  var cartData = JSON.parse(localStorage.getItem('cart'));
+  
+
+  //ptint cart data in console
+  // Check if cartData is not null
+  console.log('checkinDate:', checkinDate);
+  if (cartData) {
+      // Iterate over each type in the cart
+      Object.keys(cartData).forEach(function(type) {
+          // Print type of item
+          console.log('Type:', type);
+          
+          // Check if cartData[type] is an array
+          if (Array.isArray(cartData[type])) {
+              // Print each item ID in the type
+              cartData[type].forEach(function(id) {
+                  console.log('ID:', id);
+                  // You can retrieve additional details of the item from your data source and print them here
+              });
+          } else {
+              console.log('Invalid data format for type', type);
+          }
+      });
+  } else {
+      console.log('Cart is empty.');
+  }
+  /////////////////////////////
+  /////////
+  var pickupTime = document.getElementById('pickupTime').value;
+
+    // Check if the pickup time has a value
+    if (pickupTime) {
+        // Append the pickup time to the URL parameters
+        var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
+        var queryParams = `cart=${encodedCartData}&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}&pickupTime=${pickupTime}`;
+    } else {
+        // If pickup time is not provided, exclude it from the URL parameters
+        var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
+        var queryParams = `cart=${encodedCartData}&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}`;
+    }
+
+    // Redirect to the checkout page
+    // window.location.href = `bookingcart?${queryParams}`;
+
+    // Clear the cart after checkout
+    localStorage.removeItem('cart');
+}
+
+
+
+
+
+
 
 
 
