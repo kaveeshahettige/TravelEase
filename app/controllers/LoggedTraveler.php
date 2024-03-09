@@ -823,17 +823,73 @@ if ($vehicles) {
 
   //bookingcart
   public function bookingcart($bookingcart, $checkinDate, $checkoutDate, $pickupTime=null) {
-    // Retrieve data based on the provided parameters and perform any necessary actions
-    // For example:
-    $data['checkinDate'] = $checkinDate;
-    $data['checkoutDate'] = $checkoutDate;
-    $data['pickupTime'] = $pickupTime;
+    // Decode the JSON string into an array
+    $bookingcartArray = json_decode($bookingcart, true);
+    
+    // Check if decoding was successful
+    if ($bookingcartArray === null) {
+        // Handle JSON decoding error
+        echo "Error: Unable to decode bookingcart JSON.";
+        return;
+    }
+    
+    // Result array to store processed data
+    $resultArray = [];
+    
+    // Fetch user details
+    $userId = $_SESSION['user_id'];
+    $user = $this->userModel->findUserDetail($userId);
+    
+    // Loop through each cart element
+    foreach ($bookingcartArray as $type => $services) {
+        foreach ($services as $serviceId) {
+            // Fetch booking details for each service
+            $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($type, $serviceId);
+            
+            // Initialize variables
+            $numDays = 0;
+            $price = 0;
+           // $pickupTime = null; // Initialize pickupTime
+            
+            // Calculate values for type 4 bookings
+            if ($type == 4 && $furtherBookingDetails !== false) {
+                // Calculate the number of days between check-in and check-out dates
+                $numDays = (strtotime($checkoutDate) - strtotime($checkinDate)) / (60 * 60 * 24) + 1; 
+                // Calculate the total price for the booking
+                $price = $furtherBookingDetails->priceperday * $numDays;
 
+                // Check if pickupTime exists in booking details
+                if (property_exists($furtherBookingDetails, 'pickupTime')) {
+                    $pickupTime = date("g:i A", strtotime($furtherBookingDetails->pickupTime));       
+                }
+            }
+            
+            // Store the processed data in the result array
+            $resultArray[] = [
+                'type' => $type,
+                'serviceId' => $serviceId,
+                'user' => $user,
+                'furtherBookingDetails' => $furtherBookingDetails,
+                'numDays' => $numDays,
+                'price' => $price,
+                'pickupTime' => $pickupTime ,// Assign pickupTime
+                'checkinDate' => $checkinDate,
+                'checkoutDate' => $checkoutDate,
+            ];
+        }
+    }
+    
+    // Prepare data to pass to the view
+    $data = [
+        'resultArray' => $resultArray,
+        'user' => $user,     
+        'checkinDate' => $checkinDate,
+        'checkoutDate' => $checkoutDate,
+    ];
+    
     // Pass data to the view
     $this->view('loggedTraveler/bookingcart', $data);
 }
-
-
 
 }
 

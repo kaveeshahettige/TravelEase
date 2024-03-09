@@ -230,7 +230,8 @@
     </div>
     
     <br><br><br>
-    <div id="checkoutSection"><button class="continue-button" onclick="continueToCheckout(<?php echo $data['checkinDate'];?>,<?php echo $data['checkoutDate'];?>)">Continue to Checkout</button></div>
+    <!-- <?php echo $data['checkinDate'];?>,<?php echo $data['checkoutDate'];?> -->
+    <div id="checkoutSection"><button class="continue-button" data-checkin="<?php echo $data['checkinDate']; ?>" data-checkout="<?php echo $data['checkoutDate']; ?>"onclick="continueToCheckout()">Continue to Checkout</button></div>
 
     
 </section>

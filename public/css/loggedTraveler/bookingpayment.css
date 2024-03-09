@@ -223,6 +223,25 @@ input[type="number"] {
     .payment-button:hover, .cancel-button:hover {
         background-color: #3f7d20;
     }
+/* Style for price section */
+.t-price {
+    font-size: 18px;
+    color: #333;
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+.t-price strong {
+    color: #007bff; /* Color for the price value */
+}
+
+.-price::before {
+    content: "Price: ";
+    font-weight: bold;
+}
+
+
 
 
 

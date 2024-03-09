@@ -252,6 +252,19 @@ document.addEventListener('DOMContentLoaded', function() {
         handleCheckboxClick('withDriver', this.checked);
     });
 });
+// function updateTotalAmount() {
+//     var total = 0;
+//     <?php foreach ($data['resultArray'] as $bookingData): ?>
+//         <?php if ($bookingData['type'] == 4): ?>
+//             var price = parseFloat(document.getElementById('totalPrice').innerText);
+//             total += price;
+//         <?php elseif ($bookingData['type'] == 3): ?>
+//             var price = parseFloat(document.getElementById('roomPrice').innerText);
+//             total += price;
+//         <?php endif; ?>
+//     <?php endforeach; ?>
+//     document.getElementById('totalAmount').innerText = total.toFixed(2) + " LKR";
+// }
 
 function handleCheckboxClick(checkboxId, vehicleId, days) {
   // Determine the driver type based on the checkbox ID
@@ -267,6 +280,7 @@ function handleCheckboxClick(checkboxId, vehicleId, days) {
   // Fetch the updated price
   fetchUpdatedPrice(driverType, vehicleId, days);
   updateFormAction(driverType, vehicleId, days);
+  updateTotalAmount();
 }
 
 
@@ -277,8 +291,9 @@ function fetchUpdatedPrice(driverType, vehicleId, days) {
           if (xhr.status === 200) {
               const response = JSON.parse(xhr.responseText);
               const updatedPrice = response.price;
-              document.getElementById('totalPrice').innerHTML = '<strong>Total : ' + updatedPrice + '&nbsp;LKR</strong>';
+              document.getElementById('totalPrice').innerHTML = '<strong>Price : ' + updatedPrice + '&nbsp;LKR</strong>';
               handlePriceUpdate(updatedPrice);
+              updateTotalAmount(); // Call updateTotalAmount() here to update the total amount
           } else {
               console.error('Error fetching price: ' + xhr.status);
               document.getElementById('totalPrice').innerHTML = '<strong>Error fetching price</strong>'; // Display error message to the user
@@ -293,14 +308,41 @@ function fetchUpdatedPrice(driverType, vehicleId, days) {
   } else {
       // Use the initial price value for withoutDriver
       const initialPrice = parseFloat(document.getElementById('totalPrice').dataset.initialPrice);
-      document.getElementById('totalPrice').innerHTML = '<strong>Total : ' + initialPrice + '&nbsp;LKR</strong>';
+      document.getElementById('totalPrice').innerHTML = '<strong>Price : ' + initialPrice + '&nbsp;LKR</strong>';
       handlePriceUpdate(initialPrice);
+      updateTotalAmount(); // Call updateTotalAmount() here for consistency
       return;
   }
 
   xhr.open('GET', url, true);
   xhr.send();
 }
+
+
+///
+function updateTotalAmount() {
+    // Fetch all the price elements for each booking
+    const priceElements = document.querySelectorAll('.t-price');
+
+    // Initialize total amount variable
+    let totalAmount = 0;
+
+    // Iterate through each price element and sum up the prices
+    priceElements.forEach((element) => {
+        const priceText = element.innerText.replace('Price : ', '').replace(' LKR', '');
+        const price = parseFloat(priceText);
+        totalAmount += price;
+    });
+
+    // Update the total amount element
+    const totalAmountElement = document.querySelector('.total-amount');
+totalAmountElement.innerHTML = '<strong>Total : </strong>' + totalAmount.toFixed(2) + ' LKR';
+
+}
+
+
+
+
 
 //////
 
@@ -518,48 +560,53 @@ function addToCartBackend(type, id, add) {
 
 //continueToCheckout()
 //checkthis function cgeckindate and checkoutdate are wrongly printed in here
-function continueToCheckout(checkinDate,checkoutDate) {
-  // Retrieve cart data from localStorage
-  var cartData = JSON.parse(localStorage.getItem('cart'));
-  
+function continueToCheckout() {
+    // Retrieve cart data from localStorage
+    var cartData = JSON.parse(localStorage.getItem('cart'));
+    var checkinDate = document.querySelector('.continue-button').getAttribute('data-checkin');
+    var checkoutDate = document.querySelector('.continue-button').getAttribute('data-checkout');
 
-  //ptint cart data in console
-  // Check if cartData is not null
-  console.log('checkinDate:', checkinDate);
-  if (cartData) {
-      // Iterate over each type in the cart
-      Object.keys(cartData).forEach(function(type) {
-          // Print type of item
-          console.log('Type:', type);
-          
-          // Check if cartData[type] is an array
-          if (Array.isArray(cartData[type])) {
-              // Print each item ID in the type
-              cartData[type].forEach(function(id) {
-                  console.log('ID:', id);
-                  // You can retrieve additional details of the item from your data source and print them here
-              });
-          } else {
-              console.log('Invalid data format for type', type);
-          }
-      });
-  } else {
-      console.log('Cart is empty.');
-  }
-  /////////////////////////////
-  /////////
-  var pickupTime = document.getElementById('pickupTime').value;
+    // Print cart data in console
+    console.log('checkinDate:', checkinDate);
+    console.log('checkoutDate:', checkoutDate);
+
+    // Check if cartData is not null
+    if (cartData) {
+        // Iterate over each type in the cart
+        Object.keys(cartData).forEach(function (type) {
+            // Print type of item
+            console.log('Type:', type);
+
+            // Check if cartData[type] is an array
+            if (Array.isArray(cartData[type])) {
+                // Print each item ID in the type
+                cartData[type].forEach(function (id) {
+                    console.log('ID:', id);
+                    // You can retrieve additional details of the item from your data source and print them here
+                });
+            } else {
+                console.log('Invalid data format for type', type);
+            }
+        });
+    } else {
+        console.log('Cart is empty.');
+    }
+
+    // Retrieve pickupTime value
+    var pickupTime = document.getElementById('pickupTime').value;
 
     // Check if the pickup time has a value
     if (pickupTime) {
         // Append the pickup time to the URL parameters
         var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
-        var queryParams = `cart=${encodedCartData}&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}&pickupTime=${pickupTime}`;
+        window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}/${pickupTime}`, '_blank');
     } else {
         // If pickup time is not provided, exclude it from the URL parameters
         var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
-        var queryParams = `cart=${encodedCartData}&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}`;
+        window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}`, '_blank');
     }
+    
+    
 
     // Redirect to the checkout page
     // window.location.href = `bookingcart?${queryParams}`;
@@ -567,6 +614,7 @@ function continueToCheckout(checkinDate,checkoutDate) {
     // Clear the cart after checkout
     localStorage.removeItem('cart');
 }
+
 
 
 
