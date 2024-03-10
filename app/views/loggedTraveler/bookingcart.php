@@ -41,6 +41,7 @@
     </style>
 </head>
 <body style="margin-top:50%">
+<!-- <?php echo var_dump($data['bookingcartArray'])?> -->
     <div class="payment-container" >
     <div class="booking-box">
     <!-- <?php echo var_dump($data['resultArray'])?> -->
@@ -226,13 +227,39 @@ endforeach;
     <?php endforeach; ?>
 </ul>
 
+<script>
+    // Function to update the hidden input field with the selected driver type
+    function updateDriverType() {
+        const withDriverCheckbox = document.getElementById('withDriver');
+        const withoutDriverCheckbox = document.getElementById('withoutDriver');
+        const driverTypeInput = document.getElementById('driverTypeInput');
+
+        // Set the value of the hidden input field based on the selected checkbox
+        if (withDriverCheckbox.checked) {
+            driverTypeInput.value = 'withDriver';
+        } else if (withoutDriverCheckbox.checked) {
+            driverTypeInput.value = 'withoutDriver';
+        }
+    }
+
+    // Attach event listeners to the checkboxes to update the driver type
+    const withDriverCheckbox = document.getElementById('withDriver');
+    const withoutDriverCheckbox = document.getElementById('withoutDriver');
+
+    withDriverCheckbox.addEventListener('change', updateDriverType);
+    withoutDriverCheckbox.addEventListener('change', updateDriverType);
+</script>
+
     </p>
-    <form action="<?php echo URLROOT ?>loggedTraveler/dopayment/<?php echo $data1['furtherBookingDetails']->type . '/' . $data1['furtherBookingDetails']->room_id.'/'.$data1['checkinDate'].'/'.$data1['checkoutDate'] ?>">
-                                <div class="buttons">
-                                    <button type="submit" class="payment-button">Make Payment</button>
-                                </div>
-                            </form>
+    <!-- <?php echo var_dump($data['bookingcartArray'])?> -->
+    <form id="paymentFormMain" action="<?php echo URLROOT ?>loggedTraveler/cartpayment/<?php echo urlencode(json_encode($data['bookingcartArray'])) . '/' .$data['checkinDate'].'/'.$data['checkoutDate'] . '/' . $data['pickupTime'] ?>" method="POST">
+    <input type="hidden" name="totalAmount" id="totalAmountInput" value="<?php echo $total; ?>">
+    <input type="hidden" name="driverType" id="driverTypeInput" value="">
+    <div class="buttons">
+        <button type="submit" class="payment-button">Make Payment</button>
     </div>
+</form>
+
 </div>
 
     </div>

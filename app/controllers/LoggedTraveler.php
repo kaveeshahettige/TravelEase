@@ -875,21 +875,149 @@ if ($vehicles) {
                 'pickupTime' => $pickupTime ,// Assign pickupTime
                 'checkinDate' => $checkinDate,
                 'checkoutDate' => $checkoutDate,
+                
             ];
         }
     }
     
     // Prepare data to pass to the view
     $data = [
+      'bookingcartArray'=>$bookingcartArray,
         'resultArray' => $resultArray,
         'user' => $user,     
         'checkinDate' => $checkinDate,
         'checkoutDate' => $checkoutDate,
+        'pickupTime' => $pickupTime,
     ];
     
     // Pass data to the view
     $this->view('loggedTraveler/bookingcart', $data);
 }
+
+//cartpayment
+public function cartpayment($bookingcartArrayString, $checkinDate, $checkoutDate, $pickupTime=null) {
+  $bookingcartArray = json_decode(urldecode($bookingcartArrayString), true);
+
+  $totalAmount = $_POST['totalAmount'];
+  $driverType = $_POST['driverType'];
+  //echo $driverType;
+  //if driver type==withdriver
+  if($driverType=='withDriver'){
+    $driver = 1;
+  }else{
+      $driver=0;
+    };
+  //echo $driverType;
+
+  // Retrieve user details
+  
+  $id = $_SESSION['user_id'];
+  $user = $this->userModel->findUserDetail($id);
+
+  // Initialize an empty array to store booking details
+$furtherBookingDetails = [];
+
+// Iterate over each key-value pair in the $bookingcartArray
+foreach ($bookingcartArray as $type => $serviceIds) {
+    // Iterate over each service ID for the current type
+    foreach ($serviceIds as $serviceId) {
+        // Retrieve booking details for the current type and service ID
+        $bookingDetails = $this->userModel->findBookingDetailByServiceid($type, $serviceId);
+        // Add the retrieved booking details to the array
+        $furtherBookingDetails[] = $bookingDetails;
+    }
+}
+
+// Now $allBookingDetails contains booking details for all items in $bookingcartArray
+
+
+  //Construct transaction data
+  $transactionData = [
+      'user' => $user,
+      'checkinDate' => $checkinDate,
+      'checkoutDate' => $checkoutDate,
+      'bookingcartArray' => $bookingcartArray,
+      'pickupTime' => $pickupTime ? $pickupTime : null,
+      'price' => $totalAmount,
+      'furtherBookingDetails' => $furtherBookingDetails,
+      'driver' => $driver,
+      
+      // Add any other relevant transaction details
+  ];
+
+  // Create a Stripe Checkout session
+  require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+  $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
+  \Stripe\Stripe::setApiKey($stripe_secret_key);
+  $checkout_session = \Stripe\Checkout\Session::create([
+    'payment_method_types' => ['card'],
+      'mode' => 'payment',
+      'success_url' => "http://localhost/TravelEase/loggedTraveler/cartpaymentSuccessful",
+      'line_items' => [[
+          'quantity' => 1,
+          'price_data' => [
+              'currency' => 'lkr',
+              'unit_amount' => $totalAmount * 100,
+              'product_data' => [
+                  'name' => 'Cart Payment',
+              ],
+          ],
+      ]],
+      'cancel_url' => 'https://example.com/cancel',
+  ]);
+
+  // Store the Stripe Checkout session ID in the transaction data
+  $transactionData['stripe_session_id'] = $checkout_session->id;
+
+  // Store the transaction data in the session or database for retrieval in the paymentSuccessful() function
+  $_SESSION['transaction_data'] = $transactionData;
+
+  // Redirect the user to the Stripe Checkout session URL
+  http_response_code(303);
+  header("Location: " . $checkout_session->url);
+  
+}
+/////////////////////////////////////
+
+public function cartpaymentSuccessful() {
+  // Check if transaction data exists in the session
+  if (isset($_SESSION['transaction_data'])) {
+      // Retrieve transaction data from the session
+      $transactionData = $_SESSION['transaction_data'];
+      $this->userModel->addBookingfromCart($transactionData);
+      $lastcartBooking = $this->userModel->getLastCartBooking();
+      $this->userModel->addCartPaymentDetails($transactionData, $lastcartBooking->booking_id);
+
+      // Iterate over each booking detail in $transactionData['furtherBookingDetails']
+      foreach ($transactionData['furtherBookingDetails'] as $bookingDetail) {
+          $type = $bookingDetail->type; 
+          $driver = isset($transactionData['driver']) ? $transactionData['driver'] : null; 
+          if ($type == 3) {
+         
+              $this->userModel->addroomUnavailabilityfromCart($bookingDetail, $transactionData);
+          } elseif ($type == 4) {
+              $this->userModel->addVehicleBookingfromCart($bookingDetail,$transactionData,$driver);
+             
+          }
+      }
+      
+      // Optionally, you can pass data to the view if needed
+      $data = [
+          // Add any data you want to pass to the view
+      ];
+
+      // Load the view for the payment successful page
+      $this->view('loggedTraveler/paymentSuccessful', $data);
+  } else {
+      // Handle the case where transaction data is missing
+      // Redirect the user to an error page or perform any other action as needed
+  }
+}
+
+
+
+//////////////////////////////////////////
+
 
 }
 

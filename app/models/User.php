@@ -731,6 +731,92 @@ public function addBooking($transactionData){
     }
 }
 
+// //
+public function addBookingfrohbmCart($furtherbookingdetail,$transactionData){
+    $currentDate = date('Y-m-d');  //this is a dummy
+//need more changes
+    if($furtherbookingdetail->type==3){
+    $this->db->query('INSERT INTO bookings (user_id, serviceProvider_id, startDate, endDate, room_id) VALUES (:user_id, :serviceProvider_id, :startDate, :endDate, :room_id)');
+    $this->db->bind(':user_id', $transactionData['user']->id);
+    $this->db->bind(':serviceProvider_id', $furtherbookingdetail->id);   
+    $this->db->bind(':startDate', $transactionData['checkinDate']);
+    $this->db->bind(':endDate', $transactionData['checkoutDate']);
+    $this->db->bind(':room_id', $furtherbookingdetail->room_id);
+
+    }elseif($furtherbookingdetail->type==4){
+        $this->db->query('INSERT INTO bookings (user_id, serviceProvider_id, startDate, endDate, vehicle_id) VALUES (:user_id, :serviceProvider_id, :startDate, :endDate, :vehicle_id)');
+        $this->db->bind(':user_id', $transactionData['user']->id);
+        $this->db->bind(':serviceProvider_id', $furtherbookingdetail->id);   
+        $this->db->bind(':startDate', $transactionData['checkinDate']);
+        $this->db->bind(':endDate', $transactionData['checkoutDate']);
+        $this->db->bind(':vehicle_id', $furtherbookingdetail->vehicle_id);
+
+    }elseif($furtherbookingdetail->type==5){
+        $this->db->query('INSERT INTO bookings (user_id, serviceProvider_id, startDate, endDate, package_id) VALUES (:user_id, :serviceProvider_id, :startDate, :endDate, :package_id)');
+        $this->db->bind(':user_id', $transactionData['user']->id);
+        $this->db->bind(':serviceProvider_id', $furtherbookingdetail->id);   
+        $this->db->bind(':startDate', $currentDate);
+        $this->db->bind(':endDate', $currentDate);
+        $this->db->bind(':package_id', $furtherbookingdetail->package_id);
+    }
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+//addBookingfromCart($transactionData)
+public function addBookingfromCart($transactionData){
+    $currentDate = date('Y-m-d');  //this is a dummy
+//need more changes
+
+// Generate a unique booking ID
+$booking_id = uniqid('booking_');
+
+// Iterate over each booking detail and insert it with the same booking ID
+foreach ($transactionData['furtherBookingDetails'] as $bookingDetail) {
+    if ($bookingDetail->type == 3) {
+        $this->db->query('INSERT INTO cartbookings (booking_id, user_id, serviceProvider_id, startDate, endDate, room_id) VALUES (:booking_id, :user_id, :serviceProvider_id, :startDate, :endDate, :room_id)');
+        $this->db->bind(':booking_id', $booking_id);
+        $this->db->bind(':user_id', $transactionData['user']->id);
+        $this->db->bind(':serviceProvider_id', $bookingDetail->id);
+        $this->db->bind(':startDate', $transactionData['checkinDate']);
+        $this->db->bind(':endDate', $transactionData['checkoutDate']);
+        $this->db->bind(':room_id', $bookingDetail->room_id);
+    } elseif ($bookingDetail->type == 4) {
+        $this->db->query('INSERT INTO cartbookings (booking_id, user_id, serviceProvider_id, startDate, endDate, vehicle_id) VALUES (:booking_id, :user_id, :serviceProvider_id, :startDate, :endDate, :vehicle_id)');
+        $this->db->bind(':booking_id', $booking_id);
+        $this->db->bind(':user_id', $transactionData['user']->id);
+        $this->db->bind(':serviceProvider_id', $bookingDetail->id);
+        $this->db->bind(':startDate', $transactionData['checkinDate']);
+        $this->db->bind(':endDate', $transactionData['checkoutDate']);
+        $this->db->bind(':vehicle_id', $bookingDetail->vehicle_id);
+    } elseif ($bookingDetail->type == 5) {
+        $this->db->query('INSERT INTO cartbookings (booking_id, user_id, serviceProvider_id, startDate, endDate, package_id) VALUES (:booking_id, :user_id, :serviceProvider_id, :startDate, :endDate, :package_id)');
+        $this->db->bind(':booking_id', $booking_id);
+        $this->db->bind(':user_id', $transactionData['user']->id);
+        $this->db->bind(':serviceProvider_id', $bookingDetail->id);
+        $this->db->bind(':startDate', $currentDate);
+        $this->db->bind(':endDate', $currentDate);
+        $this->db->bind(':package_id', $bookingDetail->package_id);
+    }
+    
+    // Execute the query for the current iteration
+    if (!$this->db->execute()) {
+        // Handle the case where the query fails
+        return false;
+    }
+}
+
+// If all queries are executed successfully, return true
+return true;
+
+
+    
+}
+
+
 //addPaymentDetails($transactionData);
 public function addPaymentDetails($transactionData,$booking_id){
         $this->db->query('INSERT INTO payments (booking_id, amount) VALUES (:booking_id, :amount)');
@@ -744,6 +830,34 @@ public function addPaymentDetails($transactionData,$booking_id){
         }
        
 }
+//
+
+public function addCartPaymentDetails($transactionData,$booking_id){
+    $this->db->query('INSERT INTO cartpayments (booking_id, amount) VALUES (:booking_id, :amount)');
+    $this->db->bind(':booking_id',$booking_id);
+    $this->db->bind(':amount', $transactionData['price']);
+
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+   
+}
+//
+//
+// public function addCartPaymentDetails($transactionData,$booking_id){
+//     $this->db->query('INSERT INTO payments (booking_id, amount) VALUES (:booking_id, :amount)');
+//     $this->db->bind(':booking_id',$booking_id);
+//     $this->db->bind(':amount', $transactionData['furtherBookingDetails']['price']);
+
+//     if($this->db->execute()){
+//         return true;
+//     }else{
+//         return false;
+//     }
+   
+// }
 //addPaymentDetailsVehicles
 public function addPaymentDetailsVehicles($transactionData,$booking_id,$price){
     $this->db->query('INSERT INTO payments (booking_id, amount) VALUES (:booking_id, :amount)');
@@ -761,6 +875,18 @@ public function addPaymentDetailsVehicles($transactionData,$booking_id,$price){
 //getLastBooking
 public function getLastBooking(){
     $this->db->query('SELECT * FROM bookings ORDER BY booking_id DESC LIMIT 1');
+    $booking = $this->db->single();
+    if($this->db->rowcount()>0){
+        return $booking;
+     }
+     else{
+        return false;
+    }
+}
+
+//lastcartBooking
+public function getLastCartBooking(){
+    $this->db->query('SELECT * FROM cartbookings ORDER BY id DESC LIMIT 1');
     $booking = $this->db->single();
     if($this->db->rowcount()>0){
         return $booking;
@@ -803,6 +929,21 @@ public function findAvailableRooms($checkinDate, $checkoutDate,$hotelid){
 public function addUnavailabilty($transactionData){
     $this->db->query('INSERT INTO room_availability (room_id, startDate,endDate) VALUES (:room_id, :startDate,:endDate)');
     $this->db->bind(':room_id',$transactionData['furtherBookingDetails']->room_id);
+    $this->db->bind(':startDate', $transactionData['checkinDate']);
+    $this->db->bind(':endDate', $transactionData['checkoutDate']);
+
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+   
+}
+
+//addroomUnavailabilityfromCart
+public function addroomUnavailabilityfromCart($furtherbookingdetail,$transactionData){
+    $this->db->query('INSERT INTO room_availability (room_id, startDate,endDate) VALUES (:room_id, :startDate,:endDate)');
+    $this->db->bind(':room_id',$furtherbookingdetail->room_id);
     $this->db->bind(':startDate', $transactionData['checkinDate']);
     $this->db->bind(':endDate', $transactionData['checkoutDate']);
 
@@ -1015,6 +1156,27 @@ public function addVehicleBooking($transactionData,$driver) {
     // Prepare and execute the SQL query
     $this->db->query('INSERT INTO vehicle_bookings(vehicle_id, start_date, end_date, start_time,withDriver) VALUES (:vehicle_id, :start_date, :end_date, :start_time, :withDriver)');
     $this->db->bind(':vehicle_id', $transactionData['furtherBookingDetails']->vehicle_id);  
+    $this->db->bind(':start_date', $transactionData['checkinDate']);
+    $this->db->bind(':end_date', $transactionData['checkoutDate']);
+    $this->db->bind(':start_time', $pickupTime);
+    $this->db->bind(':withDriver', $driver);
+
+    // Execute the query
+    if($this->db->execute()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//addVehicleBookingfromCart
+public function addVehicleBookingfromCart($furtherbookingdetail,$transactionData,$driver) {
+    // Convert the pickup time to the correct format (if needed)
+    $pickupTime = date('H:i:s', strtotime($transactionData['pickupTime']));
+
+    // Prepare and execute the SQL query
+    $this->db->query('INSERT INTO vehicle_bookings(vehicle_id, start_date, end_date, start_time,withDriver) VALUES (:vehicle_id, :start_date, :end_date, :start_time, :withDriver)');
+    $this->db->bind(':vehicle_id', $furtherbookingdetail->vehicle_id);  
     $this->db->bind(':start_date', $transactionData['checkinDate']);
     $this->db->bind(':end_date', $transactionData['checkoutDate']);
     $this->db->bind(':start_time', $pickupTime);

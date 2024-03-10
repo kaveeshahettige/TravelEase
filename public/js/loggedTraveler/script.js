@@ -338,6 +338,10 @@ function updateTotalAmount() {
     const totalAmountElement = document.querySelector('.total-amount');
 totalAmountElement.innerHTML = '<strong>Total : </strong>' + totalAmount.toFixed(2) + ' LKR';
 
+// Update the value of the hidden input field
+const totalAmountInput = document.getElementById('totalAmountInput');
+totalAmountInput.value = totalAmount.toFixed(2); // Set the value of the hidden input field
+
 }
 
 
@@ -555,6 +559,16 @@ function addToCartBackend(type, id, add) {
 //       }
 //     }
 //   }
+
+
+    function continueToCheckoutAndRefresh() {
+        // Call the original function to continue to checkout
+        continueToCheckout();
+        // Reload the page after a slight delay
+        setTimeout(function() {
+            location.reload();
+        }, 1000); // Adjust the delay time as needed
+    }
 
 
 

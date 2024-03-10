@@ -110,9 +110,10 @@
     </section>
 
     <section class="resultPagem2" id="B1">
-        <h1 class="ResultTopics">Top Places to Visit</h1>
-        <div class="whatToDo">
-            <?php $chunks = array_chunk($data['places'], ceil(count($data['places']) / 2))?>
+    <h1 class="ResultTopics">Top Places to Visit</h1>
+    <div class="whatToDo">
+        <?php if (!empty($data['places']) && is_array($data['places'])): ?>
+            <?php $chunks = array_chunk($data['places'], ceil(count($data['places']) / 2)); ?>
             <div class="divleft">
                 <?php foreach ($chunks[0] as $place) : ?>
                     <div class="divleft1">
@@ -129,22 +130,28 @@
                 <?php endforeach; ?>
             </div>
             <div class="divright">
-                <?php foreach ($chunks[1] as $place) : ?>
-                    <div class="divright1">
-                        <h1><?php echo $place->place_name; ?></h1>
-                        <div class="divright1_1">
-                            <div>
-                                <p><?php echo $place->place_description; ?></p>
-                            </div>
-                            <div>
-                                <img src="<?php echo URLROOT . '/images/' . $place->place_photo; ?>" alt="">
+                <?php if (!empty($chunks[1]) && is_array($chunks[1])): ?>
+                    <?php foreach ($chunks[1] as $place) : ?>
+                        <div class="divright1">
+                            <h1><?php echo $place->place_name; ?></h1>
+                            <div class="divright1_1">
+                                <div>
+                                    <p><?php echo $place->place_description; ?></p>
+                                </div>
+                                <div>
+                                    <img src="<?php echo URLROOT . '/images/' . $place->place_photo; ?>" alt="">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
-        </div>  
-    </section>
+        <?php else: ?>
+            <p>No places to visit right now.</p>
+        <?php endif; ?>
+    </div>  
+</section>
+
 
     <section class="main2" id="S1">
         <h1 class="ResultTopics">Top Places to Stay</h1>
@@ -193,48 +200,56 @@
         <input type="time" id="pickupTime" name="pickupTime">
     </div>
     <div class="vehicles">
-        <?php foreach ($data['vehicles'] as $vehicle): ?>
-            <div class="vehicledetails">
-                <div style="display: flex;margin-bottom: 10px;align-items: center; justify-content: center;flex-direction: column; "> <img src="<?php echo URLROOT?>/images/<?php echo $vehicle->image; ?>" alt="">
-                <div>
-                    <br>
-                <button class="add-to-cart-button" style="padding: 10px 20px;border-radius: 20px;margin-top:0px;margin-left:10px;background-color: #45a049;color: white; border: none; cursor: pointer;transition: background-color 0.3s;" onclick="addToCart(4,<?php echo $vehicle->vehicle_id; ?>,this)">&#x271A;&nbsp;Cart</button>
-                </div>
-            </div>
-                
-                <div class="vehicleIndetails">
-                    <div><strong><?php echo $vehicle->brand; ?> <?php echo $vehicle->model; ?></strong>&nbsp;by  <?php echo $vehicle->agency_name; ?></div>
-                    <div style="padding: 10px;">
-                        <ul>
-                            <li><?php echo $vehicle->fuel_type; ?>&nbsp;Vehicle</li>
-                            <li><?php echo $vehicle->seating_capacity; ?>&nbsp;Persons</li>
-                            <?php if ($vehicle->ac_type == 1) : ?>
-                                <li>AC :&nbsp;Available</li>
-                            <?php else: ?>
-                                <li>AC :&nbsp;Not Available</li>
-                            <?php endif; ?>
-                        </ul>
+        <?php if (!empty($data['vehicles']) && is_array($data['vehicles'])): ?>
+            <?php foreach ($data['vehicles'] as $vehicle): ?>
+                <div class="vehicledetails">
+                    <div style="display: flex;margin-bottom: 10px;align-items: center; justify-content: center;flex-direction: column; ">
+                        <img src="<?php echo URLROOT?>/images/<?php echo $vehicle->image; ?>" alt="">
+                        <div>
+                            <br>
+                            <button class="add-to-cart-button" style="padding: 10px 20px;border-radius: 20px;margin-top:0px;margin-left:10px;background-color: #45a049;color: white; border: none; cursor: pointer;transition: background-color 0.3s;" onclick="addToCart(4,<?php echo $vehicle->vehicle_id; ?>,this)">&#x271A;&nbsp;Cart</button>
+                        </div>
                     </div>
-                    <div>Price : <strong><?php echo $data['vehiclePrices'][$vehicle->vehicle_id]; ?> LkR</strong></div>
-                </div>
-                <div class="vehicleBookButton"><button onclick="bookingHas(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">View Deal</button></div>
-                <div class="vehicleBookButton">
-                <!-- <div><button class="view-button" onclick="openPopup(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">View</button></div>  -->
-                
-                    <button onclick="booking(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">Book now</button>
-                    
-                </div>
-               
-            </div>
-        <?php endforeach; ?>
-    </div>
-    
-    <br><br><br>
-    <!-- <?php echo $data['checkinDate'];?>,<?php echo $data['checkoutDate'];?> -->
-    <div id="checkoutSection"><button class="continue-button" data-checkin="<?php echo $data['checkinDate']; ?>" data-checkout="<?php echo $data['checkoutDate']; ?>"onclick="continueToCheckout()">Continue to Checkout</button></div>
 
-    
+                    <div class="vehicleIndetails">
+                        <div><strong><?php echo $vehicle->brand; ?> <?php echo $vehicle->model; ?></strong>&nbsp;by  <?php echo $vehicle->agency_name; ?></div>
+                        <div style="padding: 10px;">
+                            <ul>
+                                <li><?php echo $vehicle->fuel_type; ?>&nbsp;Vehicle</li>
+                                <li><?php echo $vehicle->seating_capacity; ?>&nbsp;Persons</li>
+                                <?php if ($vehicle->ac_type == 1) : ?>
+                                    <li>AC :&nbsp;Available</li>
+                                <?php else: ?>
+                                    <li>AC :&nbsp;Not Available</li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                        <div>Price : <strong><?php echo $data['vehiclePrices'][$vehicle->vehicle_id]; ?> LkR</strong></div>
+                    </div>
+
+                    <div class="vehicleBookButton"><button onclick="bookingHas(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">View Deal</button></div>
+
+                    <div class="vehicleBookButton">
+                        <!-- <div><button class="view-button" onclick="openPopup(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">View</button></div>  -->
+                        <button onclick="booking(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">Book now</button>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No vehicles available right now.</p>
+        <?php endif; ?>
+    </div>
+
+    <br><br><br>
+
+    <div id="checkoutSection">
+        <button class="continue-button" 
+                data-checkin="<?php echo $data['checkinDate']; ?>" 
+                data-checkout="<?php echo $data['checkoutDate']; ?>"
+                onclick="continueToCheckoutAndRefresh()">Continue to Checkout</button>
+    </div>
 </section>
+
 <!-- <div id="myModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span> 
@@ -259,7 +274,7 @@
         <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
     </div>
     <div class="site-links">
-        <a href="<?php echo URLROOT?>Landpage">Home</a> |
+        <a href="<?php echo URLROOT?>LoggedTraveler/index">Home</a> |
         <a href="">About Us</a> |
         <a href="<?php echo URLROOT?>Landpage/termsofuse" target="_blank">Terms of Use</a> | 
         <a href="">Contact</a>
