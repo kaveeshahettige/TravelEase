@@ -1479,6 +1479,61 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
         }
     }
 
+    //countPreviousTrips($id)
+    public function countPreviousTrips($id){
+        $this->db->query('SELECT COUNT(*) AS count FROM bookings WHERE user_id = :id AND endDate < CURDATE()');
+        $this->db->bind(':id', $id);
+        $row = $this->db->single();
+         if($this->db->rowcount()>0){
+            return $row->count;
+         }
+         else{
+            return false;
+        }
+    }
+    
+    //findPreviousTrips($id)
+    public function findPreviousTrips($id){
+        $this->db->query('SELECT 
+        bookings.*, 
+        users.*, 
+        hotel_rooms.description AS hotel_description,  -- Alias for description from hotel_rooms
+        vehicles.description AS vehicle_description   -- Alias for description from vehicles
+    FROM 
+        bookings
+    INNER JOIN 
+        users ON bookings.serviceProvider_id = users.id
+    LEFT JOIN 
+        hotel_rooms ON bookings.room_id IS NOT NULL AND bookings.room_id = hotel_rooms.room_id
+    LEFT JOIN 
+        vehicles ON bookings.vehicle_id IS NOT NULL AND bookings.vehicle_id = vehicles.vehicle_id
+    WHERE 
+        bookings.user_id = :id
+        AND bookings.endDate < CURDATE();    
+        ');
+        $this->db->bind(':id', $id);
+        $result = $this->db->resultSet();
+        if ($this->db->rowCount() > 0) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
+    //submitFeedback($feedback,$rating,$serviceId)
+    public function submitFeedback($user_id,$feedback,$rating,$serviceId){
+        $this->db->query('INSERT INTO feedbacksnratings (user_id,service_id,feedback,rating) VALUES (:user_id,:service_id,:feedback, :rating)');
+        $this->db->bind(':user_id', $user_id);
+        $this->db->bind(':feedback', $feedback);
+        $this->db->bind(':rating', $rating);
+        $this->db->bind(':service_id', $serviceId);
+        if($this->db->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 
 }
 

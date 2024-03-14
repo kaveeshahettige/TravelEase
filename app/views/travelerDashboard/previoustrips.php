@@ -50,7 +50,7 @@
         </div>
         
         <div class="dashboard-content">
-            <h1>Bookings</h1>
+            <h1>Your Past Trips</h1>
         </div>
 
         <div class="dashboard-sub-content">
@@ -63,8 +63,8 @@
 
             <!-- Total Bookings Box -->
             <div class="box">
-                <h2>Total Bookings</h2>
-                <p><?php  echo $data['noOfBooking']?></p>
+                <h2>Total Trips Finished</h2>
+                <p><?php  echo $data['noOfPreviousTrips']?></p>
             </div>
         
             <!-- Ongoing Bookings Box
@@ -91,16 +91,19 @@
         </div>
 
         <div class="table-content">
-            <h2>Booking Details</h2>
+            <h2>Trip Details</h2>
             <table class="booking-table">
                 <thead>
                 <tr>
                     <th>No</th>
-                    <th>Booking ID</th>
-                    <th>Booking</th>
+                    <th>Trip ID</th>
+                    <th>Service Provider</th>
                     <th>Start Date</th>
                     <th>End Date</th>
-                    <th>Booking Date</th>
+                    <th>Booking</th>
+                    <th></th>
+                    <th></th>
+
                    
                 </tr>
                 </thead>
@@ -110,18 +113,31 @@
                 <?php
 $count = 1;
 
-if (!empty($data['mybooking']) && is_array($data['mybooking'])) {
-    foreach ($data['mybooking'] as $booking ) {
+if (!empty($data['previousTrips']) && is_array($data['previousTrips'])) {
+    foreach ($data['previousTrips'] as $booking) {
         echo '<tr class="t-row">';
         echo '<td>' . $count . '</td>';
         echo '<td>' . $booking->booking_id . '</td>';
-        echo '<td>' .$booking->fname.' '.$booking->lname.'</td>';
+         echo '<td>' . $booking->fname . ' ' . $booking->lname . '</td>';
         echo '<td>' . $booking->startDate . '</td>';
         echo '<td>' . $booking->endDate . '</td>';
-        echo '<td>' . date('Y-m-d', strtotime($booking->bookingDate)) . '</td>';
+        if ($booking->room_id !== null) {
+            // Display the description from hotel_rooms if room_id is not null
+            echo '<td>' . $booking->hotel_description . '</td>'; // Assuming you alias it as hotel_description
+        } elseif ($booking->vehicle_id !== null) {
+            // Display the description from vehicles if vehicle_id is not null
+            echo '<td>' . $booking->vehicle_description . '</td>'; // Assuming you alias it as vehicle_description
+        } elseif ($booking->package_id !== null) {
+            // Display the description from another source (if applicable) based on the context
+        }
+
+        echo '<td><button class="viewbooking">View</button></td>';
+        echo '<td><button class="provide-feedback-button" onclick="openFeedbackPopup(' . $booking->booking_id . ', \'' . $booking->fname . ' ' . $booking->lname . '\')"><i class="bx bx-plus"></i>Feedback</button></td>';
+
         echo '</tr>';
         $count++;
     }
+    
 } else {
     echo '<tr><td colspan="4">No data available</td></tr>';
 }
@@ -131,6 +147,30 @@ if (!empty($data['mybooking']) && is_array($data['mybooking'])) {
             </table>
         </div>
 
+        <!-- pop up -->
+        <div id="feedbackModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeFeedbackPopup()">&times;</span>
+    <h2>Feedback for : <span id="bookingNameSpan"></span></h2>
+    <!-- Feedback form and rating input -->
+    <div class="feedback-form">
+      <label for="feedback">How was the service : </label>
+      <textarea id="feedback" rows="4" cols="50"></textarea>
+      <label for="rating">Rating : </label>
+      <div class="rating">
+      <input type="radio" id="star1" name="rating" value="5" /><label for="star1" title="1 star"></label>
+      <input type="radio" id="star2" name="rating" value="4" /><label for="star2" title="2 stars"></label>
+      <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars"></label>
+        <input type="radio" id="star4" name="rating" value="2" /><label for="star4" title="4 stars"></label>
+        <input type="radio" id="star5" name="rating" value="1" /><label for="star5" title="5 stars"></label>
+      </div>
+      <button id="submitFeedbackButton" onclick="submitFeedback()">Submit</button>
+    </div>
+    <div id="successMessage" style="display: none;color:red"></div>
+  </div>
+</div>
+
+        <!-- /// -->
 
         <div class="more-content">
             <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
@@ -149,6 +189,6 @@ if (!empty($data['mybooking']) && is_array($data['mybooking'])) {
             <!-- Add more details as needed -->
         </div>
     </div>
-    <script src= "<?php echo URLROOT?>/public/js/hotel/bookings.js"></script>
+    <!-- <script src= "<?php echo URLROOT?>/public/js/hotel/bookings.js"></script> -->
 </body>
 </html>

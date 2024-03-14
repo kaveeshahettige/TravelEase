@@ -101,7 +101,23 @@ class TravelerDashboard extends Controller{
 
     //previous trips
     public function previoustrips($id){
-      $this->view('travelerDashboard/previoustrips');
+      $id= $_SESSION['user_id'];
+      $user=$this->userModel->findUserDetail($id);
+      $noOfPreviousTrips=$this->userModel->countPreviousTrips($id);
+      $previousTrips=$this->userModel->findPreviousTrips($id);
+      $data = [
+        'id' => '$id',
+        'email'=>$user->email,
+        'lname' => $user->lname,
+        'fname' => $user->fname,
+        'number' => $user->number,
+        'profile_picture'=>$user->profile_picture,
+        'noOfPreviousTrips'=>$noOfPreviousTrips,
+        'previousTrips'=>$previousTrips,
+        
+      ];
+
+      $this->view('travelerDashboard/previoustrips',$data);
     }
     
 //     public function changeProfilePicture(){
@@ -301,7 +317,35 @@ echo '</script>';
     
 
     
+
+
+//submitfeedback
+ public function submitFeedback(){
+  $id= $_SESSION['user_id'];
+  $user=$this->userModel->findUserDetail($id);
+
+  if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    // Sanitize POST array
+   // $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+    $feedback = $_POST["feedback"];
+    $rating = $_POST["rating"];
+    $serviceId = $_POST["bookingId"];
+
+   $submit=$this->userModel->submitFeedback($id,$feedback,$rating,$serviceId);
+   //if tru alert feedback submitted
+    if($submit){
+      echo '<script>';
+      echo 'alert("Feedback submitted");';
+      //echo 'window.location.href = "previoustrips/' . $_SESSION['user_id'] . '";';
+      echo '</script>';
+    }
+   
+  } else {
+    $data = [
+      
+    ];
+    $this->view('travelerDashboard/submitFeedback', $data);
+  }
+ }
 }
-
-
 
