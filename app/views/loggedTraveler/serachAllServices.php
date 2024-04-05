@@ -121,6 +121,26 @@
                     <p style="font-size: 30px; margin: 0px; font-weight: bold;"><?php echo ($hotelroom ? $hotelroom->fname . ' ' . $hotelroom->lname : ' '); ?></p>
                     <p><?php echo $hotelroom->roomType ?>&nbsp;Room</p>
                     <p><?php echo $hotelroom->add ?></p>
+                    <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+       // Extract the rating value from the ratings object
+       $rating = isset($hotelroom->ratings->rating) ? $hotelroom->ratings->rating : 0;
+                    
+       // Round the rating value
+       $filled_stars = $rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
                 </div>
                 <div><button class="view-button" onclick="booking(3, '<?php echo $hotelroom->room_id; ?>', '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">View</button></div>
             </div>
@@ -143,7 +163,27 @@
     <div class="vehicles">
         <?php foreach ($data['vehicles'] as $vehicle): ?>
             <div class="vehicledetails">
-                <div> <img src="<?php echo URLROOT?>/images/<?php echo $vehicle->image; ?>" alt=""></div>
+                <div> <img src="<?php echo URLROOT?>/images/<?php echo $vehicle->image; ?>" alt="">
+                <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+       // Extract the rating value from the ratings object
+       $rating = isset($vehicle->vratings->rating) ? $vehicle->vratings->rating : 0;
+                    
+       // Round the rating value
+       $filled_stars = $rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div></div>
                 <div class="vehicleIndetails">
                     <div><strong><?php echo $vehicle->brand; ?> <?php echo $vehicle->model; ?></strong>&nbsp;by  <?php echo $vehicle->agency_name; ?></div>
                     <div style="padding: 10px;">

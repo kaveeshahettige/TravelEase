@@ -303,6 +303,50 @@ body{
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+/* //////////// */
+.feedback {
+    border: 2px solid #efdc0b;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f7f7f7;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 1000px;
+}
+
+.feedback-details {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.feedback-details img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.feedback-details span {
+    color: #555;
+    font-size: 15px;
+}
+
+.rating {
+    margin-bottom: 10px;
+}
+
+.star {
+    font-size: 25px;
+    color: #FFD700;
+    margin-right: 5px;
+}
+
+.comment p {
+    color: #444;
+    font-size: 20px;
+    line-height: 1.6;
+}
 
 
 

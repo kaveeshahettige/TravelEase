@@ -329,9 +329,9 @@ echo '</script>';
    // $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
     $feedback = $_POST["feedback"];
     $rating = $_POST["rating"];
-    $serviceId = $_POST["bookingId"];
+    $bookingId = $_POST["bookingId"];
 
-   $submit=$this->userModel->submitFeedback($id,$feedback,$rating,$serviceId);
+   $submit=$this->userModel->submitFeedback($id,$feedback,$rating,$bookingId);
    //if tru alert feedback submitted
     if($submit){
       echo '<script>';

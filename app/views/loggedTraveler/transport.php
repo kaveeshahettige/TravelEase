@@ -71,6 +71,26 @@ $agency_chunks = array_chunk($data['agencies'], 3);
                     <div>
                         <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $agency->fname; ?></p>
                         <p><?php echo $agency->city; ?></p>
+                        <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+       // Extract the rating value from the ratings object
+       $rating = isset($agency->ratings->rating) ? $agency->ratings->rating : 0;
+                    
+       // Round the rating value
+       $filled_stars = $rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
                     </div>
                     <div> <button onclick="Tripdetails(<?= $agency->user_id?>)">View</button></div>
                 </div>

@@ -1080,6 +1080,92 @@ if($this->db->rowCount()>0){
 }
 }
 
+//getRatings
+public function getRatings($hotel_id) {
+    // Query to calculate the average rating for the given hotel ID
+    $this->db->query('
+        SELECT AVG(r.rating) AS rating
+        FROM feedbacksnratings r
+        JOIN bookings b ON r.booking_id = b.booking_id
+        WHERE b.serviceProvider_id = :hotel_id
+    ');
+    // $this->db->query('
+    //     SELECT AVG(rating) AS rating
+    //     FROM feedbacksnratings
+    //     WHERE booking_id IN (SELECT booking_id FROM bookings WHERE room_id = :hotel_id)
+    // ');
+
+    // Bind hotel_id parameter
+    $this->db->bind(':hotel_id', $hotel_id);
+
+    // Execute the query and fetch the result
+    $result = $this->db->single();
+
+    // Return the result
+    return $result;
+}
+//getRatingsOfRooms($room_id)
+public function getRatingsOfRooms($room_id) {
+    // Query to calculate the average rating for the given hotel ID
+    $this->db->query('
+        SELECT AVG(r.rating) AS rating
+        FROM feedbacksnratings r
+        JOIN bookings b ON r.booking_id = b.booking_id
+        WHERE b.room_id = :room_id
+    ');
+
+    // Bind hotel_id parameter
+    $this->db->bind(':room_id', $room_id);
+
+    // Execute the query and fetch the result
+    $result = $this->db->single();
+
+    // Return the result
+    return $result;
+}
+
+//getRatingsOfVehicles($vehicle->vehicle_id);
+public function getRatingsOfVehicles($vehicle_id) {
+    // Query to calculate the average rating for the given hotel ID
+    $this->db->query('
+        SELECT AVG(r.rating) AS rating
+        FROM feedbacksnratings r
+        JOIN bookings b ON r.booking_id = b.booking_id
+        WHERE b.vehicle_id = :vehicle_id
+    ');
+
+    // Bind hotel_id parameter
+    $this->db->bind(':vehicle_id', $vehicle_id);
+
+    // Execute the query and fetch the result
+    $result = $this->db->single();
+
+    // Return the result
+    return $result;
+}
+
+//findFeedbacks
+public function findFeedbacks($sId) {
+    // Query to fetch all feedbacks for the given hotel ID
+    $this->db->query('
+        SELECT f.*, u.*
+        FROM feedbacksnratings f
+        JOIN users u ON f.user_id = u.id
+        JOIN bookings b ON f.booking_id = b.booking_id
+        WHERE b.serviceProvider_id = :sId
+    ');
+
+    // Bind hotel_id parameter
+    $this->db->bind(':sId', $sId);
+
+    // Execute the query and fetch the result
+    $result = $this->db->resultSet();
+
+    // Return the result
+    return $result;
+}
+
+
 //getRandomAgencies
 public function getRandomAgencies(){
     $this->db->query('SELECT t.*,u.* 
@@ -1521,12 +1607,12 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
     }
 
     //submitFeedback($feedback,$rating,$serviceId)
-    public function submitFeedback($user_id,$feedback,$rating,$serviceId){
-        $this->db->query('INSERT INTO feedbacksnratings (user_id,service_id,feedback,rating) VALUES (:user_id,:service_id,:feedback, :rating)');
+    public function submitFeedback($user_id,$feedback,$rating,$bookingId){
+        $this->db->query('INSERT INTO feedbacksnratings (user_id,booking_id,feedback,rating) VALUES (:user_id,:bookingId,:feedback, :rating)');
         $this->db->bind(':user_id', $user_id);
         $this->db->bind(':feedback', $feedback);
         $this->db->bind(':rating', $rating);
-        $this->db->bind(':service_id', $serviceId);
+        $this->db->bind(':bookingId', $bookingId);
         if($this->db->execute()){
             return true;
         }else{

@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="<?php echo URLROOT?>/js/loggedTraveler/script.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-y4jl5lAxu7c0J0pQv4KzoUW0ojrYwMq2/wn7E5tlUCVgQFm/hhtIkV6uUavvB8sW" crossorigin="anonymous">
+
     <style>
 
     </style>
@@ -49,10 +51,10 @@
     </form>
 </div>
 
-<!-- <?php 
-// echo var_dump($data['hotels']);
-$hotel_chunks = array_chunk($data['hotels'], 3);
-?> -->
+<?php 
+//echo var_dump($data['hotels']);
+//$hotel_chunks = array_chunk($data['hotels'], 3);
+?>
     </section>
     <section class="main2" id="S1">
     <div class="main2buttons">
@@ -70,6 +72,26 @@ $hotel_chunks = array_chunk($data['hotels'], 3);
                         <div>
                             <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $hotel->fname; ?></p>
                             <p><?php echo $hotel->city ?></p>
+                            <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+       // Extract the rating value from the ratings object
+       $rating = isset($hotel->ratings->rating) ? $hotel->ratings->rating : 0;
+                    
+       // Round the rating value
+       $filled_stars = $rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
                         </div>
                         <div><button onclick="Tripdetails(<?= $hotel->user_id?>)">View</button></div>
                     </div>

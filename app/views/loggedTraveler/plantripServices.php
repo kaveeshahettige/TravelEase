@@ -164,7 +164,27 @@
             <div>
                 <p style="font-size: 30px; margin: 0px; font-weight: bold;"><?php echo ($hotelroom ? $hotelroom->fname . ' ' . $hotelroom->lname : ' '); ?></p>
                 <p><?php echo $hotelroom->roomType ?>&nbsp;Room</p>
-                <p><?php echo $hotelroom->add ?></p>
+                <!-- <p><?php echo $hotelroom->add ?></p> -->
+                <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+       // Extract the rating value from the ratings object
+       $rating = isset($hotelroom->ratings->rating) ? $hotelroom->ratings->rating : 0;
+                    
+       // Round the rating value
+       $filled_stars = $rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
                 <button class="add-to-cart-button" style="margin-top:0px;margin-left:10px;background-color: #45a049;color: white; border: none; cursor: pointer;transition: background-color 0.3s;" onclick="addToCart(3,<?php echo $hotelroom->room_id ?>,this)">&#x271A;&nbsp;Cart</button>
                 
                 <!-- Add to Cart button -->
@@ -205,6 +225,26 @@
                 <div class="vehicledetails">
                     <div style="display: flex;margin-bottom: 10px;align-items: center; justify-content: center;flex-direction: column; ">
                         <img src="<?php echo URLROOT?>/images/<?php echo $vehicle->image; ?>" alt="">
+                        <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+       // Extract the rating value from the ratings object
+       $rating = isset($vehicle->vratings->rating) ? $vehicle->vratings->rating : 0;
+                    
+       // Round the rating value
+       $filled_stars = $rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
                         <div>
                             <br>
                             <button class="add-to-cart-button" style="padding: 10px 20px;border-radius: 20px;margin-top:0px;margin-left:10px;background-color: #45a049;color: white; border: none; cursor: pointer;transition: background-color 0.3s;" onclick="addToCart(4,<?php echo $vehicle->vehicle_id; ?>,this)">&#x271A;&nbsp;Cart</button>

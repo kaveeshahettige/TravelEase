@@ -45,6 +45,11 @@ $service2Name = $this->userModel->findUserDetail($randomServiceProviders[1]->id)
 $service2Details=$this->userModel->findBookingDetail($randomServiceProviders[1]->type,$randomServiceProviders[1]->id);
 $service3Name = $this->userModel->findUserDetail($randomServiceProviders[2]->id);
 $service3Details=$this->userModel->findBookingDetail($randomServiceProviders[2]->type,$randomServiceProviders[2]->id);
+$service1Ratings = $this->userModel->getRatings($randomServiceProviders[0]->id);
+$service2Ratings = $this->userModel->getRatings($randomServiceProviders[1]->id);
+$service3Ratings = $this->userModel->getRatings($randomServiceProviders[2]->id);
+
+
 
 $data = [
     'id' => $id, // Remove the single quotes
@@ -67,6 +72,14 @@ $data = [
     'randomServiceProvider3Location'=>$service3Details ? $service3Details->city : null,
     'randomServiceProvider3Id'=>$service3Details ? $service3Details->user_id : null,
     'randomServiceProvider3Name'=>$service3Name ? $service3Name->fname . ' ' . $service3Name->lname : null,
+    'service1Ratings' => $service1Ratings ? $service1Ratings : null,
+    'service2Ratings' => $service2Ratings ? $service2Ratings : null,
+    'service3Ratings' => $service3Ratings ? $service3Ratings : null,
+    'service1pp' => $service1Name ? $service1Name->profile_picture : null,
+    'service2pp' => $service2Name ? $service2Name->profile_picture : null,
+    'service3pp' => $service3Name ? $service3Name->profile_picture : null,
+   
+    //'service1Name'=>$service1Name,
 
     'bookingDetailsArray'=>$bookingDetailsArray,
     //'randomServiceProvider1Name'=>$service1Details ? $service1Details->fname . ' ' . $service1Details->lname : null,
@@ -81,6 +94,25 @@ $data = [
     $id = $_SESSION['user_id'];
     $user = $this->userModel->findUserDetail($id);
     $hotels=$this->userModel->getRandomHotels();
+    //$ratings = $this->userModel->getRatings($hotels->id);
+
+    // Initialize an empty array to store ratings for each hotel
+$ratings = [];
+
+// Iterate through each hotel
+foreach ($hotels as $hotel) {
+    // Fetch ratings for the current hotel
+    $hotelRatings = $this->userModel->getRatings($hotel->user_id);
+    
+    // Store ratings in the ratings array with hotel id as key
+    $ratings[$hotel->hotel_id] = $hotelRatings;
+}
+
+// Iterate through each hotel again to add ratings to the hotel data
+foreach ($hotels as &$hotel) {
+    // Add ratings to the hotel data
+    $hotel->ratings = isset($ratings[$hotel->hotel_id]) ? $ratings[$hotel->hotel_id] : null;
+}
 
       $data=[
         'profile_picture' => $user ? $user->profile_picture : null, // Add the profile picture to the data array
@@ -88,10 +120,30 @@ $data = [
       ];
       $this->view('loggedTraveler/hotel',$data);
     }
-    public function transport(){
+
+
+public function transport(){
       $id = $_SESSION['user_id'];
     $user = $this->userModel->findUserDetail($id);
     $agencies=$this->userModel->getRandomAgencies();
+     // Initialize an empty array to store ratings for each hotel
+$ratings = [];
+
+// Iterate through each hotel
+foreach ($agencies as $agency) {
+    // Fetch ratings for the current hotel
+    $agencyRatings = $this->userModel->getRatings($agency->user_id);
+    
+    // Store ratings in the ratings array with hotel id as key
+    $ratings[$agency->agency_id] = $agencyRatings;
+}
+
+// Iterate through each hotel again to add ratings to the hotel data
+foreach ($agencies as $agency) {
+    // Add ratings to the hotel data
+    $agency->ratings = isset($ratings[$agency->agency_id]) ? $ratings[$agency->agency_id] : null;
+}
+
 
       $data=[
         'profile_picture' => $user ? $user->profile_picture : null,
@@ -253,6 +305,7 @@ $data = [
       $user=$this->userModel->findUserDetail($_SESSION['user_id']);
       //main booking details from service provider table(hotel,travelagncy,package tables)
       $bookingDetails = $servicProvider ? $this->userModel->findBookingDetail($servicProvider->type, $Sid) : null;
+      $feedbacks = $servicProvider ? $this->userModel->findFeedbacks($Sid) : null;
       if($servicProvider->type==3){
         $rooms=$bookingDetails?$this->userModel->findRooms($bookingDetails->hotel_id) : null;
         $vehicles=null;
@@ -279,6 +332,7 @@ $data = [
         'rooms'=>$rooms?$rooms:null,
         'NoVehicles'=>$NoVehicles?$NoVehicles:0,
         'vehicles'=>$vehicles?$vehicles:null,
+        'feedbacks'=>$feedbacks?$feedbacks:null,
       ];
       $this->view('loggedTraveler/tripfurtherdetail',$data);
     }
@@ -722,6 +776,55 @@ $places = $this->userModel->findPlaces($location);
 
 
     $vehiclePrices = []; // Array to hold prices for each vehicle
+//////////
+$city=$this->userModel->findCitydetails($location);
+      $places = $this->userModel->findPlaces($location);
+          $user = $this->userModel->findUserDetail($_SESSION['user_id']);
+          $hotels = $this->userModel->findAvailableHotelRooms($location, $checkinDate, $checkoutDate);
+          $vehicles = $this->userModel->findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate);
+          //$packages = $this->userModel->findPackages($location);
+
+
+          $vehiclePrices = []; // Array to hold prices for each vehicle
+
+          // Initialize an empty array to store ratings for each hotel
+$ratings = [];
+
+// Iterate through each hotel
+foreach ($hotels as $hotel) {
+    // Fetch ratings for the current hotel
+    $roomRatings = $this->userModel->getRatingsOfRooms($hotel->room_id);
+    
+    // Store ratings in the ratings array with hotel id as key
+    $ratings[$hotel->room_id] = $roomRatings;
+}
+
+// Iterate through each hotel again to add ratings to the hotel data
+foreach ($hotels as &$hotel) {
+    // Add ratings to the hotel data
+    $hotel->ratings = isset($ratings[$hotel->room_id]) ? $ratings[$hotel->room_id] : null;
+}
+////////////////
+// Initialize an empty array to store ratings for each hotel
+$vratings = [];
+
+// Iterate through each hotel
+foreach ($vehicles as $vehicle) {
+    // Fetch ratings for the current hotel
+    $vehicleRatings = $this->userModel->getRatingsOfVehicles($vehicle->vehicle_id);
+    
+    // Store ratings in the ratings array with hotel id as key
+    $vratings[$vehicle->vehicle_id] = $vehicleRatings;
+}
+
+// Iterate through each hotel again to add ratings to the vehcle data
+foreach ($vehicles as &$vehicle) {
+    // Add ratings to the vehicle data
+    $vehicle->vratings = isset($vratings[$vehicle->vehicle_id]) ? $vratings[$vehicle->vehicle_id] : null;
+}
+
+/////////
+
 if ($vehicles) {
 foreach ($vehicles as $vehicle) {
   // Assuming you have a method to find prices for a specific vehicle and dates
@@ -734,7 +837,7 @@ foreach ($vehicles as $vehicle) {
   $vehiclePrices[$vehicle->vehicle_id] = $totalPrice; // Assuming vehicle_id is unique
 }
 } else {
-echo "No vehicles available";
+//echo "No vehicles available";
 }
 
 
@@ -782,6 +885,45 @@ echo "No vehicles available";
 
 
           $vehiclePrices = []; // Array to hold prices for each vehicle
+
+          // Initialize an empty array to store ratings for each hotel
+$ratings = [];
+
+// Iterate through each hotel
+foreach ($hotels as $hotel) {
+    // Fetch ratings for the current hotel
+    $roomRatings = $this->userModel->getRatingsOfRooms($hotel->room_id);
+    
+    // Store ratings in the ratings array with hotel id as key
+    $ratings[$hotel->room_id] = $roomRatings;
+}
+
+// Iterate through each hotel again to add ratings to the hotel data
+foreach ($hotels as &$hotel) {
+    // Add ratings to the hotel data
+    $hotel->ratings = isset($ratings[$hotel->room_id]) ? $ratings[$hotel->room_id] : null;
+}
+////////////////
+// Initialize an empty array to store ratings for each hotel
+$vratings = [];
+
+// Iterate through each hotel
+foreach ($vehicles as $vehicle) {
+    // Fetch ratings for the current hotel
+    $vehicleRatings = $this->userModel->getRatingsOfVehicles($vehicle->vehicle_id);
+    
+    // Store ratings in the ratings array with hotel id as key
+    $vratings[$vehicle->vehicle_id] = $vehicleRatings;
+}
+
+// Iterate through each hotel again to add ratings to the vehcle data
+foreach ($vehicles as &$vehicle) {
+    // Add ratings to the vehicle data
+    $vehicle->vratings = isset($vratings[$vehicle->vehicle_id]) ? $vratings[$vehicle->vehicle_id] : null;
+}
+
+/////////////
+
 if ($vehicles) {
     foreach ($vehicles as $vehicle) {
         // Assuming you have a method to find prices for a specific vehicle and dates

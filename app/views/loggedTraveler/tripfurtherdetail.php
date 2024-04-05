@@ -305,10 +305,35 @@ if (!empty($data['vehicles']) && is_array($data['vehicles'])) {
     <?php elseif ($data['type'] == 5): ?>
         type 5
     <?php endif; ?>
+    <div class="feedbacks">
+    <h3 >Feedbacks</h2>
+    <?php if (empty($data['feedbacks'])): ?>
+    <p>No feedbacks available</p>
+<?php else: ?>
+    <?php foreach ($data['feedbacks'] as $feedbacks): ?>
+        <div class="feedback">
+            <div class="feedback-details">
+                <img src="<?php echo URLROOT; ?>images1/<?php echo $feedbacks->profile_picture; ?>" alt="Publisher Picture" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; display: inline-block; vertical-align: middle;">
+                <span style="margin-bottom: 5px; display: inline-block; vertical-align: middle;">Publisher: <?php echo $feedbacks->fname . " " . ($feedbacks->lname ? $feedbacks->lname : ""); ?></span>
+                <span style="margin-bottom: 5px; display:block; vertical-align: middle;">&nbsp; &nbsp;&nbsp;&nbsp;<?php echo $feedbacks->time; ?></span>
+            </div>
+            <div class="rating">
+                <!-- Display rating stars -->
+                <?php for ($i = 0; $i < $feedbacks->rating; $i++): ?>
+                    <span class="star">&#9733;</span>
+                <?php endfor; ?>
+            </div>
+            <div class="comment">
+                <!-- Display feedback comment -->
+                <p><?php echo $feedbacks->feedback; ?></p>
+            </div>
         </div>
-    </section>
-    <section style="margin:50px">
-    
+    <?php endforeach; ?>
+<?php endif; ?>
+
+</div>
+
+        </div>
     </section>
    
     

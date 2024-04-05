@@ -14,7 +14,7 @@
     </style>
 </head>
 <body>
-    
+    <!-- <?php echo var_dump($data['service1Name'])?> -->
     <div class="navbar">
         <div class="logo">
             <img src="<?php echo URLROOT?>/images/TravelEase_logo.png" alt="Logo">
@@ -102,11 +102,29 @@
         </div>
         <div class="main3images">
             <div class="main3img1content">
-                <div><img src="<?php echo URLROOT?>images/car 7.jpg" alt=""></div>
+            <div><img src="<?php echo URLROOT . '/images/' . $data['service1pp'] ?>" alt=""></div>
                 <div class="c1"> 
                     <div>
                         <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider1Name']?></p>
                         <p><?php echo $data['randomServiceProvider1Location']?></p>
+                        <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+                    
+       // Round the rating value
+       $filled_stars = $data['service1Ratings']->rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
                     </div>
                     <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider1Id'] ?>)">Book Now</button></div>
                     <!-- <?php echo $data['randomServiceProvider1Id']?> -->
@@ -114,21 +132,57 @@
                 
             </div>
             <div class="main3img2content">
-                <div><img src="<?php echo URLROOT?>images/car 5.jpg" alt=""></div>
+            <div><img src="<?php echo URLROOT . '/images/' . $data['service2pp'] ?>" alt=""></div>
                 <div class="c2">
                     <div>
                         <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider2Name']?></p>
                         <p><?php echo $data['randomServiceProvider2Location']?></p>
+                        <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+                    
+       // Round the rating value
+       $filled_stars = $data['service2Ratings']->rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
                     </div>
                     <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider2Id'] ?>)">Book Now</button></div>
                 </div>
             </div>
             <div class="main3img3content">
-                <div><img src="<?php echo URLROOT?>images/4.jpg" alt=""></div>
+            <div><img src="<?php echo URLROOT . '/images/' . $data['service3pp'] ?>" alt=""></div>
                 <div class="c3">
                     <div>
                         <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider3Name']?></p>
                         <p><?php echo $data['randomServiceProvider3Location']?></p>
+                        <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+                    
+       // Round the rating value
+       $filled_stars = $data['service3Ratings']->rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
                     </div>
                     <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider3Id'] ?>)">Book Now</button></div>
                 </div>
