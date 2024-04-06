@@ -89,14 +89,14 @@
             </button>
         </div>
         </div>
-
+<!-- <?php echo var_dump($data['previousTrips'])?> -->
         <div class="table-content">
             <h2>Trip Details</h2>
             <table class="booking-table">
                 <thead>
                 <tr>
                     <th>No</th>
-                    <th>Trip ID</th>
+                    <!-- <th>Trip ID</th> -->
                     <th>Service Provider</th>
                     <th>Start Date</th>
                     <th>End Date</th>
@@ -117,7 +117,7 @@ if (!empty($data['previousTrips']) && is_array($data['previousTrips'])) {
     foreach ($data['previousTrips'] as $booking) {
         echo '<tr class="t-row">';
         echo '<td>' . $count . '</td>';
-        echo '<td>' . $booking->booking_id . '</td>';
+        // echo '<td>' . $booking->booking_id . '</td>';
          echo '<td>' . $booking->fname . ' ' . $booking->lname . '</td>';
         echo '<td>' . $booking->startDate . '</td>';
         echo '<td>' . $booking->endDate . '</td>';
@@ -131,11 +131,21 @@ if (!empty($data['previousTrips']) && is_array($data['previousTrips'])) {
             // Display the description from another source (if applicable) based on the context
         }
 
-        echo '<td><button class="viewbooking">View</button></td>';
-        echo '<td><button class="provide-feedback-button" onclick="openFeedbackPopup(' . $booking->booking_id . ', \'' . $booking->fname . ' ' . $booking->lname . '\')"><i class="bx bx-plus"></i>Feedback</button></td>';
+        
+        echo '<td><button class="viewbooking" onclick="openPopup(' . $booking->serviceProvider_id . ', ' . $booking->booking_id . ')">View</button></td>';
+       // Check if feedback has been provided for this booking
+       $feedbackProvided = $this->userModel->checkFeedbackProvided($booking->booking_id);
 
-        echo '</tr>';
-        $count++;
+       // Display the "Feedback" button only if feedback hasn't been provided
+       if (!$feedbackProvided) {
+        echo '<td><button class="provide-feedback-button" onclick="openFeedbackPopup(' . $booking->booking_id . ', \'' . $booking->fname . ' ' . $booking->lname . '\')"><i class="bx bx-plus"></i>Feedback</button></td>';
+    } else {
+        echo '<td><button class="submitted-button" disabled><i class="bx bx-check"></i>Submitted</button></td>';
+    }
+    
+
+       echo '</tr>';
+       $count++;
         
     }
     
@@ -191,5 +201,11 @@ if (!empty($data['previousTrips']) && is_array($data['previousTrips'])) {
         </div>
     </div>
     <!-- <script src= "<?php echo URLROOT?>/public/js/hotel/bookings.js"></script> -->
+    <div id="myModal" class="modal1">
+  <div class="modal1-content">
+    <span class="close1">&times;</span>
+    <iframe id="popupFrame" width="100%" height="100%"></iframe>
+  </div>
+</div>
 </body>
 </html>

@@ -50,7 +50,7 @@
         </div>
         
         <div class="dashboard-content">
-            <h1>Bookings</h1>
+            <h1>Upcoming Bookings</h1>
         </div>
 
         <div class="dashboard-sub-content">
@@ -96,17 +96,20 @@
                 <thead>
                 <tr>
                     <th>No</th>
-                    <th>Booking ID</th>
+                    <!-- <th>Booking ID</th> -->
                     <th>Booking</th>
                     <th>Start Date</th>
                     <th>End Date</th>
                     <th>Booking Date</th>
+                    <th></th>
+                    <th></th>
+
                    
                 </tr>
                 </thead>
                 <tbody>
 
-
+<!-- <?php echo var_dump($data['mybooking'])?> -->
                 <?php
 $count = 1;
 
@@ -114,11 +117,17 @@ if (!empty($data['mybooking']) && is_array($data['mybooking'])) {
     foreach ($data['mybooking'] as $booking ) {
         echo '<tr class="t-row">';
         echo '<td>' . $count . '</td>';
-        echo '<td>' . $booking->booking_id . '</td>';
+        // echo '<td>' . $booking->booking_id . '</td>';
         echo '<td>' .$booking->fname.' '.$booking->lname.'</td>';
         echo '<td>' . $booking->startDate . '</td>';
         echo '<td>' . $booking->endDate . '</td>';
         echo '<td>' . date('Y-m-d', strtotime($booking->bookingDate)) . '</td>';
+        echo '<td><button class="viewbooking" onclick="openPopup(' . $booking->serviceProvider_id . ', ' . $booking->booking_id . ')">View</button></td>';
+        if ($booking->cancellation_eligibility === 'Unavailable') {
+            echo '<td><button class="unavailable-button" disabled><i class="bx bx-x-circle"></i>&nbsp Not Available &nbsp </button></td>';
+        } else {
+            echo '<td><button class="cancel-button" onclick="cancelBooking(' . $booking->booking_id . ')"><i class="bx bx-x-circle"></i> Cancel Booking</button></td>';
+        }
         echo '</tr>';
         $count++;
     }
@@ -138,17 +147,14 @@ if (!empty($data['mybooking']) && is_array($data['mybooking'])) {
 
     </main>
 
-    <div class="popup" id="popup">
-        <div class="popup-content">
-            <span class="close" onclick="closePopup()">&times;</span>
-            <!-- Add details about the booking here -->
-            <h2>Booking Details</h2>
-            <p id="guestName">Guest Name: John Doe</p>
-            <p id="checkInDate">Check-in Date: 2023-09-01</p>
-            <p id="roomType">Room Type: Single Room</p>
-            <!-- Add more details as needed -->
-        </div>
-    </div>
-    <script src= "<?php echo URLROOT?>/public/js/hotel/bookings.js"></script>
+    <div id="myModal" class="modal1">
+  <div class="modal1-content">
+    <span class="close1">&times;</span>
+    <iframe id="popupFrame" width="100%" height="100%"></iframe>
+  </div>
+</div>
+
+    <!-- <script src= "<?php echo URLROOT?>/public/js/hotel/bookings.js"></script> -->
 </body>
+
 </html>

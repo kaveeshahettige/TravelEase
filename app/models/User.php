@@ -566,21 +566,36 @@ public function updatePicture($data){
     }
 
     //checkCancellationEligibility($booking->id)
-    public function checkCancellationEligibility($id){
-        $this->db->query('SELECT * FROM bookings WHERE booking_id = :id');
-$this->db->bind(':id', $id);
-$booking = $this->db->single();
-$today = date("Y-m-d");
-$bookingDate = $booking->bookingDate; // Change to use the correct attribute name
-$diff = strtotime($today) - strtotime($bookingDate); // Change the order of substraction
-$days = round($diff / 86400); // Use round without abs to allow negative values
-if ($days > 7) { // Change the condition to check if $days is greater than 7
-    return "Unavailable";
-} else {
-    return "Available";
+    public function checkCancellationEligibility($id) {
+    $this->db->query('SELECT * FROM bookings WHERE booking_id = :id');
+    $this->db->bind(':id', $id);
+    $booking = $this->db->single();
+
+    // Get today's date
+    $today = date("Y-m-d");
+
+    // Get the start date of the booking
+    $start = $booking->startDate;
+
+    // Get the booking date
+    $bookingDate = $booking->bookingDate;
+
+    // Calculate the difference in days between today and the start date of the booking
+    $diffStart = strtotime($start) - strtotime($today);
+    $daysStart = round($diffStart / 86400); // Convert seconds to days
+
+    // Calculate the difference in days between the booking date and the start date of the booking
+    $diffBooking = strtotime($start) - strtotime($bookingDate);
+    $daysBooking = round($diffBooking / 86400); // Convert seconds to days
+
+    // Check both conditions
+    if ($daysStart > 3 && $daysBooking > 7) {
+        return "Available";
+    } else {
+        return "Unavailable";
+    }
 }
 
-    }
 
     //findMyBooking
     public function findMyBooking($id){
@@ -599,10 +614,42 @@ if ($days > 7) { // Change the condition to check if $days is greater than 7
             return null;
         }
     }
+    //
+    //findMyUpcomingBooking
+    public function findMyUpcomingBooking($id){
+        $this->db->query('SELECT bookings.*, users.*
+        FROM bookings
+        LEFT JOIN users ON bookings.serviceProvider_id = users.id
+        WHERE bookings.user_id = :id
+        AND DATE(bookings.startDate) > CURDATE();');
+        $this->db->bind(':id',$id);
+
+        $data=$this->db->resultSet();
+
+        //check row
+        if($this->db->rowCount()>0){
+            return $data;
+        }else{
+            return null;
+        }
+    }
 
     //countMyBooking
     public function countMyBooking($id){
         $this->db->query('SELECT COUNT(*) AS count FROM bookings WHERE user_id = :id');
+        $this->db->bind(':id', $id);
+        $row = $this->db->single();
+         if($this->db->rowcount()>0){
+            return $row->count;
+         }
+         else{
+            return false;
+        }
+    }
+    //
+    //countMyUpcomingBooking
+    public function countMyUpcomingBooking($id){
+        $this->db->query('SELECT COUNT(*) AS count FROM bookings WHERE user_id = :id AND DATE(startDate) > CURDATE()');
         $this->db->bind(':id', $id);
         $row = $this->db->single();
          if($this->db->rowcount()>0){
@@ -1408,8 +1455,21 @@ public function countPayment($id){
 
 //findPayment($id)
 public function findPayment($id){
-    $this->db->query('SELECT * FROM payments JOIN bookings ON payments.booking_id = bookings.booking_id
-    WHERE bookings.user_id = :id');
+    $this->db->query('
+    SELECT 
+        payments.*, 
+        bookings.*, 
+        users.*
+    FROM 
+        payments
+    JOIN 
+        bookings ON payments.booking_id = bookings.booking_id
+    JOIN 
+        users ON bookings.serviceProvider_id = users.id
+    WHERE 
+        bookings.user_id = :id
+');
+
     $this->db->bind(':id', $id);
     $payments = $this->db->resultSet();
      if($this->db->rowcount()>0){
@@ -1579,32 +1639,36 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
     }
     
     //findPreviousTrips($id)
-    public function findPreviousTrips($id){
-        $this->db->query('SELECT 
-        bookings.*, 
-        users.*, 
-        hotel_rooms.description AS hotel_description,  -- Alias for description from hotel_rooms
-        vehicles.description AS vehicle_description   -- Alias for description from vehicles
-    FROM 
-        bookings
-    INNER JOIN 
-        users ON bookings.serviceProvider_id = users.id
-    LEFT JOIN 
-        hotel_rooms ON bookings.room_id IS NOT NULL AND bookings.room_id = hotel_rooms.room_id
-    LEFT JOIN 
-        vehicles ON bookings.vehicle_id IS NOT NULL AND bookings.vehicle_id = vehicles.vehicle_id
-    WHERE 
-        bookings.user_id = :id
-        AND bookings.endDate < CURDATE();    
-        ');
-        $this->db->bind(':id', $id);
-        $result = $this->db->resultSet();
-        if ($this->db->rowCount() > 0) {
-            return $result;
-        } else {
-            return false;
-        }
+    public function findPreviousTrips($id) {
+    $this->db->query('
+        SELECT 
+            bookings.*, 
+            users.*, 
+            hotel_rooms.description AS hotel_description,  -- Alias for description from hotel_rooms
+            vehicles.description AS vehicle_description   -- Alias for description from vehicles
+        FROM 
+            bookings
+        INNER JOIN 
+            users ON bookings.serviceProvider_id = users.id
+        LEFT JOIN 
+            hotel_rooms ON bookings.room_id IS NOT NULL AND bookings.room_id = hotel_rooms.room_id
+        LEFT JOIN 
+            vehicles ON bookings.vehicle_id IS NOT NULL AND bookings.vehicle_id = vehicles.vehicle_id
+        WHERE 
+            bookings.user_id = :id
+            AND bookings.endDate < CURDATE()
+        ORDER BY 
+            bookings.endDate DESC; -- Order by endDate in descending order
+    ');
+    $this->db->bind(':id', $id);
+    $result = $this->db->resultSet();
+    if ($this->db->rowCount() > 0) {
+        return $result;
+    } else {
+        return false;
     }
+}
+
 
     //submitFeedback($feedback,$rating,$serviceId)
     public function submitFeedback($user_id,$feedback,$rating,$bookingId){
@@ -1619,6 +1683,31 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
             return false;
         }
     }
+
+    //checkFeedbackProvided
+    public function checkFeedbackProvided($bookingId) {
+        // Query to check if feedback has been provided for the given booking ID
+        $this->db->query('SELECT COUNT(*) AS feedback_count FROM feedbacksnratings WHERE booking_id = :booking_id');
+        $this->db->bind(':booking_id', $bookingId);
+        $result = $this->db->single();
+    
+        // If there are any feedback entries for the booking ID, return true (feedback provided)
+        return $result->feedback_count > 0;
+    }
+
+    //countFeedbacks
+    public function countFeedbacks($user_id){
+        $this->db->query('SELECT COUNT(*) AS count FROM feedbacksnratings WHERE user_id = :user_id');
+        $this->db->bind(':user_id', $user_id);
+        $row = $this->db->single();
+         if($this->db->rowcount()>0){
+            return $row->count;
+         }
+         else{
+            return false;
+        }
+    }
+    
 
 
 }

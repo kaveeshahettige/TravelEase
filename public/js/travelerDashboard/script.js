@@ -109,5 +109,41 @@ window.onclick = function(event) {
   }
 }
 
+function openPopup(Sid, Bid) {
+  // Get the modal
+  var modal1 = document.getElementById("myModal");
+
+  // Get the iframe
+  var iframe = document.getElementById("popupFrame");
+
+  // Set the URL you want to open in the iframe
+  var newPageURL = `../bookingdetails/${Sid}/${Bid}`;
+
+  // Set the iframe source
+  iframe.src = newPageURL;
+
+  // Display the modal
+  modal1.style.display = "block";
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close1")[0];
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function () {
+    modal1.style.display = "none";
+  };
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == modal1) {
+      modal1.style.display = "none";
+    }
+  };
+  var elements = document.getElementsByClassName('navbar');
+}
+
+
+
+
 
 

@@ -18,17 +18,16 @@ class TravelerDashboard extends Controller{
       $noOfBooking=$this->userModel->countMyBooking($id);
       $noOfUpcomingTrips=$this->userModel->countUpcomingTrips($id);
       $monthlyPayment=$this->userModel->monthlyPayment($id);
+      $noOfFeedbacks=$this->userModel->countFeedbacks($id);
 
       $data = [
         'id' => '$id',
-        'email'=>$user->email,
-        'lname' => $user->lname,
-        'fname' => $user->fname,
-        'number' => $user->number,
+        'user'=>$user,
         'profile_picture'=>$user->profile_picture,
         'noOfBooking'=>$noOfBooking,
         'noOfUpcomingTrips'=>$noOfUpcomingTrips,
         'monthlyPayment'=>$monthlyPayment,
+        'noOfFeedbacks'=>$noOfFeedbacks,
       ];
       $this->view('travelerDashboard/index',$data);
     }
@@ -55,8 +54,17 @@ class TravelerDashboard extends Controller{
     public function bookings($id){
       $id= $_SESSION['user_id'];
       $user=$this->userModel->findUserDetail($id);
-      $mybooking=$this->userModel->findMyBooking($id);
-      $noOfBooking=$this->userModel->countMyBooking($id);
+      $noOfBooking=$this->userModel->countMyUpcomingBooking($id);
+      $mybooking = $this->userModel->findMyUpcomingBooking($id);
+
+    if ($mybooking) {
+    // Check cancellation eligibility for each booking and store it in $mybooking
+    foreach ($mybooking as $key => $booking) {
+        $cancellationEligibility = $this->userModel->checkCancellationEligibility($booking->booking_id);
+        $mybooking[$key]->cancellation_eligibility = $cancellationEligibility;
+    }
+}
+
     
 
       $data = [
@@ -104,7 +112,22 @@ class TravelerDashboard extends Controller{
       $id= $_SESSION['user_id'];
       $user=$this->userModel->findUserDetail($id);
       $noOfPreviousTrips=$this->userModel->countPreviousTrips($id);
-      $previousTrips=$this->userModel->findPreviousTrips($id);
+      $previousTrips = $this->userModel->findPreviousTrips($id);
+    $feedbackStatus = [];
+
+    foreach ($previousTrips as $trip) {
+    // Check if feedback has been provided for this booking
+    $feedbackProvided = $this->userModel->checkFeedbackProvided($trip->booking_id);
+    
+    // Store the feedback status (1 if feedback provided, 0 otherwise)
+    $feedbackStatus[$trip->booking_id] = $feedbackProvided ? 1 : 0;
+}
+
+// Store the feedback status array in the $previousTrips array
+foreach ($previousTrips as $key => $trip) {
+    $previousTrips[$key]->feedback_provided = $feedbackStatus[$trip->booking_id];
+}
+
       $data = [
         'id' => '$id',
         'email'=>$user->email,
@@ -347,5 +370,71 @@ echo '</script>';
     $this->view('travelerDashboard/submitFeedback', $data);
   }
  }
+
+
+ public function bookingdetails($Sid,$Bid){
+
+  $id = $_SESSION['user_id'];
+  $user=$this->userModel->findUserDetail($id);
+  $serviceProvider = $this->userModel->findUserDetail($Sid);
+
+  //from service provider table(hotel,travelagncy,pacjage tables)
+  $mainbookingDetails = $serviceProvider ? $this->userModel->findBookingDetail($serviceProvider->type, $Sid) : null;
+  
+  //booking table booking data
+  $booking = $this->userModel->findBooking($Bid);
+
+  //find further booking details
+  $furtherbookingDetails = $serviceProvider ? $this->userModel->findBookingFurtherDetail($booking) : null;
+
+  $cancellationEligibility = $booking ? $this->userModel->checkCancellationEligibility($booking->booking_id) : null;
+  
+  
+  // // Initializing an array to store further booking details for each booking
+  // $furtherBookingDetailsArray = [];
+  // $startDates;
+  // $endDates;
+
+  
+
+  // foreach ($bookings as $booking) {
+  //   //this is from room, vehicle, or package tables
+  //   $furtherbookingDetails = $serviceProvider ? $this->userModel->findBookingFurtherDetail($booking) : null;
+  //   //checking booking can be canceled or not
+  //   $cancellationEligibility = $bookings ? $this->userModel->checkCancellationEligibility($booking->booking_id) : null;
+    
+  //   ////////////////////////////////////////////////////////////
+  //   // Adding details to the array for each booking
+  //   $furtherBookingDetailsArray[] = [
+  //       'furtherBookingDetails' => $furtherbookingDetails, // Corrected variable name
+  //       'cancellationEligibility' => $cancellationEligibility, // Corrected variable name
+  //       'startDates' => $booking->startDate,
+  //       'endDates' => $booking->endDate,
+        
+  //   ];
+// }
+$vehicleprice=null;
+$driver=null;
+if($serviceProvider->type==4){
+  $vehicleprice=$this->userModel->findVehiclePrice($Bid);
+  $driver=$this->userModel->findDriverAvilability($Bid);
+}
+
+  $data=[
+    'serviceProviderName' => $serviceProvider ? $serviceProvider->fname . ' ' . $serviceProvider->lname : null,
+    'type' => $serviceProvider ? $serviceProvider->type : null,
+    'profile_picture' => $user ? $user->profile_picture : null,
+    'number' => $serviceProvider ? $serviceProvider->number : null,
+    'location' => $mainbookingDetails ? $mainbookingDetails->city : null,
+    'serviceDescription' => $mainbookingDetails ? $mainbookingDetails->description : null,
+    'mainbookingDetails' => $mainbookingDetails,
+    'furtherBookingDetails' => $furtherbookingDetails,
+    'booking' => $booking,
+    'cancellationEligibility' => $cancellationEligibility,
+    'vehicleprice'=>$vehicleprice?$vehicleprice:null,
+    'driver'=>$driver?$driver:null,
+  ];
+  $this->view('travelerDashboard/bookingpopup',$data);
+}
 }
 

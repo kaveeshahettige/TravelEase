@@ -15,7 +15,7 @@
     <nav class="left-menu">
         <div class="user-profile">
             <img style="cursor: pointer;" src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo" onclick="gotoHome()"> 
-            <span class="user-name" style="font-weight: bold;"><?php echo $data['fname']." ".$data['lname']?></span>
+            <span class="user-name" style="font-weight: bold;"><?php echo  $data['user']->fname."  ". $data['user']->lname?></span>
 
         </div>
         
@@ -58,9 +58,11 @@
                         <img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> 
                         </div>
                         <div class="profileinfo">
-                            <h1><?php echo $_SESSION['user_fname']."  ".$_SESSION['user_lname']?></h1>
-                            <h4 style="font-weight:bold"><?php echo $_SESSION['user_email']?></h4>
-                            <h4 style="font-weight:bold">Registration Number: <?php echo $_SESSION['user_id']?></h4>
+                            <h1><?php echo  $data['user']->fname."  ". $data['user']->lname?></h1>
+                            <h4 style="font-weight:bold">Registration Number: <?php echo $data['user']->id?></h4>
+                            <h4 style="font-weight:bold"><?php echo $data['user']->email?></h4>
+                           
+                            <h4 style="font-weight:bold"><?php echo $data['user']->number?></h4>
                             
                         </div>
                     </div>
@@ -79,7 +81,7 @@
                                 <td><?php echo $data['noOfBooking']?></td>
                                 <td><?php echo $data['noOfUpcomingTrips']?></td>
                                 <td><?php echo $data['monthlyPayment']?>&nbspLKR</td>
-                                <td>4</td>
+                                <td><?php echo $data['noOfFeedbacks']?></td>
                             </tr>
                             <!-- Add more rows for additional trip summaries -->
                         </tbody>

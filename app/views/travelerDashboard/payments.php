@@ -66,17 +66,7 @@
                 <p><?php  echo $data['noofPayments']?></p>
             </div>
         
-            <!-- Ongoing Bookings Box
-            <div class="box">
-                <h2>Ongoing Bookings</h2>
-                <p>35</p>
-            </div>
-        
-            <!-- Customers Box -->
-            <!--<div class="box">
-                <h2>Total Customers</h2>
-                <p>10</p>
-            </div> -->
+           
         </div>
         </div>
         <!-- <?php echo var_dump($data['payments']) ?> -->
@@ -96,10 +86,12 @@
                 <thead>
                 <tr>
                     <th>No</th>
-                    <th>Payment ID</th>
-                    <th>Booking ID</th>
-                    <!-- <th>Booking</th> -->
+                    <!-- <th>Payment ID</th> -->
+                    <!-- <th>Booking ID</th> -->
+                    <th>Booking</th>
+
                     <th>Amount (LKR)</th>
+                    <th>Date of Payment</th>
                    
                 </tr>
                 </thead>
@@ -113,10 +105,12 @@ if (!empty($data['payments']) && is_array($data['payments'])) {
     foreach ($data['payments'] as $payment ) {
         echo '<tr class="t-row">';
         echo '<td>' . $count . '</td>';
-        echo '<td>' . $payment->payment_id . '</td>';
-        echo '<td>' .$payment->booking_id .'</td>';
+        // echo '<td>' . $payment->payment_id . '</td>';
+        // echo '<td>' .$payment->booking_id .'</td>';
+        echo '<td>' . ucfirst($payment->fname).''.$payment->lname . '</td>';
         // echo '<td>' . $payment->startDate . '</td>';
-        echo '<td>' . $payment->amount . '</td>';
+        echo '<td>' . $payment->amount.".00 " . '</td>';
+        echo '<td>' . date('Y-m-d', strtotime($payment->bookingDate)) . '</td>';
         echo '</tr>';
         $count++;
     }

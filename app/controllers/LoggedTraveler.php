@@ -698,6 +698,8 @@ public function dopaymentVehicles($type, $serviceid, $checkinDate, $checkoutDate
       'checkinDate' => $checkinDate,
       'checkoutDate' => $checkoutDate,
       'pickupTime' => $pickupTime,
+        'price' => $price,
+        'driver' => $driver,
       // Add any other relevant transaction details
   ];
 
