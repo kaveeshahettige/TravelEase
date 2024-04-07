@@ -693,6 +693,139 @@ li {
     opacity: 0.6; /* Reduce opacity for disabled button */
     cursor: not-allowed; /* Change cursor for disabled button */
 }
+/* Style for notification container */
+.notification-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Adjust as needed */
+    margin-left: 250px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+/* Style for individual notification */
+.notification {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 25px 15px;
+}
+
+/* Style for notification header */
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+/* Style for notification sender name */
+.notification-sender {
+    font-weight: bold;
+}
+
+/* Style for notification date */
+.notification-date {
+    font-style: italic;
+    color: #777;
+}
+
+/* Style for notification content */
+.notification-content {
+    /* Add styles for notification content here */
+}
+
+.notification-sender {
+    display: flex;
+    align-items: center;
+}
+
+.sender-image {
+    width: 50px; /* Adjust the size of the image as needed */
+    height: 50px;
+    border-radius: 50%; /* Ensure circular shape for the image */
+    margin-right: 10px; /* Add some spacing between the image and the name */
+}
+
+.sender-name {
+    font-weight: bold;
+}
+/*  */
+
+/* Modal Styles */
+.modal2 {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal2-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  /* Close Button */
+  .close2 {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close2:hover,
+  .close2:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  /* Confirm Button */
+  #confirmCancelBtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #confirmCancelBtn:hover {
+    background-color: #45a049;
+  }
+  #denyCancelBtn {
+    background-color: #ce091c;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+  }
+  #denyCancelBtn:hover {
+    background-color: #970615;
+  }
+
+
 
 
 

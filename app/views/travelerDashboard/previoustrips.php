@@ -132,7 +132,8 @@ if (!empty($data['previousTrips']) && is_array($data['previousTrips'])) {
         }
 
         
-        echo '<td><button class="viewbooking" onclick="openPopup(' . $booking->serviceProvider_id . ', ' . $booking->booking_id . ')">View</button></td>';
+        // echo '<td><button class="viewbooking" onclick="openPopup(' . $booking->serviceProvider_id . ', ' . $booking->booking_id . ')">View</button></td>';
+        echo '<td><button class="viewbooking" onclick="openPopup(\'' . $booking->temporyid .'\',' . $booking->serviceProvider_id . ', \'' . $booking->booking_id . '\')">View</button></td>';
        // Check if feedback has been provided for this booking
        $feedbackProvided = $this->userModel->checkFeedbackProvided($booking->booking_id);
 

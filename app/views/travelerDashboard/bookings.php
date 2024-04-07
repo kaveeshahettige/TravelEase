@@ -63,7 +63,7 @@
 
             <!-- Total Bookings Box -->
             <div class="box">
-                <h2>Total Bookings</h2>
+                <h2>Total Upcoming Bookings</h2>
                 <p><?php  echo $data['noOfBooking']?></p>
             </div>
         
@@ -121,13 +121,19 @@ if (!empty($data['mybooking']) && is_array($data['mybooking'])) {
         echo '<td>' .$booking->fname.' '.$booking->lname.'</td>';
         echo '<td>' . $booking->startDate . '</td>';
         echo '<td>' . $booking->endDate . '</td>';
+        //echo '<td>' . $booking->temporyid . '</td>';
         echo '<td>' . date('Y-m-d', strtotime($booking->bookingDate)) . '</td>';
-        echo '<td><button class="viewbooking" onclick="openPopup(' . $booking->serviceProvider_id . ', ' . $booking->booking_id . ')">View</button></td>';
-        if ($booking->cancellation_eligibility === 'Unavailable') {
-            echo '<td><button class="unavailable-button" disabled><i class="bx bx-x-circle"></i>&nbsp Not Available &nbsp </button></td>';
-        } else {
-            echo '<td><button class="cancel-button" onclick="cancelBooking(' . $booking->booking_id . ')"><i class="bx bx-x-circle"></i> Cancel Booking</button></td>';
-        }
+        echo '<td><button class="viewbooking" onclick="openPopup(\'' . $booking->temporyid .'\',' . $booking->serviceProvider_id . ', \'' . $booking->booking_id . '\')">View</button></td>';
+
+        
+if ($booking->cancellation_eligibility === 'Unavailable') {
+    echo '<td><button class="unavailable-button" disabled><i class="bx bx-x-circle"></i>&nbsp Not Available &nbsp </button></td>';
+} else {
+    echo '<td><button class="cancel-button" onclick="cancelBooking(\'' . $booking->temporyid . '\', \'' . $booking->booking_id . '\')"><i class="bx bx-x-circle"></i> Cancel Booking</button></td>';
+
+}
+
+
         echo '</tr>';
         $count++;
     }
@@ -154,7 +160,17 @@ if (!empty($data['mybooking']) && is_array($data['mybooking'])) {
   </div>
 </div>
 
-    <!-- <script src= "<?php echo URLROOT?>/public/js/hotel/bookings.js"></script> -->
+   <!-- Hidden modal for cancellation confirmation -->
+<div id="confirmationModal" class="modal2">
+  <div class="modal2-content">
+    <span class="close2">&times;</span>
+    <p>Are you sure you want to cancel this booking?</p>
+    <button id="confirmCancelBtn">Yes, Cancel Booking</button>
+    <button id="denyCancelBtn">No,Close</button>
+    <div id="confirmationMessage"></div>
+  </div>
+</div>
+<iframe id="cancelFrame" style="display: none;"></iframe>
 </body>
 
 </html>

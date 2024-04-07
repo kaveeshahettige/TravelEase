@@ -87,6 +87,9 @@ class TravelerDashboard extends Controller{
       $user=$this->userModel->findUserDetail($id);
       $noofPayments=$this->userModel->countPayment($id);
       $payments=$this->userModel->findPayment($id);
+      $noofPaymentsMonth=$this->userModel->countPaymentMonthly($id);
+      $amountofPaymentsMonth=$this->userModel->amountPaymentMonthly($id);
+
       $data = [
         'id' => '$id',
         'email'=>$user->email,
@@ -96,6 +99,8 @@ class TravelerDashboard extends Controller{
         'profile_picture'=>$user->profile_picture,
         'noofPayments'=>$noofPayments,
         'payments'=>$payments,
+        'noofPaymentsMonth'=>$noofPaymentsMonth,
+        'amountofPaymentsMonth'=>$amountofPaymentsMonth,
         
       ];
 
@@ -104,7 +109,23 @@ class TravelerDashboard extends Controller{
 
     //notifications
     public function notifications($id){
-      $this->view('travelerDashboard/notifications');
+      $id= $_SESSION['user_id'];
+      $user=$this->userModel->findUserDetail($id);
+      $noOfNotifications=$this->userModel->countNotifications($id);
+      $notifications=$this->userModel->findNotifications($id);
+
+      $data = [
+        'id' => '$id',
+        'email'=>$user->email,
+        'lname' => $user->lname,
+        'fname' => $user->fname,
+        'number' => $user->number,
+        'profile_picture'=>$user->profile_picture,
+        'noOfNotifications'=>$noOfNotifications,
+        'notifications'=>$notifications,
+        
+      ];
+      $this->view('travelerDashboard/notifications',$data);
     }
 
     //previous trips
@@ -377,6 +398,11 @@ echo '</script>';
   $id = $_SESSION['user_id'];
   $user=$this->userModel->findUserDetail($id);
   $serviceProvider = $this->userModel->findUserDetail($Sid);
+  // echo "<script>";
+  //   echo "console.log('Booking ID:');";
+  //   echo "</script>";
+
+
 
   //from service provider table(hotel,travelagncy,pacjage tables)
   $mainbookingDetails = $serviceProvider ? $this->userModel->findBookingDetail($serviceProvider->type, $Sid) : null;
@@ -436,5 +462,101 @@ if($serviceProvider->type==4){
   ];
   $this->view('travelerDashboard/bookingpopup',$data);
 }
+
+public function bookingdetailscart($Tid,$Sid,$Bid){
+
+  $id = $_SESSION['user_id'];
+  $user=$this->userModel->findUserDetail($id);
+  $serviceProvider = $this->userModel->findUserDetail($Sid);
+  // echo "<script>";
+  //   echo "console.log('Booking ID:');";
+  //   echo "</script>";
+
+
+
+  //from service provider table(hotel,travelagncy,pacjage tables)
+  $mainbookingDetails = $serviceProvider ? $this->userModel->findBookingDetail($serviceProvider->type, $Sid) : null;
+  
+  //booking table booking data
+  $booking = $this->userModel->findCartBooking($Bid,$Tid);
+
+  //find further booking details
+  $furtherbookingDetails = $serviceProvider ? $this->userModel->findBookingFurtherDetail($booking) : null;
+
+  $cancellationEligibility = $booking ? $this->userModel->checkCancellationEligibility($booking->booking_id) : null;
+  
+  
+  // // Initializing an array to store further booking details for each booking
+  // $furtherBookingDetailsArray = [];
+  // $startDates;
+  // $endDates;
+
+  
+
+  // foreach ($bookings as $booking) {
+  //   //this is from room, vehicle, or package tables
+  //   $furtherbookingDetails = $serviceProvider ? $this->userModel->findBookingFurtherDetail($booking) : null;
+  //   //checking booking can be canceled or not
+  //   $cancellationEligibility = $bookings ? $this->userModel->checkCancellationEligibility($booking->booking_id) : null;
+    
+  //   ////////////////////////////////////////////////////////////
+  //   // Adding details to the array for each booking
+  //   $furtherBookingDetailsArray[] = [
+  //       'furtherBookingDetails' => $furtherbookingDetails, // Corrected variable name
+  //       'cancellationEligibility' => $cancellationEligibility, // Corrected variable name
+  //       'startDates' => $booking->startDate,
+  //       'endDates' => $booking->endDate,
+        
+  //   ];
+// }
+$vehicleprice=null;
+$driver=null;
+if($serviceProvider->type==4){
+  $vehicleprice=$this->userModel->findCartVehiclePrice($Bid);
+  $driver=$this->userModel->findDriverAvilabilityCart($Bid);
+}
+
+  $data=[
+    'serviceProviderName' => $serviceProvider ? $serviceProvider->fname . ' ' . $serviceProvider->lname : null,
+    'type' => $serviceProvider ? $serviceProvider->type : null,
+    'profile_picture' => $user ? $user->profile_picture : null,
+    'number' => $serviceProvider ? $serviceProvider->number : null,
+    'location' => $mainbookingDetails ? $mainbookingDetails->city : null,
+    'serviceDescription' => $mainbookingDetails ? $mainbookingDetails->description : null,
+    'mainbookingDetails' => $mainbookingDetails,
+    'furtherBookingDetails' => $furtherbookingDetails,
+    'booking' => $booking,
+    'cancellationEligibility' => $cancellationEligibility,
+    'vehicleprice'=>$vehicleprice?$vehicleprice:null,
+    'driver'=>$driver?$driver:null,
+  ];
+  $this->view('travelerDashboard/bookingpopup',$data);
+}
+
+//cancelBooking
+public function cancelBooking($temporyid,$booking_id){
+
+  echo '<script>console.log("cancelBooking function is running!");</script>';
+    $id = $_SESSION['user_id'];
+    
+    if ($temporyid==0) {
+      //cancelfrom booking table
+      $cancel = $this->userModel->cancelBooking($booking_id);
+      //refund user
+      //check type and provide availibility
+      //send a sms to service provider
+      
+    }else{
+      $cancel = $this->userModel->cancelCartBooking($temporyid,$booking_id);
+      //refund user
+      //check type and provide availibility
+      //send a sms to service provider
+    }
+    
+    
+}
+
+
+
 }
 

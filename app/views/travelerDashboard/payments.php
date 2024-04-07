@@ -65,6 +65,14 @@
                 <h2>Total Payments</h2>
                 <p><?php  echo $data['noofPayments']?></p>
             </div>
+            <div class="box">
+                <h2>Total Payments Last Month</h2>
+                <p><?php  echo $data['noofPaymentsMonth']?></p>
+            </div>
+            <div class="box">
+                <h2>Payment Amount Last Month</h2>
+                <p><?php  echo $data['amountofPaymentsMonth']?>.00 &nbsp LKR</p>
+            </div>
         
            
         </div>

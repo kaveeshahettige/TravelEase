@@ -406,7 +406,7 @@ foreach ($agencies as $agency) {
               // Add to booking table
               $this->userModel->addBooking($transactionData);
               $lastBooking = $this->userModel->getLastBooking();
-              $this->userModel->addVehicleBooking($transactionData, $driver); // Booking to vehicle booking table
+              $this->userModel->addVehicleBooking($lastBooking->booking_id,$transactionData, $driver); // Booking to vehicle booking table
               $this->userModel->addPaymentDetailsVehicles($transactionData, $lastBooking->booking_id, $price);
           }
   
@@ -1140,7 +1140,7 @@ public function cartpaymentSuccessful() {
          
               $this->userModel->addroomUnavailabilityfromCart($bookingDetail, $transactionData);
           } elseif ($type == 4) {
-              $this->userModel->addVehicleBookingfromCart($bookingDetail,$transactionData,$driver);
+              $this->userModel->addVehicleBookingfromCart($lastcartBooking->booking_id,$bookingDetail,$transactionData,$driver);
              
           }
       }
