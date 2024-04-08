@@ -96,10 +96,12 @@
                 <thead>
                 <tr>
                     <th>No</th>
-                    <!-- <th>Trip ID</th> -->
+                    <!-- <th>booking ID</th> -->
                     <th>Service Provider</th>
                     <th>Start Date</th>
                     <th>End Date</th>
+                    <!-- <th>Tempory ID</th>
+                    <th>Service Provider ID</th> -->
                     <th>Booking</th>
                     <th></th>
                     <th></th>
@@ -117,10 +119,13 @@ if (!empty($data['previousTrips']) && is_array($data['previousTrips'])) {
     foreach ($data['previousTrips'] as $booking) {
         echo '<tr class="t-row">';
         echo '<td>' . $count . '</td>';
-        // echo '<td>' . $booking->booking_id . '</td>';
+        //  echo '<td>' . $booking->booking_id . '</td>';
          echo '<td>' . $booking->fname . ' ' . $booking->lname . '</td>';
         echo '<td>' . $booking->startDate . '</td>';
         echo '<td>' . $booking->endDate . '</td>';
+        // echo '<td>' . $booking->temporyid . '</td>';
+        // echo '<td>' . $booking->serviceProvider_id . '</td>';
+
         if ($booking->room_id !== null) {
             // Display the description from hotel_rooms if room_id is not null
             echo '<td>' . $booking->hotel_description . '</td>'; // Assuming you alias it as hotel_description
@@ -135,11 +140,11 @@ if (!empty($data['previousTrips']) && is_array($data['previousTrips'])) {
         // echo '<td><button class="viewbooking" onclick="openPopup(' . $booking->serviceProvider_id . ', ' . $booking->booking_id . ')">View</button></td>';
         echo '<td><button class="viewbooking" onclick="openPopup(\'' . $booking->temporyid .'\',' . $booking->serviceProvider_id . ', \'' . $booking->booking_id . '\')">View</button></td>';
        // Check if feedback has been provided for this booking
-       $feedbackProvided = $this->userModel->checkFeedbackProvided($booking->booking_id);
+       $feedbackProvided = $this->userModel->checkFeedbackProvided($booking->booking_id,$booking->temporyid);
 
        // Display the "Feedback" button only if feedback hasn't been provided
        if (!$feedbackProvided) {
-        echo '<td><button class="provide-feedback-button" onclick="openFeedbackPopup(' . $booking->booking_id . ', \'' . $booking->fname . ' ' . $booking->lname . '\')"><i class="bx bx-plus"></i>Feedback</button></td>';
+        echo '<td><button class="provide-feedback-button" onclick="openFeedbackPopup(' . $booking->temporyid . ',' . $booking->serviceProvider_id . ',\'' . $booking->booking_id . '\', \'' . $booking->fname . ' ' . $booking->lname . '\')"><i class="bx bx-plus"></i> Feedback</button></td>';
     } else {
         echo '<td><button class="submitted-button" disabled><i class="bx bx-check"></i>Submitted</button></td>';
     }

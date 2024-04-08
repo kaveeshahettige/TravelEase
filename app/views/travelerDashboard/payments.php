@@ -66,11 +66,11 @@
                 <p><?php  echo $data['noofPayments']?></p>
             </div>
             <div class="box">
-                <h2>Total Payments Last Month</h2>
+                <h2>MonthlyTotal Payments</h2>
                 <p><?php  echo $data['noofPaymentsMonth']?></p>
             </div>
             <div class="box">
-                <h2>Payment Amount Last Month</h2>
+                <h2>Monthly Payment Amount</h2>
                 <p><?php  echo $data['amountofPaymentsMonth']?>.00 &nbsp LKR</p>
             </div>
         
@@ -110,19 +110,40 @@
 $count = 1;
 
 if (!empty($data['payments']) && is_array($data['payments'])) {
-    foreach ($data['payments'] as $payment ) {
+    // Initialize an array to store payments grouped by booking_id
+    $groupedPayments = [];
+
+    // Group payments by booking_id
+    foreach ($data['payments'] as $payment) {
+        $bookingId = $payment->booking_id;
+        if (!isset($groupedPayments[$bookingId])) {
+            // Initialize an array for the booking_id if it doesn't exist
+            $groupedPayments[$bookingId] = [];
+        }
+        // Add the payment to the array for the booking_id
+        $groupedPayments[$bookingId][] = $payment;
+    }
+
+    // Loop through the grouped payments
+    foreach ($groupedPayments as $bookingId => $payments) {
+        // Combine service provider names into a single string separated by commas
+        $providerNames = array_map(function ($payment) {
+            return ucfirst($payment->fname) . ' ' . $payment->lname;
+        }, $payments);
+        $providerNamesString = implode(', ', $providerNames);
+
+        // Output the row for each booking_id
         echo '<tr class="t-row">';
         echo '<td>' . $count . '</td>';
-        // echo '<td>' . $payment->payment_id . '</td>';
-        // echo '<td>' .$payment->booking_id .'</td>';
-        echo '<td>' . ucfirst($payment->fname).''.$payment->lname . '</td>';
-        // echo '<td>' . $payment->startDate . '</td>';
-        echo '<td>' . $payment->amount.".00 " . '</td>';
-        echo '<td>' . date('Y-m-d', strtotime($payment->bookingDate)) . '</td>';
+        // echo '<td>' . $bookingId . '</td>';
+        echo '<td>' . $providerNamesString . '</td>';
+        echo '<td>' . $payments[0]->amount . '.00 </td>'; // Assuming all payments for the same booking have the same amount
+        echo '<td>' . date('Y-m-d', strtotime($payments[0]->bookingDate)) . '</td>'; // Assuming all payments for the same booking have the same booking date
         echo '</tr>';
         $count++;
     }
-} else {
+}
+ else {
     echo '<tr><td colspan="4">No payments available</td></tr>';
 }
 ?>

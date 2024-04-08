@@ -16,8 +16,8 @@ class TravelerDashboard extends Controller{
       $id= $_SESSION['user_id'];
       $user=$this->userModel->findUserDetail($id);
       $noOfBooking=$this->userModel->countMyBooking($id);
-      $noOfUpcomingTrips=$this->userModel->countUpcomingTrips($id);
-      $monthlyPayment=$this->userModel->monthlyPayment($id);
+      $noOfUpcomingTrips=$this->userModel->countMyUpcomingBooking($id);
+      $monthlyPayment=$this->userModel->amountPaymentMonthly($id);
       $noOfFeedbacks=$this->userModel->countFeedbacks($id);
 
       $data = [
@@ -134,20 +134,23 @@ class TravelerDashboard extends Controller{
       $user=$this->userModel->findUserDetail($id);
       $noOfPreviousTrips=$this->userModel->countPreviousTrips($id);
       $previousTrips = $this->userModel->findPreviousTrips($id);
+      $feedbacks=$this->userModel->findPreviousFeedbacks($id);
+
     $feedbackStatus = [];
 
     foreach ($previousTrips as $trip) {
-    // Check if feedback has been provided for this booking
-    $feedbackProvided = $this->userModel->checkFeedbackProvided($trip->booking_id);
-    
-    // Store the feedback status (1 if feedback provided, 0 otherwise)
-    $feedbackStatus[$trip->booking_id] = $feedbackProvided ? 1 : 0;
-}
-
-// Store the feedback status array in the $previousTrips array
-foreach ($previousTrips as $key => $trip) {
-    $previousTrips[$key]->feedback_provided = $feedbackStatus[$trip->booking_id];
-}
+      // Check if feedback has been provided for this booking
+      $feedbackProvided = $this->userModel->checkFeedbackProvided($trip->booking_id, $trip->temporyid);
+      
+      // Store the feedback status (1 if feedback provided, 0 otherwise)
+      $feedbackStatus[$trip->booking_id . '_' . $trip->temporyid] = $feedbackProvided ? 1 : 0;
+  }
+  
+  // Store the feedback status array in the $previousTrips array
+  foreach ($previousTrips as $key => $trip) {
+      $previousTrips[$key]->feedback_provided = $feedbackStatus[$trip->booking_id . '_' . $trip->temporyid];
+  }
+  
 
       $data = [
         'id' => '$id',
@@ -374,8 +377,10 @@ echo '</script>';
     $feedback = $_POST["feedback"];
     $rating = $_POST["rating"];
     $bookingId = $_POST["bookingId"];
+    $serviceProvider_id=$_POST["Spid"];
+    $temporyid=$_POST["tid"];
 
-   $submit=$this->userModel->submitFeedback($id,$feedback,$rating,$bookingId);
+   $submit=$this->userModel->submitFeedback($id,$feedback,$rating,$bookingId,$serviceProvider_id,$temporyid);
    //if tru alert feedback submitted
     if($submit){
       echo '<script>';
@@ -538,23 +543,62 @@ public function cancelBooking($temporyid,$booking_id){
 
   echo '<script>console.log("cancelBooking function is running!");</script>';
     $id = $_SESSION['user_id'];
+    $user=$this->userModel->findUserDetail($id);
+    //$bookingDetails=$this->userModel->findBookingDetails($booking_id,$temporyid);
     
     if ($temporyid==0) {
-      //cancelfrom booking table
+      //detail of the booking
+      $bookingDetails=$this->userModel->findBookingDetails($booking_id);
+      $bookingFurtherDetail=$this->userModel->findBookingFurtherDetail($bookingDetails);
+      if($bookingDetails->type==4){
+        $message="Your Agency vehicle with ID ".$bookingFurtherDetail->vehicle_id."-".$bookingFurtherDetail->brand ." ".$bookingFurtherDetail->model." ".$bookingFurtherDetail->plate_number." ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+      }elseif($bookingDetails->type==3){
+        $message="Your Hotel room with ID ".$bookingFurtherDetail->room_id."-".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+
+      }
+      
+      
+      //cancel from booking table
       $cancel = $this->userModel->cancelBooking($booking_id);
+
       //refund user
-      //check type and provide availibility
+      //$refund = $this->userModel->refundUser($booking_id);
+
+      //check type and provide availibility of vehicle_bookings,room_availability
+      $availibility=$this->userModel->makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 
+      
       //send a sms to service provider
+
+      //send notofuiaction
+      $send=$this->userModel->sendBookingCancellationNotification($id,$bookingDetails->serviceProvider_id,$booking_id,$message);
       
     }else{
+
+      $bookingDetails=$this->userModel->findCartBookingDetails($booking_id,$temporyid);
+      $bookingFurtherDetail=$this->userModel->findBookingFurtherDetail($bookingDetails);
+      if($bookingDetails->type==4){
+        $message="Your Agency vehicle with ID ".$bookingFurtherDetail->vehicle_id."-".$bookingFurtherDetail->brand ." ".$bookingFurtherDetail->model." ".$bookingFurtherDetail->plate_number." ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+      }elseif($bookingDetails->type==3){
+        $message="Your Hotel room with ID ".$bookingFurtherDetail->room_id."-".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+
+      }
+      
+      //cancel from cartbookings table
       $cancel = $this->userModel->cancelCartBooking($temporyid,$booking_id);
+
       //refund user
-      //check type and provide availibility
+      //$refund = $this->userModel->refundUser($booking_id);
+
+      //check type and provide availibility of vehicle_bookings,room_availability
+      $availibility=$this->userModel->makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 
       //send a sms to service provider
-    }
+
     
-    
+       //send notofuiaction
+       $send=$this->userModel->sendBookingCancellationNotification($id,$bookingDetails->serviceProvider_id,$booking_id,$message);
+    }    
 }
+
 
 
 

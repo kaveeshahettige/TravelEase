@@ -121,7 +121,7 @@ if (!empty($data['mybooking']) && is_array($data['mybooking'])) {
         echo '<td>' .$booking->fname.' '.$booking->lname.'</td>';
         echo '<td>' . $booking->startDate . '</td>';
         echo '<td>' . $booking->endDate . '</td>';
-        //echo '<td>' . $booking->temporyid . '</td>';
+        echo '<td>' . $booking->temporyid . '</td>';
         echo '<td>' . date('Y-m-d', strtotime($booking->bookingDate)) . '</td>';
         echo '<td><button class="viewbooking" onclick="openPopup(\'' . $booking->temporyid .'\',' . $booking->serviceProvider_id . ', \'' . $booking->booking_id . '\')">View</button></td>';
 

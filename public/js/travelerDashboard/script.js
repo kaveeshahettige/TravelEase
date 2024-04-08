@@ -48,23 +48,31 @@ function editInfo() {
 /// Function to open the feedback popup
 
 
-function openFeedbackPopup(bookingId, Name) {
+function openFeedbackPopup(tid,Spid,bookingId, Name) {
   console.log("Opening feedback popup for: " + Name);
   // Display the modal
   var modal = document.getElementById("feedbackModal");
   var bookingNameSpan = document.getElementById("bookingNameSpan");
   var submitFeedbackButton = document.getElementById("submitFeedbackButton");
 
+
   bookingNameSpan.innerText = Name; // Set booking name in the modal
   submitFeedbackButton.dataset.bookingId = bookingId; // Set booking ID as a data attribute
+  submitFeedbackButton.dataset.tid = tid; // Set tid as a data attribute
+  submitFeedbackButton.dataset.Spid = Spid; // Set Spid as a data attribute
   modal.style.display = "block";
 }
 
 function submitFeedback() {
   var feedback = document.getElementById("feedback").value;
   var rating = document.querySelector('input[name="rating"]:checked').value;
-  var bookingId = document.getElementById("submitFeedbackButton").dataset.bookingId; // Retrieve booking ID from data attribute
+  var bookingId = document.getElementById("submitFeedbackButton").dataset.bookingId;
+  var tid= document.getElementById("submitFeedbackButton").dataset.tid;// Retrieve booking ID from data attribute
+  var Spid= document.getElementById("submitFeedbackButton").dataset.Spid;// Retrieve booking ID from data attribute
 
+  console.log("Tid: "+tid);
+  console.log("Spid: "+Spid);
+  console.log("bid: " + bookingId);
   // AJAX request
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "http://localhost/TravelEase/travelerDashboard/submitFeedback", true);
@@ -89,7 +97,7 @@ function submitFeedback() {
       }
   };
   
-  var data = "feedback=" + encodeURIComponent(feedback) + "&rating=" + encodeURIComponent(rating) + "&bookingId=" + encodeURIComponent(bookingId);
+  var data = "feedback=" + encodeURIComponent(feedback) + "&rating=" + encodeURIComponent(rating) + "&bookingId=" + encodeURIComponent(bookingId) + "&tid=" + encodeURIComponent(tid) + "&Spid=" + encodeURIComponent(Spid);
   xhr.send(data);
 }
 
@@ -99,6 +107,9 @@ function closeFeedbackPopup() {
   // Hide the modal
   var modal = document.getElementById("feedbackModal");
   modal.style.display = "none";
+  setTimeout(function() {
+    location.reload();
+  }, 2000);
 }
 
 window.onclick = function(event) {
@@ -151,9 +162,8 @@ function openPopup(Tid,Sid, Bid) {
 }
 
 
-//////////
-// Function to open the confirmation modal
-// Declare confirmBtn globally
+///////////////////////////
+
 // Declare confirmBtn and confirmationMessage globally
 var confirmBtn, confirmationMessage;
 
@@ -240,7 +250,7 @@ function initiateRefund() {
   }, 2000);
 }
 
-
+///////////////////////
 
 
 

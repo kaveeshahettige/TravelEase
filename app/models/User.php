@@ -651,7 +651,26 @@ public function updatePicture($data){
     //findMyUpcomingCartBooking
     //countMyBooking
     public function countMyBooking($id){
-        $this->db->query('SELECT COUNT(*) AS count FROM bookings WHERE user_id = :id  AND bookingCondition != "cancelled"');
+        $this->db->query('SELECT COUNT(*) AS count
+        FROM (
+            SELECT booking_id, user_id, bookingCondition, bookingDate
+            FROM bookings
+            WHERE user_id = :id
+                AND bookingCondition != "cancelled"
+                AND MONTH(bookingDate) = MONTH(CURRENT_DATE())
+                AND YEAR(bookingDate) = YEAR(CURRENT_DATE())
+        
+            UNION ALL
+        
+            SELECT booking_id, user_id, bookingCondition, bookingDate
+            FROM cartbookings
+            WHERE user_id = :id
+                AND bookingCondition != "cancelled"
+                AND MONTH(bookingDate) = MONTH(CURRENT_DATE())
+                AND YEAR(bookingDate) = YEAR(CURRENT_DATE())
+        ) AS all_bookings;
+        
+        ');
         $this->db->bind(':id', $id);
         $row = $this->db->single();
          if($this->db->rowcount()>0){
@@ -1529,7 +1548,12 @@ public function monthlyPayment($id){
 
 //countPayment($id)
 public function countPayment($id){
-    $this->db->query('SELECT COUNT(*) AS count FROM payments WHERE booking_id IN (SELECT booking_id FROM bookings WHERE user_id = :id)');
+    $this->db->query('SELECT COUNT(*) AS count FROM (
+        SELECT booking_id FROM payments WHERE booking_id IN (SELECT booking_id FROM bookings WHERE user_id = :id)
+        UNION ALL
+        SELECT booking_id FROM cartpayments WHERE booking_id IN (SELECT booking_id FROM cartbookings WHERE user_id = :id)
+    ) AS combined_payments;
+    ');
     $this->db->bind(':id', $id);
     $row = $this->db->single();
      if($this->db->rowcount()>0){
@@ -1542,14 +1566,30 @@ public function countPayment($id){
 //countPaymentMonthly
 public function countPaymentMonthly($id){
     $this->db->query('SELECT COUNT(*) AS count 
-    FROM payments 
-    WHERE booking_id IN (
-        SELECT booking_id 
-        FROM bookings 
-        WHERE user_id = :id 
-    )
-    AND MONTH(payment_date) = MONTH(CURDATE()) 
-    AND YEAR(payment_date) = YEAR(CURDATE());
+    FROM (
+        SELECT booking_id
+        FROM payments 
+        WHERE booking_id IN (
+            SELECT booking_id 
+            FROM bookings 
+            WHERE user_id = :id 
+        )
+        AND MONTH(payment_date) = MONTH(CURDATE()) 
+        AND YEAR(payment_date) = YEAR(CURDATE())
+    
+        UNION ALL
+    
+        SELECT booking_id
+        FROM cartpayments 
+        WHERE booking_id IN (
+            SELECT booking_id 
+            FROM cartbookings 
+            WHERE user_id = :id 
+        )
+        AND MONTH(payment_date) = MONTH(CURDATE()) 
+        AND YEAR(payment_date) = YEAR(CURDATE())
+    ) AS all_payments;
+    
     ');
     $this->db->bind(':id', $id);
     $row = $this->db->single();
@@ -1563,14 +1603,30 @@ public function countPaymentMonthly($id){
 //amountPaymentMonthly
 public function amountPaymentMonthly($id){
     $this->db->query('SELECT SUM(amount) AS total 
-    FROM payments 
-    WHERE booking_id IN (
-        SELECT booking_id 
-        FROM bookings 
-        WHERE user_id = :id 
-    )
-    AND MONTH(payment_date) = MONTH(CURDATE()) 
-    AND YEAR(payment_date) = YEAR(CURDATE());
+    FROM (
+        SELECT amount
+        FROM payments 
+        WHERE booking_id IN (
+            SELECT booking_id 
+            FROM bookings 
+            WHERE user_id = :id 
+        )
+        AND MONTH(payment_date) = MONTH(CURDATE()) 
+        AND YEAR(payment_date) = YEAR(CURDATE())
+    
+        UNION ALL
+    
+        SELECT amount
+        FROM cartpayments 
+        WHERE booking_id IN (
+            SELECT booking_id 
+            FROM cartbookings 
+            WHERE user_id = :id 
+        )
+        AND MONTH(payment_date) = MONTH(CURDATE()) 
+        AND YEAR(payment_date) = YEAR(CURDATE())
+    ) AS all_payments;
+    
     ');
     $this->db->bind(':id', $id);
     $row = $this->db->single();
@@ -1586,17 +1642,33 @@ public function amountPaymentMonthly($id){
 public function findPayment($id){
     $this->db->query('
     SELECT 
-        payments.*, 
-        bookings.*, 
-        users.*
-    FROM 
-        payments
-    JOIN 
-        bookings ON payments.booking_id = bookings.booking_id
-    JOIN 
-        users ON bookings.serviceProvider_id = users.id
-    WHERE 
-        bookings.user_id = :id
+    payments.*, 
+    bookings.*, 
+    users.*
+FROM 
+    payments
+JOIN 
+    bookings ON payments.booking_id = bookings.booking_id
+JOIN 
+    users ON bookings.serviceProvider_id = users.id
+WHERE 
+    bookings.user_id = :id
+
+UNION ALL
+
+SELECT 
+    cartpayments.*, 
+    cartbookings.*, 
+    users.*
+FROM 
+    cartpayments
+JOIN 
+    cartbookings ON cartpayments.booking_id = cartbookings.booking_id
+JOIN 
+    users ON cartbookings.serviceProvider_id = users.id
+WHERE 
+    cartbookings.user_id = :id;
+
 ');
 
     $this->db->bind(':id', $id);
@@ -1800,12 +1872,16 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
             SELECT 
                 cartbookings.*, 
                 users.*, 
-                NULL AS hotel_description,  -- No hotel description for cart bookings
-                NULL AS vehicle_description  -- No vehicle description for cart bookings
+                hotel_rooms.description AS hotel_description,  -- No hotel description for cart bookings
+                vehicles.description AS vehicle_description  -- No vehicle description for cart bookings
             FROM 
             cartbookings
             INNER JOIN 
                 users ON cartbookings.serviceProvider_id = users.id
+            LEFT JOIN 
+                hotel_rooms ON cartbookings.room_id IS NOT NULL AND cartbookings.room_id = hotel_rooms.room_id
+            LEFT JOIN 
+                vehicles ON cartbookings.vehicle_id IS NOT NULL AND cartbookings.vehicle_id = vehicles.vehicle_id
             WHERE 
             cartbookings.user_id = :id
                 AND cartbookings.endDate < CURDATE()
@@ -1824,12 +1900,14 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
 
 
     //submitFeedback($feedback,$rating,$serviceId)
-    public function submitFeedback($user_id,$feedback,$rating,$bookingId){
-        $this->db->query('INSERT INTO feedbacksnratings (user_id,booking_id,feedback,rating) VALUES (:user_id,:bookingId,:feedback, :rating)');
+    public function submitFeedback($user_id,$feedback,$rating,$bookingId,$serviceProvider_id,$temporyid){
+        $this->db->query('INSERT INTO feedbacksnratings (user_id,booking_id,fservice_id,ftempory_id,feedback,rating) VALUES (:user_id,:bookingId,:fservice_id,:ftempory_id,:feedback, :rating)');
         $this->db->bind(':user_id', $user_id);
         $this->db->bind(':feedback', $feedback);
         $this->db->bind(':rating', $rating);
         $this->db->bind(':bookingId', $bookingId);
+        $this->db->bind(':fservice_id', $serviceProvider_id);
+        $this->db->bind(':ftempory_id', $temporyid);
         if($this->db->execute()){
             return true;
         }else{
@@ -1838,10 +1916,11 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
     }
 
     //checkFeedbackProvided
-    public function checkFeedbackProvided($bookingId) {
+    public function checkFeedbackProvided($bookingId,$temporyid) {
         // Query to check if feedback has been provided for the given booking ID
-        $this->db->query('SELECT COUNT(*) AS feedback_count FROM feedbacksnratings WHERE booking_id = :booking_id');
+        $this->db->query('SELECT COUNT(*) AS feedback_count FROM feedbacksnratings WHERE booking_id = :booking_id AND ftempory_id = :temporyid');
         $this->db->bind(':booking_id', $bookingId);
+        $this->db->bind(':temporyid', $temporyid);
         $result = $this->db->single();
     
         // If there are any feedback entries for the booking ID, return true (feedback provided)
@@ -1896,6 +1975,98 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
         } else {
             return false;
         }
+    }
+
+    //findPreviousFeedbacks
+    public function findPreviousFeedbacks(){
+        $this->db->query('SELECT * FROM feedbacksnratings');
+
+       // $this->db->bind(':user_id', $user_id);
+        $result = $this->db->resultSet();
+        if ($this->db->rowCount() > 0) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
+    //findBookingDetails($booking_id);
+    public function findBookingDetails($booking_id){
+        $this->db->query('SELECT u.*,b.*
+        FROM bookings b
+        JOIN users u ON b.serviceProvider_id = u.id
+        WHERE b.booking_id = :booking_id;
+        ');
+        $this->db->bind(':booking_id', $booking_id);
+        $result = $this->db->single();
+        if ($this->db->rowCount() > 0) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
+    //findCartBookingDetails($booking_id);
+    public function findCartBookingDetails($booking_id,$temporyid){
+        $this->db->query('SELECT u.*, b.*
+        FROM cartbookings b
+        JOIN users u ON b.serviceProvider_id = u.id
+        WHERE b.booking_id = :booking_id
+        AND b.temporyid = :temporyid;        
+        ');
+        $this->db->bind(':booking_id', $booking_id);
+        $this->db->bind(':temporyid', $temporyid);
+        $result = $this->db->single();
+        if ($this->db->rowCount() > 0) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
+    //sendBookingCancellationNotification($bookingDetails->serviceProvider_id,$booking_id)
+    public function sendBookingCancellationNotification($id,$serviceProvider_id,$booking_id,$notification){
+        $this->db->query('INSERT INTO notifications (booking_id,sender_id,receiver_id, notification) VALUES (:booking_id,:sender_id, :receiver_id, :notification)');
+        
+        $this->db->bind(':booking_id', $booking_id);
+        $this->db->bind(':sender_id', $id);
+        $this->db->bind(':receiver_id', $serviceProvider_id);
+        $this->db->bind(':notification', $notification);
+
+        if($this->db->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 
+    public function makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail){
+        if($bookingDetails->type==4){
+            $this->db->query('DELETE FROM vehicle_bookings WHERE vehicle_id = :vehicle_id AND start_date = :start_date AND end_date = :end_date OR booking_id = :booking_id');
+            $this->db->bind(':vehicle_id', $bookingFurtherDetail->vehicle_id);
+            $this->db->bind(':start_date', $bookingDetails->startDate);
+            $this->db->bind(':end_date', $bookingDetails->endDate);
+            $this->db->bind(':booking_id', $booking_id);
+            if($this->db->execute()){
+                return true;
+            }else{
+                return false;
+            }
+
+        }else if($bookingDetails->type==3){
+            $this->db->query('DELETE FROM room_availability WHERE room_id = :room_id AND startDate = :startDate AND endDate = :endDate');
+            $this->db->bind(':room_id', $bookingFurtherDetail->room_id);
+            $this->db->bind(':startDate', $bookingDetails->startDate);
+            $this->db->bind(':endDate', $bookingDetails->endDate);
+            if($this->db->execute()){
+                return true;
+            }else{
+                return false;
+            }
+
+        }
+        
     }
 
 

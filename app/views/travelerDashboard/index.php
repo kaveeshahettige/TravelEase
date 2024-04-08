@@ -70,7 +70,7 @@
                     <table class="summary">
                         <thead>
                             <tr>
-                                <th>Total Bookings</th>
+                                <th>Total Monthly Bookings</th>
                                 <th>Upcoming Trips</th>
                                 <th>Total Monthly Payments</th>
                                 <th>Feedbacks provided</th>
