@@ -248,6 +248,8 @@ class Driver extends Controller{
         // var_dump($agencyId);
         
         $pendingBookings = $this->TravelsModel->getPendingBookings($agencyId);
+
+        // var_dump($pendingBookings); // Debug: Display the pending bookings array
     
         // Fetch payment amounts for each booking ID and store them in an array
         $paymentAmounts = [];
@@ -260,21 +262,22 @@ class Driver extends Controller{
         foreach ($pendingBookings as $key => $booking) {
             // Call getPlateNumberForVehicle with the vehicle_id property of the $booking object
             $plateNumber = $this->TravelsModel->getPlateNumberForVehicle($booking->vehicle_id);
-            // if ($plateNumber) {       
+            if ($plateNumber) {       
 
-            //     // Append the plate_number property of $plateNumber to $plateNumbers
-            //     $pendingBookings[$key]->plate_number = $plateNumber->plate_number;
-            // }
-        var_dump($plateNumber);
+                // Append the plate_number property of $plateNumber to $plateNumbers
+                $pendingBookings[$key]->plate_number = $plateNumber->plate_number;
+            }
+        // var_dump($plateNumber);
             // Call getTravelerDetails with the user_id property of the $booking object
             $details = $this->TravelsModel->getTravelerDetails($booking->user_id);
             if ($details) {
                 // Append the traveler's details to $travelerDetails
                 $pendingBookings[$key]->traveler_details = $details;
             }
-        
+        // var_dump($details);
             // Call getVehicleBookingDetails with the booking_id property of the $booking object
             $vehicleDetails = $this->TravelsModel->getVehicleBookingDetails($booking->booking_id);
+            // var_dump($vehicleDetails);
             if ($vehicleDetails) {
                 // Merge vehicle details with booking details
                 $pendingBookings[$key]->start_time = $vehicleDetails->start_time;
@@ -294,6 +297,8 @@ class Driver extends Controller{
             'plateNumber' => $plateNumber,
             // var_dump($pendingBookings)
         ];
+
+        // var_dump($data);
         // var_dump($plateNumber); // Debug: Display the data array
         $this->view('driver/bookings', $data);
     }

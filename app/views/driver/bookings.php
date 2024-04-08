@@ -102,7 +102,7 @@
     <?php
     // Check if $data exists and has the expected structure
     if (!empty($data) && isset($data['pendingBookings'])) {
-        echo "Data exists"; // Debug statement to check if data exists
+        // Debug statement to check if data exists
 
         // Debug statement to check the structure of $data['pendingBookings']
         // var_dump($data['pendingBookings']);
@@ -132,7 +132,7 @@
 
             foreach (array_map(null, $pendingBookings, $paymentAmounts) as [$booking, $payment]) {
                 // Your code here to handle each iteration
-                var_dump($payment);
+                // var_dump($payment);
             ?>
                 <tr>
                     <td><?php $key = 0; echo $key + 1; ?></td>
@@ -144,7 +144,7 @@
                     <td><?php echo $booking->Pickup_Location; ?></td>
                     <td><?php echo $booking->End_Location; ?></td>
                     <td><?php echo $booking->plate_number; ?></td>
-                    <td><?php echo $payment->amount; ?></td>
+                    <td><?php echo $payment[0]; ?></td>
                     <td><?php echo $booking->withDriver ? 'Yes' : 'No'; ?></td>
                     <td><!-- Add action buttons here if needed --></td>
                 </tr>
