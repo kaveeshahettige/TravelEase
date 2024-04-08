@@ -86,7 +86,7 @@ $userData= $data['basicInfo']['userData'];
                                     <input name="date" type="hidden" id="selectedDate" value="<?php
                                     echo htmlspecialchars($data["selectedDate"]); ?>">
                                     <button type="submit" id="checkAvailabilityBtn" disabled>Check Availability</button>
-<!--                                    <p id="dateError" style="color: red; display: none;">Please select a date.</p>-->
+                                   <p id="dateError" style="color: red; display: none;">Please select a date.</p>
                                 </form>
 
                             </div>

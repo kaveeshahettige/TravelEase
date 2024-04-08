@@ -8,6 +8,11 @@
     margin: 20px auto;
     overflow: hidden;
 }
+.disabled {
+    color: #000000; /* Set the text color for disabled dates */
+    pointer-events: none;
+    opacity:calc(0.5); /* Disable pointer events for disabled dates */
+}
 
 /* Calendar Header */
 .calendar-header {
@@ -66,7 +71,15 @@
 .selected-day {
     background-color: #FFCC5B;
     color: #fff;
+    
 }
+.current-date {
+    /* background-color: #FFCC5B; */
+    border: 3px solid #000;
+    border-radius: 10%;
+}
+
+
 
 .empty-cell {
     background-color: #fff;
@@ -83,6 +96,8 @@
 #selected-date {
     font-size: 24px;
     margin-bottom: 15px;
+    justify-content: center;
+    align-items: center;
 }
 
 #availability-content {

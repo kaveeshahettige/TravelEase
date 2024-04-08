@@ -112,9 +112,9 @@
                 
 
                         </div>
-                        <a href="<?php echo URLROOT; ?>driver/vehicleedit/<?php echo $vehicle['id']?>"><button class="edit-button2">Edit </button>
+                        <a href="<?php echo URLROOT; ?>driver/vehicleedit/<?php echo $vehicle['vehicle_id']?>"><button class="edit-button2">Edit </button>
 </a>
-                    <a href="<?php echo URLROOT?>driver/vehicledelete/<?php echo $vehicle['id']?>"><button class ="edit-button2">Delete</button></a>
+                    <a href="<?php echo URLROOT?>driver/vehicledelete/<?php echo $vehicle['vehicle_id']?>"><button class ="edit-button2">Delete</button></a>
                      </div>
                     
                 </div>

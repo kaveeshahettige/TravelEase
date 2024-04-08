@@ -1,12 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-    renderCalendar();
-});
-
-let currentDate = new Date();
-
-function renderCalendar() {
     const monthYearElement = document.getElementById("current-month-year");
     const daysElement = document.getElementById("calendar-days");
+
+    let currentDate = new Date();
 
     monthYearElement.innerText = getMonthYearString(currentDate);
 
@@ -15,7 +11,7 @@ function renderCalendar() {
 
     // Add day names
     const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    dayNames.forEach(dayName => {
+    dayNames.forEach((dayName) => {
         const dayNameCell = document.createElement("div");
         dayNameCell.classList.add("day", "day-name");
         dayNameCell.innerText = dayName;
@@ -36,9 +32,26 @@ function renderCalendar() {
     for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
         const cell = createDayCell(date);
+
+        // Highlight the current date
+        if (date.toDateString() === new Date().toDateString()) {
+            cell.classList.add("current-date");
+        }
+
+        // Check if the date is in the past
+        if (date < new Date()) {
+            cell.classList.add("disabled"); // Add a CSS class to visually disable past dates
+            cell.removeEventListener("click", handleDayClick); // Remove click event listener for past dates
+        }
+
         daysElement.appendChild(cell);
     }
-}
+});
+
+
+
+let currentDate = new Date();
+
 
 function createEmptyCell() {
     const cell = document.createElement("div");
@@ -55,12 +68,19 @@ function createDayCell(date) {
     dayNumber.innerText = date.getDate();
     cell.appendChild(dayNumber);
 
+    // Check if the date is the current date
+    const today = new Date();
+    if (date.toDateString() === today.toDateString()) {
+        cell.classList.add("current-date"); // Add the current date styling
+    }
+
     cell.addEventListener("click", function () {
         handleDayClick(date);
     });
 
     return cell;
 }
+
 
 function getFormattedDateStringForSQL(date) {
     const year = date.getFullYear();

@@ -89,60 +89,77 @@
             </div>
             
             <?php
-        // Check if the sort parameter is set in the URL
-$sort = isset($_GET['sort']) ? $_GET['sort'] : 'asc';
+// Add this before the foreach loop
+// var_dump($data);
+// var_dump($data['plateNumber']);
+// var_dump($data['paymentAmounts']);
 
-// Determine the sorting order based on the current order
-$newSort = ($sort === 'asc') ? 'desc' : 'asc';
+
+
 ?>
-
 <div class="table-content">
     <h2>Pending Booking Details</h2>
-    <form action="<?php echo URLROOT; ?>/driver/bookings" method="post">
-        <table class="booking-table">
-            <thead>
+    <?php
+    // Check if $data exists and has the expected structure
+    if (!empty($data) && isset($data['pendingBookings'])) {
+        echo "Data exists"; // Debug statement to check if data exists
+
+        // Debug statement to check the structure of $data['pendingBookings']
+        // var_dump($data['pendingBookings']);
+    ?>
+    <table class="booking-table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Passenger Name</th>
+                <th>Passenger Contact Number</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Time</th>
+                <th>Pickup Location</th>
+                <th>End Location</th>
+                <th>Vehicle Plate Number</th>
+                <th>Amount</th>
+                <th>With Driver</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $pendingBookings = $data['pendingBookings'] ?? [];
+            $paymentAmounts = $data['paymentAmounts'] ?? [];
+            // $plateNumber = $data['plateNumber'] ?? null;
+
+            foreach (array_map(null, $pendingBookings, $paymentAmounts) as [$booking, $payment]) {
+                // Your code here to handle each iteration
+                var_dump($payment);
+            ?>
                 <tr>
-                    <th>No</th>
-                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=trip_id&sort=<?php echo $newSort; ?>">Trip ID</a></th>
-                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=start_date&sort=<?php echo $newSort; ?>">Start Date</a></th>
-                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=end_date&sort=<?php echo $newSort; ?>">End Date</a></th>
-                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=pickup_location&sort=<?php echo $newSort; ?>">Pickup Location</th>
-                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=dropoff_location&sort=<?php echo $newSort; ?>">Dropoff Location</th>
-                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=passenger_count&sort=<?php echo $newSort; ?>">Number of passengers</th>
-                    <th>Actions</th>
+                    <td><?php $key = 0; echo $key + 1; ?></td>
+                    <td><?php echo $booking->traveler_details->fname . ' ' . $booking->traveler_details->lname; ?></td>
+                    <td><?php echo $booking->traveler_details->number; ?></td>
+                    <td><?php echo $booking->startDate; ?></td>
+                    <td><?php echo $booking->endDate; ?></td>
+                    <td><?php echo $booking->start_time; ?></td>
+                    <td><?php echo $booking->Pickup_Location; ?></td>
+                    <td><?php echo $booking->End_Location; ?></td>
+                    <td><?php echo $booking->plate_number; ?></td>
+                    <td><?php echo $payment->amount; ?></td>
+                    <td><?php echo $booking->withDriver ? 'Yes' : 'No'; ?></td>
+                    <td><!-- Add action buttons here if needed --></td>
                 </tr>
-            </thead>
-            <tbody>
-                <?php
-                if (!empty($data['pendingbookings'])) {
-                    $count = 1;
-                    foreach ($data['pendingbookings'] as $booking) :
-                ?>
-                        <tr>
-                            <td><?php echo $count; ?></td>
-                            <td><?php echo $booking->trip_id; ?></td>
-                            <td><?php echo $booking->start_date; ?></td>
-                            <td><?php echo $booking->end_date; ?></td>
-                            <td><?php echo $booking->pickup_location; ?></td>
-                            <td><?php echo $booking->dropoff_location; ?></td>
-                            <td><?php echo $booking->passenger_count; ?></td>
-                            <td>
-        <input type="hidden" name="booking_id" value="<?php echo $booking->trip_id; ?>">
-        <button type="submit" name="status" value="accepted" class="view-button">Accept</button>
-        <button type="submit" name="status" value="decline" class="view-button">Decline</button>
-    </td>
-                        </tr>
-                <?php
-                        $count++;
-                    endforeach;
-                } else {
-                    echo '<tr><td colspan="8"><center>No pending bookings available.</center></td></tr>';
-                }
-                ?>
-            </tbody>
-        </table>
-    </form>
+            <?php } ?>
+        </tbody>
+    </table>
+    <?php } ?>
 </div>
+
+
+
+
+
+
+
 
 
 
@@ -153,14 +170,17 @@ $newSort = ($sort === 'asc') ? 'desc' : 'asc';
         <table class="booking-table">
         <thead>
             <tr>
-                <th>No</th>
-                <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=trip_id&sort=<?php echo $newSort; ?>">Trip ID</a></th>
-                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=start_date&sort=<?php echo $newSort; ?>">Start Date</a></th>
-                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=end_date&sort=<?php echo $newSort; ?>">End Date</a></th>
-                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=pickup_location&sort=<?php echo $newSort; ?>">Pickup Location</th>
-                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=dropoff_location&sort=<?php echo $newSort; ?>">Dropoff Location</th>
-                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=passenger_count&sort=<?php echo $newSort; ?>">Number of passengers</th>
-                    <th><a href="<?php echo URLROOT; ?>/driver/bookings?column=earnings&sort=<?php echo $newSort; ?>">Trip Charges</th>
+            <th>No</th>
+                <th>Passenger Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Time</th>
+                <th>Pickup Location</th>
+                <th>End Location</th>
+                <th>Vehicle Plate Number</th>
+                <th>Amount</th>
+                <th>With Driver</th>
+
                     <th>Actions</th>
             </tr>
         </thead>
@@ -175,10 +195,11 @@ $newSort = ($sort === 'asc') ? 'desc' : 'asc';
                         <td><?php echo $booking->trip_id; ?></td>
                         <td><?php echo $booking->start_date; ?></td>
                         <td><?php echo $booking->end_date; ?></td>
-                        <td><?php echo $booking->pickup_location; ?></td>
-                        <td><?php echo $booking->dropoff_location; ?></td>
+                        <td><?php echo $booking->Pickup_location; ?></td>
+                        <td><?php echo $booking->End_location; ?></td>
                         <td><?php echo $booking->passenger_count; ?></td>
                         <td><?php echo $booking->earnings; ?></td>
+
                         <td>
     <input type="hidden" name="booking_id" value="<?php echo $booking->trip_id; ?>">
     <button type="submit" name="status" value="complete" class="view-button">Complete</button>

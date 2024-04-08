@@ -1,6 +1,7 @@
 <?php
-
 class Driver extends Controller{
+
+    private $TravelsModel;
     
 
     private $postModel;
@@ -11,30 +12,36 @@ class Driver extends Controller{
           }
           $this->TravelsModel = $this->model('Travel');
     }
+
+    
+    
     public function index() {
         // Check if the user is logged in
         if (!isset($_SESSION['user_id'])) {
             // Redirect to login page or handle unauthorized access
-            // For example:
             redirect('login');
+            return; // Add return statement to prevent further execution
         }
-    
         // Get user ID from session
         $userId = $_SESSION['user_id'];
     
         // Check if the request method is POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Check if the form for adding agency details is submitted
+            // Handle form submissions
             if (isset($_POST['agency_name']) && isset($_POST['reg_number']) && isset($_POST['address']) && isset($_POST['description']) && isset($_POST['location'])) {
                 // Handle agency details submission
                 $agencyName = htmlspecialchars($_POST['agency_name']);
                 $regNumber = htmlspecialchars($_POST['reg_number']);
                 $address = htmlspecialchars($_POST['address']);
                 $description = htmlspecialchars($_POST['description']);
+                $website = isset($_POST['website']) ? htmlspecialchars($_POST['website']) : '-';
+                $facebook = isset($_POST['facebook']) ? htmlspecialchars($_POST['facebook']) : '-';
+                $twitter = isset($_POST['twitter']) ? htmlspecialchars($_POST['twitter']) : '-';
+                $instagram = isset($_POST['instagram']) ? htmlspecialchars($_POST['instagram']) : '-';
                 $location = htmlspecialchars($_POST['location']);
     
                 // Call the model to insert agency details into the database
-                if ($this->TravelsModel->addAgency($agencyName, $regNumber, $address, $description, $location, $userId)) {
+                if ($this->TravelsModel->addAgency($agencyName, $regNumber, $address, $description, $website, $facebook, $twitter, $instagram, $location, $userId)) {
                     // Agency added successfully
                     // You can redirect or show a success message
                     flash('success', 'Agency added successfully');
@@ -76,84 +83,232 @@ class Driver extends Controller{
             }
         }
     
-        // Load the view
-        $this->view('driver/index');
-    }
+        // Call the model to get agency details for the user
+        $agencyDetails = $this->TravelsModel->getAgencyDetails($userId);
+        $userDetails = $this->TravelsModel->getUserDetails($_SESSION['user_id']);
     
-    
-    
-    
-    
-    
-    
-    public function Calender(){
-        $this->view('driver/calender');
-    }
-    public function bookings() {
-        $user_id = $_SESSION['user_id'];
-        $column = isset($_GET['column']) ? $_GET['column'] : 'trip_id';
-    
-        // Check if the sort parameter is set in the URL
-        $sort = isset($_GET['sort']) ? $_GET['sort'] : 'asc';
-    
-        // Determine the sorting order based on the current order
-        $newSort = ($sort === 'asc') ? 'desc' : 'asc';
-    
-        // Get pending bookings and sort by the specified column
-        $pendingBookings = $this->TravelsModel->getPendingBookingsSorted($column, $newSort,$user_id);
-    
-        $acceptedbookings = $this->TravelsModel->getAcceptedBookingsSorted($column, $newSort, $user_id);
-    
-        // Get completed bookings
-        $completedbookings = $this->TravelsModel->getCompletedBookingsSorted($column, $newSort, $user_id);
-    
-        // Handle update status form submission
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $bookingId = $_POST['booking_id'];
-            $action = $_POST['status'];
-    
-            $TravelsModel = $this->loadModel('Travel');
-    
-            // Call a method in the model to handle the status update
-            $result = $TravelsModel->updateBookingStatus($bookingId, $action);
-    
-            if ($result) {
-                // Successful update, you may redirect or perform additional actions
-                // For example, redirect back to the bookings page
-                header('Location: ' . URLROOT . '/driver/bookings');
-                exit();
-            } else {
-                // Handle update failure
-                // You may display an error message or redirect to an error page
-                echo "Error updating booking status";
-            }
+        // Check if all required fields in agency details are filled
+        $emptyFields = []; // Initialize emptyFields array
+        if (empty($agencyDetails->website)) {
+            $emptyFields[] = 'website';
+        }
+        if (empty($agencyDetails->facebook)) {
+            $emptyFields[] = 'facebook';
+        }
+        if (empty($agencyDetails->twitter)) {
+            $emptyFields[] = 'twitter';
+        }
+        if (empty($agencyDetails->instagram)) {
+            $emptyFields[] = 'instagram';
         }
     
-        // Assign the data to be passed to the view
+        // Debug code to show empty fields
+        echo "<pre>";
+        print_r($emptyFields);
+        echo "</pre>";
+    
+        // Pass the emptyFields flag and list of empty fields to the view along with other data
         $data = [
-            'acceptedbookings' => $acceptedbookings,
-            'completedbookings' => $completedbookings,
-            'pendingbookings' => $pendingBookings,
-            'sort' => $newSort, // Include the sort order in the data
-            'column' => $column, // Include the current column in the data
+            'agencyDetails' => $agencyDetails,
+            'formVisible' => count($emptyFields) > 0,
+            'user_id' => $userId,
+            'emptyFields' => $emptyFields,
+            'userDetails' => $userDetails,
+            'emptyAgencyFields' => $this->checkEmptyAgencyFields($agencyDetails), // Add this line
         ];
     
-        // Load the view
+        $this->view('driver/index', $data);
+    }
+    
+    public function calender() {
+        // Get the current date in UTC+05:30 timezone
+        $currentDate = new DateTime('now', new DateTimeZone('Asia/Colombo'));
+        $formattedDate = $currentDate->format('Y-m-d');
+    
+        $data = [
+            'selectedDate' => $formattedDate,
+            'basicInfo' => $this->basicInfo(),
+        ];
+    
+        $this->view('driver/calender', $data);
+    }
+    
+    
+
+    public function availablevehicles()
+    {
+        $date = $_GET['date'] ?? null;
+    
+        if (empty($date)) {
+            flash('error', 'Please select a date.');
+            redirect('driver/calender');
+        }
+    
+        $user_id = $_SESSION['user_id'];
+        $agency_id = $this->TravelsModel->getAgencyIdByUserId($user_id);
+    
+        $vehicleData = $this->TravelsModel->getAgencyvehicles($agency_id);
+        $vehicleIds = array_column($vehicleData, 'vehicle_id');
+    
+        $unavailableDates = $this->TravelsModel->getUnavailableDatesForVehicles($vehicleIds, $date);
+    
+        $unavailableVehicles = [];
+        foreach ($unavailableDates as $unavailable) {
+            $unavailableVehicles[$unavailable->vehicle_id] = true;
+        }
+    
+        $data = [
+            'vehicleData' => $vehicleData,
+            'date' => $date,
+            'unavailableVehicles' => $unavailableVehicles,
+            'basicInfo' => $this->basicInfo(),
+        ];
+    
+        $this->view('driver/availablevehicles', $data);
+    }
+    
+    public function setUnavailableDate()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+    
+        // Assuming you have a method in your model to set unavailable dates
+        $result = $this->TravelsModel->setUnavailableDate($data['vehicle_id'], $data['date']);
+    
+        if ($result) {
+            // Set Unavailability successful
+            echo json_encode(['success' => true]);
+        } else {
+            // Set Unavailability failed
+            echo json_encode(['success' => false]);
+        }
+    }
+    
+    public function removeUnavailableDate()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+    
+        // Assuming you have a method in your model to remove unavailable dates
+        $result = $this->TravelsModel->removeUnavailableDate($data['vehicle_id'], $data['date']);
+    
+        if ($result) {
+            // Remove Unavailability successful
+            echo json_encode(['success' => true]);
+        } else {
+            // Remove Unavailability failed
+            echo json_encode(['success' => false]);
+        }
+    }
+    
+
+
+    
+    public function basicInfo()
+    {
+        $travelModel = $this->model('Travel');
+
+        $user_id = $_SESSION['user_id'];
+
+        // Get user details
+        $userData = $travelModel->getUserById($user_id);
+
+        // Get hotel details
+        $driverData = $travelModel->getDiverByUserId($user_id);
+
+        // Pass data to the view
+        return ['userData' => $userData, 'driverData' => $driverData];
+    }
+    
+    
+   
+
+    private function checkEmptyAgencyFields($agencyDetails) {
+        $emptyFields = [];
+        if (empty($agencyDetails->agency_name)) {
+            $emptyFields[] = 'agency_name';
+        }
+        if (empty($agencyDetails->reg_number)) {
+            $emptyFields[] = 'reg_number';
+        }
+        // Add checks for other fields as needed
+        return $emptyFields;
+    }
+    public function bookings() {
+        // Check if the user is logged in
+        if (!isset($_SESSION['user_id'])) {
+            // Redirect to login page or handle unauthorized access
+            redirect('login');
+            return; // Add return statement to prevent further execution
+        }
+       
+        // Get user ID from session
+        $userId = $_SESSION['user_id'];
+        // var_dump($userId);
+        
+        $agencyId = $this->TravelsModel->getAgencyId($userId);
+        // var_dump($agencyId);
+        
+        $pendingBookings = $this->TravelsModel->getPendingBookings($agencyId);
+    
+        // Fetch payment amounts for each booking ID and store them in an array
+        $paymentAmounts = [];
+        foreach ($pendingBookings as $booking) {
+            $paymentAmounts[$booking->booking_id] = $this->TravelsModel->getPaymentAmountForBooking($booking->booking_id);
+        }
+    
+        // var_dump($paymentAmounts); // Debug: Display booking IDs with their corresponding payment amounts
+        
+        foreach ($pendingBookings as $key => $booking) {
+            // Call getPlateNumberForVehicle with the vehicle_id property of the $booking object
+            $plateNumber = $this->TravelsModel->getPlateNumberForVehicle($booking->vehicle_id);
+            // if ($plateNumber) {       
+
+            //     // Append the plate_number property of $plateNumber to $plateNumbers
+            //     $pendingBookings[$key]->plate_number = $plateNumber->plate_number;
+            // }
+        var_dump($plateNumber);
+            // Call getTravelerDetails with the user_id property of the $booking object
+            $details = $this->TravelsModel->getTravelerDetails($booking->user_id);
+            if ($details) {
+                // Append the traveler's details to $travelerDetails
+                $pendingBookings[$key]->traveler_details = $details;
+            }
+        
+            // Call getVehicleBookingDetails with the booking_id property of the $booking object
+            $vehicleDetails = $this->TravelsModel->getVehicleBookingDetails($booking->booking_id);
+            if ($vehicleDetails) {
+                // Merge vehicle details with booking details
+                $pendingBookings[$key]->start_time = $vehicleDetails->start_time;
+                $pendingBookings[$key]->withDriver = $vehicleDetails->withDriver;
+                $pendingBookings[$key]->Pickup_Location = $vehicleDetails->Pickup_Location;
+                $pendingBookings[$key]->End_Location = $vehicleDetails->End_Location;
+        
+                // Get payment amount for the booking
+                $paymentAmount = $this->TravelsModel->getPaymentAmountForBooking($booking->booking_id);
+                $pendingBookings[$key]->payment_amount = $paymentAmount;
+            }
+
+        }
+        $data = [
+            'pendingBookings' => $pendingBookings,
+            'paymentAmounts' => $paymentAmounts,
+            'plateNumber' => $plateNumber,
+            // var_dump($pendingBookings)
+        ];
+        // var_dump($plateNumber); // Debug: Display the data array
         $this->view('driver/bookings', $data);
     }
     
-
-    protected function loadModel($model) {
-        require_once '../app/models/' . $model . '.php';
-        return new $model();
+    
+    
+    public function getPlateNumberForVehicle($vehicleId) {
+        $plateNumber = $this->TravelsModel->getPlateNumberForVehicle($vehicleId);
+        return $plateNumber;
     }
-
-
-  
     
-    
-
         
+    
+    
+    
     public function earings() {
 
         
@@ -181,12 +336,12 @@ class Driver extends Controller{
                     $user_id = $_SESSION['user_id'];
 
                             // Get pending bookings
-                            $pendingbookings = $this->TravelsModel->getPendingBookings($user_id);
+                            // $pendingbookings = $this->TravelsModel->getPendingBookings($user_id);
                 
-                            $data = [
-                                'pendingbookings' => $pendingbookings,
-                            ];
-                    $this->view('driver/notification', $data);
+                            // $data = [
+                            //     'pendingbookings' => $pendingbookings,
+                            // ];
+                    $this->view('driver/notification');
     }
     
     
@@ -229,41 +384,108 @@ class Driver extends Controller{
     public function addvehiclesedit(){
         $this->view('driver/addvehiclesedit');
                     }
-    public function vehicleedit($id){
+    // public function vehicleedit($id){
         
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    //         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
-                // Sanitize POST array
-                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+    //             // Sanitize POST array
+    //             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
             
-                $data = [
-                    'vehicle_id' => $id,
-                 'seating_capacity' => trim($_POST['seating_capacity']),
-                    'ac_type' => trim($_POST['ac_type']),
-                    'description' => trim($_POST['description']),
-                ];
+    //             $data = [
+    //                 'vehicle_id' => $id,
+    //              'seating_capacity' => trim($_POST['seating_capacity']),
+    //                 'ac_type' => trim($_POST['ac_type']),
+    //                 'description' => trim($_POST['description']),
+    //             ];
 
                 
-                if ($this->TravelsModel->updatevehicle($data)) {
-                     flash('user_message', 'User Updated');
-                    //  redirect('driver/vehicleedit');
-                } else {
-                    die('Something went wrong');
-                }
-            } else {
+    //             if ($this->TravelsModel->updatevehicle($data)) {
+    //                  flash('user_message', 'User Updated');
+    //                 //  redirect('driver/vehicleedit');
+    //             } else {
+    //                 die('Something went wrong');
+    //             }
+    //         } else {
                                 
-                $data = [
-                    'vehicle_id' => $id,
-                    'seating_capacity' => '',
-                    'ac_type' => '',
-                    'description' => '',
-                ];
+    //             $data = [
+    //                 'vehicle_id' => $id,
+    //                 'seating_capacity' => '',
+    //                 'ac_type' => '',
+    //                 'description' => '',
+    //             ];
 
 
-            }
-            $this->view('driver/vehicleedit',$data);
+    //         }
+    //         $this->view('driver/vehicleedit',$data);
             
-                    }
+    //                 }
+
+    public function vehiclereg(){
+        // Check for POST
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            // Process form
+            
+            // Instantiate VehicleModel
+            $vehicleModel = $this->model('VehicleModel');
+
+            // Sanitize POST data
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+            // Upload images and get filenames
+
+            // Construct data array
+            $data = [
+                'agency_id' => 'YourAgencyID',
+                'brand' => $_POST['brand'],
+                'model' => $_POST['model'],
+                'plate_number' => $_POST['plate_number'],
+                'fuel_type' => $_POST['fuel_type'],
+                'year' => $_POST['year'],
+                'priceperday' => $_POST['priceperday'],
+                'seating_capacity' => $_POST['seating_capacity'],
+                'ac_type' => isset($_POST['ac_type']) ? 1 : 0,
+                'description' => $_POST['description'],
+                'image' => 'image_filename.jpg', // Replace with uploaded filename
+                'vehi_img2' => 'image_filename2.jpg', // Replace with uploaded filename
+                'vehi_img3' => 'image_filename3.jpg', // Replace with uploaded filename
+                'vehi_img4' => 'image_filename4.jpg', // Replace with uploaded filename
+                'insurance' => 'insurance_filename.jpg', // Replace with uploaded filename
+                'registration' => 'registration_filename.jpg', // Replace with uploaded filename
+                'revenue' => 'revenue_filename.jpg', // Replace with uploaded filename
+                'status' => 1, // Example status
+                'withDriverPerDay' => $_POST['withDriverPerDay'],
+                'pricing_option' => $_POST['pricing_option'],
+                'driver_name' => $_POST['driver_name'],
+                'driver_license_number' => $_POST['driver_license_number'],
+                'per_day_price_with_driver' => $_POST['per_day_price_with_driver'],
+                'daily_mileage_limit_with_driver' => $_POST['daily_mileage_limit_with_driver'],
+                'extra_mileage_charge_with_driver' => $_POST['extra_mileage_charge_with_driver'],
+                'per_day_price_without_driver' => $_POST['per_day_price_without_driver'],
+                'daily_mileage_limit_without_driver' => $_POST['daily_mileage_limit_without_driver'],
+                'extra_mileage_charge_without_driver' => $_POST['extra_mileage_charge_without_driver'],
+                'vehicle_type' => $_POST['vehicle_type'],
+                'number_of_doors' => $_POST['number_of_doors'],
+                'nav' => isset($_POST['nav']) ? 1 : 0,
+                'airbag' => isset($_POST['airbag']) ? 1 : 0,
+                'tv' => isset($_POST['tv']) ? 1 : 0,
+                'usb' => isset($_POST['usb']) ? 1 : 0,
+                'driver_license_image' => 'license_filename.jpg' // Replace with uploaded filename
+            ];
+
+            // Call model method to add vehicle
+            if($vehicleModel->addVehicle($data)){
+                // Redirect to success page
+                redirect('driver/success');
+            } else {
+                // Redirect to error page
+                redirect('driver/error');
+            }
+
+        } else {
+            // If not a POST request, redirect to home
+            redirect('home');
+        }
+    }
                 
 
     
@@ -299,7 +521,9 @@ class Driver extends Controller{
         $this->view('driver/upload');
                 }
 
-                public function vehiclereg() {
+               
+                
+                public function vehicule() {
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         // Check if necessary form fields are set
                         if (!isset($_POST['brand'], $_POST['model'], $_POST['plate_number'], $_POST['fuel_type'], $_POST['year'], $_POST['seating_capacity'], $_POST['ac_type'], $_POST['description'],$_POST['airbag'],$_POST['nav'],$_POST['tv'],$_POST['usb']) || 

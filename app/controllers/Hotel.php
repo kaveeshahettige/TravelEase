@@ -2,7 +2,7 @@
 
 class Hotel extends Controller
 {
-
+    private $hotelsModel;
     private $postModel;
     public function __construct()
     {
