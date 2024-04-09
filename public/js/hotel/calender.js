@@ -174,16 +174,16 @@ function handleFormSubmit() {
     // }
 }
 
-function updateRoomStatus(room_id, date) {
+function updateRoomStatus(room_id, startDate) {
     // Prepare the data to send
-    console.log(room_id, date);
+    console.log(room_id, startDate);
     var requestData = {
         room_id: room_id,
-        date: date
+        startDate: startDate // Adjust variable name to match PHP controller
     };
     const form = new FormData();
     form.append('room_id', room_id);
-    form.append('date', date);
+    form.append('startDate', startDate); // Adjust variable name to match PHP controller
 
     // Make an AJAX request
     fetch(
@@ -195,7 +195,7 @@ function updateRoomStatus(room_id, date) {
     )
         .then(async function(response) {
             if (response.ok) {
-                const data =await response.json();
+                const data = await response.json();
                 console.log(data);
                 console.log('Room status updated successfully');
                 window.location.reload();
@@ -204,22 +204,22 @@ function updateRoomStatus(room_id, date) {
             }
         })
         .catch(function(error) {
-            console.error('Error updating room status:', error);
-        }
-    )
+                console.error('Error updating room status:', error);
+            }
+        )
 }
 
-function deleteRoomStatus(room_id,date) {
+function deleteRoomStatus(room_id, startDate) {
     // Prepare the data to send
     var requestData = {
         room_id: room_id,
-        date: date
+        startDate: startDate // Adjust variable name to match PHP controller
     };
     const form = new FormData();
     form.append('room_id', room_id);
-    form.append('date', date);
+    form.append('startDate', startDate); // Adjust variable name to match PHP controller
 
-    console.log(room_id,date);
+    console.log(room_id, startDate);
     // Make an AJAX request
     fetch(
         'http://localhost/TravelEase/hotel/deleteRoomStatus',
@@ -230,7 +230,7 @@ function deleteRoomStatus(room_id,date) {
     )
         .then(async function(response) {
             if (response.ok) {
-                const data =await response.json();
+                const data = await response.json();
                 console.log('Room Status deleted successfully');
                 window.location.reload();
             } else {
@@ -238,9 +238,10 @@ function deleteRoomStatus(room_id,date) {
             }
         })
         .catch(function(error) {
-            console.error('Error deleting room:', error);
-        }
-    )
+                console.error('Error deleting room:', error);
+            }
+        )
 }
+
 
 

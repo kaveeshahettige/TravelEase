@@ -20,7 +20,16 @@ class Hotel extends Controller
 
     public function index()
     {
-        $data = ['basicInfo' => $this->basicInfo(), 'roomCount' => $this->roomCount()];
+        $bookingsCount = $this->getBookingsCount();
+        $guestCount = $this->getGuestCount();
+
+        $data = [
+            'bookingsCount' => $bookingsCount,
+            'guestCount' => $guestCount,
+            'basicInfo' => $this->basicInfo(),
+            'roomCount' => $this->roomCount()
+        ];
+
         $this->view('hotel/index',$data);
     }
 
@@ -37,15 +46,13 @@ class Hotel extends Controller
 
     public function availablerooms()
     {
-
-        $date = null;
+        $startDate = null;
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             // Retrieve the date from the query parameters
-            $date = isset($_GET['date']) ? $_GET['date'] : null;
+            $startDate = isset($_GET['date']) ? $_GET['date'] : null;
 
-
-            if (empty($date)) {
+            if (empty($startDate)) {
                 flash('error', 'Please select a date.');
                 redirect('hotel/calender');
             }
@@ -57,7 +64,7 @@ class Hotel extends Controller
 
         // Get room data for the hotel
         $roomData = $this->hotelsModel->getHotelRooms($hotel_id);
-        $unavailableRooms = $this->hotelsModel->getUnavailableRooms($date);
+        $unavailableRooms = $this->hotelsModel->getUnavailableRooms($startDate);
         $unavailableRoomsIds = [];
         foreach ($unavailableRooms as $room) {
             $unavailableRoomsIds[] = $room->room_id;
@@ -66,7 +73,7 @@ class Hotel extends Controller
         // Pass the room data and selected date to the view
         $data = [
             'roomData' => $roomData,
-            'date' => $date,
+            'date' => $startDate,
             'unavailableRooms' => $unavailableRoomsIds,
             'basicInfo' => $this->basicInfo(),
         ];
@@ -75,12 +82,19 @@ class Hotel extends Controller
         $this->view('hotel/availablerooms', $data);
     }
 
+
     public function bookings()
     {
         $bookingData = $this->getBookingsData();
+        $bookingsCount = $this->getBookingsCount();
+        $guestCount = $this->getGuestCount();
+//        var_dump($guestCount);
+
         $data=[
             'bookingData' => $bookingData,
             'basicInfo' => $this->basicInfo(),
+            'bookingsCount'=> $bookingsCount,
+            'guestCount' => $guestCount,
             ];
         // Pass the data to the view
         $this->view('hotel/bookings',$data);
@@ -236,13 +250,13 @@ class Hotel extends Controller
                 'roomType' => trim($_POST['roomType']),
                 'numOfBeds' => trim($_POST['numOfBeds']),
                 'price' => trim($_POST['price']),
-                'roomImages' => isset($_POST['roomImages'][0]) ? trim($_POST['roomImages'][0]) : '',
+                'image' => isset($_POST['image'][0]) ? trim($_POST['image'][0]) : '',
                 'acAvailability' => trim($_POST['acAvailability']),
                 'tvAvailability' => trim($_POST['tvAvailability']),
                 'wifiAvailability' => trim($_POST['wifiAvailability']),
                 'smokingPolicy' => trim($_POST['smokingPolicy']),
                 'petPolicy' => trim($_POST['petPolicy']),
-                'roomDescription' => trim($_POST['roomDescription']),
+                'description' => trim($_POST['description']),
                 'cancellationPolicy' => trim($_POST['cancellationPolicy']),
                 'roomType_err' => '',
                 'numOfBeds_err' => '',
@@ -253,7 +267,7 @@ class Hotel extends Controller
                 'wifiAvailability_err' => '',
                 'smokingPolicy_err' => '',
                 'petPolicy_err' => '',
-                'roomDescription_err' => '',
+                'description_err' => '',
                 'cancellationPolicy_err' => '',
             ];
 
@@ -288,10 +302,10 @@ class Hotel extends Controller
             // Check if there are no errors
             if (
                 empty($roomData['roomType_err']) && empty($roomData['numOfBeds_err']) &&
-                empty($roomData['price_err']) && empty($roomData['roomImages_err']) &&
+                empty($roomData['price_err']) && empty($roomData['image_err']) &&
                 empty($roomData['acAvailability_err']) && empty($roomData['tvAvailability_err']) &&
                 empty($roomData['wifiAvailability_err']) && empty($roomData['smokingPolicy_err']) &&
-                empty($roomData['petPolicy_err']) && empty($roomData['roomDescription_err']) &&
+                empty($roomData['petPolicy_err']) && empty($roomData['description_err']) &&
                 empty($roomData['cancellationPolicy_err'])
             ) {
                 // Set the correct hotel_id before inserting into the database
@@ -318,13 +332,13 @@ class Hotel extends Controller
                 'roomType' => '',
                 'numOfBeds' => '',
                 'price' => '',
-                'roomImages' => '',
+                'image' => '',
                 'acAvailability' => '',
                 'tvAvailability' => '',
                 'wifiAvailability' => '',
                 'smokingPolicy' => '',
                 'petPolicy' => '',
-                'roomDescription' => '',
+                'description' => '',
                 'cancellationPolicy' => '',
                 'roomType_err' => '',
                 'numOfBeds_err' => '',
@@ -335,7 +349,7 @@ class Hotel extends Controller
                 'wifiAvailability_err' => '',
                 'smokingPolicy_err' => '',
                 'petPolicy_err' => '',
-                'roomDescription_err' => '',
+                'description_err' => '',
                 'cancellationPolicy_err' => '',
             ];
 
@@ -359,7 +373,7 @@ class Hotel extends Controller
                 'wifiAvailability' => trim($_POST['wifiAvailability']),
                 'smokingPolicy' => trim($_POST['smokingPolicy']),
                 'petPolicy' => trim($_POST['petPolicy']),
-                'roomDescription' => trim($_POST['roomDescription']),
+                'description' => trim($_POST['description']),
                 'cancellationPolicy' => trim($_POST['cancellationPolicy']),
                 'room_id' => $room_id,
                 'roomType_err' => '',
@@ -371,7 +385,7 @@ class Hotel extends Controller
                 'wifiAvailability_err' => '',
                 'smokingPolicy_err' => '',
                 'petPolicy_err' => '',
-                'roomDescription_err' => '',
+                'description_err' => '',
                 'cancellationPolicy_err' => '',
             ];
 
@@ -447,7 +461,7 @@ class Hotel extends Controller
                 empty($roomData['price_err']) &&
                 empty($roomData['acAvailability_err']) && empty($roomData['tvAvailability_err']) &&
                 empty($roomData['wifiAvailability_err']) && empty($roomData['smokingPolicy_err']) &&
-                empty($roomData['petPolicy_err']) && empty($roomData['roomDescription_err']) &&
+                empty($roomData['petPolicy_err']) && empty($roomData['description_err']) &&
                 empty($roomData['cancellationPolicy_err'])
             ) {
                 // Save the data to the database
@@ -478,7 +492,7 @@ class Hotel extends Controller
                 'wifiAvailability' => $hotels->wifiAvailability,
                 'smokingPolicy' => $hotels->smokingPolicy,
                 'petPolicy' => $hotels->petPolicy,
-                'roomDescription' => $hotels->roomDescription,
+                'description' => $hotels->description,
                 'cancellationPolicy' => $hotels->cancellationPolicy,
             ];
 
@@ -641,8 +655,8 @@ class Hotel extends Controller
     {
         // Access the data sent from the client-side
         $roomId = $_POST['room_id'];
-        $date = $_POST['date'];
-        $inserted = $this->hotelsModel->insertRoomStatus($roomId, $date);
+        $startDate = $_POST['startDate'];
+        $inserted = $this->hotelsModel->insertRoomStatus($roomId, $startDate);
 
         // Check if insertion was successful
         if ($inserted) {
@@ -658,10 +672,10 @@ class Hotel extends Controller
     {
         // Access the data sent from the client-side
         $roomId = $_POST['room_id'];
-        $date = $_POST['date'];
-        $deleted = $this->hotelsModel->deleteRoomStatus($roomId, $date);
+        $startDate = $_POST['startDate'];
+        $deleted = $this->hotelsModel->deleteRoomStatus($roomId, $startDate);
 
-        // Check if insertion was successful
+        // Check if deletion was successful
         if ($deleted) {
             // Return a success response
             echo json_encode(['success' => 'Room status updated successfully']);
@@ -670,6 +684,26 @@ class Hotel extends Controller
             echo json_encode(['error' => 'Failed to update room status']);
         }
     }
+
+
+    public function getBookingsCount(){
+
+        $user_id = $_SESSION['user_id'];
+        $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
+        $bookingsCount = $this->hotelsModel->getBookingsCount($hotel_id);
+
+        return $bookingsCount;
+    }
+
+    public function getGuestCount(){
+
+        $user_id = $_SESSION['user_id'];
+        $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
+        $guestCount = $this->hotelsModel->getGuestCount($hotel_id);
+
+        return $guestCount;
+    }
+
 
 
 

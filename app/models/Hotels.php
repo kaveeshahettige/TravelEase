@@ -108,21 +108,21 @@ class Hotels
 
             // Insert the data into the hotel_rooms table
             $this->db->query('INSERT INTO hotel_rooms 
-        (hotel_id, roomType, numOfBeds, price, roomImages, acAvailability, tvAvailability, wifiAvailability, smokingPolicy, petPolicy, roomDescription, cancellationPolicy, registration_number) 
-        VALUES (:hotel_id, :roomType, :numOfBeds, :price, :roomImages, :acAvailability, :tvAvailability, :wifiAvailability, :smokingPolicy, :petPolicy, :roomDescription, :cancellationPolicy, :registration_number)');
+        (hotel_id, roomType, numOfBeds, price, image, acAvailability, tvAvailability, wifiAvailability, smokingPolicy, petPolicy, description, cancellationPolicy, registration_number) 
+        VALUES (:hotel_id, :roomType, :numOfBeds, :price, :image, :acAvailability, :tvAvailability, :wifiAvailability, :smokingPolicy, :petPolicy, :description, :cancellationPolicy, :registration_number)');
 
             // Bind values
             $this->db->bind(':hotel_id', $roomData['hotel_id']);
             $this->db->bind(':roomType', $roomData['roomType']);
             $this->db->bind(':numOfBeds', $roomData['numOfBeds']);
             $this->db->bind(':price', $roomData['price']);
-            $this->db->bind(':roomImages', $roomData['roomImages']);
+            $this->db->bind(':image', $roomData['image']);
             $this->db->bind(':acAvailability', $roomData['acAvailability']);
             $this->db->bind(':tvAvailability', $roomData['tvAvailability']);
             $this->db->bind(':wifiAvailability', $roomData['wifiAvailability']);
             $this->db->bind(':smokingPolicy', $roomData['smokingPolicy']);
             $this->db->bind(':petPolicy', $roomData['petPolicy']);
-            $this->db->bind(':roomDescription', $roomData['roomDescription']);
+            $this->db->bind(':description', $roomData['description']);
             $this->db->bind(':cancellationPolicy', $roomData['cancellationPolicy']);
             $this->db->bind(':registration_number', $roomData['registration_number']);
 
@@ -223,7 +223,7 @@ class Hotels
 
     public function getBookingsByHotel($hotel_id)
     {
-        $this->db->query('SELECT b.*, u.fname, u.profile_picture, hr.roomType 
+        $this->db->query('SELECT b.*, u.fname, u.profile_picture, hr.roomType,hr.registration_number 
                       FROM bookings b
                       JOIN users u ON b.user_id = u.id
                       LEFT JOIN hotel_rooms hr ON b.room_id = hr.room_id
@@ -312,13 +312,13 @@ class Hotels
         return $this->db->execute();
     }
 
-    public function insertRoomStatus($room_id, $date)
+    public function insertRoomStatus($room_id, $startDate)
     {
         // Prepare and execute the SQL query to insert room availability
-        $sql = "INSERT INTO room_availability (room_id, date) VALUES (:room_id, :date)";
+        $sql = "INSERT INTO room_availability (room_id, startDate) VALUES (:room_id, :startDate)";
         $this->db->query($sql);
         $this->db->bind(':room_id', $room_id);
-        $this->db->bind(':date', $date);
+        $this->db->bind(':startDate', $startDate);
 
         // Execute the query
         if ($this->db->execute()) {
@@ -328,13 +328,13 @@ class Hotels
         }
     }
 
-    public function deleteRoomStatus($room_id, $date)
+    public function deleteRoomStatus($room_id, $startDate)
     {
         // Prepare and execute the SQL query to delete room availability
-        $sql = "DELETE FROM room_availability WHERE room_id = :room_id AND date = :date";
+        $sql = "DELETE FROM room_availability WHERE room_id = :room_id AND startDate = :startDate";
         $this->db->query($sql);
         $this->db->bind(':room_id', $room_id);
-        $this->db->bind(':date', $date);
+        $this->db->bind(':startDate', $startDate);
 
         // Execute the query
         if ($this->db->execute()) {
@@ -345,11 +345,11 @@ class Hotels
     }
 
 
-    public function getUnavailableRooms($date)
+    public function getUnavailableRooms($startDate)
     {
-        $sql = "SELECT * FROM room_availability WHERE date = :date";
+        $sql = "SELECT * FROM room_availability WHERE startDate = :startDate";
         $this->db->query($sql);
-        $this->db->bind(':date', $date);
+        $this->db->bind(':startDate', $startDate);
 
         // Execute the query
         try {
@@ -359,6 +359,31 @@ class Hotels
             echo 'Error: ' . $e->getMessage();
             return [];
         }
+    }
+
+    public function getBookingsCount($hotel_id)
+    {
+        $this->db->query('SELECT COUNT(b.booking_id) AS booking_count
+                      FROM bookings b
+                      JOIN users u ON b.user_id = u.id
+                      LEFT JOIN hotel_rooms hr ON b.room_id = hr.room_id
+                      WHERE hr.hotel_id = :hotel_id');
+
+        $this->db->bind(':hotel_id', $hotel_id);
+
+        return $this->db->single()->booking_count;
+    }
+
+    public function getGuestCount($hotel_id){
+        $this->db->query('SELECT COUNT(DISTINCT b.user_id) AS user_count
+                      FROM bookings b
+                      JOIN users u ON b.user_id = u.id
+                      LEFT JOIN hotel_rooms hr ON b.room_id = hr.room_id
+                      WHERE hr.hotel_id = :hotel_id');
+
+        $this->db->bind(':hotel_id', $hotel_id);
+
+        return $this->db->single()->user_count;
     }
 
 

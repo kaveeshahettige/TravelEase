@@ -35,12 +35,13 @@ include 'navigation.php';
             <?php
             $roomData = $data["roomData"];
             foreach ($roomData as $hotel_rooms):
+//                var_dump($hotel_rooms);
                 ?>
                 <div class="room-box">
 <!--                    <h3>--><?php //echo $hotel_rooms->room_id ?><!--</h3>-->
                     <h2><?php echo ucfirst($hotel_rooms->registration_number); ?></h2>
                     <h3><?php echo ucfirst($hotel_rooms->roomType);?> -<?php echo ucfirst($hotel_rooms->price);?></h3>
-                    <p><?php echo ucfirst($hotel_rooms->roomDescription);?></p>
+                    <p><?php echo ucfirst($hotel_rooms->description);?></p>
                     <div class="icons">
                         <a href="<?php echo URLROOT; ?>Hotel/hotelupdaterooms/<?= $hotel_rooms->room_id ?>"><i class='bx bx-edit'></i></a>
                         <a href="<?php echo URLROOT; ?>Hotel/deleterooms/<?= $hotel_rooms->room_id ?>"><i class='bx bx-trash'></i></a>
