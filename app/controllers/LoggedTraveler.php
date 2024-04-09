@@ -28,6 +28,7 @@ foreach ($bookings as $booking) {
     'furtherBookingDetails' => $furtherbookingDetails,
     'mainbookingDetails' => $mainbookingDetails, 
     'bookingIDs' => $booking->booking_id,
+    'temporyIDs' => $booking->temporyid,
     'serviceProviderID' => $booking->serviceProvider_id,
     'serviceProviderName' => $booking->fname,
     'type'=>$booking->type,
@@ -229,6 +230,78 @@ foreach ($agencies as $agency) {
       ];
       $this->view('loggedTraveler/bookingdetails',$data);
     }
+    /////////
+    public function bookingdetailsCart($Tid,$Sid,$Bid){
+        $newTid=$Tid;
+        $id = $_SESSION['user_id'];
+        $user=$this->userModel->findUserDetail($id);
+        $serviceProvider = $this->userModel->findUserDetail($Sid);
+        // echo "<script>";
+        //   echo "console.log('Booking ID:');";
+        //   echo "</script>";
+      
+      
+      
+        //from service provider table(hotel,travelagncy,pacjage tables)
+        $mainbookingDetails = $serviceProvider ? $this->userModel->findBookingDetail($serviceProvider->type, $Sid) : null;
+        
+        //booking table booking data
+        $booking = $this->userModel->findCartBooking($Bid,$Tid);
+      
+        //find further booking details
+        $furtherbookingDetails = $serviceProvider ? $this->userModel->findBookingFurtherDetail($booking) : null;
+      
+        $cancellationEligibility = $booking ? $this->userModel->checkCancellationEligibility($booking->booking_id) : null;
+        
+        
+        // // Initializing an array to store further booking details for each booking
+        // $furtherBookingDetailsArray = [];
+        // $startDates;
+        // $endDates;
+      
+        
+      
+        // foreach ($bookings as $booking) {
+        //   //this is from room, vehicle, or package tables
+        //   $furtherbookingDetails = $serviceProvider ? $this->userModel->findBookingFurtherDetail($booking) : null;
+        //   //checking booking can be canceled or not
+        //   $cancellationEligibility = $bookings ? $this->userModel->checkCancellationEligibility($booking->booking_id) : null;
+          
+        //   ////////////////////////////////////////////////////////////
+        //   // Adding details to the array for each booking
+        //   $furtherBookingDetailsArray[] = [
+        //       'furtherBookingDetails' => $furtherbookingDetails, // Corrected variable name
+        //       'cancellationEligibility' => $cancellationEligibility, // Corrected variable name
+        //       'startDates' => $booking->startDate,
+        //       'endDates' => $booking->endDate,
+              
+        //   ];
+      // }
+      $vehicleprice=null;
+      $driver=null;
+      if($serviceProvider->type==4){
+        $vehicleprice=$this->userModel->findCartVehiclePrice($Bid);
+        $driver=$this->userModel->findDriverAvilabilityCart($Bid);
+      }
+      
+        $data=[
+          'serviceProviderName' => $serviceProvider ? $serviceProvider->fname . ' ' . $serviceProvider->lname : null,
+          'type' => $serviceProvider ? $serviceProvider->type : null,
+          'profile_picture' => $user ? $user->profile_picture : null,
+          'number' => $serviceProvider ? $serviceProvider->number : null,
+          'location' => $mainbookingDetails ? $mainbookingDetails->city : null,
+          'serviceDescription' => $mainbookingDetails ? $mainbookingDetails->description : null,
+          'mainbookingDetails' => $mainbookingDetails,
+          'furtherBookingDetails' => $furtherbookingDetails,
+          'booking' => $booking,
+          'cancellationEligibility' => $cancellationEligibility,
+          'vehicleprice'=>$vehicleprice?$vehicleprice:null,
+          'driver'=>$driver?$driver:null,
+          'Tid'=>$newTid,
+        ];
+        $this->view('loggedTraveler/bookingdetails',$data);
+      }
+    ////////
     public function bookingpayment($type,$serviceid,$checkinDate,$checkoutDate,$pickupTime = null){
 
       $id = $_SESSION['user_id'];
@@ -545,25 +618,25 @@ public function fetchAvailableRooms()
 
 
 
-//removeBooking
-public function cancelBooking($bookingId)
-{
-    $cancel = $this->userModel->cancelBooking($bookingId);
-    ///////////////below should be developed///////////
-    //system user should be refunded
-    //service provider should be notified about the bookingg cancellation
-    //should remove the unavailabilty
+// //removeBooking
+// public function cancelBooking($bookingId)
+// {
+//     $cancel = $this->userModel->cancelBooking($bookingId);
+//     ///////////////below should be developed///////////
+//     //system user should be refunded
+//     //service provider should be notified about the bookingg cancellation
+//     //should remove the unavailabilty
 
-    if ($cancel) {
-        // Booking cancellation successful
-        echo '<script>alert("Trip has been cancelled. You will be refunded.");';
-        echo 'window.location.href = "/Travelease/loggedTraveler/index";</script>';
-    } else {
-        // Booking cancellation failed
-        echo '<script>alert("Failed to cancel the trip. Please try again.");';
-        echo 'window.location.href = "/Travelease/loggedTraveler/index";</script>';
-    }
-}
+//     if ($cancel) {
+//         // Booking cancellation successful
+//         echo '<script>alert("Trip has been cancelled. You will be refunded.");';
+//         echo 'window.location.href = "/Travelease/loggedTraveler/index";</script>';
+//     } else {
+//         // Booking cancellation failed
+//         echo '<script>alert("Failed to cancel the trip. Please try again.");';
+//         echo 'window.location.href = "/Travelease/loggedTraveler/index";</script>';
+//     }
+// }
 
 //serachhotels
 public function searchHotels()
@@ -770,7 +843,7 @@ public function plantrip(){
     // $checkoutDate = date('Y-m-d', strtotime($checkoutDate));
 
     $city=$this->userModel->findCitydetails($location);
-$places = $this->userModel->findPlaces($location);
+    $places = $this->userModel->findPlaces($location);
     $user = $this->userModel->findUserDetail($_SESSION['user_id']);
     $hotels = $this->userModel->findAvailableHotelRooms($location, $checkinDate, $checkoutDate);
     $vehicles = $this->userModel->findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate);
@@ -779,12 +852,12 @@ $places = $this->userModel->findPlaces($location);
 
     $vehiclePrices = []; // Array to hold prices for each vehicle
 //////////
-$city=$this->userModel->findCitydetails($location);
-      $places = $this->userModel->findPlaces($location);
-          $user = $this->userModel->findUserDetail($_SESSION['user_id']);
-          $hotels = $this->userModel->findAvailableHotelRooms($location, $checkinDate, $checkoutDate);
-          $vehicles = $this->userModel->findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate);
-          //$packages = $this->userModel->findPackages($location);
+    $city=$this->userModel->findCitydetails($location);
+    $places = $this->userModel->findPlaces($location);
+    $user = $this->userModel->findUserDetail($_SESSION['user_id']);
+    $hotels = $this->userModel->findAvailableHotelRooms($location, $checkinDate, $checkoutDate);
+    $vehicles = $this->userModel->findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate);
+    //$packages = $this->userModel->findPackages($location);
 
 
           $vehiclePrices = []; // Array to hold prices for each vehicle
@@ -1161,6 +1234,69 @@ public function cartpaymentSuccessful() {
 
 
 //////////////////////////////////////////
+//cancelBooking
+public function cancelBooking($temporyid,$booking_id){
+
+    echo '<script>console.log("cancelBooking function is running!");</script>';
+      $id = $_SESSION['user_id'];
+      $user=$this->userModel->findUserDetail($id);
+      //$bookingDetails=$this->userModel->findBookingDetails($booking_id,$temporyid);
+      
+      if ($temporyid==0) {
+        //detail of the booking
+        $bookingDetails=$this->userModel->findBookingDetails($booking_id);
+        $bookingFurtherDetail=$this->userModel->findBookingFurtherDetail($bookingDetails);
+        if($bookingDetails->type==4){
+          $message="Your Agency vehicle with ID ".$bookingFurtherDetail->vehicle_id."-".$bookingFurtherDetail->brand ." ".$bookingFurtherDetail->model." ".$bookingFurtherDetail->plate_number." ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+        }elseif($bookingDetails->type==3){
+          $message="Your Hotel room with ID ".$bookingFurtherDetail->room_id."-".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+  
+        }
+        
+        
+        //cancel from booking table
+        $cancel = $this->userModel->cancelBooking($booking_id);
+  
+        //refund user
+        //$refund = $this->userModel->refundUser($booking_id);
+  
+        //check type and provide availibility of vehicle_bookings,room_availability
+        $availibility=$this->userModel->makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 
+        
+        //send a sms to service provider
+  
+        //send notofuiaction
+        $send=$this->userModel->sendBookingCancellationNotification($id,$bookingDetails->serviceProvider_id,$booking_id,$message);
+        
+      }else{
+  
+        $bookingDetails=$this->userModel->findCartBookingDetails($booking_id,$temporyid);
+        $bookingFurtherDetail=$this->userModel->findBookingFurtherDetail($bookingDetails);
+        if($bookingDetails->type==4){
+          $message="Your Agency vehicle with ID ".$bookingFurtherDetail->vehicle_id."-".$bookingFurtherDetail->brand ." ".$bookingFurtherDetail->model." ".$bookingFurtherDetail->plate_number." ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+        }elseif($bookingDetails->type==3){
+          $message="Your Hotel room with ID ".$bookingFurtherDetail->room_id."-".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+  
+        }
+        
+        //cancel from cartbookings table
+        $cancel = $this->userModel->cancelCartBooking($temporyid,$booking_id);
+  
+        //refund user
+        //$refund = $this->userModel->refundUser($booking_id);
+  
+        //check type and provide availibility of vehicle_bookings,room_availability
+        $availibility=$this->userModel->makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 
+        //send a sms to service provider
+  
+      
+         //send notofuiaction
+         $send=$this->userModel->sendBookingCancellationNotification($id,$bookingDetails->serviceProvider_id,$booking_id,$message);
+      }    
+  }
+  
+
+
 
 
 }

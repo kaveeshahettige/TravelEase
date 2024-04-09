@@ -164,7 +164,7 @@
             <div>
                 <p style="font-size: 30px; margin: 0px; font-weight: bold;"><?php echo ($hotelroom ? $hotelroom->fname . ' ' . $hotelroom->lname : ' '); ?></p>
                 <p><?php echo $hotelroom->roomType ?>&nbsp;Room</p>
-                <!-- <p><?php echo $hotelroom->add ?></p> -->
+                <!-- <p><?php echo $hotelroom->ratings->rating ?></p> -->
                 <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
        // Extract the rating value from the ratings object

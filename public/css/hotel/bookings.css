@@ -484,7 +484,7 @@ li {
 /* Button style */
 /* Button style */
 .provide-feedback-button {
-    background-color: #f84a4a; /* Blue background */
+    background-color: #7ec405f5; /* Blue background */
     color: #fff; /* White text */
     border: none; /* No border */
     border-radius: 5px; /* Rounded corners */
@@ -499,7 +499,7 @@ li {
 
 /* Button hover effect */
 .provide-feedback-button:hover {
-    background-color: #ff0000; /* Darker blue on hover */
+    background-color: #5d9201f5; /* Darker blue on hover */
 }
 
 /*  */

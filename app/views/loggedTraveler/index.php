@@ -57,7 +57,7 @@
             <?php endif; ?>
             <button id="plantrip" onclick="planNewTrip()">Plan New Trip</button>
         </div>
-        
+        <!-- <?php echo var_dump($data['bookingDetailsArray'])?> -->
         <div class="main2trip-container">
     <div class="main2trip">
         <?php if (!empty($data['bookingDetailsArray'])): ?>
@@ -81,7 +81,7 @@
                             <?php endif; ?>
                         </div>
                         <div>
-                            <button id="viewbooking" onclick="viewBooking(<?php echo $serviceProviderID; ?>, <?php echo $element['bookingIDs']; ?>)">View</button>
+                        <button id="viewbooking" onclick="viewBooking(<?php echo $element['temporyIDs']; ?>, <?php echo $serviceProviderID; ?>, '<?php echo $element['bookingIDs']; ?>')">View</button>            
                         </div>
                     </div>
                 </div>

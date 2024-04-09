@@ -1,10 +1,19 @@
-function viewBooking($Sid,$Bid) {
-  // Set the new URL you want to navigate to
-  const newPageURL = `bookingdetails/${$Sid}/${$Bid}`; // Replace with your desired URL
-
-  // Use window.location to navigate to the new page
-  window.location.href = newPageURL;
-}
+function viewBooking($Tid, $Sid, $Bid) {
+    // Set the new URL you want to navigate to
+    let newPageURL;
+  
+    if ($Tid == 0) {
+      newPageURL = `bookingdetails/${$Sid}/${$Bid}`;
+    } else {
+      //alert("Tid is not 0!");
+      //console.log("Tid", Tid);
+      newPageURL = `bookingdetailsCart/${$Tid}/${$Sid}/${$Bid}`;
+    }
+  
+    // Use window.location to navigate to the new page
+    window.location.href = newPageURL;
+  }
+  
 
   
   // Attach the clickSearch function to the button's click event
@@ -151,10 +160,16 @@ function searchRooms(event) {
 ///////////////
 //deleteBooking()
 
-function deleteBooking(bookingid) {
-  // Corrected implementation
-  window.location.href = `../../cancelBooking/${bookingid}`;
-}
+// function deleteBooking(bookingid) {
+//   // Corrected implementation
+//   window.location.href = `../../cancelBooking/${bookingid}`;
+// }
+//////////////////
+///////////////////////////
+
+
+
+/////////////////
 
 
 
@@ -628,6 +643,16 @@ function continueToCheckout() {
     // Clear the cart after checkout
     localStorage.removeItem('cart');
 }
+
+///////////
+
+///////////////////////////
+
+
+
+///////////////////////
+
+///////////////////////
 
 
 

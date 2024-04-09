@@ -442,7 +442,16 @@ public function updatePicture($data){
         INNER JOIN users ON bookings.serviceProvider_id = users.id
         WHERE bookings.user_id = :id
         AND bookings.bookingCondition != "cancelled"
-        AND bookings.enddate > CURDATE();
+        AND bookings.enddate > CURDATE()
+
+        UNION ALL
+
+        SELECT cartbookings.*, users.*
+        FROM cartbookings
+        INNER JOIN users ON cartbookings.serviceProvider_id = users.id
+        WHERE cartbookings.user_id = :id
+        AND cartbookings.bookingCondition != "cancelled"
+        AND cartbookings.enddate > CURDATE();
         
         ');
         $this->db->bind(':id',$id);
@@ -1201,10 +1210,21 @@ if($this->db->rowCount()>0){
 public function getRatings($hotel_id) {
     // Query to calculate the average rating for the given hotel ID
     $this->db->query('
-        SELECT AVG(r.rating) AS rating
-        FROM feedbacksnratings r
-        JOIN bookings b ON r.booking_id = b.booking_id
-        WHERE b.serviceProvider_id = :hotel_id
+    SELECT AVG(r.rating) AS rating
+    FROM (
+        SELECT  rating
+        FROM feedbacksnratings
+        JOIN bookings ON feedbacksnratings.booking_id = bookings.booking_id
+        WHERE bookings.serviceProvider_id = :hotel_id
+    
+        UNION ALL
+    
+        SELECT  rating
+        FROM feedbacksnratings
+        JOIN cartbookings ON feedbacksnratings.ftempory_id = cartbookings.temporyid
+        WHERE cartbookings.serviceProvider_id = :hotel_id
+    ) AS r;
+    
     ');
     // $this->db->query('
     //     SELECT AVG(rating) AS rating
@@ -1225,10 +1245,20 @@ public function getRatings($hotel_id) {
 public function getRatingsOfRooms($room_id) {
     // Query to calculate the average rating for the given hotel ID
     $this->db->query('
-        SELECT AVG(r.rating) AS rating
+    SELECT AVG(rating) AS rating
+    FROM (
+        SELECT r.rating
         FROM feedbacksnratings r
         JOIN bookings b ON r.booking_id = b.booking_id
         WHERE b.room_id = :room_id
+
+        UNION ALL
+
+        SELECT cr.rating
+        FROM feedbacksnratings cr
+        JOIN cartbookings cb ON cr.ftempory_id = cb.temporyid
+        WHERE cb.room_id = :room_id
+    ) AS combined_ratings;      
     ');
 
     // Bind hotel_id parameter
@@ -1245,10 +1275,21 @@ public function getRatingsOfRooms($room_id) {
 public function getRatingsOfVehicles($vehicle_id) {
     // Query to calculate the average rating for the given hotel ID
     $this->db->query('
-        SELECT AVG(r.rating) AS rating
+
+        SELECT AVG(rating) AS rating
+    FROM (
+        SELECT r.rating
         FROM feedbacksnratings r
         JOIN bookings b ON r.booking_id = b.booking_id
         WHERE b.vehicle_id = :vehicle_id
+
+        UNION ALL
+
+        SELECT cr.rating
+        FROM feedbacksnratings cr
+        JOIN cartbookings cb ON cr.ftempory_id = cb.temporyid
+        WHERE cb.vehicle_id = :vehicle_id
+    ) AS combined_ratings;  
     ');
 
     // Bind hotel_id parameter
@@ -1265,11 +1306,22 @@ public function getRatingsOfVehicles($vehicle_id) {
 public function findFeedbacks($sId) {
     // Query to fetch all feedbacks for the given hotel ID
     $this->db->query('
-        SELECT f.*, u.*
-        FROM feedbacksnratings f
-        JOIN users u ON f.user_id = u.id
-        JOIN bookings b ON f.booking_id = b.booking_id
-        WHERE b.serviceProvider_id = :sId
+    SELECT f.*, u.*
+    FROM (
+        SELECT feedbacksnratings.*
+        FROM feedbacksnratings
+        JOIN bookings ON feedbacksnratings.booking_id = bookings.booking_id
+        WHERE bookings.serviceProvider_id = :sId
+    
+        UNION ALL
+    
+        SELECT feedbacksnratings.*
+        FROM feedbacksnratings
+        JOIN cartbookings ON feedbacksnratings.ftempory_id = cartbookings.temporyid
+        WHERE cartbookings.serviceProvider_id = :sId
+    ) AS f
+    JOIN users u ON f.user_id = u.id;
+    
     ');
 
     // Bind hotel_id parameter

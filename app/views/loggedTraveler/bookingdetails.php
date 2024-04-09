@@ -15,6 +15,7 @@
 </head>
 <body>
     
+    
     <div class="navbar">
         <div class="logo">
             <img src="<?php echo URLROOT?>/images/TravelEase_logo.png" alt="Logo">
@@ -31,8 +32,9 @@
                 </div>
         </ul>
     </div>
+    <!-- <?php echo $data['Tid']; ?> -->
     <!-- <?php echo var_dump($data['booking'])?> -->
-    <!-- <?php echo $data['type']?> -->
+    <!-- <?php echo var_dump($$data['driver'])?> -->
     <section class="bookingResultm1">
     
         <?php if ($data['type']==3): ?>
@@ -40,6 +42,7 @@
             <div class="bookingtitles"><h1><?php echo ucfirst($data['serviceProviderName']) ?></h1>
             
                 <h5>Booking details</h5>
+                
             </div>
             <div class="images">
                 <div class="mainimage">
@@ -407,18 +410,125 @@
     
 <?php endif; ?>
 <?php if ($data['cancellationEligibility'] == "Available"): ?>
-    <button id="delbutton" onclick="deleteBooking('<?php echo $data['booking']->booking_id; ?>')">Cancel Trip</button>
+    <!-- <button id="delbutton" onclick="deleteBooking('<?php echo $data['booking']->booking_id; ?>')">Cancel Trip</button> -->
+    <button id="delbutton" onclick="cancelBooking(<?php echo isset($data['Tid']) ? $data['Tid'] : 0; ?>, '<?php echo $data['booking']->booking_id; ?>')">Cancel Trip</button>
+    
     </div>
 <?php endif; ?>
+
 
                 
             </div>
         </div>
     </section>
+    <div id="confirmationModal" class="modal2">
+  <div class="modal2-content">
+    <span class="close2">&times;</span>
+    <p>Are you sure you want to cancel this booking?</p>
+    <button id="confirmCancelBtn">Yes, Cancel Booking</button>
+    <button id="denyCancelBtn">No,Close</button>
+    <div id="confirmationMessage"></div>
+  </div>
+</div>
+<iframe id="cancelFrame" style="display: none;"></iframe>
+
+
     
     
   
 </body>
+
+<!-- ---------------js for cancel booking ----------->
+<script>
+    // Declare confirmBtn and confirmationMessage globally
+var confirmBtn, confirmationMessage;
+
+document.addEventListener("DOMContentLoaded", function(){
+  // Get the confirmation button, deny button, and the <span> element that closes the modal
+  confirmBtn = document.getElementById("confirmCancelBtn");
+  var denyBtn = document.getElementById("denyCancelBtn");
+  var span = document.getElementsByClassName("close2")[0];
+  // Get the confirmation message element
+  confirmationMessage = document.getElementById("confirmationMessage");
+
+  // Event listener for the <span> element that closes the modal
+  span.onclick = function() {
+    closeModal();
+  }
+
+  // Event listener for clicks outside the modal to close it
+  window.onclick = function(event) {
+    var modal = document.getElementById("confirmationModal");
+    if (event.target == modal) {
+      closeModal();
+    }
+  }
+
+  // Event listener for the deny button to close the modal
+  denyBtn.onclick = function() {
+    closeModal();
+  }
+});
+
+// Function to open the confirmation modal
+function openModal() {
+  var modal = document.getElementById("confirmationModal");
+  modal.style.display = "block";
+}
+
+// Function to close the confirmation modal after a delay
+function closeModalWithDelay() {
+  // Close the modal after a delay of 2 seconds
+  setTimeout(function() {
+    closeModal();
+  }, 2000); // Adjust the delay as needed
+}
+
+// Function to close the confirmation modal
+function closeModal() {
+  var modal = document.getElementById("confirmationModal");
+  modal.style.display = "none";
+}
+
+// Function to handle cancellation of booking
+function cancelBooking(tid, bookingId){
+  console.log("Traveler ID: " + tid);
+  console.log("Cancelling booking with ID: " + bookingId);
+
+  // Call the function to open the confirmation modal
+  openModal();
+
+  // Event listener for the confirmation button
+  confirmBtn.onclick = function() {
+    // Display the confirmation message
+    confirmationMessage.innerHTML = "Deleting successful. Refund will be processed shortly.";
+
+    // Execute the cancellation action using iframe
+    var iframe = document.getElementById("cancelFrame");
+    iframe.onload = function() {
+      // After the cancellation action is completed, refresh the page
+      //window.location.reload();
+      window.location.href = "http://localhost/TravelEase/loggedTraveler/index";
+    };
+    iframe.src = "http://localhost/TravelEase/LoggedTraveler/cancelBooking/" + tid + "/" + bookingId;
+
+    // Close the confirmation modal after action is performed with a delay
+    closeModalWithDelay();
+  }
+}
+
+
+
+// Function to simulate refund initiation
+function initiateRefund() {
+  // Simulate refund process (for demonstration purposes)
+  setTimeout(function() {
+    location.reload();
+  }, 2000);
+}
+</script>
+
+<!-- end of js for cancel booking -->
 </html>
 
 

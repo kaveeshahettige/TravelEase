@@ -167,7 +167,7 @@ function openPopup(Tid,Sid, Bid) {
 // Declare confirmBtn and confirmationMessage globally
 var confirmBtn, confirmationMessage;
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function(){
   // Get the confirmation button, deny button, and the <span> element that closes the modal
   confirmBtn = document.getElementById("confirmCancelBtn");
   var denyBtn = document.getElementById("denyCancelBtn");
@@ -215,7 +215,7 @@ function closeModal() {
 }
 
 // Function to handle cancellation of booking
-function cancelBooking(tid, bookingId) {
+function cancelBooking(tid, bookingId){
   console.log("Traveler ID: " + tid);
   console.log("Cancelling booking with ID: " + bookingId);
 
