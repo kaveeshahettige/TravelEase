@@ -1297,6 +1297,7 @@ public function getRatingsOfVehicles($vehicle_id) {
 
     // Execute the query and fetch the result
     $result = $this->db->single();
+    
 
     // Return the result
     return $result;

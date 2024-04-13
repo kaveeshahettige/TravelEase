@@ -645,6 +645,47 @@ function continueToCheckout() {
 }
 
 ///////////
+// Get the modal element
+var modali = document.getElementById("myModali");
+
+// Get the <span> element that closes the modal
+var spani = document.getElementsByClassName("closei")[0];
+
+// Function to open the modal
+function openModal() {
+  if (modali) {
+    modali.style.display = "block";
+  } else {
+    console.error("Modal element not found.");
+  }
+}
+
+// Function to close the modal
+function closeModal() {
+  if (modali) {
+    modali.style.display = "none";
+  } else {
+    console.error("Modal element not found.");
+  }
+}
+
+// When the user clicks on <span> (x), close the modal
+if (spani) {
+  spani.onclick = function() {
+    closeModal();
+  };
+} else {
+  console.error("Close button element not found.");
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modali) {
+    closeModal();
+  }
+};
+
+
 
 ///////////////////////////
 

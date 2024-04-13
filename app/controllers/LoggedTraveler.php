@@ -450,6 +450,10 @@ foreach ($agencies as $agency) {
   
       // Store the Stripe Checkout session ID in the transaction data
       $transactionData['stripe_session_id'] = $checkout_session->id;
+
+      //
+      
+
   
       // Store the transaction data in the session or database for retrieval in the paymentSuccessful() function
       $_SESSION['transaction_data'] = $transactionData;
@@ -486,6 +490,7 @@ foreach ($agencies as $agency) {
           // Optionally, you can pass data to the view if needed
           $data = [
               // Add any data you want to pass to the view
+              'transaction'=>$transactionData,
           ];
   
           // Load the view for the payment successful page
@@ -940,8 +945,7 @@ foreach ($vehicles as $vehicle) {
 }
 
  //searchAllServices
-  public function searchAllServices()
-  {
+  public function searchAllServices(){
       // Check if the request method is POST
       if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           // Perform the search operation
@@ -953,84 +957,149 @@ foreach ($vehicles as $vehicle) {
 
           $city=$this->userModel->findCitydetails($location);
       $places = $this->userModel->findPlaces($location);
-          $user = $this->userModel->findUserDetail($_SESSION['user_id']);
-          $hotels = $this->userModel->findAvailableHotelRooms($location, $checkinDate, $checkoutDate);
-          $vehicles = $this->userModel->findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate);
-          //$packages = $this->userModel->findPackages($location);
+      if (!$city && !$places) {
+        // Echo the HTML for the modal
+        echo "
+        <div id='myModali' class='modali' style='display: block;'>
+            <div class='modali-content'>
+                <span class='closei'>&times;</span>
+                <h2>No Matching Locations Found</h2>
+                <p>We couldn't find any locations matching your search.</p>
+                <p>Please try again or contact support for assistance.</p>
+            </div>
+        </div>";
+    
+        // Include modal JavaScript and CSS
+        echo "<script src='" . URLROOT . "js/loggedTraveler/script.js'></script>";
+        echo "<link rel='stylesheet' type='text/css' href='" . URLROOT . "css/loggedTraveler/style.css'>";
+    
+        // JavaScript to handle modal close and redirection
+        echo "
+        <script>
+            // Function to close the modal
+            function closeModal() {
+                var modal = document.getElementById('myModali');
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            }
+    
+            // When the user clicks on the close button, close the modal
+            var closeButton = document.querySelector('.closei');
+            if (closeButton) {
+                closeButton.addEventListener('click', function() {
+                    closeModal();
+                    window.location.href = '/TravelEase/loggedTraveler/index';
+                });
+            }
+    
+            // Redirect to index after a delay
+            setTimeout(function() {
+                window.location.href = '/TravelEase/loggedTraveler/index';
+            }, 5000); // Adjust the delay as needed
+        </script>";
+    
+        exit;
+    }
+    
+    else{
+      $user = $this->userModel->findUserDetail($_SESSION['user_id']);
+      $hotels = $this->userModel->findAvailableHotelRooms($location, $checkinDate, $checkoutDate);
+      $vehicles = $this->userModel->findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate);
+      //$packages = $this->userModel->findPackages($location);
 
 
-          $vehiclePrices = []; // Array to hold prices for each vehicle
+      $vehiclePrices = []; // Array to hold prices for each vehicle
 
-          // Initialize an empty array to store ratings for each hotel
+     // Check if $hotels is iterable (array or object)
+if (is_iterable($hotels)) {
+// Initialize an empty array to store ratings for each hotel
 $ratings = [];
 
 // Iterate through each hotel
 foreach ($hotels as $hotel) {
-    // Fetch ratings for the current hotel
-    $roomRatings = $this->userModel->getRatingsOfRooms($hotel->room_id);
-    
-    // Store ratings in the ratings array with hotel id as key
-    $ratings[$hotel->room_id] = $roomRatings;
+  // Fetch ratings for the current hotel
+  $roomRatings = $this->userModel->getRatingsOfRooms($hotel->room_id);
+  
+  // Store ratings in the ratings array with hotel id as key
+  $ratings[$hotel->room_id] = $roomRatings;
 }
 
 // Iterate through each hotel again to add ratings to the hotel data
 foreach ($hotels as &$hotel) {
-    // Add ratings to the hotel data
-    $hotel->ratings = isset($ratings[$hotel->room_id]) ? $ratings[$hotel->room_id] : null;
+  // Add ratings to the hotel data
+  $hotel->ratings = isset($ratings[$hotel->room_id]) ? $ratings[$hotel->room_id] : null;
 }
+} else {
+// Handle the case where $hotels is not iterable
+// For example, display a message indicating no hotels are available
+//echo "No hotels available.";
+}
+
 ////////////////
-// Initialize an empty array to store ratings for each hotel
+// Check if $vehicles is iterable (array or object)
+if (is_iterable($vehicles)) {
+// Initialize an empty array to store vehicle ratings
 $vratings = [];
 
-// Iterate through each hotel
+// Iterate through each vehicle
 foreach ($vehicles as $vehicle) {
-    // Fetch ratings for the current hotel
+    // Fetch ratings for the current vehicle
     $vehicleRatings = $this->userModel->getRatingsOfVehicles($vehicle->vehicle_id);
     
-    // Store ratings in the ratings array with hotel id as key
+    // Store ratings in the ratings array with vehicle id as key
     $vratings[$vehicle->vehicle_id] = $vehicleRatings;
 }
 
-// Iterate through each hotel again to add ratings to the vehcle data
+// Iterate through each vehicle again to add ratings to the vehicle data
 foreach ($vehicles as &$vehicle) {
     // Add ratings to the vehicle data
     $vehicle->vratings = isset($vratings[$vehicle->vehicle_id]) ? $vratings[$vehicle->vehicle_id] : null;
 }
+} else {
+// Handle the case where $vehicles is not iterable
+// For example, display a message indicating no vehicles are available
+//echo "No vehicles available.";
+}
+
 
 /////////////
 
 if ($vehicles) {
-    foreach ($vehicles as $vehicle) {
-        // Assuming you have a method to find prices for a specific vehicle and dates
-        $prices = $this->userModel->findVehiclePrices($vehicle->vehicle_id);
-        //prices per data gap
-        $numDays = (strtotime($checkoutDate) - strtotime($checkinDate)) / (60 * 60 * 24)+1;
-        $totalPrice = $prices->priceperday * $numDays;
-        
-        // Add prices to the vehiclePrices array
-        $vehiclePrices[$vehicle->vehicle_id] = $totalPrice; // Assuming vehicle_id is unique
-    }
+foreach ($vehicles as $vehicle) {
+    // Assuming you have a method to find prices for a specific vehicle and dates
+    $prices = $this->userModel->findVehiclePrices($vehicle->vehicle_id);
+    //prices per data gap
+    $numDays = (strtotime($checkoutDate) - strtotime($checkinDate)) / (60 * 60 * 24)+1;
+    $totalPrice = $prices->priceperday * $numDays;
+    
+    // Add prices to the vehiclePrices array
+    $vehiclePrices[$vehicle->vehicle_id] = $totalPrice; // Assuming vehicle_id is unique
+}
 } else {
-    echo "No vehicles available";
+// echo "No vehicles available";
 }
 
-  
-          // Pass the search results to the view and load it
-          $data = [
-            'places' => $places,
-            'city' => $city, 
-              'hotelrooms' => $hotels,
-              // 'agencies' => $agencies,
-              // 'packages' => $packages,
-              'vehiclePrices'=>$vehiclePrices,
-              'vehicles' => $vehicles,
-              'profile_picture' => $user ? $user->profile_picture : null,
-              'location' => $location,
-              'checkinDate' => $checkinDate,
-              'checkoutDate' => $checkoutDate,
-          ];
-          $this->view('loggedTraveler/serachAllServices', $data);
-          exit; // Ensure that script execution stops after loading the view
+
+      // Pass the search results to the view and load it
+      $data = [
+        'places' => $places,
+        'city' => $city, 
+          'hotelrooms' => $hotels,
+          // 'agencies' => $agencies,
+          // 'packages' => $packages,
+          'vehiclePrices'=>$vehiclePrices,
+          'vehicles' => $vehicles,
+          'profile_picture' => $user ? $user->profile_picture : null,
+          'location' => $location,
+          'checkinDate' => $checkinDate,
+          'checkoutDate' => $checkoutDate,
+      ];
+      $this->view('loggedTraveler/serachAllServices', $data);
+      exit; // Ensure that script execution stops after loading the view
+
+    } 
+           
       } else {
           // If the request method is not POST, redirect to a different URL
           header('Location: /TravelEase/loggedTraveler'); // Redirect to the main page or another appropriate URL

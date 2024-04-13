@@ -214,7 +214,43 @@
             </div>
             
         </div>
+        <!-- modal -->
+        <!-- Modal HTML -->
+<div id="myModali" class="modali">
+  <div class="modali-content">
+    <span class="closei">&times;</span>
+    <h2>No Matching Locations Found</h2>
+    <p>We couldn't find any locations matching your search.</p>
+    <p>Please try again or contact support for assistance.</p>
+  </div>
+</div>
 
+        <!-- /// -->
+        <script>
+            // Get the modal element
+var modali = document.getElementById("myModali");
+
+// Get the <span> element that closes the modal
+var spani = document.getElementsByClassName("closei")[0];
+
+// When the user clicks on the button, open the modal
+function openModal() {
+  modali.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+spani.onclick = function() {
+    modali.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modali) {
+    modali.style.display = "none";
+  }
+}
+
+        </script>
     </section>
   
 </body>
