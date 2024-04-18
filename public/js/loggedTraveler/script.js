@@ -687,11 +687,81 @@ window.onclick = function(event) {
 
 
 
-///////////////////////////
+// ////////////locations suggestion///////////////
+// // JavaScript for autocomplete functionality
+// document.addEventListener("DOMContentLoaded", function() {
+//     const locationInput = document.getElementById("location-input");
+
+//     // Event listener for input changes
+//     locationInput.addEventListener("input", function() {
+//         const inputValue = this.value.trim();
+
+//         // Make AJAX request to fetch location suggestions
+//         if (inputValue.length > 0) {
+//             fetchLocations(inputValue);
+//         } else {
+//             // Clear previous suggestions if input is empty
+//             clearSuggestions();
+//         }
+//     });
+
+//     // Function to fetch location suggestions from the server
+//     function fetchLocations(query) {
+//         // Construct the URL for the AJAX request
+//         const url = 'http://localhost/TravelEase/loggedTraveler/suggestLocations?query=' + query;
+
+//         // Make AJAX request to the server
+//         fetch(url)
+//             .then(response => response.json())
+//             .then(data => {
+//                 // Display the suggestions in a dropdown menu
+//                 displaySuggestions(data);
+//             })
+//             .catch(error => console.error('Error fetching locations:', error));
+//     }
+
+//     // Function to display location suggestions
+//     function displaySuggestions(locations) {
+//       const suggestionsContainer = document.getElementById("suggestions-container");
+//       suggestionsContainer.innerHTML = ""; // Clear previous suggestions
+  
+//       locations.forEach(location => {
+//           const suggestionDiv = document.createElement("div");
+//           suggestionDiv.textContent = location.city; // Assuming each location object has a 'city' property
+//           suggestionDiv.classList.add("suggestion");
+//           suggestionDiv.addEventListener("click", () => {
+//               // Handle click event when a suggestion is selected
+//               document.getElementById("location-input").value = location.city; // Update the input field value with the selected suggestion
+//               suggestionsContainer.innerHTML = ""; // Clear suggestions after selection
+//           });
+//           suggestionsContainer.appendChild(suggestionDiv);
+//       });
+  
+//       // Show the suggestions container
+//       suggestionsContainer.style.display = "block";
+//   }
+  
+  
+
+//     // Function to clear previous suggestions
+//     function clearSuggestions() {
+//         // Implement code to clear any previous suggestions from the dropdown menu
+//     }
+// });
 
 
+///////////api location suggestion////////////
+// document.addEventListener("DOMContentLoaded", function() {
+//     const locationInput = document.getElementById("location-input");
+//     const autocomplete = new google.maps.places.Autocomplete(locationInput);
 
-///////////////////////
+//     // Listen for place selection
+//     autocomplete.addListener("place_changed", function() {
+//         const place = autocomplete.getPlace();
+//         // You can access the selected place details here
+//         console.log("Selected Place:", place);
+//     });
+// });
 
 ///////////////////////
 

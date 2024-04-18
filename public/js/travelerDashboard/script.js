@@ -251,6 +251,44 @@ function initiateRefund() {
 }
 
 ///////////////////////
+function viewBookings(id){
+  window.location.href = `http://localhost/TravelEase/travelerDashboard/bookings/${id}`;
+}
+function viewPayments(id){
+  window.location.href = `http://localhost/TravelEase/travelerDashboard/payments/${id}`;
+}
 
+
+///////////////
+
+//markAsRead
+function markAsRead(nid) {
+  // Send an AJAX request to mark the notification as read
+  $.ajax({
+      url: `http://localhost/TravelEase/travelerDashboard/markAsRead/${nid}`,
+      type: 'GET', // Assuming it's a GET request, adjust if it's a POST request
+      dataType: 'json', // Specify the expected data type of the response
+      success: function(response) {
+          // Check if the mark operation was successful
+          if (response.success) {
+              // Reload the current page after a short delay
+              setTimeout(function() {
+                  location.reload();
+              }, 1000);
+          } else {
+              // Handle the case where marking the notification as read failed
+              console.error('Failed to mark notification as read');
+              // Optionally, display an error message to the user
+          }
+      },
+      error: function(xhr, status, error) {
+          // Handle error if needed
+          console.error(error);
+      }
+  });
+}
+
+
+//
 
 

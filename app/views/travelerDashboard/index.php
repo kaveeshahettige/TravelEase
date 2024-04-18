@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo URLROOT?>css/travelerDashboard/style.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>css/travelerDashboard/settings/style.css">
     <title>Dashboard</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>images/TravelEase_logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -46,48 +46,85 @@
             <img src="<?php echo URLROOT?>images/TravelEase_logo.png" alt="TravelEase Logo">
             <span class="logo-text">TravelEase</span>
         </div>
-        <div class="right">
-            <div class="item2">
-                <span id="pageTitle">Overview</span>
-                
-                </div>
+        
+        <div class="dashboard-content">
+            <h1>Overview</h1>
+        </div>
 
-                <div class="item4">
-                    <div class="profile-card">
-                        <div class="profilepicture">
-                        <img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> 
-                        </div>
-                        <div class="profileinfo">
-                            <h1><?php echo  $data['user']->fname."  ". $data['user']->lname?></h1>
-                            <h4 style="font-weight:bold">Registration Number: <?php echo $data['user']->id?></h4>
-                            <h4 style="font-weight:bold"><?php echo $data['user']->email?></h4>
-                           
-                            <h4 style="font-weight:bold"><?php echo $data['user']->number?></h4>
+        <div class="dashboard-subcontent">
+        <div class="content-container">
+            <div class="left-content">
+
+                <div class="rectangle">
+                   <!-- Rectangle 1: Basic Info -->
+                    <div class="basic-info-content">
+                        <div class="center-image" >
+                        <!-- src="<?php echo URLROOT?>images/5.jpg -->
+                            <img style="cursor:pointer;transition: box-shadow 0.8s;" onclick="triggerClick()" id="profileDisplay" src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture">
+                            
                             
                         </div>
-                    </div>
-                    
-                    <table class="summary">
-                        <thead>
-                            <tr>
-                                <th>Total Monthly Bookings</th>
-                                <th>Upcoming Trips</th>
-                                <th>Total Monthly Payments</th>
-                                <th>Feedbacks provided</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><?php echo $data['noOfBooking']?></td>
-                                <td><?php echo $data['noOfUpcomingTrips']?></td>
-                                <td><?php echo $data['monthlyPayment']?>&nbspLKR</td>
-                                <td><?php echo $data['noOfFeedbacks']?></td>
-                            </tr>
-                            <!-- Add more rows for additional trip summaries -->
-                        </tbody>
-                    </table>
+                        <div class="hotel-details">
+                            
+                            <h3><?php echo  $data['user']->fname."  ". $data['user']->lname?></h3><br>
+                            <h6 style="font-weight:bold">Registration Number: <?php echo $data['user']->id?></h6><br>
+                            <h6 style="font-weight:bold"><?php echo $data['user']->email?></h6> <br>  
+                            <h6 style="font-weight:bold"><?php echo $data['user']->number?></h6> <br>
+                        </div>
+                        
+                       
+                     </div>
                 </div>
+                
+            </div>
+
+            <div class="right-content">
+
+                <div class="rectangle">
+                    <!-- Rectangle 2: Change Password -->
+                    <div class="basic-info-content">
+                        <h2 style="margin-top:0px;">Total Monthly Bookings</h2>
+                        <h4 style="font-weight:bold; margin:0px;"><?php echo $data['noOfBooking']; ?></h4> 
+                    </div>      
+                </div>
+                <div class="rectangle">
+                    <!-- Rectangle 2: Change Password -->
+                <div class="basic-info-content">
+                        <h2 style="margin-top:0px;">Upcoming Trips</h2>
+                        <h4 style="font-weight:bold; margin:0px;"><?php echo $data['noOfUpcomingTrips']; ?></h4>
+                        <button type="button" onclick="viewBookings(<?php echo $_SESSION['user_id']?>)">View</button>
+
+                </div>
+    
+                </div>
+                <div class="rectangle">
+                    <!-- Rectangle 2: Change Password -->
+                    <div class="basic-info-content">
+                        <h2 style="margin-top:0px;">Total Monthly Payments</h2>
+                        <h4 style="font-weight:bold; margin:0px;"><?php echo $data['monthlyPayment']; ?> LKR</h4> 
+                        <button type="button" onclick="viewPayments(<?php echo $_SESSION['user_id']?>)">View</button>
+
+                    </div>      
+                </div>
+                <div class="rectangle">
+                    <!-- Rectangle 2: Change Password -->
+                    <div class="basic-info-content">
+                        <h2 style="margin-top:0px;">Feedbacks provided</h2> 
+                        <h4 style="font-weight:bold; margin:0px;"><?php echo $data['noOfFeedbacks']; ?></h4>   
+                                                
+                    </div>      
+                </div>
+                
+
+                
+                
+            </div>
+
         </div>
+
+    </div>
     </main>
+    
+    
 </body>
 </html>

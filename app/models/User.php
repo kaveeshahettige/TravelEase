@@ -1155,6 +1155,14 @@ public function findCitydetails($location) {
         return false;
     }
 }
+//findLocations
+public function findLocations($location) {
+    $this->db->query('SELECT city FROM cities WHERE city LIKE :location');
+    $this->db->bind(':location', '%' . $location . '%');
+    $results = $this->db->resultSet();
+    return $results;
+}
+
 
 //findHotels($location);
 //have to rewrite
@@ -2018,6 +2026,7 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
         JOIN users u ON n.sender_id = u.id
         -- JOIN bookings b ON n.booking_id = b.booking_id
         WHERE n.receiver_id = :user_id
+        AND markAsRead = 0
         AND n.nDate >= DATE_SUB(NOW(), INTERVAL 30 DAY)
         ORDER BY n.nDate DESC;');
 
@@ -2026,6 +2035,21 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
         if ($this->db->rowCount() > 0) {
             return $result;
         } else {
+            return false;
+        }
+    }
+    //countUnreadNotifications
+    public function countUnreadNotifications($user_id){
+        $this->db->query('SELECT COUNT(*) AS count
+        FROM notifications
+        WHERE receiver_id = :user_id
+        AND markAsRead = 0;');
+        $this->db->bind(':user_id', $user_id);
+        $row = $this->db->single();
+         if($this->db->rowcount()>0){
+            return $row->count;
+         }
+         else{
             return false;
         }
     }
@@ -2123,7 +2147,16 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
     }
 
 
-    
+    //markAsRead($notification_id);
+    public function markAsRead($notification_id){
+        $this->db->query('UPDATE notifications SET markAsRead = 1 WHERE notification_id = :notification_id');
+        $this->db->bind(':notification_id', $notification_id);
+        if($this->db->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
 
 }

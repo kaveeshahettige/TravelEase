@@ -826,6 +826,26 @@ li {
   }
 
 
+  /* Style for the mark as read button */
+.mark-as-read-button {
+    text-align: right;
+}
+
+.mark-as-read-button button {
+    background-color: #ffc107;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.mark-as-read-button button:hover {
+    background-color: #e2ab05;
+}
+
+
 
 
 

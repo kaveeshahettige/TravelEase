@@ -9,8 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
-    <style>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADD6_nBEr9ZJd44sKcqr0dj-JRvbt5ogo&libraries=places"></script> -->
 
+    <style>
+        /* Style for the suggestions dropdown */
+        .pac-container {
+            background-color: #FFF;
+            z-index: 1000;
+            position: fixed;
+            display: inline-block;
+            float: left;
+        }
     </style>
 </head>
 <body>
@@ -42,7 +51,8 @@
         <div class="main1searchbar" >
         <form action="<?php echo URLROOT ?>loggedTraveler/searchAllServices" method="POST">
             <div class="search">         
-                <div class="search1"><input type="text" placeholder="Location: " name="location"></div>
+                <div class="search1"><input type="text" placeholder="Location: " name="location" id="location-input">
+            </div>
                 <div class="search2">Check in Date:<input type="date" placeholder="Check in Date" name="checkinDate"></div>
                 <div class="search3">Check out Date:<input type="date" placeholder="Check out Date" name="checkoutDate"></div>
                 <div class="search4"><button type="submit" id="searchbtn">  Search</button></div>
@@ -251,6 +261,20 @@ window.onclick = function(event) {
 }
 
         </script>
+        <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const locationInput = document.getElementById("location-input");
+        const autocomplete = new google.maps.places.Autocomplete(locationInput);
+
+        // Listen for place selection
+        autocomplete.addListener("place_changed", function() {
+            const place = autocomplete.getPlace();
+            // Log the selected place details for debugging
+            console.log("Selected Place:", place);
+        });
+    });
+</script>
+
     </section>
   
 </body>

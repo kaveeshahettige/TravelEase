@@ -1363,6 +1363,21 @@ public function cancelBooking($temporyid,$booking_id){
          $send=$this->userModel->sendBookingCancellationNotification($id,$bookingDetails->serviceProvider_id,$booking_id,$message);
       }    
   }
+
+  ////////////////////////////
+  //suggestLocations
+  public function suggestLocations(){
+    if (isset($_GET['query'])) {
+      $query = $_GET['query'];
+      // Implement code to query the database for location suggestions based on the user input
+      // Fetch locations that match the query and return them as JSON
+       // Query the database and fetch locations
+    $locations = $this->userModel->findLocations($query);
+      echo json_encode($locations);
+  }
+   
+  }
+
   
 
 

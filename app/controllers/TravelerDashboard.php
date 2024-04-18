@@ -113,6 +113,7 @@ class TravelerDashboard extends Controller{
       $user=$this->userModel->findUserDetail($id);
       $noOfNotifications=$this->userModel->countNotifications($id);
       $notifications=$this->userModel->findNotifications($id);
+      $noOfUnreadNotification=$this->userModel->countUnreadNotifications($id);
 
       $data = [
         'id' => '$id',
@@ -123,6 +124,7 @@ class TravelerDashboard extends Controller{
         'profile_picture'=>$user->profile_picture,
         'noOfNotifications'=>$noOfNotifications,
         'notifications'=>$notifications,
+        'noOfUnreadNotification'=>$noOfUnreadNotification,
         
       ];
       $this->view('travelerDashboard/notifications',$data);
@@ -599,6 +601,17 @@ public function cancelBooking($temporyid,$booking_id){
     }    
 }
 
+//markAsRead
+public function markAsRead($notification_id) {
+  // Call the UserModel method to mark the notification as read
+  $mark = $this->userModel->markAsRead($notification_id);
+
+  // Return a response indicating success or failure (if needed)
+  echo json_encode(['success' => $mark]); // Assuming the markAsRead method returns a boolean indicating success or failure
+
+  // Optionally, you can return additional data in the response, such as a message
+  // echo json_encode(['success' => $mark, 'message' => 'Notification marked as read successfully']);
+}
 
 
 

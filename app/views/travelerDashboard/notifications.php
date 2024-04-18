@@ -66,6 +66,10 @@
                 <h2>Total Notifications</h2>
                 <p><?php  echo $data['noOfNotifications']?></p>
             </div>
+            <div class="box">
+                <h2>Unread Notifications</h2>
+                <p><?php  echo $data['noOfUnreadNotification']?></p>
+            </div>
         
             <!-- Ongoing Bookings Box
             <div class="box">
@@ -90,32 +94,31 @@
         </div>
         </div>
 
-        
-        
-
-
-        <!-- <div class="more-content">
-            <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
-        </div> -->
-        <!-- <?php echo var_dump($data['notifications'])?> -->
-        <div class="notification-container">
-    <?php foreach ($data['notifications'] as $notifications): ?>
-        <div class="notification">
-            <div class="notification-header">
-                
-            <div class="notification-sender">
-    <img src="<?php echo URLROOT ?>/images/<?php echo $notifications->profile_picture ?>" alt="Sender Image" class="sender-image">
-    <span class="sender-name"><?php echo $notifications->fname." ".$notifications->lname ?></span>
-</div>
-
-                <div class="notification-date"><?php echo $notifications->nDate; ?></div>
+        <!--<?php echo var_dump($data['notifications'])?> -->
+        <?php if (!empty($data['notifications'])): ?>
+    <div class="notification-container">
+        <?php foreach ($data['notifications'] as $notification): ?>
+            <div class="notification">
+                <div class="notification-header">
+                    <div class="notification-sender">
+                        <img src="<?php echo URLROOT ?>/images/<?php echo $notification->profile_picture ?>" alt="Sender Image" class="sender-image">
+                        <span class="sender-name"><?php echo $notification->fname." ".$notification->lname ?></span>
+                    </div>
+                    <div class="notification-date"><?php echo $notification->nDate; ?></div>
+                </div>
+                <div class="notification-content">
+                    <?php echo $notification->notification; ?>
+                </div>
+                <div class="mark-as-read-button">
+                    <button type="button" onclick="markAsRead(<?php echo $notification->notification_id; ?>)">Mark as Read</button>
+                </div>
             </div>
-            <div class="notification-content">
-                <?php echo $notifications->notification; ?>
-            </div>
-        </div>
-    <?php endforeach; ?>
-</div>
+        <?php endforeach; ?>
+    </div>
+<?php else: ?>
+    <p>No notifications to display.</p>
+<?php endif; ?>
+
 
 
     </main>
