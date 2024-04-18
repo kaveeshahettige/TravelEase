@@ -255,11 +255,10 @@ public function updatePackages($PackageID)
 public function deletepackages($PackageID)
 {
     if ($this->packageModel->deletepackages($PackageID)) {
-//            var_dump($package_id);
+        // var_dump($package_id);
         flash('post_message', 'user Removed');
         redirect('Packages/addpackages');
     } else {
         die('Something went wrong');
     }
-}
 }
