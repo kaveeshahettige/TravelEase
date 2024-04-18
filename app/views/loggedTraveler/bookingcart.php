@@ -252,13 +252,22 @@ endforeach;
 
     </p>
     <!-- <?php echo var_dump($data['bookingcartArray'])?> -->
-    <form id="paymentFormMain" action="<?php echo URLROOT ?>loggedTraveler/cartpayment/<?php echo urlencode(json_encode($data['bookingcartArray'])) . '/' .$data['checkinDate'].'/'.$data['checkoutDate'] . '/' . $data['pickupTime'] ?>" method="POST">
+    <!-- <form id="paymentFormMain" action="<?php echo URLROOT ?>loggedTraveler/cartpayment/<?php echo urlencode(json_encode($data['bookingcartArray'])) . '/' .$data['checkinDate'].'/'.$data['checkoutDate'] . '/' . $data['pickupTime'] ?>" method="POST">
     <input type="hidden" name="totalAmount" id="totalAmountInput" value="<?php echo $total; ?>">
     <input type="hidden" name="driverType" id="driverTypeInput" value="">
     <div class="buttons">
         <button type="submit" class="payment-button">Make Payment</button>
     </div>
+</form> -->
+<form id="paymentFormMain" action="<?php echo URLROOT ?>loggedTraveler/cartpayment/<?php echo urlencode(json_encode($data['bookingcartArray'])) . '/' .$data['checkinDate'].'/'.$data['checkoutDate'] . '/' . $data['pickupTime'] ?>" method="POST">
+    <input type="hidden" name="totalAmount" id="totalAmountInput" value="<?php echo $total; ?>">
+    <input type="hidden" name="driverType" id="driverTypeInput" value="">
+    <div class="buttons">
+        <button type="submit" class="payment-button">Make Payment</button>
+        <button type="submit" formaction="<?php echo URLROOT ?>loggedTraveler/addtocart/<?php echo urlencode(json_encode($data['bookingcartArray'])) . '/' .$data['checkinDate'].'/'.$data['checkoutDate'] . '/' . $data['pickupTime'] ?>" class="payment-button">Add to Cart</button>
+    </div>
 </form>
+
 
 </div>
 

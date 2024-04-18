@@ -9,6 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-NwdoN0yM5JcJJ4jX1KvJXrQhQ+6RMo3hV3brvytgePvVzSlc3PjMFbpL5T+VUAq7" crossorigin="anonymous">
+
+
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADD6_nBEr9ZJd44sKcqr0dj-JRvbt5ogo&libraries=places"></script> -->
 
     <style>
@@ -35,6 +38,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
             <div class="rightcontent">
+            <li><a href="<?php echo URLROOT ?>travelerDashboard/cart/<?php echo $_SESSION['user_id'] ?>"><img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" alt="Cart"></a></li>
             <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
             <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
             </div>

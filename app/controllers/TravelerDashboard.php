@@ -614,6 +614,34 @@ public function markAsRead($notification_id) {
 }
 
 
+//deactivateUser
+public function deactivateUser($id){
+  $user=$this->userModel->deactivateUser($id);
+}
+
+//cart
+public function cart($id){
+  $id= $_SESSION['user_id'];
+  $user=$this->userModel->findUserDetail($id);
+  $cartDetails=$this->userModel->findCartDetails($id);
+  $noofCarts=$this->userModel->countCart($id);
+  $noofCartItems=$this->userModel->countCartItems($id);
+
+  $data = [
+    'id' => '$id',
+    'email'=>$user->email,
+    'lname' => $user->lname,
+    'fname' => $user->fname,
+    'number' => $user->number,
+    'profile_picture'=>$user->profile_picture,
+    'cartDetails'=>$cartDetails,
+    'noofCarts'=>$noofCarts,
+    'noofCartItems'=>$noofCartItems,
+    
+  ];
+  $this->view('travelerDashboard/cart',$data);
+}
+
 
 }
 

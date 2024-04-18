@@ -109,8 +109,22 @@ class User{
         }
       }
 
-      public function deleteUser($id){
-        $this->db->query('DELETE FROM users WHERE id = :id');
+    //   public function deleteUser($id){
+    //     $this->db->query('DELETE FROM users WHERE id = :id');
+    //     // Bind values
+    //     $this->db->bind(':id', $id);
+  
+    //     // Execute
+    //     if($this->db->execute()){
+    //       return true;
+    //     } else {
+    //       return false;
+    //     }
+    //   }
+
+    //deactivateUser
+    public function deactivateUser($id){
+        $this->db->query('UPDATE users SET profile_status = 0 WHERE id = :id');
         // Bind values
         $this->db->bind(':id', $id);
   
@@ -924,6 +938,111 @@ return true;
 
 
     
+}
+
+//addtoCartTable
+public function addtoCartTable($transactionData){
+    $currentDate = date('Y-m-d');  //this is a dummy
+
+    $cartbooking_id = uniqid('', true);
+
+// Iterate over each booking detail and insert it with the same booking ID
+foreach ($transactionData['furtherBookingDetails'] as $bookingDetail) {
+    if ($bookingDetail->type == 3) {
+        $this->db->query('INSERT INTO cart (cartbooking_id,user_id, serviceProvider_id, startDate, endDate, room_id) VALUES (:cartbooking_id,:user_id, :serviceProvider_id, :startDate, :endDate, :room_id)');
+       
+        $this->db->bind(':cartbooking_id', $cartbooking_id);
+        $this->db->bind(':user_id', $transactionData['user']->id);
+        $this->db->bind(':serviceProvider_id', $bookingDetail->id);
+        $this->db->bind(':startDate', $transactionData['checkinDate']);
+        $this->db->bind(':endDate', $transactionData['checkoutDate']);
+        $this->db->bind(':room_id', $bookingDetail->room_id);
+    } elseif ($bookingDetail->type == 4) {
+        $this->db->query('INSERT INTO cart (cartbooking_id,user_id, serviceProvider_id, startDate, endDate, vehicle_id,withDriver,pickupTime) VALUES (:cartbooking_id,:user_id, :serviceProvider_id, :startDate, :endDate, :vehicle_id,:withDriver,:pickupTime)');
+        
+        $this->db->bind(':cartbooking_id', $cartbooking_id);
+        $this->db->bind(':user_id', $transactionData['user']->id);
+        $this->db->bind(':serviceProvider_id', $bookingDetail->id);
+        $this->db->bind(':startDate', $transactionData['checkinDate']);
+        $this->db->bind(':endDate', $transactionData['checkoutDate']);
+        $this->db->bind(':vehicle_id', $bookingDetail->vehicle_id);
+        $this->db->bind(':withDriver', $transactionData['driver']);
+        $this->db->bind(':pickupTime', $transactionData['pickupTime']);
+
+    } elseif ($bookingDetail->type == 5) {
+        $this->db->query('INSERT INTO cart (cartbooking_id,user_id, serviceProvider_id, startDate, endDate, package_id) VALUES (:cartbooking_id,:user_id, :serviceProvider_id, :startDate, :endDate, :package_id)');
+        
+        $this->db->bind(':cartbooking_id', $cartbooking_id);
+        $this->db->bind(':user_id', $transactionData['user']->id);
+        $this->db->bind(':serviceProvider_id', $bookingDetail->id);
+        $this->db->bind(':startDate', $currentDate);
+        $this->db->bind(':endDate', $currentDate);
+        $this->db->bind(':package_id', $bookingDetail->package_id);
+    }
+    
+    // Execute the query for the current iteration
+    if (!$this->db->execute()) {
+        // Handle the case where the query fails
+        return false;
+    }
+}
+
+// If all queries are executed successfully, return true
+return true;
+
+
+    
+}
+
+//findCartDetails($id)
+public function findCartDetails($id){
+    $this->db->query('SELECT cart.*, users.*
+    FROM cart
+    LEFT JOIN users ON cart.serviceProvider_id = users.id
+    WHERE cart.user_id = :id;');
+    $this->db->bind(':id',$id);
+
+    $data=$this->db->resultSet();
+
+    //check row
+    if($this->db->rowCount()>0){
+        return $data;
+    }else{
+        return null;
+    }
+}
+
+
+//countCart($id)
+public function countCart($id){
+    //detinct number of cartbooking_id
+    $this->db->query('SELECT COUNT(DISTINCT cartbooking_id) AS count
+    FROM cart
+    WHERE user_id = :id;');
+    $this->db->bind(':id', $id);
+    $row = $this->db->single();
+     if($this->db->rowcount()>0){
+        return $row->count;
+     }
+     else{
+        return false;
+    }
+}
+
+
+//countCartItems($id)
+public function countCartItems($id){
+    $this->db->query('SELECT COUNT(*) AS count
+    FROM cart
+    WHERE user_id = :id;');
+    $this->db->bind(':id', $id);
+    $row = $this->db->single();
+     if($this->db->rowcount()>0){
+        return $row->count;
+     }
+     else{
+        return false;
+    }
 }
 
 

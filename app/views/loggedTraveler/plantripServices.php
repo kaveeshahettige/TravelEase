@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADD6_nBEr9ZJd44sKcqr0dj-JRvbt5ogo&callback=initMap" async defer></script>
     <style>
         
         .modal {
@@ -48,23 +49,6 @@
         
     </style>
     
-    <!-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize the map
-        var map = L.map('map').setView([7.8731, 80.7718], 12); // Set the initial coordinates and zoom level
-
-        // Add OpenStreetMap tile layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Add markers for your places
-        L.marker([6.0329, 80.2170])
-            .addTo(map)
-            .bindPopup("<b>Sample Place Name</b><br>Sample Place Description");
-    });
-    </script> -->
-
     <style>
     /* Your CSS styles here */
     </style>
@@ -90,15 +74,59 @@
     </div>
 
     <section class="resultPagem1">
-        <div class="results">
-            <img src="<?php echo URLROOT . '/images/' . $data['city']->city_photo; ?>" alt="">
+    <div class="results">
+        <?php
+            // Random image URL
+        $randomImageURL = 'https://picsum.photos/1000/650'; // Random image from Lorem Picsum
+
+        // Check if city photo is available, if not, use the random image URL
+        $cityPhoto = !empty($data['city']->city_photo) ? URLROOT . '/images/' . $data['city']->city_photo : $randomImageURL;?>
+
+        <img src="<?php echo $cityPhoto; ?>" alt="">
+
             <div class="dark-overlay"></div>
             <div class="textonimage">
-                <p><?php echo $data['city']->city_description?></p>
+                <p><?php echo $data['city']->city_description?$data['city']->city_description:$data['city']->city?></p>
             </div>
         </div>
-        <!-- below id should be map -->
-        <div id="" class="map" style="height: 400px;"></div>
+        
+        <div id="map"></div>
+        <!-- script for map -->
+        <script>
+    // Initialize and add the map
+    function initMap() {
+        // The location of your initial map center
+        // var myLatLng = { lat: 6.0328, lng: 80.2170 };
+        var myLatLng = { lat: <?php echo $data['city']->lat?>, lng: <?php echo $data['city']->lng?> };
+        
+        // Define an array to store all the marker positions
+        // var markerPositions = [
+        //     <?php //foreach ($data['places'] as $place): ?>
+        //         {lat: <?php //echo $place->latitude; ?>, lng: <?php// echo $place->longitude; ?>},
+        //     <?php //endforeach; ?>
+        // ];
+        // Create a map object and specify the DOM element for display.
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: myLatLng,
+            zoom: 15 // Adjust the initial zoom level as needed
+        });
+
+        // Create a marker and set its position.
+        var marker = new google.maps.Marker({
+            map: map,
+            position: myLatLng,
+            title: 'Hello World!'
+        });
+        // markerPositions.forEach(function(position) {
+        //     var marker = new google.maps.Marker({
+        //         position: position,
+        //         map: map,
+        //         title: 'Hello World!' // You can set the title of the marker if needed
+        //     });
+        // });
+    }
+</script>
+
     </section>
 
     <section class="resultsPage1_1">
@@ -324,6 +352,7 @@
         &copy; 2023 Your Company Name. All rights reserved.
     </div>
 </div>
+
 
 
 </body>

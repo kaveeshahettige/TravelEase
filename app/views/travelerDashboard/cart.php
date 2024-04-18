@@ -29,11 +29,11 @@
         
         <ul>
             <li><a href="<?php echo URLROOT; ?>travelerDashboard/index/<?php echo $_SESSION['user_id']?>" class="nav-button "><i class='bx bxs-dashboard bx-sm'></i>Overview</a></li>
-            <li><a href="<?php echo URLROOT; ?>travelerDashboard/bookings/<?php echo $_SESSION['user_id']?>" class="nav-button active"><i class='bx bxs-book bx-sm bx-fw'></i> Bookings</a></li>
+            <li><a href="<?php echo URLROOT; ?>travelerDashboard/bookings/<?php echo $_SESSION['user_id']?>" class="nav-button "><i class='bx bxs-book bx-sm bx-fw'></i> Bookings</a></li>
             <li><a href="<?php echo URLROOT; ?>travelerDashboard/payments/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bxs-package bx-sm' class="nav-button "></i></i> Payments</a></li>
             <li><a href="<?php echo URLROOT; ?>travelerDashboard/notifications/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bxs-report bx-sm' class="nav-button "></i> Notifications</a></li>
             <li><a href="<?php echo URLROOT; ?>travelerDashboard/previoustrips/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bx-line-chart bx-sm' class="nav-button "></i> Previous Trips</a></li>
-            <li><a href="<?php echo URLROOT?>travelerDashboard/cart/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bx-cart bx-sm'></i> Cart</a></li>
+            <li><a href="<?php echo URLROOT?>travelerDashboard/cart/<?php echo $_SESSION['user_id']?>" class="nav-button active"><i class='bx bx-cart bx-sm'></i> Cart</a></li>
             <li><a href="<?php echo URLROOT?>travelerDashboard/settings/<?php echo $_SESSION['user_id']?>" class="nav-button "><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
            
         </ul>
@@ -51,7 +51,7 @@
         </div>
         
         <div class="dashboard-content">
-            <h1>Upcoming Bookings</h1>
+            <h1>Cart bookings</h1>
         </div>
 
         <div class="dashboard-sub-content">
@@ -64,27 +64,19 @@
 
             <!-- Total Bookings Box -->
             <div class="box">
-                <h2>Total Upcoming Bookings</h2>
-                <p><?php  echo $data['noOfBooking']?></p>
+                <h2>Total Carts</h2>
+                <p><?php  echo $data['noofCarts']?></p>
             </div>
-        
-            <!-- Ongoing Bookings Box
             <div class="box">
-                <h2>Ongoing Bookings</h2>
-                <p>35</p>
+                <h2>Total Items</h2>
+                <p><?php  echo $data['noofCartItems']?></p>
             </div>
-        
-            <!-- Customers Box -->
-            <!--<div class="box">
-                <h2>Total Customers</h2>
-                <p>10</p>
-            </div> -->
         </div>
         </div>
-
+    <!-- <?php echo var_dump($data['cartDetails'])?> -->
         <div class="search-content">
         <div class="booking-search">
-            <input type="text" id="booking-search" placeholder="Search for Boookings">
+            <input type="text" id="booking-search" placeholder="Search for Bookings">
             <button onclick="filterBookings()">
                 <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
             </button>
@@ -92,13 +84,13 @@
         </div>
 
         <div class="table-content">
-            <h2>Booking Details</h2>
+            <h2>Cart Details</h2>
             <table class="booking-table">
                 <thead>
                 <tr>
                     <th>No</th>
                     <!-- <th>Booking ID</th> -->
-                    <th>Booking</th>
+                    <th>Cart</th>
                     <th>Start Date</th>
                     <th>End Date</th>
                     <th>Booking Date</th>
@@ -111,37 +103,57 @@
                 <tbody>
 
 <!-- <?php echo var_dump($data['mybooking'])?> -->
-                <?php
-$count = 1;
+<?php
+$count = 1; // Initialize the count
 
-if (!empty($data['mybooking']) && is_array($data['mybooking'])) {
-    foreach ($data['mybooking'] as $booking ) {
-        echo '<tr class="t-row">';
-        echo '<td>' . $count . '</td>';
-        // echo '<td>' . $booking->booking_id . '</td>';
-        echo '<td>' .$booking->fname.' '.$booking->lname.'</td>';
-        echo '<td>' . $booking->startDate . '</td>';
-        echo '<td>' . $booking->endDate . '</td>';
-      
-        echo '<td>' . date('Y-m-d', strtotime($booking->bookingDate)) . '</td>';
-        echo '<td><button class="viewbooking" onclick="openPopup(\'' . $booking->temporyid .'\',' . $booking->serviceProvider_id . ', \'' . $booking->booking_id . '\')">View</button></td>';
+if (!empty($data['cartDetails']) && is_array($data['cartDetails'])) {
+    $previousBookingId = null; // Initialize previous booking ID
 
-        
-if ($booking->cancellation_eligibility === 'Unavailable') {
-    echo '<td><button class="unavailable-button" disabled><i class="bx bx-x-circle"></i>&nbsp Not Available &nbsp </button></td>';
-} else {
-    echo '<td><button class="cancel-button" onclick="cancelBooking(\'' . $booking->temporyid . '\', \'' . $booking->booking_id . '\')"><i class="bx bx-x-circle"></i> Cancel Booking</button></td>';
-
-}
-
-
-        echo '</tr>';
-        $count++;
+    foreach ($data['cartDetails'] as $booking) {
+        // Check if it's the same booking ID as the previous one
+        if ($booking->cartbooking_id !== $previousBookingId) {
+            // If it's a new booking ID, start a new row
+            if ($previousBookingId !== null) {
+                // Close the previous row if it's not the first booking
+                echo '<td>' . $names . '</td>'; // Display accumulated names
+                // Display other data only once
+                echo '<td>' . $booking->startDate . '</td>';
+                echo '<td>' . $booking->endDate . '</td>';
+                echo '<td>' . date('Y-m-d', strtotime($booking->bookingDate)) . '</td>';
+                echo '<td><button class="viewbooking" onclick="openPopup($booking->cartbooking_id)">View</button></td>';
+                echo '<td><button class="cancel-button" onclick="cancelBooking($booking->cartbooking_id)"><i class="bx bx-x-circle"></i>Remove</button></td>';
+                echo '</tr>';
+                $count++; // Increment the count for the new row
+            }
+            // Start a new row for the current booking
+            echo '<tr class="t-row">';
+            echo '<td>' . $count . '</td>'; // Display count only once
+            // Initialize names variable for the current booking
+            $names = $booking->fname . ' ' . $booking->lname;
+        } else {
+            // If it's the same booking ID, accumulate names with commas
+            $names .= ', ' . $booking->fname . ' ' . $booking->lname;
+        }
+        // Update the previous booking ID
+        $previousBookingId = $booking->cartbooking_id;
     }
+    // After the loop, display the last row
+    echo '<td>' . $names . '</td>'; // Display accumulated names
+    // Display other data for the last row
+    echo '<td>' . $booking->startDate . '</td>';
+    echo '<td>' . $booking->endDate . '</td>';
+    echo '<td>' . date('Y-m-d', strtotime($booking->bookingDate)) . '</td>';
+    echo '<td><button class="viewbooking" onclick="openPopup()">View</button></td>';
+    echo '<td><button class="cancel-button" onclick="cancelBooking()"><i class="bx bx-x-circle"></i>Remove</button></td>';
+    echo '</tr>';
+    $count++; // Increment the count for the last row
 } else {
-    echo '<tr><td colspan="4">No data available</td></tr>';
+    // Display a message if there are no cart details
+    echo '<tr><td colspan="7">No data available</td></tr>';
 }
 ?>
+
+
 
                 </tbody>
             </table>

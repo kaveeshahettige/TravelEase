@@ -1299,6 +1299,71 @@ public function cartpaymentSuccessful() {
       // Redirect the user to an error page or perform any other action as needed
   }
 }
+//addtocart
+public function addtocart($bookingcartArrayString, $checkinDate, $checkoutDate, $pickupTime=null) {
+  $bookingcartArray = json_decode(urldecode($bookingcartArrayString), true);
+  
+
+  $totalAmount = $_POST['totalAmount'];
+  $driverType = $_POST['driverType'];
+  //echo $driverType;
+  //if driver type==withdriver
+  if($driverType=='withDriver'){
+    $driver = 1;
+  }else{
+      $driver=0;
+    };
+  //echo $driverType;
+
+  // Retrieve user details
+  
+  $id = $_SESSION['user_id'];
+  $user = $this->userModel->findUserDetail($id);
+
+  // Initialize an empty array to store booking details
+$furtherBookingDetails = [];
+
+// Iterate over each key-value pair in the $bookingcartArray
+foreach ($bookingcartArray as $type => $serviceIds) {
+    // Iterate over each service ID for the current type
+    foreach ($serviceIds as $serviceId) {
+        // Retrieve booking details for the current type and service ID
+        $bookingDetails = $this->userModel->findBookingDetailByServiceid($type, $serviceId);
+        // Add the retrieved booking details to the array
+        $furtherBookingDetails[] = $bookingDetails;
+    }
+}
+
+  //Construct transaction data
+  $transactionData = [
+      'user' => $user,
+      'checkinDate' => $checkinDate,
+      'checkoutDate' => $checkoutDate,
+      'bookingcartArray' => $bookingcartArray,
+      'pickupTime' => $pickupTime ? $pickupTime : null,
+      'price' => $totalAmount,
+      'furtherBookingDetails' => $furtherBookingDetails,
+      'driver' => $driver,
+      
+      // Add any other relevant transaction details
+  ];
+  /////////////////////////////
+  //similar to addBookingfromCart
+  $this->userModel->addtoCartTable($transactionData);
+  // var_dump($transactionData);
+  
+  // Optionally, you can pass data to the view if needed
+  $data = [
+      // Add any data you want to pass to the view
+  ];
+
+  // Load the view for the payment successful page
+  $this->view('loggedTraveler/addToCartSuccessful', $data);
+  ///////////////////////////
+
+}
+
+////////////////
 
 
 
@@ -1345,7 +1410,6 @@ public function cancelBooking($temporyid,$booking_id){
           $message="Your Agency vehicle with ID ".$bookingFurtherDetail->vehicle_id."-".$bookingFurtherDetail->brand ." ".$bookingFurtherDetail->model." ".$bookingFurtherDetail->plate_number." ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
         }elseif($bookingDetails->type==3){
           $message="Your Hotel room with ID ".$bookingFurtherDetail->room_id."-".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
-  
         }
         
         //cancel from cartbookings table

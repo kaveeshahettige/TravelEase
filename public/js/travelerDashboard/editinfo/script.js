@@ -114,3 +114,87 @@ function gotoHome() {
   // Replace 'https://example.com' with the URL of the page you want to navigate to
   window.location.href = '../../loggedTraveler/index';
 }
+
+
+
+///////////////////////////
+
+// Declare confirmBtn and confirmationMessage globally
+var confirmBtn, confirmationMessage;
+
+document.addEventListener("DOMContentLoaded", function(){
+  // Get the confirmation button, deny button, and the <span> element that closes the modal
+  confirmBtn = document.getElementById("confirmCancelBtn");
+  var denyBtn = document.getElementById("denyCancelBtn");
+  var span = document.getElementsByClassName("close2")[0];
+  // Get the confirmation message element
+  confirmationMessage = document.getElementById("confirmationMessage");
+
+  // Event listener for the <span> element that closes the modal
+  span.onclick = function() {
+    closeModal();
+  }
+
+  // Event listener for clicks outside the modal to close it
+  window.onclick = function(event) {
+    var modal = document.getElementById("confirmationModal");
+    if (event.target == modal) {
+      closeModal();
+    }
+  }
+
+  // Event listener for the deny button to close the modal
+  denyBtn.onclick = function() {
+    closeModal();
+  }
+});
+
+// Function to open the confirmation modal
+function openModal() {
+  var modal = document.getElementById("confirmationModal");
+  modal.style.display = "block";
+}
+
+// Function to close the confirmation modal after a delay
+function closeModalWithDelay() {
+  // Close the modal after a delay of 2 seconds
+  setTimeout(function() {
+    closeModal();
+  }, 2000); // Adjust the delay as needed
+  window.location.href = 'http://localhost/TravelEase/Landpage';
+}
+
+// Function to close the confirmation modal
+function closeModal() {
+  var modal = document.getElementById("confirmationModal");
+  modal.style.display = "none";
+}
+
+// Function to handle cancellation of booking
+function deactivateUser(id){
+  console.log("Traveler ID: " + id);
+
+  // Call the function to open the confirmation modal
+  openModal();
+
+  // Event listener for the confirmation button
+  confirmBtn.onclick = function() {
+    // Display the confirmation message
+    confirmationMessage.innerHTML = "Deactivation successful.";
+
+    // Execute the cancellation action using iframe
+    var iframe = document.getElementById("cancelFrame");
+    iframe.onload = function() {
+      // After the cancellation action is completed, refresh the page
+      window.location.reload();
+    };
+    iframe.src = "http://localhost/TravelEase/TravelerDashboard/deactivateUser/" + id ;
+
+    // Close the confirmation modal after action is performed with a delay
+    closeModalWithDelay();
+  }
+}
+
+
+
+
