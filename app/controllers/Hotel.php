@@ -183,9 +183,12 @@ class Hotel extends Controller
 
         $roomData = $this->hotelsModel->getHotelRooms($hotel_id);
 
+        $activeRooms = $this->getActiveRooms();
+
         $data = [
             'roomData' => $roomData,
             'basicInfo' => $this->basicInfo(),
+            'activeRooms' => $activeRooms,
         ];
 
         $this->view('hotel/addrooms', $data);
@@ -732,36 +735,44 @@ class Hotel extends Controller
     }
 
 
-    public function checkRoomBeforeDelete($room_id)
+
+    public function deleterooms()
     {
-        // Check if the room is in use (has bookings)
-        if ($this->hotelsModel->checkRoomUsage($room_id)) {
-            echo "<script>alert('Unable to delete room. It is currently in use.')</script>";
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['room_id'])) {
+            $room_id = $_POST['room_id'];
+
+            // Check if the room is in use before deletion
+            $isRoomInUse = $this->hotelsModel->checkRoomUsage($room_id);
+
+            if ($isRoomInUse) {
+                // Alert the user
+                echo "<script>alert('Unable to delete room. It is currently in use.')</script>";
+            } else {
+                // Attempt to deactivate the room
+                $deactivated = $this->hotelsModel->deactivateRoom($room_id);
+
+                if ($deactivated) {
+                    flash('post_message', 'Room Deactivated');
+                } else {
+                    flash('post_message', 'Unable to deactivate room. An error occurred.');
+                }
+            }
+        } else {
+            // Redirect or handle the case when no room_id is provided
             redirect('hotel/addrooms');
         }
     }
 
-
-    public function deleterooms($room_id)
+    public function getActiveRooms()
     {
-        // Check if the room is in use before deletion
-        $isRoomInUse = $this->checkRoomBeforeDelete($room_id);
+        $user_id = $_SESSION['user_id'];
 
-        if ($isRoomInUse) {
-            flash('post_message', 'Unable to remove room. It is currently in use.');
-        } else {
-            // Attempt to delete the room
-            if ($this->hotelsModel->deleterooms($room_id)) {
-                flash('post_message', 'Room Removed');
-            } else {
-                flash('post_message', 'Unable to remove room. An error occurred.');
-            }
-        }
-        // Redirect to the page where rooms are managed
-        redirect('hotel/addrooms');
+        $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
+
+        $activeRooms = $this->hotelsModel->getActiveRooms($hotel_id);
+
+        return $activeRooms;
     }
-
-
 
     public function roomCount()
     {

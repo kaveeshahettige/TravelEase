@@ -33,8 +33,8 @@ include 'navigation.php';
     <div class="main-content">
         <div class="room-container">
             <?php
-            $roomData = $data["roomData"];
-            foreach ($roomData as $hotel_rooms):
+            $activeRooms = $data["activeRooms"];
+            foreach ($activeRooms as $hotel_rooms):
                 ?>
                 <div class="room-box">
                     <h2><?php echo ucfirst($hotel_rooms->registration_number); ?></h2>
@@ -42,7 +42,7 @@ include 'navigation.php';
                     <p><?php echo ucfirst($hotel_rooms->description);?></p>
                     <div class="icons">
                         <a href="<?php echo URLROOT; ?>Hotel/hotelupdaterooms/<?= $hotel_rooms->room_id ?>"><i class='bx bx-edit'></i></a>
-                        <a href="<?php echo URLROOT; ?>Hotel/deleterooms/<?= $hotel_rooms->room_id ?>" onclick="confirmDelete(event, <?= $hotel_rooms->room_id ?>)"><i class='bx bx-trash'></i></a>
+                        <a href="#" onclick="confirmDelete(<?= $hotel_rooms->room_id ?>)"><i class='bx bx-trash'></i></a>
                         <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
                     </div>
                 </div>

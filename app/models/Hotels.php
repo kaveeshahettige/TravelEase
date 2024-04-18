@@ -340,41 +340,30 @@ class Hotels
 
     public function checkRoomUsage($room_id)
     {
-        // Check if room_id exists in bookings
+        // Check bookings table
         $this->db->query('SELECT * FROM bookings WHERE room_id = :room_id');
         $this->db->bind(':room_id', $room_id);
-        $bookings = $this->db->resultSet();
+        $bookingsResult = $this->db->resultSet();
 
-        // If there are bookings, return true indicating that the room is in use
-        return !empty($bookings);
+        // Check anycartbookings table
+        $this->db->query('SELECT * FROM cartbookings WHERE room_id = :room_id');
+        $this->db->bind(':room_id', $room_id);
+        $cartBookingsResult = $this->db->resultSet();
+
+        // If there are bookings in either table, return true indicating that the room is in use
+        return (!empty($bookingsResult) || !empty($cartBookingsResult));
     }
 
-    public function deleterooms($room_id)
+
+    public function deactivateRoom($room_id)
     {
-        // Check if the room is in use (has bookings)
-        if ($this->checkRoomUsage($room_id)) {
-            return false; // Return false indicating the room cannot be deleted
-        }
-
-        // If there are no bookings, proceed with deletion
-        // Delete related records from room_availability
-        $this->db->query('DELETE FROM room_availability WHERE room_id = :room_id');
+        $this->db->query('UPDATE hotel_rooms SET roomCondition = "deactivated" WHERE room_id = :room_id');
         $this->db->bind(':room_id', $room_id);
 
-        // Execute deletion
-        if (!$this->db->execute()) {
-            return false; // Return false if deletion fails
-        }
-
-        // Delete room from hotel_rooms
-        $this->db->query('DELETE FROM hotel_rooms WHERE room_id = :room_id');
-        $this->db->bind(':room_id', $room_id);
-
-        // Execute deletion
         if ($this->db->execute()) {
-            return true; // Return true indicating successful deletion
+            return true;
         } else {
-            return false; // Return false if deletion fails
+            return false;
         }
     }
 
@@ -520,6 +509,19 @@ class Hotels
         }
     }
 
+    public function getActiveRooms($hotel_id){
+        $this->db->query('SELECT * FROM hotel_rooms WHERE hotel_id = :hotel_id AND roomCondition = "activated"');
+        $this->db->bind(':hotel_id', $hotel_id);
+        $activeRooms = $this->db->resultSet();
+
+        // Check row
+        if ($this->db->rowCount() > 0) {
+            return $activeRooms;
+        } else {
+            return [];
+        }
+    }
+
 
     public function getUnavailableRooms($startDate)
     {
@@ -644,7 +646,7 @@ class Hotels
         return $this->db->resultSet();
     }
 
-    // Method to mark notification as read in the database
+
     public function markAsRead($notification_id) {
         $sql = "UPDATE notifications SET markAsRead = 1 WHERE notification_id = :notification_id";
         $this->db->query($sql);

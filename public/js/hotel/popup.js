@@ -1,5 +1,4 @@
-function confirmDelete(event, room_id) {
-    event.preventDefault();
+function confirmDelete(room_id) {
     // Create overlay div
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
@@ -9,8 +8,8 @@ function confirmDelete(event, room_id) {
     confirmDialog.innerHTML = `
         <div class="confirm-message">Are you sure you want to delete this room?</div>
         <div class="buttons">
-            <button class="btn btn-yes" onclick="deleteRoom(event, ${room_id})">Yes</button>
-            <button class="btn btn-no" onclick="cancelDelete(event)">No</button>
+            <button class="btn btn-yes" onclick="deleteRoom('${room_id}')">Yes</button>
+            <button class="btn btn-no" onclick="cancelDelete()">No</button>
         </div>
     `;
 
@@ -18,18 +17,21 @@ function confirmDelete(event, room_id) {
     document.body.appendChild(confirmDialog);
 }
 
-function deleteRoom(event, room_id) {
-    event.preventDefault();
+function deleteRoom(room_id) {
+    // Prepare the data to send
+    var requestData = {
+        room_id: room_id,
+    };
+
+    const form = new FormData();
+    form.append('room_id', room_id);
 
     // Make an AJAX request to delete the room
     fetch(
-        `http://localhost/TravelEase/hotel/deleterooms/${room_id}`,
-
+        `http://localhost/TravelEase/hotel/deleterooms/`,
         {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            body: form
         }
     )
         .then(async function(response) {
@@ -46,15 +48,16 @@ function deleteRoom(event, room_id) {
         })
         .finally(function() {
             // Close the pop-up after the operation is completed
-            cancelDelete(event);
+            cancelDelete();
             window.location.reload();
         });
 }
 
-function cancelDelete(event) {
+function cancelDelete() {
     document.body.removeChild(document.querySelector('.overlay'));
     document.body.removeChild(document.querySelector('.confirm-dialog'));
 }
+
 
 
 function confirmLogout(event) {

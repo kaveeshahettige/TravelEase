@@ -57,7 +57,7 @@
 .notification-date {
     font-size: 14px;
     color: #888;
-    margin-left: 825px;
+    margin-left: 850px;
 }
 
 /* Mark as Read Button Styles */
@@ -69,7 +69,7 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
-    margin-left: 925px;
+    margin-left: 950px;
     transition: background-color 0.3s ease;
 }
 

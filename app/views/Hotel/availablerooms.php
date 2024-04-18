@@ -8,6 +8,7 @@
                                             ?><!--/css/hotel/settingssub.css">-->
     <link rel="stylesheet" href="<?php echo URLROOT ?>/css/hotel/navigation.css">
     <link rel="stylesheet" href="<?php echo URLROOT ?>/css/hotel/availablerooms.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <title>Hotel - Add Rooms</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -71,11 +72,11 @@ $userData= $data['basicInfo']['userData'];
                                 </td>
 
                                 <td>
-                                    <button class="btn btn-make-unavailable" onclick="updateRoomStatus(<?php echo $hotel_rooms->room_id; ?>, '<?php echo $data['date']; ?>')">
+                                    <button class="btn btn-make-unavailable" onclick="updateRoomPopup(<?php echo $hotel_rooms->room_id; ?>, '<?php echo $data['date']; ?>')">
                                         <i class='bx bx-check'></i>
                                     </button>
 <!--                                    deleteroomStatus-->
-                                    <button class="btn btn-make-available" onclick="deleteRoomStatus(<?php echo $hotel_rooms->room_id; ?>, '<?php echo $data['date']; ?>')">
+                                    <button class="btn btn-make-available" onclick="deleteRoomPopup(<?php echo $hotel_rooms->room_id; ?>, '<?php echo $data['date']; ?>')">
                                         <i class='bx bx-trash'></i>
                                     </button>
                                 </td>
