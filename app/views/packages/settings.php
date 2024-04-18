@@ -13,7 +13,7 @@
 </head>
 <body>
 <?php
-$activePage = 'packages/settings'; // Set the active page dynamically based on your logic
+$activePage = 'packages/settings';
 include 'navigation.php';
 ?>
 <main>
@@ -32,21 +32,20 @@ include 'navigation.php';
 
                 <div class="rectangle">
                     <?php
-                    ////                    $userData = $data;
-                    //                    $hotelData = $data2['hotelData'];
+                        $userData = $data['userData'];
                     ?>
                     <!-- Rectangle 1: Basic Info -->
                     <div class="basic-info-content">
                         <div class="center-image" onclick="openPopup()">
-                            <img id="profile-picture" src="<?= isset($_SESSION['user_profile_picture']) ? $_SESSION['user_profile_picture'] : '../Images/wikum.jpg'; ?>" alt="Profile Picture">
+                            <img id="profile-picture" src="<?= isset($userData->profile_picture) ? $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="Profile Picture">
                             <div class="edit-icon">&#9998;</div>
                         </div>
                         <div class="hotel-details">
-                            <h3><?=$_SESSION['user_fname']?></h3>
+                            <h3><?=($userData->fname)?></h3>
                             <h6>Contact Number</h6>
-                            <p><?=$_SESSION['user_number']?></p>
+                            <p><?=($userData->number)?></p>
                             <h6>Email</h6>
-                            <p><?=$_SESSION['user_email']?></p>
+                            <p><?=($userData->email)?></p>
                             <h6>Location</h6>
                             <!--                            <p>--><?php //echo $hotelData['add']; ?><!-- </p>-->
                         </div>
@@ -58,7 +57,7 @@ include 'navigation.php';
                     <div id="profile-picture-form" class="popup">
                         <div class="popup-content">
                             <span class="close-icon" onclick="closePopup()">&times;</span>
-                            <form method="POST" action="<?php echo URLROOT; ?>/hotel/changeProfilePicture" enctype="multipart/form-data">
+                            <form method="POST" action="<?php echo URLROOT; ?>/packages/changeProfilePicture" enctype="multipart/form-data">
                                 <p>Change Profile Picture:</p>
                                 <input type="file" name="profile-picture" accept="image/*" required>
                                 <button type="submit">Upload</button>
@@ -85,7 +84,6 @@ include 'navigation.php';
                     <!-- Rectangle 2: Change Password -->
                     <div class="basic-info-content">
                         <h2>Change Password</h2>
-                        <!-- Add change password form here -->
                         <a href="<?php echo URLROOT; ?>packages/packagespassword">
                             <button  class ="edit-button">Edit</button>
                         </a>
@@ -96,7 +94,7 @@ include 'navigation.php';
                     <!-- Rectangle 3: Service Validation -->
                     <div class="basic-info-content">
                         <h2>Service Validation</h2>
-                        <form class="service-validation-form" method="POST" action="<?php echo URLROOT; ?>/hotel/processServiceValidation" enctype="multipart/form-data">
+                        <form class="service-validation-form" method="POST" action="<?php echo URLROOT; ?>/packages/processServiceValidation" enctype="multipart/form-data">
                             <p>Submit a PDF for Service Validation:</p>
                             <input type="file" id="service-validation-pdf" name="service-validation-pdf" accept=".pdf" required>
                             <button class="edit-button" type="submit">Submit</button>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/settingssub.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <title>Hotel - Add Rooms</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -31,20 +32,18 @@ include 'navigation.php';
 
     <div class="main-content">
         <div class="room-container">
-
             <?php
             $roomData = $data["roomData"];
             foreach ($roomData as $hotel_rooms):
-//                var_dump($hotel_rooms);
                 ?>
                 <div class="room-box">
-<!--                    <h3>--><?php //echo $hotel_rooms->room_id ?><!--</h3>-->
                     <h2><?php echo ucfirst($hotel_rooms->registration_number); ?></h2>
                     <h3><?php echo ucfirst($hotel_rooms->roomType);?> -<?php echo ucfirst($hotel_rooms->price);?></h3>
                     <p><?php echo ucfirst($hotel_rooms->description);?></p>
                     <div class="icons">
                         <a href="<?php echo URLROOT; ?>Hotel/hotelupdaterooms/<?= $hotel_rooms->room_id ?>"><i class='bx bx-edit'></i></a>
-                        <a href="<?php echo URLROOT; ?>Hotel/deleterooms/<?= $hotel_rooms->room_id ?>"><i class='bx bx-trash'></i></a>
+                        <a href="<?php echo URLROOT; ?>Hotel/deleterooms/<?= $hotel_rooms->room_id ?>" onclick="confirmDelete(event, <?= $hotel_rooms->room_id ?>)"><i class='bx bx-trash'></i></a>
+                        <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
                     </div>
                 </div>
             <?php endforeach; ?>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <title>Hotel Bookings</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -48,9 +49,11 @@ $userData= $data['basicInfo']['userData'];
             </div>
 
             <!-- Ongoing Bookings Box -->
+            <?php
+            $reviewCount = $data["reviewCount"]; ?>
             <div class="box">
-                <h2>Ongoing Bookings</h2>
-                <p>35</p>
+                <h2>Total Reviews</h2>
+                <p><?php echo $reviewCount ?></p>
             </div>
 
             <?php
@@ -59,6 +62,7 @@ $userData= $data['basicInfo']['userData'];
                 <h2>Total Customers</h2>
                 <p><?php echo $guestCount?></p>
             </div>
+
         </div>
         </div>
 
@@ -68,7 +72,7 @@ $userData= $data['basicInfo']['userData'];
                 <input type="date" id="start-date" placeholder="Start Date">
                 <input type="date" id="end-date" placeholder="End Date">
                 <button onclick="filterBookings()">
-                    <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
+                    <i class="bx bx-search"></i>
                 </button>
             </div>
         </div>
@@ -123,9 +127,9 @@ $userData= $data['basicInfo']['userData'];
                     <th>No</th>
                     <th>Guest Name</th>
                     <th>Check-in Date</th>
-<!--                    <th>Check-out Date</th>-->
                     <th>Room Number</th>
                     <th>Room Type</th>
+                    <th>Booking Status</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -135,18 +139,25 @@ $userData= $data['basicInfo']['userData'];
                 <?php
                 $bookingData = $data["bookingData"];
                 foreach ($bookingData as $key => $booking):
-//                   var_dump($booking);?>
+                 ?>
+
                     <tr>
                         <td><?php echo $key + 1; ?></td>
                         <td><?php echo $booking->fname; ?></td>
                         <td><?php echo date("Y-m-d", strtotime($booking->startDate)); ?></td>
-<!--                        <td>--><?php //echo date("Y-m-d", strtotime($booking->endDate)); ?><!--</td>-->
                         <td><?php echo $booking->registration_number; ?></td>
                         <td><?php echo $booking->roomType; ?></td>
+                        <td><?php echo $booking->bookingCondition; ?></td>
                         <td>
                             <button class="view-button" onclick="openPopup(); updatePopupDetails('<?php echo $booking->profile_picture; ?>','<?php echo $booking->fname; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->roomType; ?>')">
                                 <i class='bx bx-show'></i>
                             </button>
+
+
+                            <button class="cancel-button" <?php if ($booking->bookingCondition === 'cancelled') echo 'disabled'; ?> onclick="showCancelPopup(<?php echo $booking->room_id; ?>, <?php echo $booking->user_id; ?>, '<?php echo $booking->booking_id; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->endDate; ?>', <?php echo $booking->temporyid; ?>, '<?php echo $booking->roomType; ?>')">
+                                <i class='bx bx-x'></i>
+                            </button>
+
                         </td>
                     </tr>
                 <?php endforeach; ?>

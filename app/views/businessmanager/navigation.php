@@ -13,8 +13,14 @@
 <body>
 <nav class="left-menu">
     <div class="user-profile">
-        <img src="<?= isset($_SESSION['user_profile_picture']) ? $_SESSION['user_profile_picture'] : '../Images/wikum.jpg'; ?> " alt="User Profile Photo">
+
+        <?php
+        $profilePicture = $data["profilePicture"];
+        ?>
+
+        <img id="profile-picture" src="<?= isset($profilePicture->profile_picture) ? $profilePicture->profile_picture : '../Images/wikum.jpg'; ?>" alt="User Profile Photo">
         <span class="user-name"><?=$_SESSION['user_fname']?></span>
+
     </div>
 
     <div class="search-bar">

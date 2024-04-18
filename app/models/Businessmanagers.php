@@ -10,22 +10,74 @@ class Businessmanagers
         $this->db = new Database;
     }
 
-    public function getBookings()
+    public function updateProfilePicture($userId, $filename)
+    {
+        $this->db->query('UPDATE users SET profile_picture = :filename WHERE id = :userId');
+        $this->db->bind(':filename', $filename);
+        $this->db->bind(':userId', $userId);
+
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getProfilePicture($userId){
+
+        $this->db->query('SELECT profile_picture FROM users WHERE id = :userId');
+        $this->db->bind(':userId', $_SESSION['user_id']);
+
+        $result = $this->db->single();
+
+        return $result;
+    }
+
+
+    public function getBookingsFromBookingsTable()
     {
         $this->db->query('SELECT bookings.*, 
-                             user1.fname AS user_fname, 
-                             user1.type AS user_type, 
-                             user1.profile_picture AS user_profile_picture, 
-                             user2.fname AS provider_fname, 
-                             user2.type AS provider_type, 
-                             payments.payment_id 
-                      FROM bookings 
-                      JOIN users AS user1 ON bookings.user_id = user1.id 
-                      JOIN users AS user2 ON bookings.serviceProvider_id = user2.id 
-                      JOIN payments ON bookings.booking_id = payments.booking_id');
+                 users.fname AS guest_name,
+                 users.profile_picture AS user_profile_picture,
+                 providers.fname AS provider_name,
+                 providers.type AS provider_type,
+                 CASE
+                     WHEN EXISTS (SELECT 1 FROM payments WHERE payments.booking_id = bookings.booking_id) THEN "Paid"
+                     ELSE "Unpaid"
+                 END AS payment_status
+          FROM bookings 
+          LEFT JOIN users ON bookings.user_id = users.id
+          LEFT JOIN users AS providers ON bookings.serviceProvider_id = providers.id
+          ORDER BY bookings.bookingDate DESC'); // Ordering by booking_date in descending order
+
         $results = $this->db->resultSet();
         return $results;
     }
+
+    public function getBookingsFromCartBookingsTable()
+    {
+        $this->db->query('SELECT cartbookings.*, 
+                 users.fname AS guest_name,
+                 users.profile_picture AS user_profile_picture,
+                 providers.fname AS provider_name,
+                 providers.type AS provider_type,
+                 CASE
+                     WHEN EXISTS (SELECT 1 FROM cartpayments WHERE cartpayments.booking_id = cartbookings.booking_id) THEN "Paid"
+                     ELSE "Unpaid"
+                 END AS payment_status
+          FROM cartbookings 
+          LEFT JOIN users ON cartbookings.user_id = users.id
+          LEFT JOIN users AS providers ON cartbookings.serviceProvider_id = providers.id
+          ORDER BY cartbookings.bookingDate DESC'); // Ordering by booking_date in descending order
+
+        $results = $this->db->resultSet();
+        return $results;
+    }
+
+
+
+
 
     public function getPackages()
     {

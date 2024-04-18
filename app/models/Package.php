@@ -95,5 +95,99 @@ class Package{
         }
     }
 
+    public function updateProfilePicture($userId, $filename)
+    {
+        $this->db->query('UPDATE users SET profile_picture = :filename WHERE id = :userId');
+        $this->db->bind(':filename', $filename);
+        $this->db->bind(':userId', $userId);
 
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function insertPdf($filename, $userId)
+    {
+        $this->db->query('UPDATE users SET document = :filename WHERE id = :userId');
+        $this->db->bind(':filename', $filename);
+        $this->db->bind(':userId', $userId);
+
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function insertStatus($user_id,$startDate){
+
+        $sql = "INSERT into guide_availability (user_id,startDate) VALUES (:user_id,:startDate)";
+        $this->db->query($sql);
+        $this->db->bind(':user_id',$user_id);
+        $this->db->bind(':startDate',$startDate);
+
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function deleteStatus($user_id, $startDate)
+    {
+        $sql = "DELETE FROM guide_availability WHERE user_id = :user_id AND startDate = :startDate";
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $user_id);
+        $this->db->bind(':startDate', $startDate);
+
+        // Execute the query
+        if ($this->db->execute()) {
+            return true; // Return true if the deletion was successful
+        } else {
+            return false; // Return false if the deletion failed
+        }
+    }
+
+    public function getAvailability($user_id,$startDate){
+
+        $sql = "SELECT * from guide_availability WHERE user_id = :user_id AND startDate = :startDate";
+        $this->db->query($sql);
+        $this->db->bind(':user_id',$user_id);
+        $this->db->bind(':startDate',$startDate);
+
+        $this->db->execute();
+        $rowCount = $this->db->rowCount();
+
+        return $rowCount > 0;
+    }
+
+    public function getUserInfo($user_id)
+    {
+        $sql = "SELECT * FROM users WHERE id = :user_id";
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $user_id);
+
+        $this->db->execute();
+
+        return $this->db->single();
+    }
+
+    public function getBookings($user_id){
+        $sql = "SELECT * FROM bookings WHERE user_id = :user_id";
+        $this->db->query($sql);
+    }
+
+    public function getCartBookings($user_id){
+        $sql = "SELECT * FROM cartbookings WHERE user_id = :user_id";
+        $this->db->query($sql);
+    }
+
+    public function getReviews($user_id){
+        $sql = "SELECT * FROM reviews WHERE user_id = :user_id";
+        $this->db->query($sql);
+    }
 }

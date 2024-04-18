@@ -11,10 +11,13 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
+<?php
+$userData = $data['userData'];
+?>
 <nav class="left-menu">
     <div class="user-profile">
-        <img src="<?= isset($_SESSION['user_profile_picture']) ? $_SESSION['user_profile_picture'] : '../Images/wikum.jpg'; ?> " alt="User Profile Photo">
-        <span class="user-name"><?=$_SESSION['user_fname']?></span>
+        <img id="profile-picture" src="<?= isset($userData->profile_picture) ? $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="Profile Picture">
+        <span class="user-name"><?php echo isset($userData->fname) ? $userData->fname : ''; ?></span>
     </div>
 
     <div class="search-bar">
@@ -26,7 +29,7 @@
 
     <?php
     $menuItems = [
-        ['url' => 'packages/index', 'icon' => 'bx bxs-info-circle bx-tada-hover bx-sm bx-fw', 'text' => 'Dashboard'],
+        ['url' => 'packages/index', 'icon' => 'bx bxs-dashboard bx-sm bx-fw', 'text' => 'Dashboard'],
         ['url' => 'packages/calender', 'icon' => 'bx bxs-book bx-sm bx-fw', 'text' => 'Availability'],
         ['url' => 'packages/bookings', 'icon' => 'bx bxs-calendar bx-sm bx-fw', 'text' => 'Bookings'],
 //        ['url' => 'packages/galllery', 'icon' => 'bx bx-images bx-sm bx-fw', 'text' => 'Gallery'],

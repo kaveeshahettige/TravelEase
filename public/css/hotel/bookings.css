@@ -6,6 +6,13 @@
     font-family: "Poppins", sans;
 }
 
+.table2-content {
+    padding-left: 15px;
+    margin-right: 20px;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
+}
+
 /* Booking Table Styles */
 .booking-table {
     width: 100%;
@@ -173,7 +180,31 @@
     margin: 0 auto 15px; /* Add margin for separation */
 }
 
+/* Cancel Booking Button Styles */
+.cancel-button {
+    background-color: #e74c3c; /* Red background color */
+    color: #ffffff; /* White text color */
+    border: none; /* No border */
+    padding: 8px; /* Adjust the padding for the button */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Show pointer cursor on hover */
+    font-size: 16px; /* Adjust the font size for the button */
+}
 
+.cancel-button i {
+    font-size: 18px; /* Set the desired font size for the icon */
+}
+
+.cancel-button:hover {
+    background-color: #c0392b; /* Darker red color on hover */
+}
+
+.cancel-button[disabled] {
+    background-color: #ccc; /* Change background color */
+    color: #999; /* Change text color */
+    cursor: not-allowed; /* Change cursor to indicate it's not clickable */
+    opacity: 0.6; /* Reduce opacity to visually indicate it's disabled */
+}
 
 /* Media Query for Responsive Design */
 @media screen and (max-width: 768px) {

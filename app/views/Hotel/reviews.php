@@ -38,21 +38,27 @@ include 'navigation.php';
            
 
             <!-- Total Bookings Box -->
+            <?php
+            $reviewCount = $data["reviewCount"]; ?>
             <div class="box">
                 <h2>Total Reviews</h2>
-                <p>100</p>
+                <p><?php echo $reviewCount ?></p>
             </div>
         
             <!-- Ongoing Bookings Box -->
+            <?php
+            $bookingsCount = $data["bookingsCount"]; ?>
             <div class="box">
                 <h2>Total Bookings</h2>
-                <p>100</p>
+                <p><?php echo $bookingsCount ?></p>
             </div>
         
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"]; ?>
             <div class="box">
                 <h2>Total Customers</h2>
-                <p>50</p>
+                <p><?php echo $guestCount?></p>
             </div>
         </div>
         </div>
@@ -94,25 +100,24 @@ include 'navigation.php';
 
 
 
-        <div class="review-content">
+        <<div class="review-content">
             <?php
             $reviews = $data["reviews"];
-//           var_dump($reviews);
             foreach ($reviews as $review): ?>
                 <div class="review-box">
                     <div class="review-sub-content">
                         <div class="review-image">
-                            <!-- You may want to display the actual user image if available -->
-                            <img src="<?php echo URLROOT; ?>/images/hotel/wikum.jpg" alt="Guest Photo">
+                            <img src="<?php echo $review->user_profile_picture; ?>" alt="User Photo">
                         </div>
-                        <h2><?= $review->fname; ?></h2>
-<!--                        <p>Date: --><?php //= $review->created_at; ?><!--</p>-->
-                        <p class="review-text"><?= $review->comment; ?></p>
-                        <button class="read-more-btn" onclick="openModal('<?= $review->fname; ?>', '<?= $review->created_at; ?>', '<?= $review->comment; ?>')">Read More</button>
+                        <h2><?= $review->user_fname; ?></h2>
+                        <p>Date: <?= $review->time; ?></p>
+                        <p class="review-text"><?= $review->feedback; ?></p>
+                        <button class="read-more-btn" onclick="openModal('<?= $review->user_fname; ?>', '<?= $review->time; ?>', '<?= $review->feedback; ?>')">Read More</button>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
+
 
 
 

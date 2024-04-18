@@ -44,22 +44,29 @@ $userData= $data['basicInfo']['userData'];
 
 
                 <!-- Total Bookings Box -->
+
+
+                <?php
+                $roomCount = $data['roomCount']; ?>
                 <div class="box">
                     <h2>Total Rooms Allocated</h2>
-                    <p>10</p>
+                    <p><?php echo $data['roomCount']; ?></p>
                 </div>
 
-                <!-- Ongoing Bookings Box -->
+                <?php
+                $bookingsCount = $data["bookingsCount"]; ?>
                 <div class="box">
-                    <h2>Booked Rooms</h2>
-                    <p>5</p>
+                    <h2>Total Bookings</h2>
+                    <p><?php echo $bookingsCount ?></p>
                 </div>
 
-                <!-- Customers Box -->
+                <?php
+                $guestCount = $data["guestCount"]; ?>
                 <div class="box">
-                    <h2>Available Rooms</h2>
-                    <p>5</p>
+                    <h2>Total Customers</h2>
+                    <p><?php echo $guestCount?></p>
                 </div>
+
             </div>
         </div>
 

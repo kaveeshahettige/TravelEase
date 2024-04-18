@@ -16,64 +16,173 @@ class Packages extends Controller
 
     public function index()
     {
-        $this->view('packages/index');
+        $userData = $this->getUserInfo();
+
+        $data = [
+            'userData' => $userData,
+        ];
+
+        $this->view('packages/index', $data);
     }
 
     public function Calender()
     {
-        $this->view('packages/calender');
+        $userData = $this->getUserInfo();
+
+        $data=[
+            'selectedDate' => 'null',
+            'userData' => $userData,
+        ];
+
+        $this->view('packages/calender',$data);
+    }
+
+    public function availability()
+    {
+        $startDate =null;
+
+        if($_SERVER['REQUEST_METHOD'] == 'GET'){
+
+            $startDate = isset($_GET['date']) ? $_GET['date'] : null;
+
+            if (empty($startDate)) {
+                flash('error', 'Please select a date.');
+                redirect('pacakges/Calender');
+            }
+        }
+
+        $user_id = $_SESSION['user_id'];
+
+        $availability = $this->packagesModel->getAvailability($user_id,$startDate);
+//        var_dump($availability);
+
+
+        $userData = $this->getUserInfo();
+
+        $data = [
+            'date' => $startDate,
+            'availability' => $availability,
+            'userData' => $userData,
+        ];
+
+
+        $this->view('packages/availability',$data);
     }
 
     public function bookings()
     {
-        $this->view('packages/bookings');
+        $userData = $this->getUserInfo();
+        $bookings = $this->getBookings();
+
+        $data = [
+            'userData' => $userData,
+            'bookings' => $bookings,
+        ];
+
+        $this->view('packages/bookings',$data);
     }
 
     public function gallery()
     {
-        $this->view('packages/gallery');
+        $userData = $this->getUserInfo();
+
+        $data = [
+            'userData' => $userData,
+        ];
+
+        $this->view('packages/gallery',$data);
     }
 
     public function revenue()
     {
-        $this->view('packages/revenue');
+        $userData = $this->getUserInfo();
+
+        $data = [
+            'userData' => $userData,
+        ];
+
+        $this->view('packages/revenue',$data);
     }
 
     public function review()
     {
-        $this->view('packages/review');
+        $reviews = $this->getReviews();
+        $userData = $this->getUserInfo();
+
+        $data = [
+            'userData' => $userData,
+            'reviews' => $reviews,
+        ];
+
+        $this->view('packages/review',$data);
     }
 
     public function settings()
     {
-        $this->view('packages/settings');
+        $userData = $this->getUserInfo();
+
+        $data = [
+            'userData' => $userData,
+        ];
+
+        $this->view('packages/settings', $data);
     }
 
     public function addpackages()
     {
+        $userData = $this->getUserInfo();
         $packageData = $this->packagesModel->getpackages();
-        $data["packageData"] = $packageData;
+
+        $data =[
+            'packageData' => $packageData,
+            'userData' => $userData,
+        ];
+
         $this->view('packages/addpackages', $data);
     }
 
     public function addpackagesedit()
     {
-        $this->view('packages/addpackagesedit');
+        $userData = $this->getUserInfo();
+
+        $data = [
+            'userData' => $userData,
+        ];
+
+        $this->view('packages/addpackagesedit', $data);
     }
 
     public function packagesedit()
     {
-        $this->view('packages/packagesedit');
+        $userData = $this->getUserInfo();
+
+        $data = [
+            'userData' => $userData,
+        ];
+
+        $this->view('packages/packagesedit', $data);
     }
 
     public function packagespassword()
     {
-        $this->view('packages/packagespassword');
+        $userData = $this->getUserInfo();
+
+        $data = [
+            'userData' => $userData,
+        ];
+
+        $this->view('packages/packagespassword', $data);
     }
 
     public function navigation()
     {
-        $this->view('packages/navigation');
+        $userData = $this->getUserInfo();
+
+        $data = [
+            'userData' => $userData,
+        ];
+
+        $this->view('packages/navigation', $data);
     }
 
     public function packagesaddpackages($package_id)
@@ -84,183 +193,139 @@ class Packages extends Controller
         $this->view('packages/addpackages', $packageData);
     }
 
-//
-//    public function addpackagesedit()
-//    {
-//        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-//
-//            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-//
-//            $packageData = [
-//                'PackageName' => trim($_POST['PackageName']),
-//                'PackageType' => trim($_POST['PackageType']),
-//                'Duration' => trim($_POST['Duration']),
-//                'TransportProvider' => trim($_POST['TransportProvider']),
-//                'AccomadationProvider' => trim($_POST['AccomadationProvider']),
-//                'PriceOfPackage' => trim($_POST['PriceOfPackage']),
-//                'Location' => trim($_POST['Location']),
-//                'PackageImages' => trim($_POST['PackageImages'][0]),
-//            ];
-//
-//            var_dump($packageData);
-//
-//            //validate packageType
-//            if (empty($packageData['PackageName'])) {
-//                $packageData['packageType_err'] = 'Please choose package Type';
-//            }
-//
-//            if (empty($packageData['PackageType'])) {
-//                $packageData['packageType_err'] = 'Please choose package Type';
-//            }
-//
-//            //validate numOfBeds
-//            if (empty($packageData['Duration'])) {
-//                $packageData['numOfBeds_err'] = 'Please enter Number of Beds';
-//            }
-//
-//            //validate price
-//            if (empty($packageData['TransportProvider'])) {
-//                $packageData['price'] = 'Please Enter Price ';
-//            }
-//
-//            //validate package images
-//            if (empty($packageData['AccomadationProvider'])) {
-//                $packageData['AccomadationProvider'] = 'Please Enter Images';
-//            }
-//
-//            //validate Description
-//            if (empty($packageData['Price'])) {
-//                $packageData['Price'] = 'Please choose package Description';
-//            }
-//
-//            if (empty($packageData['Location'])) {
-//                $packageData['Location'] = 'Please choose package Description';
-//            }
-//
-//            if (empty($packageData['PackageImages'])) {
-//                $packageData['PackageImages'] = 'Please choose package Description';
-//            }
-//
-//            //make sure errors are empty
-//            if (true) {
-//
-////                print_r($packageData);
-//
-//                if ($this->packagesModel->packagesedit($packageData)) {
-//                    flash('register_success', 'You are registered and can login');
-//                    redirect('packages/addpackages');
-//
-//                } else {
-//                    die('Something went wrong');
-//                }
-//
-//
-////                die;
-//
-//            } else {
-//                $this->view('packages/addpackagesedit', $packageData);
-//            }
-//        } else {
-//
-//            $packageData = [
-//                'PackageName' => '',
-//                'PackageType' => '',
-//                'Duration' => '',
-//                'TransportProvider' => '',
-//                'AccomadationProvider' => '',
-//                'Price' => '',
-//                'Location' => '',
-//                'PackageImages' => '',
-//            ];
-//
-//            $this->view('packages/addpackagesedit', ['packageData' => $packageData]);
-//        }
-//    }
-//
-////    public function packagesupdatepackages()
-////    {
-////        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-////
-////            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-////
-////            $packageData = [
-////                'packageType' => trim($_POST['packageType']),
-////                'numOfBeds' => trim($_POST['numOfBeds']),
-////                'price' => trim($_POST['price']),
-////                'packageImages' => trim($_POST['packageImages']),
-////                'packageDescription' => trim($_POST['packageDescription']),
-////                'packageType_err' => '',
-////                'numOfBeds_err' => '',
-////                'price_err' => '',
-////                'packageImages_err' => '',
-////                'packageDescription_err' => '',
-////            ];
-////
-////            // //validatepackageType
-////            // if(empty($packageData['packageType'])){
-////            //     $packageData['packageType_err']='Please choose package Type';
-////            // }
-////
-////            // //validate numofBeds
-////            // if(empty($packageData['numOfBeds'])){
-////            //     $packageData['numOfBeds_err']='Please enter Number of Beds';
-////            // }
-////
-////            // //validate price
-////            // if(empty($packageData['price'])){
-////            //     $packageData['price']='Please Enter Price ';
-////            // }
-////
-////            // //validate package images
-////            // if(empty($packageData['packageImages'])){
-////            //     $packageData['packageImages_err']='Please Enter Images';
-////            // }
-////
-////            // //validate Description
-////            // if(empty($packageData['packageDescription'])){
-////            //     $packageData['packageDescription_err']='Please choose package Description';
-////            // }
-////
-////            //make sure errors are empty
-////            if (empty($packageData['packageType_err']) && empty($packageData['numOfBeds_err']) && empty($packageData['price']) && empty($packageData['packageImages_err']) && empty($packageData['packageDescription'])) {
-////
-////                if ($this->packagesModel->packagesupdatepackages($packageData)) {
-////                    flash('user_message', 'user Updated');
-////                    redirect('packages/addpackages');
-////
-////                } else {
-////                    die('Something went wrong');
-////                }
-////
-////            } else {
-////                $this->view('packages/addpackages', $packageData);
-////            }
-////        } else {
-////
-////            $packageData = [
-////                'rood_id' => '$package_id',
-//////                'packageType' => $packages->packageType,
-//////                'numOfBeds' => $packages->numOfBeds,
-//////                'price' => $packages->price,
-//////                'packageImages' => $packages->packageImages,
-//////                'packageDescription' => $packages->packageDescription,
-////            ];
-////
-////
-////            $this->view('hotel/addpackagesedit', ['packageData' => $packageData]);
-////        }
-////    }
-//
-//    public function deletepackages($package_id)
-//    {
-////        echo $package_id;
-////        die;
-//        if ($this->hotelsModel->deletepackages($package_id)) {
-//            flash('post_message', 'user Removed');
-//            redirect('hotel/addpackages');
-//        } else {
-//            die('Something went wrong');
-//        }
-//    }
+
+    public function changeProfilePicture()
+    {
+        // Check if a file was uploaded
+        if ($_FILES['profile-picture']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = '../public/uploads/profile-pictures/';
+            $uploadFile = $uploadDir . basename($_FILES['profile-picture']['name']);
+
+            // Move the uploaded file to the desired directory
+            if (move_uploaded_file($_FILES['profile-picture']['tmp_name'], $uploadFile)) {
+                // Update the session with the new file path
+                $_SESSION['user_profile_picture'] = $uploadFile;
+
+                // Update the profile picture in the database
+                $this->packagesModel->updateProfilePicture($_SESSION['user_id'], $uploadFile);
+            } else {
+                echo 'Error uploading the file.';
+            }
+        } else {
+            echo 'File upload error.';
+        }
+
+        // Redirect to the profile page or wherever you want
+        header('Location: ' . URLROOT . '/packages/settings');
+        exit;
+    }
+
+    public function processServiceValidation()
+    {
+        $userId = $_SESSION['user_id'];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $targetDir = "../public/uploads/service_validations/";
+            $targetFile = $targetDir . basename($_FILES['service-validation-pdf']['name']);
+
+            // Move the uploaded file to the target directory
+            move_uploaded_file($_FILES['service-validation-pdf']['tmp_name'], $targetFile);
+
+            // Call the model to insert the PDF information into the database
+            if ($this->packagesModel->insertPdf($targetFile, $userId)) {
+                // Success - You can redirect or show a success message
+                flash('success', 'PDF submitted successfully');
+                redirect('packages/settings');
+            } else {
+                // Error - You can redirect or show an error message
+                flash('error', 'Failed to submit PDF');
+                redirect('packages/settings');
+            }
+        }
+    }
+
+    public function updateStatus(){
+        // Access the data sent from the client-side
+        $user_id = $_POST['user_id'];
+        $startDate = $_POST['startDate'];
+        $inserted = $this->packagesModel->insertStatus($user_id, $startDate);
+
+        // Check if insertion was successful
+        if ($inserted) {
+            // Return a success response
+            echo json_encode(['success' => 'Availability status updated successfully']);
+        } else {
+            // Return an error response
+            echo json_encode(['error' => 'Failed to update Availability status']);
+        }
+    }
+
+    function deleteStatus()
+    {
+        // Access the data sent from the client-side
+        $user_id = $_POST['user_id'];
+        $startDate = $_POST['startDate'];
+        $deleted = $this->packagesModel->deleteStatus($user_id, $startDate);
+
+        // Check if deletion was successful
+        if ($deleted) {
+            // Return a success response
+            echo json_encode(['success' => 'Availability status updated successfully']);
+        } else {
+            // Return an error response
+            echo json_encode(['error' => 'Failed to update Availability status']);
+        }
+    }
+
+    public function getUserInfo()
+    {
+        $user_id = $_SESSION['user_id'];
+        $userData = $this->packagesModel->getUserInfo($user_id);
+
+
+        if ($userData)
+            return $userData;
+        else{
+                return [];
+            }
+    }
+
+    public function getBookings()
+    {
+        $user_id = $_SESSION['user_id'];
+
+        // Retrieve normal bookings
+        $normalBookings = $this->packagesModel->getBookings($user_id);
+        if ($normalBookings === null) {
+            $normalBookings = []; // Set to empty array if null
+        }
+
+        // Retrieve cart bookings
+        $cartBookings = $this->packagesModel->getCartBookings($user_id);
+        if ($cartBookings === null) {
+            $cartBookings = []; // Set to empty array if null
+        }
+
+        // Merge bookings
+        $bookings = array_merge($normalBookings, $cartBookings);
+
+        if ($bookings)
+            return $bookings;
+        else
+            return [];
+    }
+
+    public function getReviews(){
+        $user_id = $_SESSION['user_id'];
+
+        $reviews = $this->packagesModel->getReviews($user_id);
+
+        if ($reviews)
+            return $reviews;
+        else
+            return [];
+    }
+
+
 
 }

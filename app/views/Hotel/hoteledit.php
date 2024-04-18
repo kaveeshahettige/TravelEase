@@ -12,7 +12,6 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-
 <?php
 $activePage = 'hotel/settings'; // Set the active page dynamically based on your logic
 include 'navigation.php';
@@ -27,14 +26,16 @@ include 'navigation.php';
 
 
         <div id="base">
-            <?php
-            $userData = $data['userData'];
-            $hotelData = $data['hotelData'];
-            ?>
             <h3 style="padding-left:20px;">Basic Info</h3>
             <div id="form">
-                <form class="registration-form">
-                    <div>
+                <form class="registration-form" method="POST" action="<?php echo URLROOT; ?>/hotel/updateHotelSettings/<?php echo $_SESSION['user_id']; ?>">
+<!--                --><?php //echo $_SESSION['user_id']; ?>
+                <div>
+                    <?php
+                        $userData= $data['basicInfo']['userData'];
+                        $hotelData= $data['basicInfo']['hotelData'];
+                    ?>
+
                         <div class="form-group">
                             <label for="hotel-name">Hotel Name</label>
                             <input type="text" id="hotel-name" name="hotel-name" placeholder="Hotel Name" value="<?php echo $userData->fname; ?>" required>
@@ -66,15 +67,12 @@ include 'navigation.php';
 
 
         <div id="base">
-            <?php
-            $userData = $data['userData'];
-            $hotelData = $data['hotelData'];
-            ?>
+
             <h3 style="padding-left:20px;">Add Details</h3>
             <div id="form">
-                <form class="registerForm">
+                <form class="registerForm" method="POST" action="<?php echo URLROOT; ?>/hotel/updateAdditionalDetails/<?php echo $_SESSION['user_id']; ?>">
 
-                    <div>
+                <div>
                         <div class="form-group">
                             <label for="altPhoneNumber">Alternate Phone Number</label>
                             <input type="text" id="altPhoneNumber" name="altPhoneNumber" placeholder="Alternate Phone Number" value="<?php echo $hotelData->alt_phone_number; ?>">
@@ -96,16 +94,21 @@ include 'navigation.php';
 
                     <div>
                         <div class="form-group">
-                            <label for="Address">Street Address</label>
-                            <input type="text" id="Address" name="Address" placeholder="Address" value="<?php echo $hotelData->street_address; ?>">
+                            <label for="add">Address</label>
+                            <input type="text" id="address" name="address" placeholder="Enter Street and Town" value="<?php echo $hotelData->address; ?>" required>
                         </div>
+                        <div class="form-group">
+                            <label for="street_address">Street Address</label>
+                            <input type="text" id="street_address" name="street_address" placeholder="Enter Street Address" value="<?php echo $hotelData->street_address; ?>">
+                        </div>
+                    </div>
+
+
+                    <div>
                         <div class="form-group">
                             <label for="city">City</label>
                             <input type="text" id="city" name="city" placeholder="City" value="<?php echo $hotelData->city; ?>">
                         </div>
-                    </div>
-
-                    <div>
                         <div class="form-group">
                             <label for="state">Province</label>
                             <input type="text" id="state" name="state" placeholder="Province" value="<?php echo $hotelData->state_province; ?>">

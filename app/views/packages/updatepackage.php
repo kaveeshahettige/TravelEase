@@ -15,6 +15,9 @@
 
 <body>
 <?php
+$userData = $data['userData'];
+?>
+<?php
 $activePage = 'packages/settings'; // Set the active page dynamically based on your logic
 include 'navigation.php';
 ?>

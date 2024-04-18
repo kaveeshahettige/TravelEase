@@ -31,63 +31,91 @@ include 'navigation.php';
             <div class="left-content">
 
                 <div class="rectangle">
+
+                    <?php
+                    $profilePicture = $data["profilePicture"];
+//                    var_dump($profilePicture);
+                    ?>
+
                     <div class="basic-info-content">
-                        <div class="center-image">
-                            <img src="<?php echo URLROOT?>/images/wikum.jpg" alt="Profile Picture">
+                        <div class="center-image" onclick="openPopup()">
+                            <img id="profile-picture" src="<?= isset($profilePicture->profile_picture) ? $profilePicture->profile_picture : '../Images/wikum.jpg'; ?>" alt="User Profile Photo">
+                            <div class="edit-icon">&#9998;</div>
                         </div>
-                        <div class="hotel-details">
+                    </div>
+
+
+                    <div class="hotel-details">
                             <h3><?=$_SESSION['user_fname']?></h3>
                             <h6>Contact Number</h6>
                             <p><?=$_SESSION['user_number']?></p>
                             <h6>Email</h6>
                             <p><?=$_SESSION['user_email']?></p>
-                            <!-- <h6>Location</h6>
-                            <p>City, Country</p> -->
-                        </div>
+<!--                            <h6>Location</h6>-->
+<!--                            <p>--><?php //=$hotelData->add ?><!-- </p>-->
+                    </div>
+
                         <a href="<?php echo URLROOT; ?>businessmanager/businessmanageredit">
-                        <button class ="edit-button">Edit</button>
+                            <button class="edit-button">Edit</button>
                         </a>
-                     </div>
-                </div>
 
-                
-            </div>
-
-            <div class="right-content">
-                
-
-                <div class="rectangle">
-                    <div class="basic-info-content">
-                    <div class="hotel-details">
-                        <h2>Pacakge Details</h2>
-                        <h6>No. Package Created</h6>
-                        <p>5</p>
+                    <div id="profile-picture-form" class="popup">
+                        <div class="popup-content">
+                            <span class="close-icon" onclick="closePopup()">&times;</span>
+                            <form method="POST" action="<?php echo URLROOT; ?>/businessmanager/changeProfilePicture" enctype="multipart/form-data">
+                                <p>Change Profile Picture:</p>
+                                <input type="file" name="profile-picture" accept="image/*" required>
+                                <button type="submit">Upload</button>
+                                <button type="button" onclick="closePopup()">Cancel</button>
+                            </form>
+                        </div>
                     </div>
-                        <a href="<?php echo URLROOT; ?>businessmanager/addpackage">  
-                        <button  class ="edit-button">Add</button>
-                        </a>
+                    <!-- JavaScript to handle the popup and image update -->
+                    <script>
+                        function openPopup() {
+                            var formPopup = document.getElementById("profile-picture-form");
+                            formPopup.style.display = "flex";
+                        }
+
+                        function closePopup() {
+                            var formPopup = document.getElementById("profile-picture-form");
+                            formPopup.style.display = "none";
+                        }
+                    </script>
+
                     </div>
-                </div>
 
                 <div class="rectangle">
                     <div class="basic-info-content">
                         <h2>Change Password</h2>
-                            <a href="<?php echo URLROOT; ?>businessmanager/businessmanagerpassword">
-                                <button  class ="edit-button">Edit</button>
-                            </a>
+                        <a href="<?php echo URLROOT; ?>businessmanager/businessmanagerpassword">
+                            <button  class ="edit-button">Edit</button>
+                        </a>
                     </div>
                 </div>
-                
-            </div>
 
         </div>
-        <div class="rectangle">
-            <div class="basic-info-content">
-            <h2>Profile Deletion</h2>
-            <a href="<?php echo URLROOT; ?>businessmanager/hoteledit">
-            <button class ="delete-button">Delete</button></a>
-            </div>
-        </div>
+
+            <div class="right-content">
+
+                <div class="rectangle">
+                    <!-- Rectangle 1: Image Slideshow -->
+                    <img class="slideshow-image" src="<?php echo URLROOT?>/images/hotel/bm-01.jpg" alt="Image 1">
+                </div>
+
+                <div class="rectangle">
+                    <div class="basic-info-content">
+                        <h2>Profile Deletion</h2>
+                        <a href="<?php echo URLROOT; ?>businessmanager/hoteledit">
+                            <button class ="delete-button">Delete</button></a>
+                    </div>
+                </div>
+
+           </div>
+                
+
+
+
     </div>
     </main>
 </body>

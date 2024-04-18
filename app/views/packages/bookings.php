@@ -13,6 +13,9 @@
 </head>
 <body>
 <?php
+$userData = $data['userData'];
+?>
+<?php
 $activePage = 'packages/bookings'; // Set the active page dynamically based on your logic
 include 'navigation.php';
 ?>
@@ -74,7 +77,7 @@ include 'navigation.php';
                 <th>Guest Name</th>
                 <th>Check-in Date</th>
                 <th>Check-out Date</th>
-                <th>Room Type</th>
+                <th></th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -82,8 +85,8 @@ include 'navigation.php';
 
 
             <?php
-            $bookingData = $data["bookingData"];
-            foreach ($bookingData as $key => $booking): ?>
+            $bookings = $data["bookings"];
+            foreach ($bookings as $key => $booking): ?>
                 <tr>
                     <td><?php echo $key + 1; ?></td>
                     <td><?php echo $booking->fname; ?></td>

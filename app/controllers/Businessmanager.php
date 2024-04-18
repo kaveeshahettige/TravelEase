@@ -13,68 +13,186 @@ class Businessmanager extends Controller{
     }
 
     public function index(){
-        $this->view('businessmanager/index');
+
+        $profilePicture = $this->getProfilePicture();
+
+        $data = [
+            'profilePicture' => $profilePicture
+        ];
+
+        $this->view('businessmanager/index', $data);
     }
     public function addpackage(){
-        $this->view('businessmanager/addpackage');
+
+        $profilePicture = $this->getProfilePicture();
+
+        $data = [
+            'profilePicture' => $profilePicture
+        ];
+
+        $this->view('businessmanager/addpackage', $data);
     }
     public function bookings(){
+
         $bookingData = $this->getBookings();
-              $data = [
+        $profilePicture = $this->getProfilePicture();
+
+        $data = [
+                'profilePicture' => $profilePicture,
                 'bookingData' => $bookingData
-            ];
+        ];
 //              var_dump($data);
             $this->view('businessmanager/bookings', $data);
 
     }
     public function notifications(){
-        $this->view('businessmanager/notifications');
+
+        $profilePicture = $this->getProfilePicture();
+
+        $data = [
+            'profilePicture' => $profilePicture
+        ];
+
+        $this->view('businessmanager/notifications', $data);
     }
     public function businessmanageredit(){
-        $this->view('businessmanager/businessmanageredit');
+
+        $profilePicture = $this->getProfilePicture();
+
+        $data = [
+            'profilePicture' => $profilePicture
+        ];
+
+        $this->view('businessmanager/businessmanageredit', $data);
     }
     public function businessmanagerpassword(){
-        $this->view('businessmanager/businessmanagerpassword');
+
+        $profilePicture = $this->getProfilePicture();
+
+        $data = [
+            'profilePicture' => $profilePicture
+        ];
+
+        $this->view('businessmanager/businessmanagerpassword', $data);
     }
     public function financialmanagement(){
+
+        $profilePicture = $this->getProfilePicture();
         $transactionData = $this->getTransactions();
-              $data = [
-                'transactionData' => $transactionData
-            ];
+
+        $data = [
+            'profilePicture' => $profilePicture,
+            'transactionData' => $transactionData
+        ];
 //              var_dump($data);
         $this->view('businessmanager/financialmanagement', $data);
     }
     public function packageedit(){
-        $this->view('businessmanager/packageedit');
+
+        $profilePicture = $this->getProfilePicture();
+
+        $data = [
+            'profilePicture' => $profilePicture
+        ];
+
+        $this->view('businessmanager/packageedit', $data);
     }
     public function packages(){
+
         $packageData = $this->getPackages();
-              $data = [
-                'packageData' => $packageData
-            ];
+        $profilePicture = $this->getProfilePicture();
+
+        $data = [
+            'profilePicture' => $profilePicture,
+            'packageData' => $packageData
+        ];
 //              var_dump($data);
         $this->view('businessmanager/packages', $data);
+
     }   public function reports(){
-        $this->view('businessmanager/reports');
+
+    $profilePicture = $this->getProfilePicture();
+
+    $data = [
+        'profilePicture' => $profilePicture
+    ];
+
+        $this->view('businessmanager/reports', $data);
     }
+
     public function settings(){
-        $this->view('businessmanager/settings');
+
+        $profilePicture = $this->getProfilePicture();
+
+        $data = [
+            'profilePicture' => $profilePicture
+        ];
+
+        $this->view('businessmanager/settings', $data);
     }
     public function navigation(){
-        $this->view('businessmanager/navigation');
+
+        $profilePicture = $this->getProfilePicture();
+
+        $data = [
+            'profilePicture' => $profilePicture
+        ];
+
+        $this->view('businessmanager/navigation',$data);
+    }
+
+    public function changeProfilePicture()
+    {
+        // Check if a file was uploaded
+        if ($_FILES['profile-picture']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = '../public/uploads/profile-pictures/';
+            $uploadFile = $uploadDir . basename($_FILES['profile-picture']['name']);
+
+            // Move the uploaded file to the desired directory
+            if (move_uploaded_file($_FILES['profile-picture']['tmp_name'], $uploadFile)) {
+                // Update the session with the new file path
+                $_SESSION['user_profile_picture'] = $uploadFile;
+
+                // Update the profile picture in the database
+                $this->BusinessmanagersModel->updateProfilePicture($_SESSION['user_id'], $uploadFile);
+            } else {
+                echo 'Error uploading the file.';
+            }
+        } else {
+            echo 'File upload error.';
+        }
+
+        // Redirect to the profile page or wherever you want
+        header('Location: ' . URLROOT . '/businessmanager/settings');
+        exit;
+    }
+
+    public function getProfilePicture()
+    {
+        $profilePicture = $this->BusinessmanagersModel->getProfilePicture($_SESSION['user_id']);
+
+        if ($profilePicture) {
+            return $profilePicture;
+        } else {
+            return [];
+        }
     }
 
 
     public function getBookings()
     {
-        $bookingData = $this->BusinessmanagersModel->getBookings();
+        // Get bookings from the bookings table
+        $bookingsFromBookingsTable = $this->BusinessmanagersModel->getBookingsFromBookingsTable();
 
-        if ($bookingData) {
-            return $bookingData;
-        } else {
-            return [];
-        }
+        // Get bookings from the cartbookings table
+        $bookingsFromCartBookingsTable = $this->BusinessmanagersModel->getBookingsFromCartBookingsTable();
+
+        // Merge the results from both tables into a single array
+        $bookingData = array_merge($bookingsFromBookingsTable, $bookingsFromCartBookingsTable);
+
+        return $bookingData;
     }
+
 
     public function getPackages()
     {
@@ -97,6 +215,8 @@ class Businessmanager extends Controller{
             return [];
         }
     }
+
+
 
     public function generateReport()
     {

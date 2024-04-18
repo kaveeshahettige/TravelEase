@@ -84,7 +84,7 @@ include 'navigation.php';
 
                     <tr>
                         <td><?php echo $key + 1; ?></td>
-                        <td><?php echo $booking->user_fname; ?></td>
+                        <td><?php echo $booking->guest_name; ?></td>
                         <td><?php
                             switch ($booking->provider_type) {
                                 case 0:
@@ -110,20 +110,21 @@ include 'navigation.php';
                                     break;
                             }
                             ?></td>
-                        <td><?php echo $booking->provider_fname; ?></td>
-                        <td><?php echo !empty($booking->payment_id) ? "Paid" : "Not Paid"; ?></td>
+                        <td><?php echo $booking->provider_name; ?></td>
+                        <td><?php echo $booking->payment_status ?></td>
                         <td>
                             <button class="view-button" onclick="openPopup(); updatePopupDetails(
                                     '<?php echo $booking->user_profile_picture; ?>',
-                                    '<?php echo $booking->user_fname; ?>',
+                                    '<?php echo $booking->guest_name; ?>',
                                     '<?php echo $booking->provider_type; ?>',
-                                    '<?php echo $booking->provider_fname; ?>',
-                                    '<?php echo !empty($booking->payment_id) ? "Paid" : "Not Paid"; ?>'
+                                    '<?php echo $booking->provider_name; ?>',
+                                    '<?php echo $booking->payment_status; ?>'
                                     )">
                                 <i class='bx bx-show'></i>
                             </button>
                         </td>
                     </tr>
+
 
                 <?php endforeach; ?>
 
@@ -148,6 +149,7 @@ include 'navigation.php';
                 <!-- Add more details as needed -->
             </div>
         </div>
+
 
         <script src= "<?php echo URLROOT?>/public/js/businessmanager/bookings.js"></script>
        
