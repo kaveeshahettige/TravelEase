@@ -72,6 +72,31 @@ function booking(type, id, checkinDate, checkoutDate) {
   // Open the URL in a new window
   window.open(url, "_blank");
 }
+function bookingGuide() {
+  var checkinDate = document.getElementById('pickup').value;
+    var meetTime = document.getElementById('ptime').value;
+    var checkoutDate = document.getElementById('dropoff').value;
+    var guideID = document.getElementById('search-button').dataset.guideId;
+  console.log("Booking Type:", 5, "ID:", guideID, "Check-in:", checkinDate, "Check-out:", checkoutDate, "Meet Time:", meetTime);
+  // var pickupTime = ''; // Initialize pickupTime variable
+  
+  
+      if (!meetTime) {
+        // Display an alert or message indicating that pickupTime is required
+        alert("Please enter pickup time.");
+        return; // Stop execution if pickupTime is not provided
+    }
+  
+  
+  // Construct the URL to include the pickupTime conditionally
+  var url = "http://localhost/TravelEase/LoggedTraveler/bookingpayment/" + 5 + "/" + guideID + "/" + checkinDate + "/" + checkoutDate;
+  
+      url += "/" + meetTime; // Append pickupTime to the URL only when type is 4
+  
+  
+  // Open the URL in a new window
+  window.open(url, "_blank");
+}
 
 /////////
 function bookingV(type, id, checkinDate, checkoutDate, pickupTime) {
@@ -767,6 +792,80 @@ window.onclick = function(event) {
 
 
 //////////////////
+/////////////
+var modalguide = document.getElementById('modalguide');
+var spanguide = document.getElementsByClassName('closeguide')[0];
+
+// When the user clicks on the button, open the modal
+// Define the openModalGuide function
+function openModalGuide() {
+  var modal = document.getElementById('modalguide');
+  if (modal) {
+    modal.style.display = 'block';
+    // Automatically close the modal after 5 seconds
+    setTimeout(function() {
+      modal.style.display = 'none';
+    }, 2000); // 2000 milliseconds = 5 seconds
+  } else {
+    console.error('Modal element not found');
+  }
+}
+
+// The rest of your code remains the same
+
+
+
+// When the user clicks on <span> (x), close the modal
+spanguide.onclick = function () {
+  modalguide.style.display = 'none';
+};
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+  if (event.target == modalguide) {
+    modalguide.style.display = 'none';
+  }
+};
+
+
+
+
+
+////////////////
+function searchGuide(event) {
+  event.preventDefault(); // Prevent the default form submission behavior
+
+  var pickupDate = document.getElementById('pickup').value;
+  var pickupTime = document.getElementById('ptime').value;
+  var dropoffDate = document.getElementById('dropoff').value;
+  var guideID = document.getElementById('search-button').dataset.guideId;
+
+  // Send a request to the server to fetch guide availability
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+          // Parse the JSON response
+          var response = JSON.parse(xhr.responseText);
+          // Check if guide is available
+          if (response.isAvailable) {
+              // Guide is available, show the "Book Now" button
+              document.getElementById('book-now-button').style.display = 'block';
+              document.getElementById('search-button').style.display = 'none';
+          } else {
+              // Guide is not available, hide the "Book Now" button or show a message
+              //need a modal pop saying tht guide is not available
+              openModalGuide();
+              document.getElementById('search-button').style.display = 'block';
+              // You can also display a message to the user indicating that the guide is not available
+          }
+      }
+  };
+  // Send the request to fetch guide availability
+  xhr.open('GET', 'http://localhost/TravelEase/LoggedTraveler/fetchGuideAvaialbility?action=fetchGuideAvaialbility&pickupDate=' + pickupDate + '&pickupTime=' + pickupTime + '&dropoffDate=' + dropoffDate + '&guideId=' + guideID, true);
+  xhr.send();
+}
+
+
 
 
 

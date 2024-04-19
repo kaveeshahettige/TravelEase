@@ -289,6 +289,37 @@ function markAsRead(nid) {
 }
 
 
-//
+/////////////
+function removeCart(bookingId){
+  console.log("Cancelling booking with ID: " + bookingId);
+
+  // Call the function to open the confirmation modal
+  openModal();
+
+  // Event listener for the confirmation button
+  confirmBtn.onclick = function() {
+    // Display the confirmation message
+    confirmationMessage.innerHTML = "Removed successfully.";
+
+    // Execute the cancellation action using iframe
+    var iframe = document.getElementById("cancelFrame");
+    iframe.onload = function() {
+      // After the cancellation action is completed, refresh the page
+      window.location.reload();
+    };
+    //iframe.src = "http://localhost/TravelEase/TravelerDashboard/cancelBooking/" + tid + "/" + bookingId;
+    iframe.src = `http://localhost/TravelEase/travelerDashboard/removeCart/${bookingId}`;
+
+    // Close the confirmation modal after action is performed with a delay
+    closeModalWithDelay();
+  }
+}
+
+function openCart(Bid) {
+
+  window.location.href = `../myCartDetails/${Bid}`;
+  
+
+}
 
 

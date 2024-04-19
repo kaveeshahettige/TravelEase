@@ -306,9 +306,13 @@ foreach ($agencies as $agency) {
 
       $id = $_SESSION['user_id'];
         $user=$this->userModel->findUserDetail($id);
+        if($type==4){
+          $serviceProvider = $this->userModel->findUserDetail($serviceid);
+        }
         //from service provider table(hotel,travelagncy,pacjage tables)
+        $serviceProvider = $this->userModel->findUserDetail($serviceid);
         $furtherBookingDetails=$this->userModel->findBookingDetailByServiceid($type,$serviceid);
-        if ($type == 4) {
+        if ($type == 4 ) {
           // Calculate the number of days between check-in and check-out dates
           $numDays = (strtotime($checkoutDate) - strtotime($checkinDate)) / (60 * 60 * 24)+1; 
           // Calculate the total price for the booking
@@ -317,7 +321,18 @@ foreach ($agencies as $agency) {
           if ($pickupTime !== null) {
             $pickupTime = date("g:i A", strtotime($pickupTime));       
         }
+        
       }
+      if ($type == 5 ) {
+        // Calculate the number of days between check-in and check-out dates
+        $numDays = (strtotime($checkoutDate) - strtotime($checkinDate)) / (60 * 60 * 24)+1; 
+        // Calculate the total price for the booking
+        $price = $furtherBookingDetails->pricePerDay * $numDays;
+
+        
+      
+    }
+     
       
       $data = [
         'furtherBookingDetails' => $furtherBookingDetails,
@@ -325,7 +340,9 @@ foreach ($agencies as $agency) {
         'checkinDate' => $checkinDate,
         'checkoutDate' => $checkoutDate,
         'type' => $type,
-        'pickupTime' => $pickupTime ? $pickupTime : ''
+        'pickupTime' => $pickupTime ? $pickupTime : '',
+        'serviceProvider' => $serviceProvider? $serviceProvider : ''
+        
     ];
     
     if ($type == 4) {
@@ -411,7 +428,7 @@ foreach ($agencies as $agency) {
     }
 
     //dopayment for hotels
-    public function dopayment($type, $serviceid, $checkinDate, $checkoutDate) {
+    public function dopayment($type, $serviceid, $checkinDate, $checkoutDate,$tot) {
       // Retrieve user details
       $id = $_SESSION['user_id'];
       $user = $this->userModel->findUserDetail($id);
@@ -425,6 +442,7 @@ foreach ($agencies as $agency) {
           'furtherBookingDetails' => $furtherBookingDetails,
           'checkinDate' => $checkinDate,
           'checkoutDate' => $checkoutDate,
+          'total' => $tot,
           // Add any other relevant transaction details
       ];
   
@@ -439,7 +457,7 @@ foreach ($agencies as $agency) {
               'quantity' => 1,
               'price_data' => [
                   'currency' => 'lkr',
-                  'unit_amount' => $furtherBookingDetails->price * 100,
+                  'unit_amount' =>  $tot* 100,
                   'product_data' => [
                       'name' => $furtherBookingDetails->description,
                   ],
@@ -475,7 +493,7 @@ foreach ($agencies as $agency) {
               $lastBooking = $this->userModel->getLastBooking();
               $this->userModel->addPaymentDetails($transactionData, $lastBooking->booking_id);
               $this->userModel->addUnavailability($transactionData);
-          } elseif ($type == 4) {
+          }elseif ($type == 4) {
               // Retrieve driver and price from transaction data
               $driver = $transactionData['driver'];
               $price = $transactionData['price'];
@@ -485,6 +503,11 @@ foreach ($agencies as $agency) {
               $lastBooking = $this->userModel->getLastBooking();
               $this->userModel->addVehicleBooking($lastBooking->booking_id,$transactionData, $driver); // Booking to vehicle booking table
               $this->userModel->addPaymentDetailsVehicles($transactionData, $lastBooking->booking_id, $price);
+          }elseif ($type == 5) {
+              $this->userModel->addBooking($transactionData);//ok
+              $lastBooking = $this->userModel->getLastBooking();///ok
+              $this->userModel->addPaymentDetails($transactionData, $lastBooking->booking_id);//ok
+              $this->userModel->addToGuideBookings($transactionData, $lastBooking->booking_id);//ok
           }
   
           // Optionally, you can pass data to the view if needed
@@ -500,6 +523,63 @@ foreach ($agencies as $agency) {
           // Redirect the user to an error page or perform any other action as needed
       }
   }
+
+  //do paymnet for guides
+  public function dopaymentGuides($type, $serviceid, $checkinDate, $checkoutDate,$tot,$pickupTime){
+    // Retrieve user details
+    $id = $_SESSION['user_id'];
+    $user = $this->userModel->findUserDetail($id);
+
+    // Retrieve booking details
+    $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($type, $serviceid);
+
+    // Construct transaction data
+    $transactionData = [
+        'user' => $user,
+        'furtherBookingDetails' => $furtherBookingDetails,
+        'checkinDate' => $checkinDate,
+        'checkoutDate' => $checkoutDate,
+        'total' => $tot,
+        'meetTime' => $pickupTime,
+        // Add any other relevant transaction details
+    ];
+
+    
+
+    // Create a Stripe Checkout session
+    require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+    $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
+    \Stripe\Stripe::setApiKey($stripe_secret_key);
+    $checkout_session = \Stripe\Checkout\Session::create([
+        'mode' => 'payment',
+        'success_url' => "http://localhost/TravelEase/loggedTraveler/paymentSuccessful/5",
+        'line_items' => [[
+            'quantity' => 1,
+            'price_data' => [
+                'currency' => 'lkr',
+                'unit_amount' => $tot * 100,
+                'product_data' => [
+                    'name' => $furtherBookingDetails->description,
+                ],
+            ],
+        ]],
+        'cancel_url' => 'https://example.com/cancel',
+    ]);
+
+    // Store the Stripe Checkout session ID in the transaction data
+    $transactionData['stripe_session_id'] = $checkout_session->id;
+
+    //
+    
+
+
+    // Store the transaction data in the session or database for retrieval in the paymentSuccessful() function
+    $_SESSION['transaction_data'] = $transactionData;
+
+    // Redirect the user to the Stripe Checkout session URL
+    http_response_code(303);
+    header("Location: " . $checkout_session->url);
+}
   
   
 
@@ -757,6 +837,36 @@ $html .= '<input type="hidden" id="pickupTime" value="' . $pickupTime . '">';
     echo $html;
     exit; 
 }
+
+//fetchAvailableVehicles
+public function fetchGuideAvaialbility()
+{
+    // Retrieve parameters from the GET request
+    $startDate = $_GET['pickupDate'];
+    $pickupTime = $_GET['pickupTime'];
+    $endDate = $_GET['dropoffDate'];
+    $guideID = $_GET['guideId'];
+
+    // Check guide availability based on the provided dates and times
+    // You need to implement your logic here to check guide availability
+    $isAvailable1 = $this->userModel->checkGuideAvailabilityForBookings($guideID, $startDate, $endDate);
+    $isAvailable2 = $this->userModel->checkGuideAvailabilityForCartBookings($guideID, $startDate, $endDate);
+  if($isAvailable1 && $isAvailable2){
+    $isAvailable=true;
+  }else{
+    $isAvailable=false;
+  }
+    // Prepare the response data
+    $response = [
+        'isAvailable' => $isAvailable,
+    ];
+
+    // Send JSON response back to the client
+    echo json_encode($response);
+    exit;
+}
+
+
 
 
 //dopaymentVehicles

@@ -116,12 +116,11 @@ if (!empty($data['cartDetails']) && is_array($data['cartDetails'])) {
             if ($previousBookingId !== null) {
                 // Close the previous row if it's not the first booking
                 echo '<td>' . $names . '</td>'; // Display accumulated names
-                // Display other data only once
-                echo '<td>' . $booking->startDate . '</td>';
-                echo '<td>' . $booking->endDate . '</td>';
+                echo '<td>' . $startDate . '</td>'; // Display start date
+                echo '<td>' . $endDate . '</td>'; // Display end date
                 echo '<td>' . date('Y-m-d', strtotime($booking->bookingDate)) . '</td>';
-                echo '<td><button class="viewbooking" onclick="openPopup($booking->cartbooking_id)">View</button></td>';
-                echo '<td><button class="cancel-button" onclick="cancelBooking($booking->cartbooking_id)"><i class="bx bx-x-circle"></i>Remove</button></td>';
+                echo '<td><button class="viewbooking" onclick="openCartPopup(\'' .$cartId . '\')">View</button></td>';
+                echo '<td><button class="cancel-button" onclick="removeCart(\'' .$cartId . '\')"><i class="bx bx-x-circle"></i>Remove</button></td>';
                 echo '</tr>';
                 $count++; // Increment the count for the new row
             }
@@ -130,6 +129,10 @@ if (!empty($data['cartDetails']) && is_array($data['cartDetails'])) {
             echo '<td>' . $count . '</td>'; // Display count only once
             // Initialize names variable for the current booking
             $names = $booking->fname . ' ' . $booking->lname;
+            // Initialize start and end dates for the current booking
+            $startDate = $booking->startDate;
+            $endDate = $booking->endDate;
+            $cartId = $booking->cartbooking_id;
         } else {
             // If it's the same booking ID, accumulate names with commas
             $names .= ', ' . $booking->fname . ' ' . $booking->lname;
@@ -139,12 +142,11 @@ if (!empty($data['cartDetails']) && is_array($data['cartDetails'])) {
     }
     // After the loop, display the last row
     echo '<td>' . $names . '</td>'; // Display accumulated names
-    // Display other data for the last row
-    echo '<td>' . $booking->startDate . '</td>';
-    echo '<td>' . $booking->endDate . '</td>';
+    echo '<td>' . $startDate . '</td>'; // Display start date
+    echo '<td>' . $endDate . '</td>'; // Display end date
     echo '<td>' . date('Y-m-d', strtotime($booking->bookingDate)) . '</td>';
-    echo '<td><button class="viewbooking" onclick="openPopup()">View</button></td>';
-    echo '<td><button class="cancel-button" onclick="cancelBooking()"><i class="bx bx-x-circle"></i>Remove</button></td>';
+    echo '<td><button class="viewbooking" onclick="openCart(\'' . $booking->cartbooking_id . '\')">View</button></td>';
+    echo '<td><button class="cancel-button" onclick="removeCart(\'' . $booking->cartbooking_id . '\')"><i class="bx bx-x-circle"></i>Remove</button></td>';
     echo '</tr>';
     $count++; // Increment the count for the last row
 } else {
@@ -152,7 +154,6 @@ if (!empty($data['cartDetails']) && is_array($data['cartDetails'])) {
     echo '<tr><td colspan="7">No data available</td></tr>';
 }
 ?>
-
 
 
                 </tbody>
@@ -177,8 +178,8 @@ if (!empty($data['cartDetails']) && is_array($data['cartDetails'])) {
 <div id="confirmationModal" class="modal2">
   <div class="modal2-content">
     <span class="close2">&times;</span>
-    <p>Are you sure you want to cancel this booking?</p>
-    <button id="confirmCancelBtn">Yes, Cancel Booking</button>
+    <p>Are you sure you want to remove this from cart?</p>
+    <button id="confirmCancelBtn">Yes, Remove</button>
     <button id="denyCancelBtn">No,Close</button>
     <div id="confirmationMessage"></div>
   </div>

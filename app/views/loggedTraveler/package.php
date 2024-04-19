@@ -71,10 +71,10 @@
     <?php endforeach; ?>
 </div>
 
-    <?php elseif (empty($data['hotels'])): ?>
-        <p>No hotels available.</p>
+    <?php elseif (empty($data['packages'])): ?>
+        <p>No Guides available.</p>
     <?php else: ?>
-        <p>Error retrieving hotel data.</p>
+        <p>Error retrieving guide data.</p>
     <?php endif; ?>
 </section>
     <section class="main4">

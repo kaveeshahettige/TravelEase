@@ -540,6 +540,78 @@ if($serviceProvider->type==4){
   $this->view('travelerDashboard/bookingpopup',$data);
 }
 
+// //myCartDetails- havent implement yet - similar to bookingdetails
+// public function myCartDetails($Bid){
+
+//   $id = $_SESSION['user_id'];
+//   //$cartData=$this->userModel->findCartDetails($id);
+//   $user=$this->userModel->findUserDetail($id);
+//   $serviceProvider = $this->userModel->findUserDetail($Sid);
+//   // echo "<script>";
+//   //   echo "console.log('Booking ID:');";
+//   //   echo "</script>";
+
+
+
+//   //from service provider table(hotel,travelagncy,pacjage tables)
+//   $mainbookingDetails = $serviceProvider ? $this->userModel->findBookingDetail($serviceProvider->type, $Sid) : null;
+  
+//   //booking table booking data
+//   $booking = $this->userModel->findCartBooking($Bid,$Tid);
+
+//   //find further booking details
+//   $furtherbookingDetails = $serviceProvider ? $this->userModel->findBookingFurtherDetail($booking) : null;
+
+//   $cancellationEligibility = $booking ? $this->userModel->checkCancellationEligibility($booking->booking_id) : null;
+  
+  
+//   // // Initializing an array to store further booking details for each booking
+//   // $furtherBookingDetailsArray = [];
+//   // $startDates;
+//   // $endDates;
+
+  
+
+//   // foreach ($bookings as $booking) {
+//   //   //this is from room, vehicle, or package tables
+//   //   $furtherbookingDetails = $serviceProvider ? $this->userModel->findBookingFurtherDetail($booking) : null;
+//   //   //checking booking can be canceled or not
+//   //   $cancellationEligibility = $bookings ? $this->userModel->checkCancellationEligibility($booking->booking_id) : null;
+    
+//   //   ////////////////////////////////////////////////////////////
+//   //   // Adding details to the array for each booking
+//   //   $furtherBookingDetailsArray[] = [
+//   //       'furtherBookingDetails' => $furtherbookingDetails, // Corrected variable name
+//   //       'cancellationEligibility' => $cancellationEligibility, // Corrected variable name
+//   //       'startDates' => $booking->startDate,
+//   //       'endDates' => $booking->endDate,
+        
+//   //   ];
+// // }
+// $vehicleprice=null;
+// $driver=null;
+// if($serviceProvider->type==4){
+//   $vehicleprice=$this->userModel->findCartVehiclePrice($Bid);
+//   $driver=$this->userModel->findDriverAvilabilityCart($Bid);
+// }
+
+//   $data=[
+//     'serviceProviderName' => $serviceProvider ? $serviceProvider->fname . ' ' . $serviceProvider->lname : null,
+//     'type' => $serviceProvider ? $serviceProvider->type : null,
+//     'profile_picture' => $user ? $user->profile_picture : null,
+//     'number' => $serviceProvider ? $serviceProvider->number : null,
+//     'location' => $mainbookingDetails ? $mainbookingDetails->city : null,
+//     'serviceDescription' => $mainbookingDetails ? $mainbookingDetails->description : null,
+//     'mainbookingDetails' => $mainbookingDetails,
+//     'furtherBookingDetails' => $furtherbookingDetails,
+//     'booking' => $booking,
+//     'cancellationEligibility' => $cancellationEligibility,
+//     'vehicleprice'=>$vehicleprice?$vehicleprice:null,
+//     'driver'=>$driver?$driver:null,
+//   ];
+//   $this->view('travelerDashboard/viewCart',$data);
+// }
+
 //cancelBooking
 public function cancelBooking($temporyid,$booking_id){
 
@@ -640,6 +712,12 @@ public function cart($id){
     
   ];
   $this->view('travelerDashboard/cart',$data);
+}
+
+//removeCart(cartbooking_id)
+public function removeCart($cartbooking_id){
+  $remove=$this->userModel->removefromCart($cartbooking_id);
+
 }
 
 

@@ -90,6 +90,19 @@ if ($data['furtherBookingDetails']->ac_type  == 1) {
 
         
     </div>
+    <?php elseif ($data['type'] == 5): ?>
+    <div class="reservation-details">
+        <p><strong>Name:</strong> <?php echo $data['serviceProvider']->fname ?> </p>
+        <p><strong>About:</strong> <?php echo $data['furtherBookingDetails']->description ?></p>
+        <p><strong>Category:</strong> <?php echo $data['furtherBookingDetails']->category ?></p>
+        <p><strong>Languages:</strong> <?php echo $data['furtherBookingDetails']->languages ?></p>
+        <p><strong>Guide Register Number:</strong> <?php echo $data['furtherBookingDetails']->GuideRegNumber ?></p>
+        <p><strong>Lisence Expiry Date:</strong> <?php echo $data['furtherBookingDetails']->LisenceExpDate ?></p>
+        <p><strong>Sites:</strong> <?php echo $data['furtherBookingDetails']->sites ?></p>
+</p>
+
+        
+    </div>
 <?php else: ?>
     <p>No details available for this type.</p>
 <?php endif; ?>
@@ -104,7 +117,7 @@ if ($data['furtherBookingDetails']->ac_type  == 1) {
                         <p><strong> Email Address:</strong> <?php echo $data['user']->email?></p>
                         <p><strong> Phone Number:</strong><?php echo $data['user']->number?></p>
                         
-                        <?php if ($data['type'] == 4): ?>
+                        <?php if ($data['type'] == 4||$data['type'] == 5 ): ?>
                             <div class="reservation-details">
                         <p><strong> Pick-up Date : </strong>  <?php echo $data['checkinDate'] ?></p>
                         <p><strong> Drop-off Date : </strong>  <?php echo $data['checkoutDate'] ?></p>
@@ -139,7 +152,7 @@ $daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
     <input type="checkbox" id="withoutDriver" name="withoutDriver" value="0" checked onclick="handleCheckboxClick('withoutDriver', '<?php echo htmlspecialchars($data['furtherBookingDetails']->vehicle_id, ENT_QUOTES, 'UTF-8') ?>', <?php echo $daysD; ?>)">
     <label for="withoutDriver"></label>
 </div>
-<p id="totalPrice" data-initial-price="<?php echo htmlspecialchars($data['price'], ENT_QUOTES, 'UTF-8') ?>"><strong>Total : <?php echo htmlspecialchars($data['price'], ENT_QUOTES, 'UTF-8') ?></strong></p>
+<p id="totalPrice" data-initial-price="<?php echo htmlspecialchars($data['price'], ENT_QUOTES, 'UTF-8') ?>"><strong>Total : <?php echo htmlspecialchars($data['price'], ENT_QUOTES, 'UTF-8') ?>  LKR</strong></p>
 
 
 <script>
@@ -179,14 +192,28 @@ $date1 = strtotime($data['checkinDate']);
 $date2 = strtotime($data['checkoutDate']);
 $diffTime = abs($date2 - $date1) + (60 * 60 * 24);
 $daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
-$tot=$daysD* $data['furtherBookingDetails']->price;
+if($data['type']==3){
+    $tot=$daysD* $data['furtherBookingDetails']->price;
+}else if($data['type']==5){
+    $tot=$daysD*$data['furtherBookingDetails']->pricePerDay;
+}
+
 ?>
-                        <p ><strong>Total :  <?php echo $tot?></strong></p>
-                        <form action="<?php echo URLROOT ?>loggedTraveler/dopayment/<?php echo $data['furtherBookingDetails']->type . '/' . $data['furtherBookingDetails']->room_id.'/'.$data['checkinDate'].'/'.$data['checkoutDate'] ?>">
+                        <p ><strong>Total :  <?php echo $tot?>  LKR</strong></p>
+                       
+                        <?php if($data['type']==3):?>
+                        <form action="<?php echo URLROOT ?>loggedTraveler/dopayment/<?php echo $data['furtherBookingDetails']->type . '/' . $data['furtherBookingDetails']->room_id.'/'.$data['checkinDate'].'/'.$data['checkoutDate'].'/'.$tot?>">
                             <div class="buttons">
                                 <button type="submit" class="payment-button">Make Payment</button>
                             </div>
                         </form>
+                        <?php elseif($data['type']==5):?>
+                            <form action="<?php echo URLROOT ?>loggedTraveler/dopaymentGuides/5/<?php echo $data['furtherBookingDetails']->user_id.'/'.$data['checkinDate'].'/'.$data['checkoutDate'].'/'.$tot.'/'.$data['pickupTime']?>">
+                            <div class="buttons">
+                                <button type="submit" class="payment-button">Make Payment</button>
+                            </div>
+                        </form>
+                        <?php endif;?>
                         <?php endif; ?>
 
                 

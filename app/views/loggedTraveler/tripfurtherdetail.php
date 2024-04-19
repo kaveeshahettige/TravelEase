@@ -303,8 +303,113 @@ if (!empty($data['vehicles']) && is_array($data['vehicles'])) {
             </div>
         
     <?php elseif ($data['type'] == 5): ?>
-        type 5
+        <div class="view">
+            <div class="bookingtitles"><h1><?php echo ucfirst($data['serviceProviderName'])?></h1>
+                <h5>Guide details</h5>
+            </div>
+            <div class="images">
+                <div class="mainimage">
+                <img src="<?php echo URLROOT ?>/images/<?php echo $data['service_image'] ?>" alt="">
+                </div>
+
+            </div>
+            <div class="des">
+                <h5 style="margin: 0px;">About</h5>
+                <p><?php echo $data['bookingDetails']->description ? ucfirst($data['bookingDetails']->description) : '-----'; ?></p> 
+            </div> 
+            
+            <div class="bookingdetails">
+                <div class="leftdiv">
+                    <div class="ldiv1">
+                        <div class="booking-label">Guide name:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['serviceProviderName'])?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Registration Number:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->GuideRegNumber)?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Category:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->category)?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Languages:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->languages)?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Lisence Expiry Date:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->LisenceExpDate)?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Places:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->sites)?></div>
+                    </div>
+                </div>
+
+                <div class="rightdiv">
+                <div class="ldiv1">
+                        <div class="booking-label">Address:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->address)?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">City:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->city)?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Province:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->province)?></div>
+                    </div>
+                <div class="ldiv1">
+                        <div class="booking-label">Email:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['email'])?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Facebook:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->facebook)?></div>
+                    </div>
+                    <div class="ldiv1">
+                        <div class="booking-label">Instargram:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['bookingDetails']->instagram)?></div>
+                    </div>
+                    
+                    
+                </div>
+                
+
+            </div>
+            <!-- //// -->
+            <div class="search-section">
+            <div class="date-picker">
+                <label for="pickup">Start date:</label>
+                <input type="date" id="pickup" name="pickup" required>
+            </div>
+            <div class="date-picker">
+                <label for="ptime">Meet Time:</label>
+                <input type="time" id="ptime" name="ptime" required>
+            </div>
+            <div class="date-picker">
+                <label for="dropoff">End date:</label>
+                <input type="date" id="dropoff" name="dropoff" required>
+            </div>
+            <!-- <div class="date-picker">
+                <label for="dtime">Time:</label>
+                <input type="time" id="dtime" name="dtime" required>
+            </div> -->
+            <button style="margin-top:30px" class="search-button"  id="search-button" data-guide-id="<?php echo $data['bookingDetails']->user_id; ?>" onclick="searchGuide(event)">Search</button>
+            <button id="book-now-button" class="search-button" style="display: none;margin-top:30px;background-color:green" onclick="bookingGuide()">Book Now</button>
+            <!-- <span id="not-available-button" style="display: none;margin-top:30px;color:red">Sry ,Not Available</span> -->
+            
+
+        </div>
+        <div>
+    
+   
+            </div>
+        
     <?php endif; ?>
+
+
+    <!-- //////// -->
     <div class="feedbacks">
     <h3 >Feedbacks</h2>
     <?php if (empty($data['feedbacks'])): ?>
@@ -334,6 +439,16 @@ if (!empty($data['vehicles']) && is_array($data['vehicles'])) {
 </div>
 
         </div>
+           <!-- Hidden modal for cancellation confirmation -->
+<!-- Modal HTML -->
+<div id="modalguide" class="modalguide">
+  <div class="modalguide-content">
+    <span class="closeguide">&times;</span>
+    <p>The guide is not available for the selected dates and times.</p>
+  </div>
+</div>
+
+        
     </section>
    
     

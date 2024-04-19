@@ -514,7 +514,7 @@ public function updatePicture($data){
             }
         }
         else if($type=='5'){
-            $this->db->query('SELECT * from packageprovider where user_id=:id');
+            $this->db->query('SELECT * from guides where user_id=:id');
             $this->db->bind(':id',$id);
         
             $data=$this->db->single();
@@ -806,7 +806,11 @@ public function findBookingDetailByServiceid($type,$id){
         }
     }
     else if($type=='5'){
-        $this->db->query('SELECT * from packages where package_id=:id');
+        $this->db->query('SELECT guides.*,users.*
+FROM guides
+JOIN users ON users.id = guides.user_id
+WHERE guides.user_id = :id;
+');
         $this->db->bind(':id',$id);
     
         $data=$this->db->single();
@@ -840,13 +844,13 @@ public function addBooking($transactionData){
         $this->db->bind(':endDate', $transactionData['checkoutDate']);
         $this->db->bind(':vehicle_id', $transactionData['furtherBookingDetails']->vehicle_id);
 
-    }elseif($transactionData->type==5){
+    }elseif($transactionData['furtherBookingDetails']->type==5){
         $this->db->query('INSERT INTO bookings (user_id, serviceProvider_id, startDate, endDate, package_id) VALUES (:user_id, :serviceProvider_id, :startDate, :endDate, :package_id)');
         $this->db->bind(':user_id', $transactionData['user']->id);
         $this->db->bind(':serviceProvider_id', $transactionData['furtherBookingDetails']->id);   
-        $this->db->bind(':startDate', $currentDate);
-        $this->db->bind(':endDate', $currentDate);
-        $this->db->bind(':package_id', $transactionData['furtherBookingDetails']->package_id);
+        $this->db->bind(':startDate', $transactionData['checkinDate']);
+        $this->db->bind(':endDate',$transactionData['checkoutDate']);
+        $this->db->bind(':package_id', $transactionData['furtherBookingDetails']->id);
     }
     if($this->db->execute()){
         return true;
@@ -878,10 +882,10 @@ public function addBookingfrohbmCart($furtherbookingdetail,$transactionData){
     }elseif($furtherbookingdetail->type==5){
         $this->db->query('INSERT INTO bookings (user_id, serviceProvider_id, startDate, endDate, package_id) VALUES (:user_id, :serviceProvider_id, :startDate, :endDate, :package_id)');
         $this->db->bind(':user_id', $transactionData['user']->id);
-        $this->db->bind(':serviceProvider_id', $furtherbookingdetail->id);   
-        $this->db->bind(':startDate', $currentDate);
-        $this->db->bind(':endDate', $currentDate);
-        $this->db->bind(':package_id', $furtherbookingdetail->package_id);
+        $this->db->bind(':serviceProvider_id', $furtherbookingdetail->user_id);   
+        $this->db->bind(':startDate', $transactionData['checkinDate']);
+        $this->db->bind(':endDate', $transactionData['checkoutDate']);
+        $this->db->bind(':package_id', $furtherbookingdetail->user_id);
     }
     if($this->db->execute()){
         return true;
@@ -1045,12 +1049,23 @@ public function countCartItems($id){
     }
 }
 
+//removefromCart($cartbooking_id)
+public function removefromCart($cartbooking_id){
+    $this->db->query('DELETE FROM cart WHERE cartbooking_id = :cartbooking_id');
+    $this->db->bind(':cartbooking_id', $cartbooking_id);
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 
 //addPaymentDetails($transactionData);
 public function addPaymentDetails($transactionData,$booking_id){
         $this->db->query('INSERT INTO payments (booking_id, amount) VALUES (:booking_id, :amount)');
         $this->db->bind(':booking_id',$booking_id);
-        $this->db->bind(':amount', $transactionData['furtherBookingDetails']->price);
+        $this->db->bind(':amount', $transactionData['total']);
 
         if($this->db->execute()){
             return true;
@@ -2276,6 +2291,69 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
             return false;
         }
     }
+
+
+
+    //checkGuideAvailability
+    public function checkGuideAvailabilityForBookings($guide_id, $startDate, $endDate){
+        $this->db->query('
+            SELECT * FROM guide_bookings 
+            LEFT JOIN bookings ON guide_bookings.booking_id = bookings.booking_id
+            WHERE bookings.serviceProvider_id = :guide_id 
+            AND bookings.startDate <= :endDate 
+            AND bookings.endDate >= :startDate
+        ');
+    
+        $this->db->bind(':guide_id', $guide_id);
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+    
+        $bookings = $this->db->resultSet();
+    
+        // Check if any bookings were found
+        if(empty($bookings)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function checkGuideAvailabilityForCartBookings($guide_id, $startDate, $endDate){
+        $this->db->query('
+            SELECT * FROM guide_bookings 
+            LEFT JOIN cartbookings ON guide_bookings.booking_id = cartbookings.booking_id
+            WHERE cartbookings.serviceProvider_id = :guide_id 
+            AND cartbookings.startDate <= :endDate 
+            AND cartbookings.endDate >= :startDate
+        ');
+    
+        $this->db->bind(':guide_id', $guide_id);
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+    
+        $cartBookings = $this->db->resultSet();
+    
+        // Check if any cart bookings were found
+        if(empty($cartBookings)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    //addToGuideBookings(($transactionData)
+    public function addToGuideBookings($transactionData,$lastbooking_id){
+        $this->db->query('INSERT INTO guide_bookings (booking_id, meetTime) VALUES (:booking_id, :meetTime)');
+        $this->db->bind(':booking_id', $lastbooking_id);
+        $this->db->bind(':meetTime', $transactionData['meetTime']);
+    
+        if($this->db->execute()){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
 
 
 }
