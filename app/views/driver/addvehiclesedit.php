@@ -12,7 +12,7 @@
 <body>
     <nav class="left-menu">
     <div class="user-profile">
-            <img src="<?php echo URLROOT; ?>/images/driver/wikum.jpg" alt="User Profile Photo">
+    <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
             <span class="user-name">Travel Agency 1</span>
         </div>
         

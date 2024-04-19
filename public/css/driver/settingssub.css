@@ -1,0 +1,719 @@
+body, ul {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #FBF9F3;
+}
+
+.dashboard-content {
+    display: flex;
+    flex-direction: column;
+    padding-left: 275px;
+    margin-right: 50px;
+    padding-top: 25px;
+    font-family: "Poppins", sans;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    padding-left: 250px;
+    margin-right: 50px;
+    padding-top: 15px;
+    font-family: "Poppins", sans;
+}
+
+.room-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.room-box {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 475px;
+    border-left: 10px solid #FFEFCC;
+    margin-left: 20px;
+}
+
+.room-box h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.icons {
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.icons a {
+    color: #000000;
+}
+
+.icons i {
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.icons i:hover {
+    color: red;
+}
+
+.add-room {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 475px;
+    border-left: 10px solid #FFEFCC;
+    text-align: center;
+    margin-left: 40px;
+}
+
+.add-room-link {
+    text-decoration: none;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#add-icon {
+    font-size: 5em;
+    margin-bottom: 10px;
+}
+
+#add-icon:hover {
+    color: red;
+}
+
+a i {
+    margin-right: 10px;
+}
+
+a.active, a:active {
+    background-color: #F1F1F1;
+    font-weight: bold;
+    color: #F9B314;
+}
+
+.dashboard-content #base {
+    background-color: #FFFFFF;
+    padding-top: 0px;
+}
+
+.dashboard-content #base h3 {
+    background-color: #F7F7F7;
+    margin-top: 0px;
+    padding: 5px 10px;
+}
+
+.dashboard-content #base #form form {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.dashboard-content #base #form form div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 15px;
+}
+
+.dashboard-content #base #form form div .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-content .form-group input,
+.dashboard-content .form-group select {
+    width: 500px;
+    height: 30px;
+    border-radius: 10px;
+    margin-top: 5px;
+    border: 1px solid rgb(171, 169, 169);
+}
+
+select::placeholder,
+input::placeholder {
+    font-size: 15px;
+}
+
+.dashboard-content .form-group label {
+    padding-right: 10px;
+    font-weight: bold;
+}
+
+.dashboard-content .baseButtons {
+    margin-left: auto;
+}
+
+.dashboard-content .baseButtons button {
+    padding: 10px 30px;
+    border-radius: 10px;
+    border: none;
+    background-color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.dashboard-content .baseButtons #cancelBut {
+    border: 2px solid #FFDB8B;
+    margin-right: 20px;
+}
+
+.dashboard-content .baseButtons #saveBut {
+    background-color: #FFDB8B;
+}
+
+.edit-button {
+    background-color: #FFDB8B;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 20px;
+    margin-left: auto;
+}
+
+/* Responsive Styles for Screens with a Maximum Width of 768px */
+@media screen and (max-width: 768px) {
+    body {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .dashboard-content,
+    .main-content {
+        padding-left: 20px;
+        margin-right: 20px;
+    }
+
+    .room-container {
+        gap: 20px;
+        padding: 10px;
+    }
+
+    .room-box,
+    .add-room {
+        width: calc(100% - 40px); /* Adjusting for padding */
+        margin-left: 0;
+    }
+
+    .dashboard-content #base #form form {
+        margin: 10px;
+    }
+
+    .dashboard-content #base #form form div {
+        flex-direction: column;
+        padding-bottom: 10px;
+    }
+
+    .dashboard-content .form-group input,
+    .dashboard-content .form-group select {
+        width: 100%;
+    }
+
+    .dashboard-content .baseButtons {
+        margin-left: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .dashboard-content .baseButtons button {
+        margin-bottom: 10px;
+    }
+}
+
+
+body, ul {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+}
+
+.search-bar {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.search-bar form {
+    display: inline-block;
+    background-color: #f1f1f1;
+    border-radius: 25px;
+    padding: 5px;
+    box-shadow: 0px 1px 3px rgba(127, 127, 127, 0.2);
+}
+
+.search-bar input[type="text"] {
+    width: 80%; /* Use 100% width for responsiveness */
+    width: 15vh;
+    padding: 5px;
+    border: none;
+    border-radius: 25px;
+    outline: none;
+    background-color: #f1f1f1;
+    font-family: "Poppins", sans;
+}
+
+.search-bar button[type="submit"] {
+    background-color: #F9B314;
+    color: #ffffff;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+/* Left menu styles */
+.left-menu {
+    background-color: #FFDB8B;
+    color: #000;
+    width: 250px;
+    height: 1000vh;
+    position: fixed;
+    overflow-y: auto;
+    font-family: "Poppins", sans-serif;
+}
+
+/* User profile styles */
+.user-profile {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.user-profile img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.user-name {
+    font-weight: bold;
+}
+
+.search-bar {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.search-bar form {
+    display: inline-block;
+    background-color: #f1f1f1;
+    border-radius: 25px;
+    padding: 5px;
+    box-shadow: 0px 1px 3px rgba(127, 127, 127, 0.2);
+}
+
+.search-bar input[type="text"] {
+    width: 80%; /* Use 100% width for responsiveness */
+    width: 15vh;
+    padding: 5px;
+    border: none;
+    border-radius: 25px;
+    outline: none;
+    background-color: #f1f1f1;
+    font-family: "Poppins", sans-serif;
+}
+
+.search-bar button[type="submit"] {
+    background-color: #F9B314;
+    color: #ffffff;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* User profile styles */
+.user-profile {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.user-profile img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.user-name {
+    font-weight: bold;
+}
+
+.search-bar {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.search-bar form {
+    display: inline-block;
+    background-color: #f1f1f1;
+    border-radius: 25px;
+    padding: 5px;
+    box-shadow: 0px 1px 3px rgba(127, 127, 127, 0.2);
+}
+
+.search-bar input[type="text"] {
+    width: 80%; /* Use 100% width for responsiveness */
+    width: 15vh;
+    padding: 5px;
+    border: none;
+    border-radius: 25px;
+    outline: none;
+    background-color: #f1f1f1;
+    font-family: "Poppins", sans-serif;
+}
+
+.search-bar button[type="submit"] {
+    background-color: #F9B314;
+    color: #ffffff;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+
+/* Main content styles */
+main {
+    padding: 20px;
+}
+
+/* Remove margin from the ul element */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 20px;
+    font-family: "Poppins", sans-serif;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+/* Apply background and border for active and clicked buttons */
+a.active, a:active {
+    background-color: #F1F1F1;
+    font-weight: bold;
+}
+
+a.active::before, a:active::before, a:hover::before {
+    content: "";
+    border-left: 4px solid #F9B314;
+    height: 100%;
+    position: absolute;
+    left: 0;
+}
+
+/* Logo container styles */
+.logo-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+}
+
+/* Define styles for menu icons */
+a img.menu-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.logout {
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    bottom: 20px;   
+    width: 100%;
+}
+
+
+/* Logo container styles */
+.logo-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+}
+
+
+.logo-container img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    margin-top: 0%;
+}
+
+.logo-text {
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #000;
+    font-family: "Caveat", cursive;
+}
+
+.dashboard-content {
+    display: flex;
+    padding-left: 275px;
+    margin-right: 50px;
+    padding-top: 25px;
+    font-family: "Poppins", sans;
+}
+
+.dashboard-subcontent {
+    padding-left: 250px;
+    margin-right: auto;
+    padding-top: 15px;
+    font-family: "Poppins", sans;
+}
+
+
+
+/* Define styles for rectangles */
+/* Center the content within the rectangle */
+.rectangle {
+    background-color: #fff;
+    border: 0.5px solid #e9e7e7;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    border-left: 10px solid #FFEFCC;
+}
+
+/* Center align the hotel details within the basic info */
+.basic-info-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.center-image {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.center-image img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.hotel-details {
+    text-align: left;
+}
+
+/* Style the hotel name */
+.hotel-details h3 {
+    font-size: 24px;
+    margin: 0;
+    font-weight: bold;
+    text-align: center; 
+    margin-bottom: 5px;
+}
+
+.hotel-details h6 {
+    font-size: 18px;
+    margin: 0;
+    color: #605D5D;
+    font-weight: light;
+}
+
+.hotel-details p {
+    margin: 5px 0;
+    font-weight:600;
+}
+
+.rectangle h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Style the buttons */
+.edit-button {
+    background-color: #FFDB8B;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 450px;
+}
+
+.delete-button{
+    background-color: #ff0000;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 1070px;
+}
+
+/* Left and Right Content */
+.content-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.left-content {
+    flex: 1;
+}
+
+.right-content {
+    flex: 1;
+}
+
+/* Default styles for the slideshow images */
+.slideshow-image {
+    max-width: 100%; /* Ensure images don't exceed their container */
+    height: auto; /* Maintain the aspect ratio of the images */
+    margin-bottom: 10px;
+}
+
+/* Media Query for Responsive Design */
+@media screen and (max-width: 768px) {
+    .left-menu {
+        width: 135%;
+        height: auto;
+        position: static;
+        overflow-y: hidden;
+    }
+
+    main {
+        margin-left: 0;
+    }
+
+    .logo-container {
+        position: static;
+        text-align: center;
+    }
+
+    .search-bar button[type="submit"] {
+        padding: 10px 20px;
+    }
+
+    .nav-button {
+        padding:auto; /* Adjust padding for smaller screens */
+    }
+
+    .edit-button{
+        margin-left: auto;
+    }
+
+    .delete-button{
+        margin-left: auto;
+    }
+    
+    .logout {
+        position: static;
+        text-align: center;
+        margin-top: 20px;
+        width: 100%; 
+    }
+
+    .dashboard-content{
+        position: static;
+        text-align: center;
+    }
+    .dashboard-content {
+        flex: auto;
+        padding-left: 20px;
+        text-align: center;
+    }
+    
+    .dashboard-content h1 {
+        font-size: 24px;
+    }
+
+    .dashboard-subcontent {
+        padding-left: 10px;
+        text-align: center;
+    }
+
+    .left-content,
+    .right-content {
+        flex: 1;
+    }
+
+    .rectangle {
+        margin: 10px;
+    }
+
+    .right-content {
+        flex-direction: column;
+    }
+}
+
+/* //////////////////////////////////////////// */
+
+.dashboard-content #baseAgency {
+    background-color: #FFFFFF;
+    padding-top: 0px;
+}
+
+.dashboard-content #baseAgency h3 {
+    background-color: #F7F7F7;
+    margin-top: 0px;
+    padding: 5px 10px;
+}
+
+.dashboard-content #baseAgency #formAgency form {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.dashboard-content #baseAgency #formAgency form div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 15px;
+}
+
+.dashboard-content #baseAgency #formAgency form div .form-group {
+    display: flex;
+    flex-direction: column;
+}
+

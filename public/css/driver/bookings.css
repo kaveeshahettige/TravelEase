@@ -4,6 +4,27 @@ body, ul {
     font-family: "Poppins", sans-serif;
 }
 
+
+
+
+.unavailable-button,
+.cancel-button {
+    background-color: #f84a4a; /* Red background */
+    color: #fff; /* White text */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Padding */
+    text-align: center; /* Center text */
+    text-decoration: none; /* No underline */
+    display: inline-block; /* Inline block display */
+    cursor: pointer; /* Cursor on hover */
+    transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+.unavailable-button:disabled {
+    opacity: 0.6; /* Reduce opacity for disabled button */
+    cursor: not-allowed; /* Change cursor for disabled button */
+}
 .search-bar {
     text-align: center;
     margin-top: 30px;
@@ -267,7 +288,7 @@ li {
     transition: background-color 0.3s;
 }
 
-.nav-button.active {
+.nav-button.tive {
     background-color: #F1F1F1;
     font-weight: bold;
     color: #F9B314;
@@ -291,6 +312,7 @@ li {
     margin-right: auto;
     padding-top: 5px;
     font-family: "Poppins", sans;
+    
 }
 
 /* Style for the container of top boxes */

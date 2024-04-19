@@ -16,7 +16,7 @@
 <body>
     <nav class="left-menu">
         <div class="user-profile">
-            <img src="<?php echo URLROOT; ?>/images/driver/wikum.jpg" alt="User Profile Photo">
+        <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
         </div>
 
@@ -68,18 +68,44 @@
                         <!-- Rectangle 1: Basic Info -->
                         <div class="basic-info-content">
                             <div class="center-image">
-                                <img src="<?php echo URLROOT?>/images/driver/wikum.jpg" alt="Profile Picture">
+                            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
                             </div>
                             <div class="hotel-details">
-                                <h3>Travel agency Name</h3>
+                                <h3><?php echo $_SESSION['user_fname'] . " " . $_SESSION['user_lname'] ?></h3>
                                 <h6>Contact Number</h6>
-                                <p>+1 123-456-7890</p>
+                                <p><?php echo $_SESSION['user_number'] ?></p>
                                 <h6>Email</h6>
-                                <p>example@example.com</p>
-                                <h6>Location</h6>
-                                <p>City, Country</p>
+                                <p><?php echo $_SESSION['user_email'] ?></p>
+
                             </div>
-                            <a href="<?php echo URLROOT; ?>driver/index">
+                            <h2>Agency Details</h2>
+                            <div class="hotel-details">
+                                <?php if (!empty($data['agencyDetails'])) : ?>
+                                <h6>Agency Name </h6>
+                                <p><?php echo $data['agencyDetails']->agency_name; ?></p>
+                                <h6>Registration Number</h6>
+                                <p> <?php echo $data['agencyDetails']->reg_number; ?></p>
+                                <h6>Address </h6>
+                                <p><?php echo $data['agencyDetails']->address; ?></p>
+                                <h6>Description</h6>
+                                <p> <?php echo $data['agencyDetails']->description; ?></p>
+                                <h6>City</h6>
+                                <p><?php echo $data['agencyDetails']->city; ?></p>
+                                <h6>Web Site</h6>
+                                <p><?php echo $data['agencyDetails']->website; ?></p>
+                                <h6>Facebook</h6>
+                                <p><?php echo $data['agencyDetails']->facebook; ?></p>
+                                <h6>Instagram</h6>
+                                <p><?php echo $data['agencyDetails']->instagram; ?></p>
+                                <h6>Twitter</h6>
+                                <p><?php echo $data['agencyDetails']->twitter; ?></p>
+                                <?php else : ?>
+                                <p>No agency details found</p>
+                                <?php endif; ?>
+
+
+                            </div>
+                            <a href="<?php echo URLROOT; ?>driver/editagency">
                                 <button class="edit-button">Edit</button>
                             </a>
                         </div>
@@ -113,6 +139,25 @@
                                 <button class="delete-button">Delete</button></a>
                         </div>
                     </div>
+
+                    <div class="rectangle">
+                        <div class="basic-info-content">
+                            <h2>Service Validation</h2>
+                            <form class="service-validation-form" method="POST"
+                                action="<?php echo URLROOT; ?>/driver/settings" enctype="multipart/form-data">
+                                <p>Submit a PDF for Service Validation:</p>
+                                <label for="service-validation-pdf" class="file-label">Choose File</label>
+                                <input type="file" id="service-validation-pdf" name="service-validation-pdf"
+                                    accept=".pdf" required onchange="updateFileName(this)">
+                                <span id="file-name-display" class="file-name">No file chosen</span>
+                                <button class="edit-button" type="submit">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+
+
+
+
                 </div>
 
             </div>
@@ -120,5 +165,17 @@
         </div>
     </main>
 </body>
+
+<script>
+    function updateFileName(input) {
+    const fileNameDisplay = document.getElementById('file-name-display');
+    if (input.files.length > 0) {
+        fileNameDisplay.textContent = input.files[0].name;
+    } else {
+        fileNameDisplay.textContent = 'No file chosen';
+    }
+}
+
+</script>
 
 </html>

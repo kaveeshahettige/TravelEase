@@ -13,7 +13,7 @@
 <body>
     <nav class="left-menu">
         <div class="user-profile">
-            <img src="<?php echo URLROOT; ?>/images/driver/wikum.jpg" alt="User Profile Photo">
+        <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
         </div>
         
@@ -55,7 +55,7 @@
             <!-- Total Request Box -->
             <div class="box">
                 <h2>Total Notification</h2>
-                <p>2</p>
+                <p><?php echo $data['count']?></p>
             </div>
         
 
@@ -70,55 +70,28 @@
             </button>
         </div>
         </div>
-       
-        <div class="table-content">
-    <h2>Pending Booking Details</h2>
-    <table class="booking-table">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Trip ID</th>
-                <th>Pickup Date</th>
-                <th>End Date</th>
-                <th>Pickup Location</th>
-                <th>Dropoff Location</th>
-                <th>Number of passengers</th>
-                <th>Accept</th>
-                <th>Decline</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if (!empty($data['pendingbookings'])) {
-                $count = 1;
-                foreach ($data['pendingbookings'] as $booking) :
-            ?>
-                    <tr>
-                        <td><?php echo $count; ?></td>
-                        <td><?php echo $booking->trip_id; ?></td>
-                        <td><?php echo $booking->start_date; ?></td>
-                        <td><?php echo $booking->end_date; ?></td>
-                        <td><?php echo $booking->pickup_location; ?></td>
-                        <td><?php echo $booking->dropoff_location; ?></td>
-                        <td><?php echo $booking->passenger_count; ?></td>
-                        <td><button class="view-button">Accept</button></td>
-                        <td><button class="view-button">Decline</button></td>
-                    </tr>
-            <?php
-                    $count++;
-                endforeach;
-            } else {
-                echo '<tr><td colspan="8"><center>No pending bookings available.</center></td></tr>';
-            }
-            ?>
-        </tbody>
-    </table>
+
+        <div class="notification-container">
+    <?php foreach ($data['notifications'] as $notifications): ?>
+        <div class="notification">
+            <div class="notification-header">
+                
+            <div class="notification-sender">
+            <img src="<?php echo URLROOT; ?>/images1/<?php echo $notifications->profile_picture ?>" alt="Sender Image" class="sender-image">
+
+    <span class="sender-name"><?php echo $notifications->fname." ".$notifications->lname ?></span>
 </div>
 
-
-        <div class="more-content">
-            <button class="next-page-btn">More Notifications <i class='bx bx-chevron-right'></i></button>
+                <div class="notification-date"><?php echo $notifications->nDate; ?></div>
+            </div>
+            <div class="notification-content">
+                <?php echo $notifications->notification; ?>
+            </div>
         </div>
+    <?php endforeach;?>
+</div>
+       
+       
 
     </main>
 </body>
