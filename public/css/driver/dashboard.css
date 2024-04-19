@@ -17,6 +17,7 @@ body, ul {
     box-shadow: 0px 1px 3px rgba(127, 127, 127, 0.2);
 }
 
+
 .search-bar input[type="text"] {
     width: 80%; /* Use 100% width for responsiveness */
     width: 15vh;
@@ -275,7 +276,13 @@ a img.menu-icon {
     box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     border-left: 10px solid #FFEFCC;
+    border: 1px solid #333;
+    padding: 20px;
+    margin: 20px;
+    /* width: 300px; */
+    background-color: #f0f0f0;
 }
+
 
 /* Center align the hotel details within the basic info */
 .basic-info-content {
@@ -869,5 +876,43 @@ a.active, a:active {
     border-radius: 25px;
     cursor: pointer;
     margin-left: 10px;
+}
+h2 {
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"], input[type="checkbox"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #F9B314;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.checkbox-label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-right: 5px;
 }
 

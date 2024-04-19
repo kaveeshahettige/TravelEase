@@ -15,6 +15,9 @@ class TravelerDashboard extends Controller{
     public function index(){
       $id= $_SESSION['user_id'];
       $user=$this->userModel->findUserDetail($id);
+      $noOfBooking=$this->userModel->countMyBooking($id);
+      $noOfUpcomingTrips=$this->userModel->countUpcomingTrips($id);
+      $monthlyPayment=$this->userModel->monthlyPayment($id);
 
       $data = [
         'id' => '$id',
@@ -23,6 +26,9 @@ class TravelerDashboard extends Controller{
         'fname' => $user->fname,
         'number' => $user->number,
         'profile_picture'=>$user->profile_picture,
+        'noOfBooking'=>$noOfBooking,
+        'noOfUpcomingTrips'=>$noOfUpcomingTrips,
+        'monthlyPayment'=>$monthlyPayment,
       ];
       $this->view('travelerDashboard/index',$data);
     }
@@ -69,7 +75,23 @@ class TravelerDashboard extends Controller{
 
     //payments
     public function payments($id){
-      $this->view('travelerDashboard/payments');
+      $id= $_SESSION['user_id'];
+      $user=$this->userModel->findUserDetail($id);
+      $noofPayments=$this->userModel->countPayment($id);
+      $payments=$this->userModel->findPayment($id);
+      $data = [
+        'id' => '$id',
+        'email'=>$user->email,
+        'lname' => $user->lname,
+        'fname' => $user->fname,
+        'number' => $user->number,
+        'profile_picture'=>$user->profile_picture,
+        'noofPayments'=>$noofPayments,
+        'payments'=>$payments,
+        
+      ];
+
+      $this->view('travelerDashboard/payments',$data);
     }
 
     //notifications

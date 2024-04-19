@@ -14,26 +14,25 @@ class Package{
 
     public function packagesedit($packageData) {
         $this->db->query ('INSERT INTO packages 
-
     (name, type, TransportProvider, hotel, Price, Location, Images, description) VALUES (:name, :type, :TransportProvider, :hotel, :Price, :Location, :Images, :PackageDescription)');
-         //bind values
-         $this->db->bind(':name',$packageData['PackageName']);
-         $this->db->bind(':type',$packageData['PackageType']);
-         // $this->db->bind(':duration',$packageData['Duration']);
-         $this->db->bind(':TransportProvider',$packageData['TransportProvider']);
-         $this->db->bind(':hotel',$packageData['AccomadationProvider']);
-         $this->db->bind(':Price',$packageData['PriceOfPackage']);
-         $this->db->bind(':Location',$packageData['PriceOfPackage']);
-         $this->db->bind(':Images',$packageData['PackageImages']);
-         $this->db->bind(':PackageDescription',$packageData['PackageDescription']);
- 
-         //execute
-         if($this->db->execute()){
-             return true;
-         }else{
-             return false;
-         }
-     }
+        //bind values
+        $this->db->bind(':name',$packageData['PackageName']);
+        $this->db->bind(':type',$packageData['PackageType']);
+        // $this->db->bind(':duration',$packageData['Duration']);
+        $this->db->bind(':TransportProvider',$packageData['TransportProvider']);
+        $this->db->bind(':hotel',$packageData['AccomadationProvider']);
+        $this->db->bind(':Price',$packageData['PriceOfPackage']);
+        $this->db->bind(':Location',$packageData['PriceOfPackage']);
+        $this->db->bind(':Images',$packageData['PackageImages']);
+        $this->db->bind(':PackageDescription',$packageData['PackageDescription']);
+
+        //execute
+        if($this->db->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     public function findpackages($PackageID){
         $this->db->query('SELECT * from packages WHERE PackageID = :PackageID');

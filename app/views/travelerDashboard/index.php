@@ -30,7 +30,7 @@
         <ul>
             <li><a href="<?php echo URLROOT?>travelerDashboard/index/<?php echo $_SESSION['user_id']?>" class="active"><i class='bx bxs-dashboard bx-sm'></i> Overview</a></li>
             <li><a href="<?php echo URLROOT?>travelerDashboard/bookings/<?php echo $_SESSION['user_id']?>"><i class='bx bxs-book bx-sm'></i> Bookings</a></li>
-            <li><a href=""><i class='bx bxs-package bx-sm'></i></i> Payments</a></li>
+            <li><a href="<?php echo URLROOT?>travelerDashboard/payments/<?php echo $_SESSION['user_id']?>"><i class='bx bxs-package bx-sm'></i></i> Payments</a></li>
             <li><a href=""><i class='bx bxs-report bx-sm'></i> Notifications</a></li>
             <li><a href=""><i class='bx bx-line-chart bx-sm'></i> Previous Trips</a></li>
             <li><a href="<?php echo URLROOT?>travelerDashboard/settings/<?php echo $_SESSION['user_id']?>"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
@@ -68,17 +68,17 @@
                     <table class="summary">
                         <thead>
                             <tr>
-                                <th>Bookings</th>
+                                <th>Total Bookings</th>
                                 <th>Upcoming Trips</th>
-                                <th>Payments</th>
+                                <th>Total Monthly Payments</th>
                                 <th>Feedbacks provided</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>10</td>
-                                <td>2</td>
-                                <td>$30000</td>
+                                <td><?php echo $data['noOfBooking']?></td>
+                                <td><?php echo $data['noOfUpcomingTrips']?></td>
+                                <td><?php echo $data['monthlyPayment']?>&nbspLKR</td>
                                 <td>4</td>
                             </tr>
                             <!-- Add more rows for additional trip summaries -->

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/manager-financial management.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
     <title>Business Financial Management</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -11,33 +12,10 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-    <nav class="left-menu">
-        <div class="user-profile">
-            <img src="<?php echo URLROOT?>/images/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
-        </div>
-        
-        <div class="search-bar">
-            <form action="#" method="GET">
-                <input type="text" placeholder="Find a Setting">
-                <button type="submit">Search</button>
-            </form>
-        </div>
-        
-        <ul>
-            <li><a href="<?php echo URLROOT; ?>businessmanager/index" class="nav-button  "><i class='bx bxs-dashboard bx-sm'></i> Overview</a></li>
-            <li><a href="<?php echo URLROOT; ?>businessmanager/bookings"class="nav-button"><i class='bx bxs-book bx-sm'></i> Bookings</a></li>
-            <li><a href="<?php echo URLROOT; ?>businessmanager/packages" class="nav-button"><i class='bx bxs-package bx-sm'></i></i> Packages</a></li>
-            <li><a href="<?php echo URLROOT; ?>businessmanager/reports" class="nav-button"><i class='bx bxs-report bx-sm'></i> Reports</a></li>
-            <li><a href="<?php echo URLROOT; ?>businessmanager/financialmanagement" class="nav-button active"><i class='bx bx-line-chart bx-sm'></i> Financial Management</a></li>
-            <li><a href="<?php echo URLROOT; ?>businessmanager/settings" class="nav-button "><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-        </ul>
-    
-    <div class="logout">
-        <a href="<?php echo URLROOT; ?>users/logout"class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
-    </div>
-
-    </nav>
+<?php
+$activePage = 'businessmanager/financialmanagement'; // Set the active page dynamically based on your logic
+include 'navigation.php';
+?>
     <main>
         <div class="logo-container">
             <img src="<?php echo URLROOT?>/images/TravelEase.png" alt="TravelEase Logo">
@@ -84,57 +62,45 @@
         
         <div class="table-content">
                 <h2>All Transactions</h2>
-                    <table class="transaction-table">
-                        <thead>
-                            <tr>
-                                <th>Service Provider</th>
-                                <th>Amount</th>
-                                <th>Date</th>
-                                <th>Account Number</th>
-                                <th>Payment Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                                
-                            <tr>
-                                <td><div class="service-provider-info">
-                                    <img src="<?php echo URLROOT?>/images/wikum.jpg" alt="Service Provider Photo">
-                                    <span>Wikum Preethika</span>
-                                </div></td>
-                                <td>5000 LKR</td>
-                                <td>2023-09-25</td>
-                                <td>1234567890</td>
-                                <td class="pending">Pending</td>
-                                <td><button class="view-button">View</button></td>
-                            </tr>
+            <table class="transaction-table">
+                <thead>
+                <tr>
+                    <th>Service Provider</th>
+                    <th>Total Amount</th>
+                    <th>To Paid</th>
+                    <th>Booking Date</th>
+                    <th>Account Number</th>
+                    <th>Payment Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $transactions = $data['transactionData'];
+                foreach ($transactions as $transaction): ?>
+                    <tr>
+                        <td>
+                            <div class="service-provider-info">
+                                <img src="<?php echo $transaction->profile_picture ?>" alt="Service Provider Photo">
+                                <span><?php echo $transaction->service_provider_name; ?></span>
+                            </div>
+                        </td>
+                        <td><?php echo $transaction->amount; ?> LKR</td>
+                        <td><?php echo ($transaction->amount * 0.85); ?> LKR</td>
+                        <td><?php echo date('Y-m-d', strtotime($transaction->date)); ?></td>
+                        <td><?php echo $transaction->account_number; ?></td>
 
-                            <tr>
-                                <td><div class="service-provider-info">
-                                    <img src="<?php echo URLROOT?>/images/wikum.jpg" alt="Service Provider Photo">
-                                    <span>Wikum Preethika</span>
-                                </div></td>
-                                <td>5000 LKR</td>
-                                <td>2023-09-25</td>
-                                <td>1234567890</td>
-                                <td class="pending">Pending</td>
-                                <td><button class="view-button">View</button></td>
-                            </tr>
+                        <td class="<?php echo strtolower($transaction->payment_status); ?>">
+                            <?php echo ($transaction->payment_status == 'Paid') ? 'Paid' : 'Pending'; ?>
+                        </td>
 
-                            <tr>
-                                <td><div class="service-provider-info">
-                                    <img src="<?php echo URLROOT?>/images/wikum.jpg" alt="Service Provider Photo">
-                                    <span>Wikum Preethika</span>
-                                </div></td>
-                                <td>5000 LKR</td>
-                                <td>2023-09-25</td>
-                                <td>1234567890</td>
-                                <td class="approved">Approved</td>
-                                <td><button class="view-button">View</button></td>
-                            </tr>
-                
-                        </tbody>
-                    </table>
+
+                        <td><button class="view-button" onclick="openPopup(<?php echo $transaction->transaction_id; ?>)">View</button></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+
         </div>
 
     </main>
