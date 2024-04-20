@@ -308,7 +308,72 @@
         <?php endif; ?>
     </div>
 
-    <br><br><br>
+    
+</section>
+<section class="main2" id="S1">
+        <h1 class="ResultTopics">Get Guidance from</h1>
+        <div class="pickupTimeField">
+        <label for="meetTime">Meet Time:</label>
+        <input type="time" id="meetTime" name="meetTime">
+    </div>
+        <?php if (!empty($data['guides']) && is_array($data['guides'])): ?>
+            <div class="main2images" id="div1">
+            <?php foreach ($data['guides'] as $guide): ?>
+    <div class="main2img1content">
+        <div><img src="<?php echo URLROOT ?>images/<?php echo $guide->image; ?>" alt=""></div>
+        <div class="c1">
+            <div>
+                <p style="font-size: 30px; margin: 0px; font-weight: bold;"><?php echo ($hotelroom ? $guide->fname . ' ' . $hotelroom->lname : ' '); ?></p>
+                <p><?php echo $guide->category ?>&nbsp;guide</p>
+                <!-- <p><?php echo $hotelroom->ratings->rating ?></p> -->
+                <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+       // Extract the rating value from the ratings object
+       $rating = isset($guide->ratings->rating) ? $guide->ratings->rating : 0;
+                    
+       // Round the rating value
+       $filled_stars = $rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
+                <button class="add-to-cart-button" style="margin-top:0px;margin-left:10px;background-color: #45a049;color: white; border: none; cursor: pointer;transition: background-color 0.3s;" onclick="addToCart(5,<?php echo $guide->user_id ?>,this)">&#x271A;&nbsp;Cart</button>
+                
+                <!-- Add to Cart button -->
+                
+            </div>
+            
+            <div>
+                <button style="margin-top: 10px; margin-bottom: 10px;" onclick="bookingHas(5, <?php echo $guide->user_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">
+                    &rarr; View Deal
+                </button>
+                <button style="margin-top: 10px; margin-bottom: 10px;" class="view-button" onclick="booking(5, '<?php echo $guide->user_id; ?>', '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">
+                    &#x1F4C5; Book Now
+                </button>
+               
+            </div>
+        </div>
+    </div>
+<?php endforeach; ?>
+
+
+</div>
+<?php elseif (empty($data['hotels'])): ?>
+    <p>No guides available Right Now</p>
+<?php else: ?>
+    <p>Error retrieving guide data.</p>
+<?php endif; ?>
+
+<br><br><br>
 
     <div id="checkoutSection">
         <button class="continue-button" 
@@ -317,6 +382,7 @@
                 onclick="continueToCheckoutAndRefresh()">Continue to Checkout</button>
     </div>
 </section>
+
 
 <!-- <div id="myModal" class="modal">
     <div class="modal-content">

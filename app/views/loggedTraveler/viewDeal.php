@@ -66,6 +66,19 @@ if ($data['furtherBookingDetails']->ac_type  == 1) {
 
         
     </div>
+    <?php elseif ($data['type'] == 5): ?>
+    <div class="reservation-details">
+        <p><strong>Name:</strong> <?php echo $data['serviceProvider']->fname ?> </p>
+        <p><strong>About:</strong> <?php echo $data['furtherBookingDetails']->description ?></p>
+        <p><strong>Category:</strong> <?php echo $data['furtherBookingDetails']->category ?></p>
+        <p><strong>Languages:</strong> <?php echo $data['furtherBookingDetails']->languages ?></p>
+        <p><strong>Guide Register Number:</strong> <?php echo $data['furtherBookingDetails']->GuideRegNumber ?></p>
+        <p><strong>Lisence Expiry Date:</strong> <?php echo $data['furtherBookingDetails']->LisenceExpDate ?></p>
+        <p><strong>Sites:</strong> <?php echo $data['furtherBookingDetails']->sites ?></p>
+</p>
+
+        
+    </div>
 <?php else: ?>
     <p>No details available for this type.</p>
 <?php endif; ?>
@@ -82,6 +95,13 @@ if ($data['furtherBookingDetails']->ac_type  == 1) {
                             <p><strong>AC availability:</strong> <?php echo $data['furtherBookingDetails']->acAvailability ?></p>
                         <p><strong>TV availability:</strong> <?php echo $data['furtherBookingDetails']->tvAvailability ?></p>
                         <p><strong>Wifi availability:</strong> <?php echo $data['furtherBookingDetails']->wifiAvailability ?></p>
+
+                    </div>
+                    <?php elseif ($data['type'] == 5): ?>
+                        <div class="reservation-details">
+                            <p><strong>Facebook :</strong> <?php echo $data['furtherBookingDetails']->facebook ?></p>
+                        <p><strong>Instagram :</strong> <?php echo $data['furtherBookingDetails']->instagram ?></p>
+                       
 
                     </div>
                           
@@ -140,11 +160,21 @@ function handlePriceUpdate(updatedPrice) {
                         </form> -->
                         <?php else: ?>
                             <?php
-$date1 = strtotime($data['checkinDate']);
+
+if($data['type']==3){
+    $date1 = strtotime($data['checkinDate']);
+$date2 = strtotime($data['checkoutDate']);
+$diffTime = abs($date2 - $date1) ;
+$daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
+    $tot=$daysD* $data['furtherBookingDetails']->price;
+}else if($data['type']==5){
+    $date1 = strtotime($data['checkinDate']);
 $date2 = strtotime($data['checkoutDate']);
 $diffTime = abs($date2 - $date1) + (60 * 60 * 24);
 $daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
-$tot=$daysD* $data['furtherBookingDetails']->price;
+    $tot=$daysD*$data['furtherBookingDetails']->pricePerDay;
+}
+
 ?>
                         <p class="total-value"><strong>Total :  <?php echo $tot?>&nbsp LKR</strong></p>
                         

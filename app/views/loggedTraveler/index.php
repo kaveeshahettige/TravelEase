@@ -83,6 +83,8 @@
                         <img src="<?php echo URLROOT ?>images/rooms/<?php echo $element['furtherBookingDetails']->image ?>" alt="" style="width: 100%; height: 100%; object-fit: cover;">
                         <?php elseif ($element['type'] == 4): ?>
                         <img src="<?php echo URLROOT ?>images/<?php echo $element['furtherBookingDetails']->image ?>" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                        <?php elseif ($element['type'] == 5): ?>
+                        <img src="<?php echo URLROOT ?>images/<?php echo $element['furtherBookingDetails']->image ?>" alt="" style="width: 100%; height: 100%; object-fit: cover;">
                         <?php endif; ?>
                     </div>
                     <div class="c1"> 

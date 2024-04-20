@@ -217,6 +217,7 @@ foreach ($agencies as $agency) {
       $data=[
         'serviceProviderName' => $serviceProvider ? $serviceProvider->fname . ' ' . $serviceProvider->lname : null,
         'type' => $serviceProvider ? $serviceProvider->type : null,
+        'serviceProvider'=> $serviceProvider ? $serviceProvider : null,
         'profile_picture' => $user ? $user->profile_picture : null,
         'number' => $serviceProvider ? $serviceProvider->number : null,
         'location' => $mainbookingDetails ? $mainbookingDetails->city : null,
@@ -358,6 +359,7 @@ foreach ($agencies as $agency) {
 
       $id = $_SESSION['user_id'];
         $user=$this->userModel->findUserDetail($id);
+        $serviceProvider = $this->userModel->findUserDetail($serviceid);
         //from service provider table(hotel,travelagncy,pacjage tables)
         $furtherBookingDetails=$this->userModel->findBookingDetailByServiceid($type,$serviceid);
         if ($type == 4) {
@@ -377,7 +379,9 @@ foreach ($agencies as $agency) {
         'checkinDate' => $checkinDate,
         'checkoutDate' => $checkoutDate,
         'type' => $type,
-        'pickupTime' => $pickupTime ? $pickupTime : ''
+        'pickupTime' => $pickupTime ? $pickupTime : '',
+        'serviceProvider' => $serviceProvider? $serviceProvider : ''
+        
     ];
     
     if ($type == 4) {
@@ -780,6 +784,41 @@ public function searchVehicles()
     }
 }
 
+// public function package(){
+//       $id = $_SESSION['user_id'];
+//     $user = $this->userModel->findUserDetail($id);
+//     $packages=$this->userModel->getRandomPackages();
+//       $data=[
+//         'profile_picture' => $user ? $user->profile_picture : null,
+//         'packages'=>$packages,  
+//       ];
+//       $this->view('loggedTraveler/package',$data);
+//      }
+
+//searchGuides
+public function searchGuides()
+{
+    // Check if the request method is POST
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Perform the search operation
+        $location = $_POST['location'];
+        $user = $this->userModel->findUserDetail($_SESSION['user_id']);
+        $packages = $this->userModel->findGuidesByLocation($location);
+
+        // Pass the search results to the view and load it
+        $data=[
+        'profile_picture' => $user ? $user->profile_picture : null,
+        'packages'=>$packages,  
+      ];
+      $this->view('loggedTraveler/package',$data);
+        exit; // Ensure that script execution stops after loading the view
+    } else {
+        // If the request method is not POST, redirect to a different URL
+        header('Location: /TravelEase/loggedTraveler'); // Redirect to the main page or another appropriate URL
+        exit; // Ensure that script execution stops after the redirect
+    }
+}
+
 
 //fetchAvailableVehicles
 public function fetchAvailableVehicles()
@@ -957,21 +996,13 @@ public function plantrip(){
     // $checkinDate = date('Y-m-d', strtotime($checkinDate));
     // $checkoutDate = date('Y-m-d', strtotime($checkoutDate));
 
-    $city=$this->userModel->findCitydetails($location);
-    $places = $this->userModel->findPlaces($location);
-    $user = $this->userModel->findUserDetail($_SESSION['user_id']);
-    $hotels = $this->userModel->findAvailableHotelRooms($location, $checkinDate, $checkoutDate);
-    $vehicles = $this->userModel->findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate);
-    //$packages = $this->userModel->findPackages($location);
-
-
-    $vehiclePrices = []; // Array to hold prices for each vehicle
 //////////
     $city=$this->userModel->findCitydetails($location);
     $places = $this->userModel->findPlaces($location);
     $user = $this->userModel->findUserDetail($_SESSION['user_id']);
     $hotels = $this->userModel->findAvailableHotelRooms($location, $checkinDate, $checkoutDate);
     $vehicles = $this->userModel->findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate);
+    $guides=$this->userModel->findGuidesByLocation($location);
     //$packages = $this->userModel->findPackages($location);
 
 
@@ -995,7 +1026,7 @@ foreach ($hotels as &$hotel) {
     $hotel->ratings = isset($ratings[$hotel->room_id]) ? $ratings[$hotel->room_id] : null;
 }
 ////////////////
-// Initialize an empty array to store ratings for each hotel
+// Initialize an empty array to store ratings for each vehicle
 $vratings = [];
 
 // Iterate through each hotel
@@ -1011,6 +1042,26 @@ foreach ($vehicles as $vehicle) {
 foreach ($vehicles as &$vehicle) {
     // Add ratings to the vehicle data
     $vehicle->vratings = isset($vratings[$vehicle->vehicle_id]) ? $vratings[$vehicle->vehicle_id] : null;
+}
+
+/////////
+////////////////
+// Initialize an empty array to store ratings for each vehicle
+$gratings = [];
+
+// Iterate through each hotel
+foreach ($guides as $guide) {
+    // Fetch ratings for the current hotel
+    $guideRatings = $this->userModel->getRatingsOfGuides($guide->user_id);
+    
+    // Store ratings in the ratings array with hotel id as key
+    $gratings[$guide->user_id] = $guideRatings;
+}
+
+// Iterate through each hotel again to add ratings to the vehcle data
+foreach ($guides as &$guide) {
+    // Add ratings to the vehicle data
+    $guide->gratings = isset($gratings[$guide->user_id]) ? $gratings[$guide->user_id] : null;
 }
 
 /////////
@@ -1044,6 +1095,7 @@ foreach ($vehicles as $vehicle) {
         'location' => $location,
         'checkinDate' => $checkinDate,
         'checkoutDate' => $checkoutDate,
+        'guides'=>$guides,
     ];
     $this->view('loggedTraveler/plantripServices', $data);
     exit; 
@@ -1218,7 +1270,7 @@ foreach ($vehicles as $vehicle) {
   }
 
   //bookingcart
-  public function bookingcart($bookingcart, $checkinDate, $checkoutDate, $pickupTime=null) {
+  public function bookingcart($bookingcart, $checkinDate, $checkoutDate, $pickupTime=null,$meetTime=null) {
     // Decode the JSON string into an array
     $bookingcartArray = json_decode($bookingcart, true);
     
@@ -1245,6 +1297,7 @@ foreach ($vehicles as $vehicle) {
             // Initialize variables
             $numDays = 0;
             $price = 0;
+            $serviceProvider = null;
            // $pickupTime = null; // Initialize pickupTime
             
             // Calculate values for type 4 bookings
@@ -1259,6 +1312,14 @@ foreach ($vehicles as $vehicle) {
                     $pickupTime = date("g:i A", strtotime($furtherBookingDetails->pickupTime));       
                 }
             }
+            if ($type == 5 && $furtherBookingDetails !== false) {
+              // Calculate the number of days between check-in and check-out dates
+              $numDays = (strtotime($checkoutDate) - strtotime($checkinDate)) / (60 * 60 * 24) + 1; 
+              // Calculate the total price for the booking
+              $price = $furtherBookingDetails->pricePerDay * $numDays;
+              $serviceProvider=$this->userModel->findUserDetail($furtherBookingDetails->user_id);
+          }
+            
             
             // Store the processed data in the result array
             $resultArray[] = [
@@ -1271,6 +1332,8 @@ foreach ($vehicles as $vehicle) {
                 'pickupTime' => $pickupTime ,// Assign pickupTime
                 'checkinDate' => $checkinDate,
                 'checkoutDate' => $checkoutDate,
+                'meetTime' => $meetTime?$meetTime:null,
+                'serviceProvider'=>$serviceProvider?$serviceProvider:null,
                 
             ];
         }
@@ -1291,7 +1354,7 @@ foreach ($vehicles as $vehicle) {
 }
 
 //cartpayment
-public function cartpayment($bookingcartArrayString, $checkinDate, $checkoutDate, $pickupTime=null) {
+public function cartpayment($bookingcartArrayString, $checkinDate, $checkoutDate, $pickupTime=null,$meetTime=null) {
   $bookingcartArray = json_decode(urldecode($bookingcartArrayString), true);
 
   $totalAmount = $_POST['totalAmount'];
@@ -1337,6 +1400,7 @@ foreach ($bookingcartArray as $type => $serviceIds) {
       'price' => $totalAmount,
       'furtherBookingDetails' => $furtherBookingDetails,
       'driver' => $driver,
+      'meetTime' => $meetTime ? $meetTime : null,
       
       // Add any other relevant transaction details
   ];
@@ -1394,6 +1458,8 @@ public function cartpaymentSuccessful() {
           } elseif ($type == 4) {
               $this->userModel->addVehicleBookingfromCart($lastcartBooking->booking_id,$bookingDetail,$transactionData,$driver);
              
+          }elseif($type==5){
+            $this->userModel->addGuideBookingfromCart($lastcartBooking->booking_id,$transactionData);
           }
       }
       

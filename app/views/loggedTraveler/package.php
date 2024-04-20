@@ -37,13 +37,15 @@
         <div class="main1img">
             <img src="<?php echo URLROOT?>images/6.1.jpg" alt="">
         </div>
+        <form action="<?php echo URLROOT ?>loggedTraveler/searchGuides" method="POST">
         <div class="main1searchbar">
             <div class="search">
-                <div class="search1"><input type="text" placeholder="Location: "></div>
-                <div class="search2"> Date:<input type="date" placeholder="Check in Date"></div>
-                <div class="search4"><button id="searchbtn" onclick="clickSearchPackage()">Search</button></div>
+                <div class="search1"><input type="text" placeholder="Location: " name="location"></div>
+                <div class="search4"><button id="searchbtn">Search</button></div>
             </div>
         </div>
+        </form>
+        
     </section>
     
     <section class="main2" id="S1">

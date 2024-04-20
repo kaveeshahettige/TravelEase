@@ -53,6 +53,8 @@ function viewBooking($Tid, $Sid, $Bid) {
 function booking(type, id, checkinDate, checkoutDate) {
   console.log("Booking Type:", type, "ID:", id, "Check-in:", checkinDate, "Check-out:", checkoutDate);
   var pickupTime = ''; // Initialize pickupTime variable
+  var meetTime = '';
+  
   
   if (type == 4) {
       pickupTime = document.getElementById('pickupTime').value; // Get pickupTime value only when type is 4
@@ -62,12 +64,23 @@ function booking(type, id, checkinDate, checkoutDate) {
         return; // Stop execution if pickupTime is not provided
     }
   }
+  if (type == 5) {
+    meetTime = document.getElementById('meetTime').value; // Get pickupTime value only when type is 4
+    if (!meetTime) {
+      // Display an alert or message indicating that pickupTime is required
+      alert("Please enter Time to meet.");
+      return; // Stop execution if pickupTime is not provided
+  }
+}
   
   // Construct the URL to include the pickupTime conditionally
   var url = "http://localhost/TravelEase/LoggedTraveler/bookingpayment/" + type + "/" + id + "/" + checkinDate + "/" + checkoutDate;
   if (type == 4) {
       url += "/" + pickupTime; // Append pickupTime to the URL only when type is 4
   }
+  if (type == 5) {
+    url += "/" + meetTime; // Append pickupTime to the URL only when type is 4
+}
   
   // Open the URL in a new window
   window.open(url, "_blank");
@@ -449,45 +462,48 @@ function bookingHas(type, id, checkinDate, checkoutDate) {
   var pickupTime = ''; // Initialize pickupTime variable
 
   if (type == 4) {
-      pickupTime = document.getElementById('pickupTime').value; // Get pickupTime value only when type is 4
+    pickupTime = document.getElementById('pickupTime').value; // Get pickupTime value only when type is 4
+  }
+  if (type == 5) {
+    meetTime = document.getElementById('meetTime').value; // Get meetTime value only when type is 5
   }
 
-  // Construct the URL to include the pickupTime conditionally
+  // Construct the URL to include the pickupTime or meetTime conditionally
   var url = "http://localhost/TravelEase/LoggedTraveler/viewDeal/" + type + "/" + id + "/" + checkinDate + "/" + checkoutDate;
   if (type == 4) {
-      url += "/" + pickupTime; // Append pickupTime to the URL only when type is 4
+    url += "/" + pickupTime; // Append pickupTime to the URL only when type is 4
+  }
+  if (type == 5) {
+    url += "/" + meetTime; // Append meetTime to the URL only when type is 5
   }
 
   // Open the URL in a pop-up modal
-  var modal = document.createElement('div');
-  modal.classList.add('modal');
-  modal.innerHTML = `
-      <div class="modal-content">
-          <span class="close" onclick="closeModal()">&times;</span>
-          <iframe src="${url}" frameborder="0"></iframe>
-      </div>
+  var customModal = document.createElement('div');
+  customModal.classList.add('modal');
+  customModal.innerHTML = `
+    <div class="modal-content">
+      <span class="close" onclick="closeCustomModal()">&times;</span>
+      <iframe src="${url}" frameborder="0"></iframe>
+    </div>
   `;
-  document.body.appendChild(modal);
-
-  // Close the modal when the user clicks on the close button
-  function closeModal() {
-      document.body.removeChild(modal);
-  }
+  document.body.appendChild(customModal);
 }
 
-function closeModal() {
+// Function to close the custom modal
+function closeCustomModal() {
   var modal = document.querySelector('.modal');
   if (modal) {
-      modal.remove();
+    modal.remove();
   }
 }
 
 // Add event listeners for the close button
 document.addEventListener('click', function(event) {
   if (event.target.classList.contains('close')) {
-      closeModal();
+    closeCustomModal();
   }
 });
+
 
 function addToCart(type, id, button) {
   // Ensure that the button is defined
@@ -523,6 +539,24 @@ function addToCart(type, id, button) {
                   // Return without adding the item to the cart
                   return;
               }
+          }else if(type === 5){
+            // Retrieve the pickup time entered by the user
+            var meetTime = document.getElementById('meetTime').value;
+            // Check if pickup time is provided and not empty
+            if (meetTime.trim() !== '') {
+                // Proceed with adding the item to the cart
+                addToCartBackend(type, id, true);
+                // Optionally, you can display a confirmation message here
+                // alert("Vehicle added to cart successfully!");
+            } else {
+                // If pickup time is not provided, notify the user
+                alert("Please enter a time to meet guide before adding to the cart.");
+                // Reset the button state to Cart
+                button.style.backgroundColor = '#45a049';
+                button.innerHTML = '&#x271A;&nbsp;Cart';
+                // Return without adding the item to the cart
+                return;
+            }
           } else {
               // For items other than vehicles, proceed with adding to cart without checking pickup time
               addToCartBackend(type, id, true);
@@ -567,39 +601,7 @@ function addToCartBackend(type, id, add) {
   // // Toggle checkout button visibility
   // toggleCheckoutButton();
 }
-
-
-// function checkCart() {
-//   var cart = JSON.parse(localStorage.getItem('cart')) || {}; // Return empty object if cart is not available
-//   return Object.keys(cart).length > 0; // Check if there are any keys in the cart object
-// }
-
-
-
-// function toggleCheckoutButton() {
-//   var checkoutSection = document.getElementById('checkoutSection');
-//   if (checkCart()) {
-//       console.log("Items are in the cart. Showing checkout button.");
-//       checkoutSection.style.display = 'block';
-//   } else {
-//       console.log("No items in the cart. Hiding checkout button.");
-//       checkoutSection.style.display = 'none';
-//   }
-// }
-// function printCart() {
-//   var cart = JSON.parse(localStorage.getItem('cart')) || {}; // Parse the cart or initialize an empty object
-
-//   // Iterate over the keys of the cart object
-//   for (var key in cart) {
-//     if (cart.hasOwnProperty(key)) {
-//       console.log("Items in cart for type " + key + ":");
-//       // Iterate over the array of items for each key
-//       for (var i = 0; i < cart[key].length; i++) {
-//         console.log(cart[key][i]);
-//       }
-//     }
-//   }
-
+//////////////
 
     function continueToCheckoutAndRefresh() {
         // Call the original function to continue to checkout
@@ -648,22 +650,28 @@ function continueToCheckout() {
 
     // Retrieve pickupTime value
     var pickupTime = document.getElementById('pickupTime').value;
+    var meetTime = document.getElementById('meetTime').value;
 
-    // Check if the pickup time has a value
-    if (pickupTime) {
-        // Append the pickup time to the URL parameters
-        var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
-        window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}/${pickupTime}`, '_blank');
-    } else {
-        // If pickup time is not provided, exclude it from the URL parameters
-        var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
-        window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}`, '_blank');
-    }
-    
-    
+   // Check if the pickup time and/or meet time have values
+   if (pickupTime && !meetTime) {
+    // If only pickup time is provided, append pickupTime to the URL parameters
+    var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
+    window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}/${pickupTime}`, '_blank');
+  } else if (!pickupTime && meetTime) {
+    // If only meet time is provided, append meetTime to the URL parameters
+    var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
+    window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}/null/${meetTime}`, '_blank');
+  } else if (pickupTime && meetTime) {
+    // If both pickup time and meet time are provided, append both to the URL parameters
+    var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
+    window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}/${pickupTime}/${meetTime}`, '_blank');
+  } else {
+    // If neither pickup time nor meet time is provided, exclude them from the URL parameters
+    var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
+    window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}`, '_blank');
+  }
+  
 
-    // Redirect to the checkout page
-    // window.location.href = `bookingcart?${queryParams}`;
 
     // Clear the cart after checkout
     localStorage.removeItem('cart');

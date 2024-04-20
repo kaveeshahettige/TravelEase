@@ -278,117 +278,82 @@
 
         </div>
         
-        <?php elseif ($data['type']==5): ?>
+       
+            <?php elseif ($data['type'] == 5): ?>
         <div class="view">
-            <div class="bookingtitles"><h1><?php echo ucfirst($data['serviceProviderName']) ?></h1>
-            
-                <h5>Booking details</h5>
+            <div class="bookingtitles"><h1><?php echo ucfirst($data['serviceProviderName'])?></h1>
+                <h5>Guide details</h5>
             </div>
             <div class="images">
                 <div class="mainimage">
-                <img src="<?php echo URLROOT . '/images/' . $element['furtherBookingDetails']['image']; ?>" alt="">
-
-                </div>
-                <div class="submimages">
-                    <div><img src="<?php echo URLROOT . '/images/' . $element['furtherBookingDetails']['image']; ?>" alt=""></div>
-                    <div><img src="<?php echo URLROOT . '/images/' . $element['furtherBookingDetails']['image']; ?>" alt=""></div>
-                </div>
-                <div class="submimages">
-                    <div><img src="<?php echo URLROOT . '/images/' . $element['furtherBookingDetails']['image']; ?>" alt=""></div>
-                    <div><img src="<?php echo URLROOT . '/images/' . $element['furtherBookingDetails']['image']; ?>" alt=""></div>
+                <img src="<?php echo URLROOT . '/images/' . $data['furtherBookingDetails']->image; ?>" alt="">
                 </div>
 
             </div>
             <div class="des">
-                <h5 style="margin: 0px;">Description</h5>
-                <p><?php echo $data['mainbookingDetails']->description?></p> 
+                <h5 style="margin: 0px;">About</h5>
+                <p><?php echo $data['furtherBookingDetails']->description ? ucfirst($data['furtherBookingDetails']->description) : '-----'; ?></p> 
             </div> 
+            
             <div class="bookingdetails">
                 <div class="leftdiv">
                     <div class="ldiv1">
-                        <div class="booking-label">Hotel name:</div>
-                        <div class="booking-value"><?php echo ucfirst($data['serviceProviderName']) ?></div>
+                        <div class="booking-label">Guide name:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['serviceProviderName'])?></div>
                     </div>
                     <div class="ldiv1">
-                        <div class="booking-label">Hotel type:</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->hotel_type?></div>
+                        <div class="booking-label">Registration Number:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->GuideRegNumber)?></div>
                     </div>
                     <div class="ldiv1">
-                        <div class="booking-label">Address:</div>
-                        <div class="booking-value"><?php echo $element['mainbookingDetails']->add?></div>
+                        <div class="booking-label">Category:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->category)?></div>
                     </div>
                     <div class="ldiv1">
-                        <div class="booking-label">City:</div>
-                        <div class="booking-value"><?php echo $element['mainbookingDetails']->city?></div>
+                        <div class="booking-label">Languages:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->languages)?></div>
                     </div>
                     <div class="ldiv1">
-                        <div class="booking-label">Room type:</div>
-                        <div class="booking-value"><?php echo $element['furtherBookingDetails']['roomType']?></div>
+                        <div class="booking-label">Lisence Expiry Date:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->LisenceExpDate)?></div>
                     </div>
                     <div class="ldiv1">
-                        <div class="booking-label">Room detail:</div>
-                        <div class="booking-value"><?php echo $element['furtherBookingDetails']['description']?></div>
+                        <div class="booking-label">Places:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->sites)?></div>
                     </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">A/C Availablility:</div>
-                        <div class="booking-value"><?php echo $element['furtherBookingDetails']['acAvailability']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">TV Availablility:</div>
-                        <div class="booking-value"><?php echo $element['furtherBookingDetails']['tvAvailability']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Wifi Availablility:</div>
-                        <div class="booking-value"><?php echo $element['furtherBookingDetails']['wifiAvailability']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Smoking policy:</div>
-                        <div class="booking-value"><?php echo $element['furtherBookingDetails']['smokingPolicy']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Pet policy:</div>
-                        <div class="booking-value"><?php echo $element['furtherBookingDetails']['petPolicy']?></div>
-                    </div>
-                    
                 </div>
 
                 <div class="rightdiv">
-                    <div class="ldiv1">
-                        <div class="booking-label">Price:</div>
-                        <div class="booking-value"><?php echo $data['furtherbookingDetails']->price?> &nbsp SLR</div>
-                    </div>
-                     
-                    <div class="ldiv1">
-                        <div class="booking-label">Contact number :</div>
-                        <div class="booking-value"><?php echo $data['number']?></div>
+                <div class="ldiv1">
+                        <div class="booking-label">Address:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->address)?></div>
                     </div>
                     <div class="ldiv1">
-                        <div class="booking-label">web Site:</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->website?></div>
+                        <div class="booking-label">City:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->city)?></div>
                     </div>
                     <div class="ldiv1">
-                        <div class="booking-label">Twitter :</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->twitter?></div>
+                        <div class="booking-label">Province:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->province)?></div>
+                    </div>
+                <div class="ldiv1">
+                        <div class="booking-label">Email:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['serviceProvider']->email)?></div>
                     </div>
                     <div class="ldiv1">
-                        <div class="booking-label">Instargram :</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->instagram?></div>
+                        <div class="booking-label">Facebook:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->facebook)?></div>
                     </div>
                     <div class="ldiv1">
-                        <div class="booking-label">Start date:</div>
-                        <div class="booking-value"><?php echo $data['start_date']?></div>
+                        <div class="booking-label">Instargram:</div>
+                        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->instagram)?></div>
                     </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">End date:</div>
-                        <div class="booking-value"><?php echo $data['end_date']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Cancellation eligibility:</div>
-                        <div class="booking-value"><?php echo $data['cancellationEligiblity']?></div>
-                    </div> 
+                    
+                    
                 </div>
+                
 
-        </div>
+            </div>
         <?php endif; ?>
         
 

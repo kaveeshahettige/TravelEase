@@ -85,6 +85,22 @@
                                 ?>
                             </p>
                         </div>
+                        <?php elseif ($data1['type'] == 5): ?>
+    <div class="reservation-details">
+        <p><strong>Name:</strong> <?php echo $data1['serviceProvider']->fname ?> </p>
+        <!-- <p><strong>About:</strong> <?php echo $data1['furtherBookingDetails']->description ?></p> -->
+        <p><strong>Category:</strong> <?php echo $data1['furtherBookingDetails']->category ?></p>
+        <p><strong>Languages:</strong> <?php echo $data1['furtherBookingDetails']->languages ?></p>
+        <p><strong>Guide Register Number:</strong> <?php echo $data1['furtherBookingDetails']->GuideRegNumber ?></p>
+        <p><strong>Lisence Expiry Date:</strong> <?php echo $data1['furtherBookingDetails']->LisenceExpDate ?></p>
+        <p><strong>Sites:</strong> <?php echo $data1['furtherBookingDetails']->sites ?></p>
+        <p><strong>facebook :</strong> <?php echo $data1['furtherBookingDetails']->facebook ?></p>
+        <p><strong>Instagram:</strong> <?php echo $data1['furtherBookingDetails']->instagram ?></p>
+        <p><strong>Contact number:</strong> <?php echo $data1['furtherBookingDetails']->number ?></p>
+</p>
+
+        
+    </div>
                     <?php else: ?>
                         <p>No details available for this type.</p>
                     <?php endif; ?>
@@ -104,6 +120,9 @@
                             <p><strong>Check-in Date:</strong> <?php echo $data1['checkinDate'] ?></p>
                             <p><strong>Check-out Date:</strong> <?php echo $data1['checkoutDate'] ?></p>
                         </div> -->
+                        <?php elseif($data1['type'] == 5): ?>
+                            <p><strong>Meet time:</strong> <?php echo $data1['meetTime']?></p>
+        
                     <?php else: ?>
                     <?php endif; ?>
                     <br>
@@ -160,6 +179,15 @@
                                     <button type="submit" class="payment-button">Make Payment</button>
                                 </div> -->
                             </form>
+                        <?php elseif ($data1['type'] == 5): ?>
+                            <?php
+                                $date1 = strtotime($data1['checkinDate']);
+                                $date2 = strtotime($data1['checkoutDate']);
+                                $diffTime = abs($date2 - $date1) + (60 * 60 * 24);
+                                $daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
+                                $tot = $daysD * $data1['furtherBookingDetails']->pricePerDay;
+                            ?>
+                            <p class="t-price"><strong>Price : <?php echo $tot?> LKR</strong></p>
                         <?php else: ?>
                             <?php
                                 $date1 = strtotime($data1['checkinDate']);
@@ -209,6 +237,8 @@ foreach ($data['resultArray'] as $bookingData):
         $diffTime = abs($date2 - $date1) + (60 * 60 * 24);
         $daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
         $total += $daysD * $bookingData['furtherBookingDetails']->price;
+    }elseif($bookingData['type'] == 5){
+        $total += $bookingData['price'];
     }
 endforeach;
             echo $total . ".00 LKR";
@@ -223,6 +253,9 @@ endforeach;
         <?php elseif ($bookingData['type'] == 3): ?>
             <!-- <li class="room-booking-price" data-price="<?php echo $daysD * $bookingData['furtherBookingDetails']->price ?>">Room Booking - Price : <?php echo $daysD * $bookingData['furtherBookingDetails']->price ?> LKR</li> -->
             <li class="room-booking-price"><strong> <?php  echo $bookingData['furtherBookingDetails']->description?></strong></li>
+        <?php elseif ($bookingData['type'] == 5): ?>
+            <!-- <li class="room-booking-price" data-price="<?php echo $daysD * $bookingData['furtherBookingDetails']->price ?>">Room Booking - Price : <?php echo $daysD * $bookingData['furtherBookingDetails']->price ?> LKR</li> -->
+            <li class="guide-booking-price"><strong>Guide&nbsp<?php  echo $bookingData['furtherBookingDetails']->fname?></strong></li>
         <?php endif; ?>
     <?php endforeach; ?>
 </ul>
@@ -259,7 +292,8 @@ endforeach;
         <button type="submit" class="payment-button">Make Payment</button>
     </div>
 </form> -->
-<form id="paymentFormMain" action="<?php echo URLROOT ?>loggedTraveler/cartpayment/<?php echo urlencode(json_encode($data['bookingcartArray'])) . '/' .$data['checkinDate'].'/'.$data['checkoutDate'] . '/' . $data['pickupTime'] ?>" method="POST">
+
+<form id="paymentFormMain" action="<?php echo URLROOT ?>loggedTraveler/cartpayment/<?php echo urlencode(json_encode($data['bookingcartArray'])) . '/' .$data['checkinDate'].'/'.$data['checkoutDate'] . '/' . $data['pickupTime'] . '/' .$data1['meetTime']?>" method="POST">
     <input type="hidden" name="totalAmount" id="totalAmountInput" value="<?php echo $total; ?>">
     <input type="hidden" name="driverType" id="driverTypeInput" value="">
     <div class="buttons">

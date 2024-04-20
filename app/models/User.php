@@ -525,6 +525,7 @@ public function updatePicture($data){
             }else{
                 return null;
             }
+            return true;
         }
     }
 
@@ -557,7 +558,7 @@ public function updatePicture($data){
             }
         }
         else if($booking->type=='5'){
-            $this->db->query('SELECT * from packages where package_id=:id');
+            $this->db->query('SELECT * from guides where user_id=:id');
             $this->db->bind(':id',$booking->package_id);
         
             $data=$this->db->single();
@@ -924,10 +925,10 @@ foreach ($transactionData['furtherBookingDetails'] as $bookingDetail) {
         $this->db->query('INSERT INTO cartbookings (booking_id, user_id, serviceProvider_id, startDate, endDate, package_id) VALUES (:booking_id, :user_id, :serviceProvider_id, :startDate, :endDate, :package_id)');
         $this->db->bind(':booking_id', $booking_id);
         $this->db->bind(':user_id', $transactionData['user']->id);
-        $this->db->bind(':serviceProvider_id', $bookingDetail->id);
-        $this->db->bind(':startDate', $currentDate);
-        $this->db->bind(':endDate', $currentDate);
-        $this->db->bind(':package_id', $bookingDetail->package_id);
+        $this->db->bind(':serviceProvider_id', $bookingDetail->user_id);
+        $this->db->bind(':startDate', $transactionData['checkinDate']);
+        $this->db->bind(':endDate', $transactionData['checkinDate']);
+        $this->db->bind(':package_id', $bookingDetail->user_id);
     }
     
     // Execute the query for the current iteration
@@ -1440,6 +1441,36 @@ public function getRatingsOfVehicles($vehicle_id) {
     // Execute the query and fetch the result
     $result = $this->db->single();
     
+
+    // Return the result
+    return $result;
+}
+
+//getRatingsOfGuides($guide->user_id);
+public function getRatingsOfGuides($guide_id) {
+    // Query to calculate the average rating for the given hotel ID
+    $this->db->query('
+    SELECT AVG(rating) AS rating
+    FROM (
+        SELECT r.rating
+        FROM feedbacksnratings r
+        JOIN bookings b ON r.booking_id = b.booking_id
+        WHERE b.package_id = :guide_id
+
+        UNION ALL
+
+        SELECT cr.rating
+        FROM feedbacksnratings cr
+        JOIN cartbookings cb ON cr.ftempory_id = cb.temporyid
+        WHERE cb.package_id = :guide_id
+    ) AS combined_ratings;  
+    ');
+
+    // Bind hotel_id parameter
+    $this->db->bind(':guide_id', $guide_id);
+
+    // Execute the query and fetch the result
+    $result = $this->db->single();
 
     // Return the result
     return $result;
@@ -2349,6 +2380,34 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
     
         if($this->db->execute()){
             return true;
+        } else {
+            return false;
+        }
+    }
+
+    //addGuideBookingfromCart($lastcartBooking->booking_id,$transactionData)
+    public function addGuideBookingfromCart($lastcartBooking_id,$transactionData){
+        $this->db->query('INSERT INTO guide_bookings (booking_id, meetTime) VALUES (:booking_id, :meetTime)');
+        $this->db->bind(':booking_id', $lastcartBooking_id);
+        $this->db->bind(':meetTime', $transactionData['meetTime']);
+    
+        if($this->db->execute()){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //findGuidesByLocation($location);
+    public function findGuidesByLocation($location) {
+        $this->db->query('SELECT * FROM guides
+        JOIN users ON guides.user_id = users.id
+        WHERE (guides.city LIKE :location OR guides.province LIKE :location OR guides.sites LIKE :location );
+        ');
+        $this->db->bind(':location', '%' . $location . '%');
+        $result = $this->db->resultSet();
+        if ($this->db->rowCount() > 0) {
+            return $result;
         } else {
             return false;
         }

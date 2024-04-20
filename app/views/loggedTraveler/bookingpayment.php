@@ -188,13 +188,18 @@ function handlePriceUpdate(updatedPrice) {
                         </form>
                         <?php else: ?>
                             <?php
-$date1 = strtotime($data['checkinDate']);
+
+if($data['type']==3){
+    $date1 = strtotime($data['checkinDate']);
+$date2 = strtotime($data['checkoutDate']);
+$diffTime = abs($date2 - $date1) ;
+$daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
+    $tot=$daysD* $data['furtherBookingDetails']->price;
+}else if($data['type']==5){
+    $date1 = strtotime($data['checkinDate']);
 $date2 = strtotime($data['checkoutDate']);
 $diffTime = abs($date2 - $date1) + (60 * 60 * 24);
 $daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
-if($data['type']==3){
-    $tot=$daysD* $data['furtherBookingDetails']->price;
-}else if($data['type']==5){
     $tot=$daysD*$data['furtherBookingDetails']->pricePerDay;
 }
 
