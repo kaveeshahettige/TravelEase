@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">    
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/travelerDashboard/cart.css">    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="<?php echo URLROOT?>js/travelerDashboard/script.js"></script>
 </head>
@@ -84,88 +84,60 @@
         </div>
 
         <div class="table-content">
-            <h2>Cart Details</h2>
-            <table class="booking-table">
-                <thead>
-                <tr>
-                    <th>No</th>
-                    <!-- <th>Booking ID</th> -->
-                    <th>Cart</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Booking Date</th>
-                    <th></th>
-                    <th></th>
 
-                   
-                </tr>
-                </thead>
-                <tbody>
-
-<!-- <?php echo var_dump($data['mybooking'])?> -->
-<?php
-$count = 1; // Initialize the count
-
-if (!empty($data['cartDetails']) && is_array($data['cartDetails'])) {
-    $previousBookingId = null; // Initialize previous booking ID
-
-    foreach ($data['cartDetails'] as $booking) {
-        // Check if it's the same booking ID as the previous one
-        if ($booking->cartbooking_id !== $previousBookingId) {
-            // If it's a new booking ID, start a new row
-            if ($previousBookingId !== null) {
-                // Close the previous row if it's not the first booking
-                echo '<td>' . $names . '</td>'; // Display accumulated names
-                echo '<td>' . $startDate . '</td>'; // Display start date
-                echo '<td>' . $endDate . '</td>'; // Display end date
-                echo '<td>' . date('Y-m-d', strtotime($booking->bookingDate)) . '</td>';
-                echo '<td><button class="viewbooking" onclick="openCartPopup(\'' .$cartId . '\')">View</button></td>';
-                echo '<td><button class="cancel-button" onclick="removeCart(\'' .$cartId . '\')"><i class="bx bx-x-circle"></i>Remove</button></td>';
-                echo '</tr>';
-                $count++; // Increment the count for the new row
+    <h2>Cart Details</h2>
+    <div class="card-container">
+        <!-- Loop through each cart item to display as a card -->
+        <?php
+        
+        if (!empty($data['cartDetails']) && is_array($data['cartDetails'])) {
+            // Array to keep track of displayed IDs
+            $displayedIds = [];
+        
+            foreach ($data['cartDetails'] as $booking) {
+                // Check if the current ID has already been displayed
+                if (!in_array($booking->cartbooking_id, $displayedIds)) {
+                    $displayedIds[] = $booking->cartbooking_id;
+        
+                    // Get all names for this cartbooking_id
+                    $names = [];
+                    foreach ($data['cartDetails'] as $provider) {
+                        if ($provider->cartbooking_id === $booking->cartbooking_id) {
+                            $names[] = $provider->fname.' '.$provider->lname;
+                        }
+                    }
+        
+                    // Display the card for this booking
+                    echo '<div class="card">';
+                    echo '<div class="card-content">';
+                    echo '<h3>Trip : ' . implode(', ', $names) . '</h3>';
+        
+                    // Display names separated by commas
+        
+                    echo '<p>Start Date: ' . $booking->startDate . '</p>';
+                    echo '<p>End Date: ' . $booking->endDate . '</p>';
+                    echo '<p>Added Date: ' . date('Y-m-d', strtotime($booking->bookingDate)) . '</p>';
+                    echo '<div class="card-buttons">';
+                    echo '<button class="viewbooking" onclick="proceedCart(\'' . $booking->cartbooking_id . '\')">';
+                    echo '<i class="bx bx-chevron-right"></i> Proceed</button>';  //icon 
+                    echo '<button class="cancel-button" onclick="removeCart(\'' . $booking->cartbooking_id . '\')">';
+                    echo '<i class="bx bx-trash"></i> Remove</button>'; //icon 
+                    echo '</div>'; // Close card-buttons
+                    echo '</div>'; // Close card-content
+                    echo '</div>'; // Close card
+                }
             }
-            // Start a new row for the current booking
-            echo '<tr class="t-row">';
-            echo '<td>' . $count . '</td>'; // Display count only once
-            // Initialize names variable for the current booking
-            $names = $booking->fname . ' ' . $booking->lname;
-            // Initialize start and end dates for the current booking
-            $startDate = $booking->startDate;
-            $endDate = $booking->endDate;
-            $cartId = $booking->cartbooking_id;
+                
         } else {
-            // If it's the same booking ID, accumulate names with commas
-            $names .= ', ' . $booking->fname . ' ' . $booking->lname;
+            // Display a message if there are no cart details
+            echo '<p>No cart items available</p>';
         }
-        // Update the previous booking ID
-        $previousBookingId = $booking->cartbooking_id;
-    }
-    // After the loop, display the last row
-    echo '<td>' . $names . '</td>'; // Display accumulated names
-    echo '<td>' . $startDate . '</td>'; // Display start date
-    echo '<td>' . $endDate . '</td>'; // Display end date
-    echo '<td>' . date('Y-m-d', strtotime($booking->bookingDate)) . '</td>';
-    echo '<td><button class="viewbooking" onclick="openCart(\'' . $booking->cartbooking_id . '\')">View</button></td>';
-    echo '<td><button class="cancel-button" onclick="removeCart(\'' . $booking->cartbooking_id . '\')"><i class="bx bx-x-circle"></i>Remove</button></td>';
-    echo '</tr>';
-    $count++; // Increment the count for the last row
-} else {
-    // Display a message if there are no cart details
-    echo '<tr><td colspan="7">No data available</td></tr>';
-}
-?>
+        ?>
+    </div> <!-- End of card-container -->
+</div>
 
 
-                </tbody>
-            </table>
-        </div>
-
-
-        <div class="more-content">
-            <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
-        </div>
-
-    </main>
+ 
 
     <div id="myModal" class="modal1">
   <div class="modal1-content">

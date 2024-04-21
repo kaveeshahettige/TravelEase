@@ -294,12 +294,11 @@ class User{
 
     // registerTransportuser
     public function registerTransportuser($data){
-        $this->db->query('INSERT INTO users (fname,lname,email,password,number,type) VALUES (:fname,:lname,:email,:password,:number,:type)');
+        $this->db->query('INSERT INTO users (fname,email,password,number,type) VALUES (:fname,:email,:password,:number,:type)');
         
             
         //bind values
         $this->db->bind(':fname',$data['fname']);
-        $this->db->bind(':lname',$data['lname']);
         $this->db->bind(':number',$data['number']);
         $this->db->bind(':email',$data['email']);
         $this->db->bind(':password',$data['password']);
@@ -1005,7 +1004,8 @@ public function findCartDetails($id){
     $this->db->query('SELECT cart.*, users.*
     FROM cart
     LEFT JOIN users ON cart.serviceProvider_id = users.id
-    WHERE cart.user_id = :id;');
+    WHERE cart.user_id = :id ');
+    
     $this->db->bind(':id',$id);
 
     $data=$this->db->resultSet();
@@ -1017,6 +1017,27 @@ public function findCartDetails($id){
         return null;
     }
 }
+
+// //findCartDetailsGrouping($id)
+// public function findCartDetailsGrouping($id){
+//     $this->db->query('SELECT cart.*, users.fname, users.lname
+//                       FROM cart
+//                       LEFT JOIN users ON cart.serviceProvider_id = users.id
+//                       WHERE cart.user_id = :id
+//                       ');
+
+//     $this->db->bind(':id', $id);
+
+//     $data = $this->db->resultSet();
+
+//     // Check if rows were returned
+//     if (!empty($data)) {
+//         return $data;
+//     } else {
+//         return null;
+//     }
+// }
+
 
 
 //countCart($id)
@@ -2413,8 +2434,96 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
             return false;
         }
     }
+
+    //findServiceProviderInCart($cart->cartbooking_id)
+    public function findServiceProviderInCart($cartid,$cartbooking_id){
+        $this->db->query('SELECT u.fname AS serviceProvider_name
+        FROM cart cb
+        LEFT JOIN users u ON u.id = cb.serviceProvider_id
+        WHERE cb.cartbooking_id = :cartbooking_id AND cb.cart_id = :cartid');
+
+        $this->db->bind(':cartbooking_id', $cartbooking_id);
+        $this->db->bind(':cartid', $cartid);
+        $result = $this->db->single();
+        if ($this->db->rowCount() > 0) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
+    //findCartDetails(cartbooking_id)
+    public function findCartDetailsByBookingId($cartbooking_id){
+        $this->db->query('SELECT users.type, cart.*
+                          FROM cart 
+                          JOIN users ON cart.serviceProvider_id = users.id
+                          WHERE cart.cartbooking_id = :cartbooking_id');
+        $this->db->bind(':cartbooking_id', $cartbooking_id);
+        $result = $this->db->resultSet(); // Use resultSet() to fetch multiple rows
+        if (!empty($result)) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
+    //removefromCart($cart_id)
+    public function removefromCartByCartId($cart_id){
+        $this->db->query('DELETE FROM cart WHERE cart_id = :cart_id');
+        $this->db->bind(':cart_id', $cart_id);
+        if($this->db->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //checkAvailbility($cartDetail->type, $serviceId,$cartDetail->startDate,$cartDetail->endDate)
+    public function checkAvailbility($type, $serviceId,$startDate,$endDate){
+        if($type==3){
+            $this->db->query('SELECT * FROM room_availability WHERE room_id = :serviceId AND startDate <= :endDate AND endDate >= :startDate');
+            $this->db->bind(':serviceId', $serviceId);
+            $this->db->bind(':startDate', $startDate);
+            $this->db->bind(':endDate', $endDate);
+            $result = $this->db->resultSet();
+            if ($this->db->rowCount() > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }else if($type==4){
+            $this->db->query('SELECT * FROM vehicle_bookings WHERE vehicle_id = :serviceId AND start_date <= :endDate AND end_date >= :startDate');
+            $this->db->bind(':serviceId', $serviceId);
+            $this->db->bind(':startDate', $startDate);
+            $this->db->bind(':endDate', $endDate);
+            $result = $this->db->resultSet();
+            if ($this->db->rowCount() > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }else if($type==5){
+        $this->db->query('SELECT * FROM bookings 
+        WHERE package_id = :serviceId AND startDate <= :endDate AND endDate >= :startDate
+        
+        UNION
+        SELECT * FROM cartbookings 
+        WHERE package_id = :serviceId AND startDate <= :endDate AND endDate >= :startDate
+        ');
+
+        
+        $this->db->bind(':serviceId', $serviceId);
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+        $result = $this->db->resultSet();
+        if ($this->db->rowCount() > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+}
+
     
-
-
+    
 }
 

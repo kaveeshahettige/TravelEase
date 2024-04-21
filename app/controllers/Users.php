@@ -846,13 +846,13 @@ public function transportRegNew(){
         //init data
         $data=[
             'fname'=>trim($_POST['fname']),
-            'lname'=>trim($_POST['lname']),
+            
             'email'=>trim($_POST['email']),
             'password'=>trim($_POST['password']),
             'confirm_password'=>trim($_POST['confirm_password']),
             'number'=>trim($_POST['number']),
             'fname_err'=>'',
-            'lname_err'=>'',
+           
             'email_err'=>'',
             'password_err'=>'',
             'confirm_password_err'=>'',
@@ -864,9 +864,7 @@ public function transportRegNew(){
             $data['fname_err']='Please enter first name';      
         }
         //validate lname
-        if(empty($data['lname'])){
-            $data['lname_err']='Please enter last name';      
-        }
+       
         //validate email
         if(empty($data['email'])){
             $data['email_err']='Please enter email';      
@@ -899,7 +897,7 @@ public function transportRegNew(){
         }
 
         //make sure errors are empty
-        if(empty($data['fname_err']) && empty($data['lname_err']) && empty($data['email_err']) && empty($data['password_err']) && empty($data['confirm_password_err']) && empty($data['number_err']) ){
+        if(empty($data['fname_err'])  && empty($data['email_err']) && empty($data['password_err']) && empty($data['confirm_password_err']) && empty($data['number_err']) ){
             //validate
 
             //hash password
@@ -924,7 +922,7 @@ public function transportRegNew(){
         //init data
         $data=[
             'fname'=>'',
-            'lname'=>'',
+            
             'email'=>'',
             'password'=>'',
             'confirm_password'=>'',

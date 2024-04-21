@@ -42,7 +42,7 @@ body {
 
 .payment-box:hover,
 .booking-box:hover {
-    transform: scale(1.05);
+    /* transform: scale(1.05); */
 }
 
 .payment-gateway,
@@ -240,6 +240,62 @@ input[type="number"] {
     content: "Price: ";
     font-weight: bold;
 }
+
+.remove-button {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.remove-button:hover {
+    background-color: #c0392b;
+}
+
+/* You can adjust the size of the icon as needed */
+.remove-button i {
+    font-size: 18px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+#removecartNotification {
+    display: none;
+    position: fixed;
+    top: 10px; /* Adjusted top position */
+    right: 20px;
+    background-color: #c33427;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.not-available {
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24; /* Dark red text color */
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block; /* Ensures the background wraps around the text */
+}
+
+.not-available .not-available-text {
+    margin: 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.not-available i {
+    font-size: 20px;
+    margin-right: 5px;
+    color: #721c24; /* Dark red icon color */
+}
+
 
 
 

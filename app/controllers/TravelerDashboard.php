@@ -698,6 +698,19 @@ public function cart($id){
   $cartDetails=$this->userModel->findCartDetails($id);
   $noofCarts=$this->userModel->countCart($id);
   $noofCartItems=$this->userModel->countCartItems($id);
+  
+  $serviceProvidersNamesArray = []; // Initialize an empty array to store names
+
+// foreach ($cartDetails as $cart) {
+//     $serviceProvidersinCart = $this->userModel->findServiceProviderInCart($cart->cartbooking_id);
+
+//     // Loop through service providers in the cart
+    
+//         // Add each provider's name to the array
+//         $serviceProvidersNamesArray[] = $serviceProvidersinCart;
+    
+// }
+// echo var_dump($cartDetails);
 
   $data = [
     'id' => '$id',
@@ -709,6 +722,7 @@ public function cart($id){
     'cartDetails'=>$cartDetails,
     'noofCarts'=>$noofCarts,
     'noofCartItems'=>$noofCartItems,
+    //'serviceProvidersNamesArray' => $serviceProvidersNamesArray,
     
   ];
   $this->view('travelerDashboard/cart',$data);
@@ -720,6 +734,95 @@ public function removeCart($cartbooking_id){
 
 }
 
+//myCartDetails($cartbooking_id) from  bookingcart($bookingcart, $checkinDate, $checkoutDate, $pickupTime=null,$meetTime=null)
+public function myCartDetails($cartbooking_id){
+  
+  // Result array to store processed data
+  $resultArray = [];
+  
+  // Fetch user details
+  $userId = $_SESSION['user_id'];
+  $user = $this->userModel->findUserDetail($userId);
+  //cart details
+  $cartDetails=$this->userModel->findCartDetailsByBookingId($cartbooking_id);
+  
+  
+ // Loop through each cart element
+ 
+      foreach ($cartDetails as $cartDetail) {
+        $serviceId = $cartDetail->room_id ? $cartDetail->room_id : ($cartDetail->vehicle_id ? $cartDetail->vehicle_id : $cartDetail->package_id);;
+          // Fetch booking details for each service
+          $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($cartDetail->type, $serviceId);
+          $checkAvailbility=$this->userModel->checkAvailbility($cartDetail->type, $serviceId,$cartDetail->startDate,$cartDetail->endDate);
+          
+          
+          // Initialize variables
+          $numDays = 0;
+          $price = 0;
+          $serviceProvider = null;
+         // $pickupTime = null; // Initialize pickupTime
+          
+         $checkinDate = $cartDetail->startDate;
+         $checkoutDate = $cartDetail->endDate;
+          // Calculate values for type 4 bookings
+          if ($cartDetail->type == 4 && $furtherBookingDetails !== false) {
+              // Calculate the number of days between check-in and check-out dates
+              $numDays = (strtotime($checkoutDate) - strtotime($checkinDate)) / (60 * 60 * 24) + 1; 
+              // Calculate the total price for the booking
+              $price = $furtherBookingDetails->priceperday * $numDays;
+
+              // Check if pickupTime exists in booking details
+              if (property_exists($furtherBookingDetails, 'pickupTime')) {
+                  $pickupTime = date("g:i A", strtotime($furtherBookingDetails->pickupTime));       
+              }
+          }
+          if ($cartDetail->type == 5 && $furtherBookingDetails !== false) {
+            // Calculate the number of days between check-in and check-out dates
+            $numDays = (strtotime($checkoutDate) - strtotime($checkinDate)) / (60 * 60 * 24) + 1; 
+            // Calculate the total price for the booking
+            $price = $furtherBookingDetails->pricePerDay * $numDays;
+            $serviceProvider=$this->userModel->findUserDetail($furtherBookingDetails->user_id);
+        }
+          
+          
+          // Store the processed data in the result array
+          $resultArray[] = [
+              'cart_id' => $cartDetail->cart_id,
+              'type' => $cartDetail->type,
+              'serviceId' => $serviceId,
+              'user' => $user,
+              'furtherBookingDetails' => $furtherBookingDetails,
+              'numDays' => $numDays,
+              'price' => $price,
+              'pickupTime' => $cartDetail->pickupTime?$cartDetail->pickupTime:null ,// Assign pickupTime
+              'checkinDate' => $checkinDate,
+              'checkoutDate' => $checkoutDate,
+              'meetTime' => $cartDetail->meetTime?$cartDetail->meetTime:null,
+              'serviceProvider'=>$serviceProvider?$serviceProvider:null,
+              'checkAvailbility'=>$checkAvailbility,
+              
+          ];
+      }
+  
+  
+  // Prepare data to pass to the view
+  $data = [
+      'resultArray' => $resultArray,
+      'user' => $user,   
+      'cartbooking_id'=>$cartbooking_id,
+  ];
+  
+  // Pass data to the view
+
+  $this->view('travelerDashboard/myCartDetails',$data);
+
+
+}
+
+//removefromCart(cart_id)
+public function removefromCartByCartId($cart_id){
+  $remove=$this->userModel->removefromCartByCartId($cart_id);
+}
 
 }
 

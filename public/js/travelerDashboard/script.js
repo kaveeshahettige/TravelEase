@@ -316,10 +316,11 @@ function removeCart(bookingId){
 }
 
 function openCart(Bid) {
-
   window.location.href = `../myCartDetails/${Bid}`;
-  
-
 }
 
+//proceedCart(Bid)
+function proceedCart(Bid) {
+  window.location.href = `../myCartDetails/${Bid}`;
+}
 
