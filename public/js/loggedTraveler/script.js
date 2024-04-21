@@ -60,7 +60,7 @@ function booking(type, id, checkinDate, checkoutDate) {
       pickupTime = document.getElementById('pickupTime').value; // Get pickupTime value only when type is 4
       if (!pickupTime) {
         // Display an alert or message indicating that pickupTime is required
-        alert("Please enter pickup time.");
+        showPopup('pickupTimePopup');
         return; // Stop execution if pickupTime is not provided
     }
   }
@@ -68,7 +68,7 @@ function booking(type, id, checkinDate, checkoutDate) {
     meetTime = document.getElementById('meetTime').value; // Get pickupTime value only when type is 4
     if (!meetTime) {
       // Display an alert or message indicating that pickupTime is required
-      alert("Please enter Time to meet.");
+      showPopup('meetTimePopup');
       return; // Stop execution if pickupTime is not provided
   }
 }
@@ -504,7 +504,17 @@ document.addEventListener('click', function(event) {
   }
 });
 
+// Function to show and hide popup
+function showPopup(popupId) {
+  var popup = document.getElementById(popupId);
+  popup.style.display = 'block'; // Show popup
 
+  // Hide popup after 3 seconds (adjust as needed)
+  setTimeout(function() {
+      popup.style.display = 'none'; // Hide popup
+  }, 3000); // 3 seconds
+}
+//
 function addToCart(type, id, button) {
   // Ensure that the button is defined
   if (button) {
@@ -532,7 +542,7 @@ function addToCart(type, id, button) {
                   // alert("Vehicle added to cart successfully!");
               } else {
                   // If pickup time is not provided, notify the user
-                  alert("Please enter a pickup time before adding the vehicle to the cart.");
+                  showPopup('pickupTimePopup');
                   // Reset the button state to Cart
                   button.style.backgroundColor = '#45a049';
                   button.innerHTML = '&#x271A;&nbsp;Cart';
@@ -550,7 +560,7 @@ function addToCart(type, id, button) {
                 // alert("Vehicle added to cart successfully!");
             } else {
                 // If pickup time is not provided, notify the user
-                alert("Please enter a time to meet guide before adding to the cart.");
+                showPopup('meetTimePopup');
                 // Reset the button state to Cart
                 button.style.backgroundColor = '#45a049';
                 button.innerHTML = '&#x271A;&nbsp;Cart';
@@ -572,6 +582,33 @@ function addToCart(type, id, button) {
       // Implement the logic to add/remove the item to/from the cart here
   }
 }
+function showAddedCartNotification() {
+  var notification = document.getElementById('cartNotification');
+  notification.style.display = 'block'; // Show notification
+
+  // Hide notification after 3 seconds (adjust as needed)
+  setTimeout(function() {
+      notification.style.display = 'none'; // Hide notification
+  }, 3000); // 3 seconds
+}
+function showRemovedCartNotification() {
+  var notification = document.getElementById('removecartNotification');
+  notification.style.display = 'block'; // Show notification
+
+  // Hide notification after 3 seconds (adjust as needed)
+  setTimeout(function() {
+      notification.style.display = 'none'; // Hide notification
+  }, 3000); // 3 seconds
+}
+function cartisEmpty() {
+  var notificationE = document.getElementById('cartIsEmptyNotification');
+  notificationE.style.display = 'block'; // Show notification
+
+  // Hide notification after 3 seconds (adjust as needed)
+  setTimeout(function() {
+    notificationE.style.display = 'none'; // Hide notification
+  }, 3000); // 3 seconds
+}
 
 function addToCartBackend(type, id, add) {
   // Simulated cart storage
@@ -584,6 +621,7 @@ function addToCartBackend(type, id, add) {
       }
       cart[type].push(id);
       console.log('Adding item to cart:', type, id);
+      showAddedCartNotification() 
   } else {
       // Remove item from cart
       if (cart[type]) {
@@ -591,12 +629,14 @@ function addToCartBackend(type, id, add) {
           if (index !== -1) {
               cart[type].splice(index, 1);
               console.log('Removing item from cart:', type, id);
+              showRemovedCartNotification()
           }
       }
   }
 
   // Update localStorage with the modified cart
   localStorage.setItem('cart', JSON.stringify(cart));
+  
 
   // // Toggle checkout button visibility
   // toggleCheckoutButton();
@@ -605,11 +645,14 @@ function addToCartBackend(type, id, add) {
 
     function continueToCheckoutAndRefresh() {
         // Call the original function to continue to checkout
-        continueToCheckout();
+        var reply=continueToCheckout();
         // Reload the page after a slight delay
-        setTimeout(function() {
+        if(reply){
+          setTimeout(function() {
             location.reload();
         }, 1000); // Adjust the delay time as needed
+        }
+        
     }
 
 
@@ -617,64 +660,67 @@ function addToCartBackend(type, id, add) {
 //continueToCheckout()
 //checkthis function cgeckindate and checkoutdate are wrongly printed in here
 function continueToCheckout() {
-    // Retrieve cart data from localStorage
-    var cartData = JSON.parse(localStorage.getItem('cart'));
-    var checkinDate = document.querySelector('.continue-button').getAttribute('data-checkin');
-    var checkoutDate = document.querySelector('.continue-button').getAttribute('data-checkout');
+  // Retrieve cart data from localStorage
+  var cartData = JSON.parse(localStorage.getItem('cart'));
+  var checkinDate = document.querySelector('.continue-button').getAttribute('data-checkin');
+  var checkoutDate = document.querySelector('.continue-button').getAttribute('data-checkout');
 
-    // Print cart data in console
-    console.log('checkinDate:', checkinDate);
-    console.log('checkoutDate:', checkoutDate);
+  // Print cart data in console
+  console.log('checkinDate:', checkinDate);
+  console.log('checkoutDate:', checkoutDate);
 
-    // Check if cartData is not null
-    if (cartData) {
-        // Iterate over each type in the cart
-        Object.keys(cartData).forEach(function (type) {
-            // Print type of item
-            console.log('Type:', type);
+  // Check if cartData is not null
+  if (cartData) {
+    // Iterate over each type in the cart
+    Object.keys(cartData).forEach(function(type) {
+      // Print type of item
+      console.log('Type:', type);
 
-            // Check if cartData[type] is an array
-            if (Array.isArray(cartData[type])) {
-                // Print each item ID in the type
-                cartData[type].forEach(function (id) {
-                    console.log('ID:', id);
-                    // You can retrieve additional details of the item from your data source and print them here
-                });
-            } else {
-                console.log('Invalid data format for type', type);
-            }
+      // Check if cartData[type] is an array
+      if (Array.isArray(cartData[type])) {
+        // Print each item ID in the type
+        cartData[type].forEach(function(id) {
+          console.log('ID:', id);
+          // You can retrieve additional details of the item from your data source and print them here
         });
-    } else {
-        console.log('Cart is empty.');
-    }
+      } else {
+        console.log('Invalid data format for type', type);
+      }
+    });
 
     // Retrieve pickupTime value
     var pickupTime = document.getElementById('pickupTime').value;
     var meetTime = document.getElementById('meetTime').value;
 
-   // Check if the pickup time and/or meet time have values
-   if (pickupTime && !meetTime) {
-    // If only pickup time is provided, append pickupTime to the URL parameters
-    var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
-    window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}/${pickupTime}`, '_blank');
-  } else if (!pickupTime && meetTime) {
-    // If only meet time is provided, append meetTime to the URL parameters
-    var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
-    window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}/null/${meetTime}`, '_blank');
-  } else if (pickupTime && meetTime) {
-    // If both pickup time and meet time are provided, append both to the URL parameters
-    var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
-    window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}/${pickupTime}/${meetTime}`, '_blank');
-  } else {
-    // If neither pickup time nor meet time is provided, exclude them from the URL parameters
-    var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
-    window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}`, '_blank');
-  }
-  
-
+    // Check if the pickup time and/or meet time have values
+    if (pickupTime && !meetTime) {
+      // If only pickup time is provided, append pickupTime to the URL parameters
+      var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
+      window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}/${pickupTime}`, '_blank');
+    } else if (!pickupTime && meetTime) {
+      // If only meet time is provided, append meetTime to the URL parameters
+      var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
+      window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}/null/${meetTime}`, '_blank');
+    } else if (pickupTime && meetTime) {
+      // If both pickup time and meet time are provided, append both to the URL parameters
+      var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
+      window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}/${pickupTime}/${meetTime}`, '_blank');
+    } else {
+      // If neither pickup time nor meet time is provided, exclude them from the URL parameters
+      var encodedCartData = encodeURIComponent(JSON.stringify(cartData));
+      window.open(`bookingcart/${encodedCartData}/${checkinDate}/${checkoutDate}`, '_blank');
+    }
 
     // Clear the cart after checkout
     localStorage.removeItem('cart');
+    return true;
+  } else {
+    // Cart is empty, show alert
+    //alert('Your cart is empty. Please add items before proceeding to checkout.');
+    cartisEmpty();
+    return false;
+    
+  }
 }
 
 ///////////
@@ -717,87 +763,6 @@ window.onclick = function(event) {
     closeModal();
   }
 };
-
-
-
-// ////////////locations suggestion///////////////
-// // JavaScript for autocomplete functionality
-// document.addEventListener("DOMContentLoaded", function() {
-//     const locationInput = document.getElementById("location-input");
-
-//     // Event listener for input changes
-//     locationInput.addEventListener("input", function() {
-//         const inputValue = this.value.trim();
-
-//         // Make AJAX request to fetch location suggestions
-//         if (inputValue.length > 0) {
-//             fetchLocations(inputValue);
-//         } else {
-//             // Clear previous suggestions if input is empty
-//             clearSuggestions();
-//         }
-//     });
-
-//     // Function to fetch location suggestions from the server
-//     function fetchLocations(query) {
-//         // Construct the URL for the AJAX request
-//         const url = 'http://localhost/TravelEase/loggedTraveler/suggestLocations?query=' + query;
-
-//         // Make AJAX request to the server
-//         fetch(url)
-//             .then(response => response.json())
-//             .then(data => {
-//                 // Display the suggestions in a dropdown menu
-//                 displaySuggestions(data);
-//             })
-//             .catch(error => console.error('Error fetching locations:', error));
-//     }
-
-//     // Function to display location suggestions
-//     function displaySuggestions(locations) {
-//       const suggestionsContainer = document.getElementById("suggestions-container");
-//       suggestionsContainer.innerHTML = ""; // Clear previous suggestions
-  
-//       locations.forEach(location => {
-//           const suggestionDiv = document.createElement("div");
-//           suggestionDiv.textContent = location.city; // Assuming each location object has a 'city' property
-//           suggestionDiv.classList.add("suggestion");
-//           suggestionDiv.addEventListener("click", () => {
-//               // Handle click event when a suggestion is selected
-//               document.getElementById("location-input").value = location.city; // Update the input field value with the selected suggestion
-//               suggestionsContainer.innerHTML = ""; // Clear suggestions after selection
-//           });
-//           suggestionsContainer.appendChild(suggestionDiv);
-//       });
-  
-//       // Show the suggestions container
-//       suggestionsContainer.style.display = "block";
-//   }
-  
-  
-
-//     // Function to clear previous suggestions
-//     function clearSuggestions() {
-//         // Implement code to clear any previous suggestions from the dropdown menu
-//     }
-// });
-
-
-///////////api location suggestion////////////
-// document.addEventListener("DOMContentLoaded", function() {
-//     const locationInput = document.getElementById("location-input");
-//     const autocomplete = new google.maps.places.Autocomplete(locationInput);
-
-//     // Listen for place selection
-//     autocomplete.addListener("place_changed", function() {
-//         const place = autocomplete.getPlace();
-//         // You can access the selected place details here
-//         console.log("Selected Place:", place);
-//     });
-// });
-
-///////////////////////
-
 
 //////////////////
 /////////////

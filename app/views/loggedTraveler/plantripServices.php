@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADD6_nBEr9ZJd44sKcqr0dj-JRvbt5ogo&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&callback=initMap" async defer></script>
     <style>
         
         .modal {
@@ -63,7 +63,7 @@
         </div>
         <ul>
             <li><a href="<?php echo URLROOT?>loggedTraveler/index">Home</a></li>
-            <li><a href="<?php echo URLROOT?>loggedTraveler/hotel" id="selected">Hotels</a></li>
+            <li><a href="<?php echo URLROOT?>loggedTraveler/hotel">Hotels</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
             <div class="rightcontent">
@@ -96,34 +96,46 @@
     // Initialize and add the map
     function initMap() {
         // The location of your initial map center
-        // var myLatLng = { lat: 6.0328, lng: 80.2170 };
-        var myLatLng = { lat: <?php echo $data['city']->lat?>, lng: <?php echo $data['city']->lng?> };
+        var myLatLng = { lat: <?php echo $data['city']->lat ?>, lng: <?php echo $data['city']->lng ?> };
         
-        // Define an array to store all the marker positions
-        // var markerPositions = [
-        //     <?php //foreach ($data['places'] as $place): ?>
-        //         {lat: <?php //echo $place->latitude; ?>, lng: <?php// echo $place->longitude; ?>},
-        //     <?php //endforeach; ?>
-        // ];
         // Create a map object and specify the DOM element for display.
         var map = new google.maps.Map(document.getElementById('map'), {
             center: myLatLng,
             zoom: 15 // Adjust the initial zoom level as needed
         });
 
-        // Create a marker and set its position.
-        var marker = new google.maps.Marker({
-            map: map,
-            position: myLatLng,
-            title: 'Hello World!'
+        // Define an array to store all the places
+        var places = [
+            <?php foreach ($data['places'] as $place): ?>
+                '<?php echo $place->place_name ?>',
+            <?php endforeach; ?>
+        ];
+
+        // Geocode each place and create markers
+        places.forEach(function(place) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'address': place + ', Sri Lanka' }, function(results, status) {
+                if (status === 'OK') {
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location,
+                        title: place
+                    });
+
+                    // Create an infowindow for each marker
+                    var infowindow = new google.maps.InfoWindow({
+                        content: '<strong>' + place + '</strong><br>' + 'Description goes here' // Replace 'Description goes here' with actual descriptions if available
+                    });
+
+                    // Add click event listener to show infowindow on marker click
+                    marker.addListener('click', function() {
+                        infowindow.open(map, marker);
+                    });
+                } else {
+                    console.error('Geocode was not successful for the following reason: ' + status);
+                }
+            });
         });
-        // markerPositions.forEach(function(position) {
-        //     var marker = new google.maps.Marker({
-        //         position: position,
-        //         map: map,
-        //         title: 'Hello World!' // You can set the title of the marker if needed
-        //     });
-        // });
     }
 </script>
 
@@ -133,7 +145,8 @@
         <div class="Buttons">
             <a href="#B1"><button>what to do</button></a>
             <a href="#B2"><button>where to stay</button></a>
-            <a href="#B3"><button>how to go there</button></a>
+            <a href="#B3"><button>How to go there</button></a>
+            <a href="#B4"><button>Join with</button></a>
         </div>
     </section>
 
@@ -181,7 +194,7 @@
 </section>
 
 
-    <section class="main2" id="S1">
+     <section class="main2" id="B2"> <!--id="S1" -->
         <h1 class="ResultTopics">Top Places to Stay</h1>
         <?php if (!empty($data['hotelrooms']) && is_array($data['hotelrooms'])): ?>
             <div class="main2images" id="div1">
@@ -310,7 +323,7 @@
 
     
 </section>
-<section class="main2" id="S1">
+<section class="main2" id="B4">
         <h1 class="ResultTopics">Get Guidance from</h1>
         <div class="pickupTimeField">
         <label for="meetTime">Meet Time:</label>
@@ -323,7 +336,7 @@
         <div><img src="<?php echo URLROOT ?>images/<?php echo $guide->image; ?>" alt=""></div>
         <div class="c1">
             <div>
-                <p style="font-size: 30px; margin: 0px; font-weight: bold;"><?php echo ($hotelroom ? $guide->fname . ' ' . $hotelroom->lname : ' '); ?></p>
+                <p style="font-size: 30px; margin: 0px; font-weight: bold;"><?php echo ($guide ? $guide->fname . ' ' . $guide->lname : ' '); ?></p>
                 <p><?php echo $guide->category ?>&nbsp;guide</p>
                 <!-- <p><?php echo $hotelroom->ratings->rating ?></p> -->
                 <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
@@ -391,8 +404,16 @@
     </div>
 </div> -->
 
+<!-- Notification Element -->
+<div id="cartNotification" class="cart-notification">Item added to cart!</div>
+<div id="removecartNotification" class="cart-notification">Item removed from the cart!</div>
+<!-- Vehicle Pickup Time Popup -->
+<div id="pickupTimePopup" class="popup">Please enter a pickup time.</div>
 
-
+<!-- Guide Meet Time Popup -->
+<div id="meetTimePopup" class="popup">Please enter a time to meet the guide.</div>
+<!-- cartIsEmptyNotification -->
+<div id="cartIsEmptyNotification" class="popup1">Your cart is empty. Please add items before proceeding to checkout.</div>
 
 <br><br><br>
 
@@ -418,6 +439,7 @@
         &copy; 2023 Your Company Name. All rights reserved.
     </div>
 </div>
+
 
 
 

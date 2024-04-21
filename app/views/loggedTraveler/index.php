@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-NwdoN0yM5JcJJ4jX1KvJXrQhQ+6RMo3hV3brvytgePvVzSlc3PjMFbpL5T+VUAq7" crossorigin="anonymous">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&libraries=places"></script>
 
 
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADD6_nBEr9ZJd44sKcqr0dj-JRvbt5ogo&libraries=places"></script> -->
@@ -268,18 +269,31 @@ window.onclick = function(event) {
 
         </script>
         <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const locationInput = document.getElementById("location-input");
-        const autocomplete = new google.maps.places.Autocomplete(locationInput);
+        document.addEventListener("DOMContentLoaded", function() {
+            const locationInput = document.getElementById("location-input");
+            const options = {
+                types: ['(cities)'],
+                componentRestrictions: { country: 'LK' } // Restrict to Sri Lanka (LK)
+            };
+            const autocomplete = new google.maps.places.Autocomplete(locationInput, options);
 
-        // Listen for place selection
-        autocomplete.addListener("place_changed", function() {
-            const place = autocomplete.getPlace();
-            // Log the selected place details for debugging
-            console.log("Selected Place:", place);
+            // Listen for place selection
+            autocomplete.addListener("place_changed", function() {
+                const place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    console.error("Place selection failed:", place);
+                    return;
+                }
+                // Extract city name without country
+                const city = place.address_components.find(component => {
+                    return component.types.includes("locality");
+                });
+                if (city) {
+                    locationInput.value = city.long_name;
+                }
+            });
         });
-    });
-</script>
+    </script>
 
     </section>
   

@@ -192,7 +192,7 @@
                             <?php
                                 $date1 = strtotime($data1['checkinDate']);
                                 $date2 = strtotime($data1['checkoutDate']);
-                                $diffTime = abs($date2 - $date1) + (60 * 60 * 24);
+                                $diffTime = abs($date2 - $date1) ;
                                 $daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
                                 $tot = $daysD * $data1['furtherBookingDetails']->price;
                             ?>
@@ -234,7 +234,7 @@ foreach ($data['resultArray'] as $bookingData):
     } elseif ($bookingData['type'] == 3) {
         $date1 = strtotime($bookingData['checkinDate']);
         $date2 = strtotime($bookingData['checkoutDate']);
-        $diffTime = abs($date2 - $date1) + (60 * 60 * 24);
+        $diffTime = abs($date2 - $date1);
         $daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
         $total += $daysD * $bookingData['furtherBookingDetails']->price;
     }elseif($bookingData['type'] == 5){
@@ -298,7 +298,7 @@ endforeach;
     <input type="hidden" name="driverType" id="driverTypeInput" value="">
     <div class="buttons">
         <button type="submit" class="payment-button">Make Payment</button>
-        <button type="submit" formaction="<?php echo URLROOT ?>loggedTraveler/addtocart/<?php echo urlencode(json_encode($data['bookingcartArray'])) . '/' .$data['checkinDate'].'/'.$data['checkoutDate'] . '/' . $data['pickupTime'] ?>" class="payment-button">Add to Cart</button>
+        <button type="submit" formaction="<?php echo URLROOT ?>loggedTraveler/addtocart/<?php echo urlencode(json_encode($data['bookingcartArray'])) . '/' .$data['checkinDate'].'/'.$data['checkoutDate'] . '/' . $data['pickupTime'] . '/' .$data1['meetTime']?>" class="payment-button">Add to Cart</button>
     </div>
 </form>
 

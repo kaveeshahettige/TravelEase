@@ -32,8 +32,8 @@
                 <span class="invalid-feedback"><?php echo $data['email_err']; ?></span>
                 
 
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" rows="4" required></textarea>
+                <!-- <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" required></textarea> -->
                 
 
             </div>
@@ -52,8 +52,8 @@
                 <input type="text" id="number" name="number" <?php echo (!empty($data['email_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['email']; ?>">
                 <span class="invalid-feedback"><?php echo $data['number_err']; ?></span>
 
-                <label for="allocatedRooms">Number of Allocated Rooms:</label>
-                <input type="number" id="allocatedRooms" name="allocatedRooms" required>
+                <!-- <label for="allocatedRooms">Number of Allocated Rooms:</label>
+                <input type="number" id="allocatedRooms" name="allocatedRooms" required> -->
 
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" <?php echo (!empty($data['password_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['password']; ?>">

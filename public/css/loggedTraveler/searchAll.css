@@ -528,6 +528,60 @@ font-size: 40px;
 
 /* /////////// */
 
+/* Notification CSS */
+#cartNotification {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #36923b;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#removecartNotification{
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #c33427;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Popup CSS */
+.popup {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #c33427;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.popup1 {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #b43327;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
 
 
 

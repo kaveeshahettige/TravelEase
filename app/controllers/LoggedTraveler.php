@@ -1012,6 +1012,7 @@ public function plantrip(){
 $ratings = [];
 
 // Iterate through each hotel
+if (is_array($hotels)) {
 foreach ($hotels as $hotel) {
     // Fetch ratings for the current hotel
     $roomRatings = $this->userModel->getRatingsOfRooms($hotel->room_id);
@@ -1019,16 +1020,20 @@ foreach ($hotels as $hotel) {
     // Store ratings in the ratings array with hotel id as key
     $ratings[$hotel->room_id] = $roomRatings;
 }
+}
 
+if (is_array($hotels)) {
 // Iterate through each hotel again to add ratings to the hotel data
 foreach ($hotels as &$hotel) {
     // Add ratings to the hotel data
     $hotel->ratings = isset($ratings[$hotel->room_id]) ? $ratings[$hotel->room_id] : null;
 }
+}
 ////////////////
 // Initialize an empty array to store ratings for each vehicle
 $vratings = [];
 
+if (is_array($vehicles)) {
 // Iterate through each hotel
 foreach ($vehicles as $vehicle) {
     // Fetch ratings for the current hotel
@@ -1037,11 +1042,14 @@ foreach ($vehicles as $vehicle) {
     // Store ratings in the ratings array with hotel id as key
     $vratings[$vehicle->vehicle_id] = $vehicleRatings;
 }
+}
 
+if (is_array($vehicles)) {
 // Iterate through each hotel again to add ratings to the vehcle data
 foreach ($vehicles as &$vehicle) {
     // Add ratings to the vehicle data
     $vehicle->vratings = isset($vratings[$vehicle->vehicle_id]) ? $vratings[$vehicle->vehicle_id] : null;
+}
 }
 
 /////////
@@ -1049,6 +1057,7 @@ foreach ($vehicles as &$vehicle) {
 // Initialize an empty array to store ratings for each vehicle
 $gratings = [];
 
+if (is_array($guides)) {
 // Iterate through each hotel
 foreach ($guides as $guide) {
     // Fetch ratings for the current hotel
@@ -1057,13 +1066,15 @@ foreach ($guides as $guide) {
     // Store ratings in the ratings array with hotel id as key
     $gratings[$guide->user_id] = $guideRatings;
 }
+}
 
+if (is_array($guides)) {
 // Iterate through each hotel again to add ratings to the vehcle data
 foreach ($guides as &$guide) {
     // Add ratings to the vehicle data
     $guide->gratings = isset($gratings[$guide->user_id]) ? $gratings[$guide->user_id] : null;
 }
-
+}
 /////////
 
 if ($vehicles) {
@@ -1096,6 +1107,7 @@ foreach ($vehicles as $vehicle) {
         'checkinDate' => $checkinDate,
         'checkoutDate' => $checkoutDate,
         'guides'=>$guides,
+        
     ];
     $this->view('loggedTraveler/plantripServices', $data);
     exit; 
@@ -1169,6 +1181,7 @@ foreach ($vehicles as $vehicle) {
       $hotels = $this->userModel->findAvailableHotelRooms($location, $checkinDate, $checkoutDate);
       $vehicles = $this->userModel->findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate);
       //$packages = $this->userModel->findPackages($location);
+      $guides=$this->userModel->findGuidesByLocation($location);
 
 
       $vehiclePrices = []; // Array to hold prices for each vehicle
@@ -1256,6 +1269,7 @@ foreach ($vehicles as $vehicle) {
           'location' => $location,
           'checkinDate' => $checkinDate,
           'checkoutDate' => $checkoutDate,
+          'guides'=>$guides,
       ];
       $this->view('loggedTraveler/serachAllServices', $data);
       exit; // Ensure that script execution stops after loading the view
@@ -1476,7 +1490,7 @@ public function cartpaymentSuccessful() {
   }
 }
 //addtocart
-public function addtocart($bookingcartArrayString, $checkinDate, $checkoutDate, $pickupTime=null) {
+public function addtocart($bookingcartArrayString, $checkinDate, $checkoutDate, $pickupTime=null, $meetTime=null) {
   $bookingcartArray = json_decode(urldecode($bookingcartArrayString), true);
   
 
@@ -1520,6 +1534,7 @@ foreach ($bookingcartArray as $type => $serviceIds) {
       'price' => $totalAmount,
       'furtherBookingDetails' => $furtherBookingDetails,
       'driver' => $driver,
+      'meetTime' => $meetTime ? $meetTime : null,
       
       // Add any other relevant transaction details
   ];

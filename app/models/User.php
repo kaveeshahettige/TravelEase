@@ -347,12 +347,12 @@ public function registerHotel($data){
     if($this->db->execute()){
         $user_id = $this->db->lastInsertId();
          var_dump($data);
-         $this->db->query('INSERT INTO hotel (user_id, hotel_type, description, `add`, no_rooms) VALUES (:id, :hoteltype, :description, :address, :norooms)');
+         $this->db->query('INSERT INTO hotel (user_id, hotel_type, `add`) VALUES (:id, :hoteltype, :address)');
 
          $this->db->bind(':hoteltype', $data['hoteltype']);
-         $this->db->bind(':description', $data['description']);
+        //  $this->db->bind(':description', $data['description']);
          $this->db->bind(':address', $data['address']); // Change the binding to :address
-         $this->db->bind(':norooms', $data['norooms']);
+        //  $this->db->bind(':norooms', $data['norooms']);
          $this->db->bind(':id', $user_id);
          
 
@@ -975,14 +975,15 @@ foreach ($transactionData['furtherBookingDetails'] as $bookingDetail) {
         $this->db->bind(':pickupTime', $transactionData['pickupTime']);
 
     } elseif ($bookingDetail->type == 5) {
-        $this->db->query('INSERT INTO cart (cartbooking_id,user_id, serviceProvider_id, startDate, endDate, package_id) VALUES (:cartbooking_id,:user_id, :serviceProvider_id, :startDate, :endDate, :package_id)');
+        $this->db->query('INSERT INTO cart (cartbooking_id,user_id, serviceProvider_id, startDate, endDate, package_id,meetTime) VALUES (:cartbooking_id,:user_id, :serviceProvider_id, :startDate, :endDate, :package_id,:meetTime)');
         
         $this->db->bind(':cartbooking_id', $cartbooking_id);
         $this->db->bind(':user_id', $transactionData['user']->id);
-        $this->db->bind(':serviceProvider_id', $bookingDetail->id);
+        $this->db->bind(':serviceProvider_id', $bookingDetail->user_id);
         $this->db->bind(':startDate', $currentDate);
         $this->db->bind(':endDate', $currentDate);
-        $this->db->bind(':package_id', $bookingDetail->package_id);
+        $this->db->bind(':package_id', $bookingDetail->user_id);
+        $this->db->bind(':meetTime', $transactionData['meetTime']);
     }
     
     // Execute the query for the current iteration

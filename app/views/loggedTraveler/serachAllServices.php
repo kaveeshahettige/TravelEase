@@ -10,8 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADD6_nBEr9ZJd44sKcqr0dj-JRvbt5ogo&callback=initMap" async defer></script>
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&callback=initMap" async defer></script>
     
     <style>
     /* Your CSS styles here */
@@ -60,46 +59,58 @@
     // Initialize and add the map
     function initMap() {
         // The location of your initial map center
-        // var myLatLng = { lat: 6.0328, lng: 80.2170 };
-        var myLatLng = { lat: <?php echo $data['city']->lat?>, lng: <?php echo $data['city']->lng?> };
+        var myLatLng = { lat: <?php echo $data['city']->lat ?>, lng: <?php echo $data['city']->lng ?> };
         
-        // Define an array to store all the marker positions
-        // var markerPositions = [
-        //     <?php //foreach ($data['places'] as $place): ?>
-        //         {lat: <?php //echo $place->latitude; ?>, lng: <?php// echo $place->longitude; ?>},
-        //     <?php //endforeach; ?>
-        // ];
         // Create a map object and specify the DOM element for display.
         var map = new google.maps.Map(document.getElementById('map'), {
             center: myLatLng,
             zoom: 15 // Adjust the initial zoom level as needed
         });
 
-        // Create a marker and set its position.
-        var marker = new google.maps.Marker({
-            map: map,
-            position: myLatLng,
-            title: 'Hello World!'
+        // Define an array to store all the places
+        var places = [
+            <?php foreach ($data['places'] as $place): ?>
+                '<?php echo $place->place_name ?>',
+            <?php endforeach; ?>
+        ];
+
+        // Geocode each place and create markers
+        places.forEach(function(place) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'address': place + ', Sri Lanka' }, function(results, status) {
+                if (status === 'OK') {
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location,
+                        title: place
+                    });
+
+                    // Create an infowindow for each marker
+                    var infowindow = new google.maps.InfoWindow({
+                        content: '<strong>' + place + '</strong><br>' + 'Description goes here' // Replace 'Description goes here' with actual descriptions if available
+                    });
+
+                    // Add click event listener to show infowindow on marker click
+                    marker.addListener('click', function() {
+                        infowindow.open(map, marker);
+                    });
+                } else {
+                    console.error('Geocode was not successful for the following reason: ' + status);
+                }
+            });
         });
-        // markerPositions.forEach(function(position) {
-        //     var marker = new google.maps.Marker({
-        //         position: position,
-        //         map: map,
-        //         title: 'Hello World!' // You can set the title of the marker if needed
-        //     });
-        // });
     }
 </script>
-
-        <!-- -------------- -->
+       <!-- -------------- -->
 
     </section>
 
     <section class="resultsPage1_1">
         <div class="Buttons">
-            <a href="#B1"><button>what to do</button></a>
+        <a href="#B1"><button>what to do</button></a>
             <a href="#B2"><button>where to stay</button></a>
-            <a href="#B3"><button>how to go there</button></a>
+            <a href="#B3"><button>How to go there</button></a>
+            <a href="#B4"><button>Join with</button></a>
         </div>
     </section>
 
@@ -144,7 +155,7 @@
     </div>
 </section>
 
-    <section class="main2" id="S1">
+    <section class="main2" id="B2">
         <h1 class="ResultTopics">Top Places to Stay</h1>
         <?php if (!empty($data['hotelrooms']) && is_array($data['hotelrooms'])): ?>
             <div class="main2images" id="div1">
@@ -177,7 +188,7 @@
         ?>
     </div>
                 </div>
-                <div><button class="view-button" onclick="booking(3, '<?php echo $hotelroom->room_id; ?>', '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">View</button></div>
+                <div><button class="view-button" onclick="booking(3, '<?php echo $hotelroom->room_id; ?>', '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">&rarr; View</button></div>
             </div>
         </div>
     <?php endforeach; ?>
@@ -236,7 +247,7 @@
                     <div>Price : <strong><?php echo $data['vehiclePrices'][$vehicle->vehicle_id]; ?> LkR</strong></div>
                 </div>
                 <div class="vehicleBookButton"> 
-                    <button onclick="booking(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">Book now</button>
+                    <button onclick="booking(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">&rarr; View</button>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -245,7 +256,71 @@
 <?php endif; ?>
     </div>
 </section>
-<br><br><br>
+<section class="main2" id="B4">
+        <h1 class="ResultTopics">Get Guidance from</h1>
+        <div class="pickupTimeField">
+        <label for="meetTime">Meet Time:</label>
+        <input type="time" id="meetTime" name="meetTime">
+    </div>
+        <?php if (!empty($data['guides']) && is_array($data['guides'])): ?>
+            <div class="main2images" id="div1">
+            <?php foreach ($data['guides'] as $guide): ?>
+    <div class="main2img1content">
+        <div><img src="<?php echo URLROOT ?>images/<?php echo $guide->image; ?>" alt=""></div>
+        <div class="c1">
+            <div>
+                <p style="font-size: 30px; margin: 0px; font-weight: bold;"><?php echo ($guide ? $guide->fname . ' ' . $guide->lname : ' '); ?></p>
+                <p><?php echo $guide->category ?>&nbsp;guide</p>
+                <!-- <p><?php echo $hotelroom->ratings->rating ?></p> -->
+                <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+       // Extract the rating value from the ratings object
+       $rating = isset($guide->ratings->rating) ? $guide->ratings->rating : 0;
+                    
+       // Round the rating value
+       $filled_stars = $rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
+
+                <!-- Add to Cart button -->
+                
+            </div>
+            
+            <div>
+                <button style="margin-top: 10px; margin-bottom: 10px;" class="view-button" onclick="booking(5, '<?php echo $guide->user_id; ?>', '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">
+                &rarr; View
+                </button>
+               
+            </div>
+        </div>
+    </div>
+<?php endforeach; ?>
+
+
+</div>
+<?php elseif (empty($data['hotels'])): ?>
+    <p>No guides available Right Now</p>
+<?php else: ?>
+    <p>Error retrieving guide data.</p>
+<?php endif; ?>
+<!-- Vehicle Pickup Time Popup -->
+<div id="pickupTimePopup" class="popup">Please enter a pickup time.</div>
+
+<!-- Guide Meet Time Popup -->
+<div id="meetTimePopup" class="popup">Please enter a time to meet the guide.</div>
+
+</section>
 
 <div class="footer">
     <div class="contact-info">
