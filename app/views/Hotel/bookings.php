@@ -130,7 +130,7 @@ $userData= $data['basicInfo']['userData'];
                     <th>Room Number</th>
                     <th>Room Type</th>
                     <th>Booking Status</th>
-                    <th>Action</th>
+                    <th>Action</th>p
                 </tr>
                 </thead>
                 <tbody>
@@ -152,7 +152,6 @@ $userData= $data['basicInfo']['userData'];
                             <button class="view-button" onclick="openPopup(); updatePopupDetails('<?php echo $booking->profile_picture; ?>','<?php echo $booking->fname; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->roomType; ?>')">
                                 <i class='bx bx-show'></i>
                             </button>
-
 
                             <button class="cancel-button" <?php if ($booking->bookingCondition === 'cancelled') echo 'disabled'; ?> onclick="showCancelPopup(<?php echo $booking->room_id; ?>, <?php echo $booking->user_id; ?>, '<?php echo $booking->booking_id; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->endDate; ?>', <?php echo $booking->temporyid; ?>, '<?php echo $booking->roomType; ?>')">
                                 <i class='bx bx-x'></i>

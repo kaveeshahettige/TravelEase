@@ -108,7 +108,7 @@ include 'navigation.php';
                         $bookingData = $data["bookingData"];
                         $rowCount = 0;
                         foreach ($bookingData as $key => $booking):
-                            if ($rowCount >= 4) break; // Limit to 4 rows
+                            if ($rowCount >= 3) break; // Limit to 4 rows
                             ?>
                             <tr>
                                 <td><?php echo $booking->fname; ?></td>

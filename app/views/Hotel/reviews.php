@@ -100,23 +100,34 @@ include 'navigation.php';
 
 
 
-        <<div class="review-content">
+        <div class="review-content">
             <?php
             $reviews = $data["reviews"];
             foreach ($reviews as $review): ?>
                 <div class="review-box">
+                    <div class="review-image">
+                        <img src="<?php echo $review->user_profile_picture ? URLROOT . '/images/' . $review->user_profile_picture : URLROOT . '/images/hotel/wikum.jpg'; ?>" alt="User Photo">
+                    </div>
                     <div class="review-sub-content">
-                        <div class="review-image">
-                            <img src="<?php echo $review->user_profile_picture; ?>" alt="User Photo">
-                        </div>
                         <h2><?= $review->user_fname; ?></h2>
-                        <p>Date: <?= $review->time; ?></p>
                         <p class="review-text"><?= $review->feedback; ?></p>
-                        <button class="read-more-btn" onclick="openModal('<?= $review->user_fname; ?>', '<?= $review->time; ?>', '<?= $review->feedback; ?>')">Read More</button>
+                        <p>Rating: <?= getStarRating($review->rating); ?></p>
+                        <p>Date: <?= $review->time; ?></p>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
+
+        <?php
+        function getStarRating($rating) {
+            $stars = '';
+            for ($i = 0; $i < $rating; $i++) {
+                $stars .= '<i class="bx bxs-star"></i>';
+            }
+            return $stars;
+        }
+        ?>
+
 
 
 

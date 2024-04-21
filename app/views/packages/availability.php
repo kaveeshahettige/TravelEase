@@ -40,8 +40,8 @@ include 'navigation.php';
         <div id="base">
             <h3 style="padding-left:20px;">Update Availability</h3>
             <div id="form">
-                    <p>Confirm your Availability on:<?php echo $data['date']; ?> </p>
-                    <p>
+                <p style="margin-left: 20px;">Confirm your Availability on:<?php echo $data['date']; ?> </p>
+                <p style="margin-left: 20px;">
                         <?php if ($data['availability']) : ?>
                             Unavailable
                         <?php else : ?>
@@ -49,8 +49,8 @@ include 'navigation.php';
                         <?php endif; ?>
                     </p>
 
-                    <button class="available-button" onclick="updateStatus (<?php echo $_SESSION['user_id']; ?> , '<?php echo $data['date']; ?>')">Available</button>
-                    <button class="unavailable-button" onclick="deleteStatus(<?php echo $_SESSION['user_id']; ?> , '<?php echo $data['date']; ?>')">Unavailable</button>
+                    <button  style="margin-left: 20px;" class="available-button" onclick="updateStatus (<?php echo $_SESSION['user_id']; ?> , '<?php echo $data['date']; ?>')">Unavailable</button>
+                    <button  style="margin-left: 20px;" class="unavailable-button" onclick="deleteStatus(<?php echo $_SESSION['user_id']; ?> , '<?php echo $data['date']; ?>')">Available</button>
 
             </div>
         </div>

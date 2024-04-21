@@ -42,7 +42,7 @@ class Hotel extends Controller
         $guestCount = $this->getGuestCount();
 
         $data = [
-            'selectedDate' => 'null',
+            'selectedDate' => date('Y-m-d'),
             'basicInfo' => $this->basicInfo(),
             'bookingsCount'=> $bookingsCount,
             'roomCount' => $roomCount,
@@ -54,17 +54,20 @@ class Hotel extends Controller
 
     public function availablerooms()
     {
-        $startDate = null;
+        $startDate = date('Y-m-d');
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             // Retrieve the date from the query parameters
-            $startDate = isset($_GET['date']) ? $_GET['date'] : null;
+            $startDate = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
 
             if (empty($startDate)) {
                 flash('error', 'Please select a date.');
                 redirect('hotel/calender');
             }
         }
+
+
+
 
         // Get the hotel ID for the logged-in user
         $user_id = $_SESSION['user_id'];
@@ -836,24 +839,31 @@ class Hotel extends Controller
         $userId = $_SESSION['user_id'];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $targetDir = "../public/uploads/service_validations/";
-            $targetFile = $targetDir . basename($_FILES['service-validation-pdf']['name']);
+            $targetDir = '../public/documents/';
+            $fileName = basename($_FILES['service-validation-pdf']['name']); // Extract the filename
+
+            $targetFile = $targetDir . $fileName;
 
             // Move the uploaded file to the target directory
-            move_uploaded_file($_FILES['service-validation-pdf']['tmp_name'], $targetFile);
-
-            // Call the model to insert the PDF information into the database
-            if ($this->hotelsModel->insertPdf($targetFile, $userId)) {
-                // Success - You can redirect or show a success message
-                flash('success', 'PDF submitted successfully');
-                redirect('hotel/settings');
+            if (move_uploaded_file($_FILES['service-validation-pdf']['tmp_name'], $targetFile)) {
+                // Call the model to insert the filename into the database
+                if ($this->hotelsModel->insertPdf($fileName, $userId)) {
+                    // Success - You can redirect or show a success message
+                    flash('success', 'PDF submitted successfully');
+                    redirect('hotel/settings');
+                } else {
+                    // Error - You can redirect or show an error message
+                    flash('error', 'Failed to submit PDF');
+                    redirect('hotel/settings');
+                }
             } else {
-                // Error - You can redirect or show an error message
-                flash('error', 'Failed to submit PDF');
+                // Error handling for file upload failure
+                flash('error', 'Failed to upload PDF');
                 redirect('hotel/settings');
             }
         }
     }
+
 
     public function changeProfilePicture()
     {
@@ -984,6 +994,8 @@ class Hotel extends Controller
 
     }
 
+
+
     public function updateBookingStatus()
     {
         // Retrieve room_id, booking_id, and temporyid from the POST request
@@ -1012,13 +1024,34 @@ class Hotel extends Controller
         }
 
         // Construct the notification message
-        $notification_message = "$sender_name" . " has cancelled your booking with the booking details were for" . " $roomType" . " room from" . " $startDate". " to" ." $endDate." ." We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
+        $notification_message = "$sender_name" . " has cancelled your booking with the booking details were for" . " $roomType" . " room from" . " $startDate" . " to" . " $endDate." . " We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
 
         // Insert notification
         $notification_inserted = $this->hotelsModel->insertNotification($booking_id, $sender_id, $receiver_id, $notification_message);
 
+
+
+        require_once __DIR__ . '/../libraries/sms/vendor/autoload.php';
+
+        $basic  = new \Vonage\Client\Credentials\Basic("992a5e27", "YiQN3gXeYkIkfbcJ");
+        $client = new \Vonage\Client($basic);
+
+        $messageBody = "$sender_name has cancelled your booking with the booking details for $roomType room from $startDate to $endDate. We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
+
+        $response = $client->sms()->send(
+            new \Vonage\SMS\Message\SMS("94768968161", 'Travelease', $messageBody)
+        );
+
+        $message = $response->current();
+
+        if ($message->getStatus() == 0) {
+            echo "The message was sent successfully\n";
+        } else {
+            echo "The message failed with status: " . $message->getStatus() . "\n";
+        }
+
         // Return JSON response based on the result
-        if ($updated && $notification_inserted) {
+        if ($updated && $notification_inserted && $message->getStatus() == 0) {
             echo json_encode(['success' => true]);
         } else {
             echo json_encode(['success' => false]);
@@ -1027,4 +1060,10 @@ class Hotel extends Controller
 
 
 
+
+
+
 }
+
+
+

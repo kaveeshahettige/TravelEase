@@ -17,9 +17,13 @@ class Packages extends Controller
     public function index()
     {
         $userData = $this->getUserInfo();
+        $guideData = $this->updateGuideDetails($userData->id);
+        $bookings = $this->getBookings();
 
         $data = [
             'userData' => $userData,
+            'guideData' => $guideData,
+            'bookings' => $bookings,
         ];
 
         $this->view('packages/index', $data);
@@ -30,7 +34,7 @@ class Packages extends Controller
         $userData = $this->getUserInfo();
 
         $data=[
-            'selectedDate' => 'null',
+            'selectedDate' => date('Y-m-d'),
             'userData' => $userData,
         ];
 
@@ -39,7 +43,7 @@ class Packages extends Controller
 
     public function availability()
     {
-        $startDate =null;
+        $startDate = date('Y-m-d');
 
         if($_SERVER['REQUEST_METHOD'] == 'GET'){
 
@@ -47,7 +51,7 @@ class Packages extends Controller
 
             if (empty($startDate)) {
                 flash('error', 'Please select a date.');
-                redirect('pacakges/Calender');
+                redirect('packages/Calender');
             }
         }
 
@@ -82,16 +86,6 @@ class Packages extends Controller
         $this->view('packages/bookings',$data);
     }
 
-    public function gallery()
-    {
-        $userData = $this->getUserInfo();
-
-        $data = [
-            'userData' => $userData,
-        ];
-
-        $this->view('packages/gallery',$data);
-    }
 
     public function revenue()
     {
@@ -102,6 +96,20 @@ class Packages extends Controller
         ];
 
         $this->view('packages/revenue',$data);
+    }
+
+    public function notifications()
+    {
+
+        $notifications = $this->getNotifications();
+        $userData = $this->getUserInfo();
+
+        $data = [
+            'userData' => $userData,
+            'notifications' => $notifications,
+        ];
+
+        $this->view('packages/notifications',$data);
     }
 
     public function review()
@@ -120,9 +128,11 @@ class Packages extends Controller
     public function settings()
     {
         $userData = $this->getUserInfo();
+        $guideData = $this->updateGuideDetails($userData->id);
 
         $data = [
             'userData' => $userData,
+            'guideData' => $guideData,
         ];
 
         $this->view('packages/settings', $data);
@@ -155,9 +165,11 @@ class Packages extends Controller
     public function packagesedit()
     {
         $userData = $this->getUserInfo();
+        $guideData = $this->updateGuideDetails($userData->id);
 
         $data = [
             'userData' => $userData,
+            'guideData' => $guideData,
         ];
 
         $this->view('packages/packagesedit', $data);
@@ -316,6 +328,7 @@ class Packages extends Controller
     }
 
     public function getReviews(){
+
         $user_id = $_SESSION['user_id'];
 
         $reviews = $this->packagesModel->getReviews($user_id);
@@ -326,6 +339,141 @@ class Packages extends Controller
             return [];
     }
 
+    public function updateGuideDetails($user_id)
+    {
+        // Sanitize input
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Get form data
+            $guideData = [
+                'address' => $_POST['address'],
+                'pricePerDay' => $_POST['pricePerDay'],
+                'city' => $_POST['city'],
+                'province' => $_POST['province'],
+                'facebook' => $_POST['facebook'],
+                'instagram' => $_POST['instagram'],
+                'category' => $_POST['category'],
+                'languages' => isset($_POST['languages']) ? $_POST['languages'] : [],
+                'GuideRegNumber' => $_POST['GuideRegNumber'],
+                'LisenceExpDate' => $_POST['LisenceExpDate'],
+                'description' => $_POST['description'],
+                'sites' => $_POST['sites'],
+                'user_id' => $user_id,
+            ];
+
+            // Call the model method to update guide details
+            if ($this->packagesModel->updateGuideDetails($guideData)) {
+                // Details updated successfully
+                flash('success_message', 'Guide details updated successfully');
+                redirect('packages/packagesedit');
+            } else {
+                // Something went wrong with the update
+                flash('error_message', 'Failed to update hotel details');
+                redirect('packages/packagesedit');
+            }
+        } else {
+            // Retrieve existing guide data based on user_id
+            $guideData = $this->packagesModel->getGuideDetails($user_id);
+
+            // Check if guide data exists
+            if ($guideData) {
+                return $guideData;
+            } else {
+                // guide data not found for the given user ID
+                flash('error_message', 'Guide data not found for the given user ID');
+                redirect('packages/packagesedit');
+            }
+        }
+    }
+
+    public function updateBookingStatus(){
+
+        // Retrieve room_id, booking_id, and temporyid from the POST request
+        $sender_id = $_SESSION['user_id'];
+        $receiver_id = $_POST['user_id'];
+        $temporyid = $_POST['temporyid'];
+        $package_id = $_POST['package_id'];
+        $booking_id = $_POST['booking_id'];
+        $startDate = $_POST['startDate'];
+        $endDate = $_POST['endDate'];
+        $meetTime = $_POST['meetTime'];
+
+        $userData = $this->getUserInfo();
+        $sender_name = $userData->fname;
+
+        // Check if temporyid is 0
+        if ($temporyid == 0) {
+            // Call the model function to update the booking status
+            $updated = $this->packagesModel->updateBookingStatus($booking_id);
+        } elseif ($temporyid !== 1) {
+            // Handle the case where temporyid is 1
+            $updated = $this->packagesModel->updateCartBookingStatus($booking_id, $package_id);
+        } else {
+            // Handle the case where temporyid is neither 0 nor 1
+            $updated = $this->packagesModel->updateCartBookingStatus($booking_id, $package_id);
+        }
+
+        // Construct the notification message
+        $notification_message = "Tour Guide,"." $sender_name" . " has cancelled your booking with the booking details were for tour guide room from" . " $startDate". " to" ." $endDate." ." We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
+
+        // Insert notification
+        $notification_inserted = $this->packagesModel->insertNotification($booking_id, $sender_id, $receiver_id, $notification_message);
+
+        require_once __DIR__ . '/../libraries/sms/vendor/autoload.php';
+
+        $basic  = new \Vonage\Client\Credentials\Basic("992a5e27", "YiQN3gXeYkIkfbcJ");
+        $client = new \Vonage\Client($basic);
+
+        $messageBody = "Tour Guide,"." $sender_name" . " has cancelled your booking with the booking details were for tour guide room from" . " $startDate". " to" ." $endDate." ." We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
+
+        $response = $client->sms()->send(
+            new \Vonage\SMS\Message\SMS("94768968161", 'Travelease', $messageBody)
+        );
+
+        $message = $response->current();
+
+        if ($message->getStatus() == 0) {
+            echo "The message was sent successfully\n";
+        } else {
+            echo "The message failed with status: " . $message->getStatus() . "\n";
+        }
+
+        // Return JSON response based on the result
+        if ($updated && $notification_inserted && $message->getStatus() == 0) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false]);
+        }
+    }
+
+    public function getNotifications()
+    {
+        $user_id = $_SESSION['user_id'];
+
+        $notifications = $this->packagesModel->getNotifications($user_id);
+
+        if ($notifications)
+            return $notifications;
+        else
+            return [];
+    }
+
+    public function markNotificationAsRead()
+    {
+        // Retrieve notification_id from the POST request
+        $notification_id = $_POST['notification_id'];
+
+        // Call the model function to mark the notification as read
+        $marked = $this->packagesModel->markNotificationAsRead($notification_id);
+
+        // Return JSON response based on the result
+        if ($marked) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false]);
+        }
+    }
 
 
 }

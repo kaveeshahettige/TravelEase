@@ -47,6 +47,8 @@ include 'navigation.php';
 
                     <div class="hotel-details">
                             <h3><?=$_SESSION['user_fname']?></h3>
+                            <h6>Full Name</h6>
+                            <p><?= $_SESSION['user_fname'] ?></p>
                             <h6>Contact Number</h6>
                             <p><?=$_SESSION['user_number']?></p>
                             <h6>Email</h6>
@@ -100,7 +102,7 @@ include 'navigation.php';
 
                 <div class="rectangle">
                     <!-- Rectangle 1: Image Slideshow -->
-                    <img class="slideshow-image" src="<?php echo URLROOT?>/images/hotel/bm-01.jpg" alt="Image 1">
+                    <img class="slideshow-image" src="<?php echo URLROOT?>/images/hotel/dashboard.jpg" alt="Image 1">
                 </div>
 
                 <div class="rectangle">

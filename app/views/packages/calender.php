@@ -70,23 +70,19 @@ include 'navigation.php';
                 <div id="calendar-days" class="calendar-days"></div>
             </div>
 
-            <div class="booking-details">
-                <div class="date-info-container">
-                    <div id="selected-date"></div>
-                </div>
-            </div>
 
             <div class="availability-content" id="availability-content">
                 <div id="selected-date"></div>
-                <div id="availability-info"></div>
                 <div class="calendar-buttons">
                     <div class="calendar-buttons">
+
                         <form id="availabilityForm" action="<?php echo URLROOT; ?>packages/availability/.php" method="get" onsubmit="return validateForm()">
                             <input type="hidden" name="action" value="check_availability">
-                            <input type="hidden" name="date" id="selectedDate" value="<?php echo $selectedDate; ?>">
+                            <input type="hidden" name="date" id="selectedDate" value="<?php echo htmlspecialchars($data["selectedDate"]);?>">
                             <button type="submit" id="checkAvailabilityBtn" disabled>Check Availability</button>
                         </form>
                     </div>
+
                 </div>
             </div>
 

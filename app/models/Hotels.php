@@ -655,6 +655,8 @@ class Hotels
         return $this->db->execute();
     }
 
+    public function insertMessage(){
 
+    }
 
 }

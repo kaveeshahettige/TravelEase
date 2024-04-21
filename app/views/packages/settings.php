@@ -33,6 +33,7 @@ include 'navigation.php';
                 <div class="rectangle">
                     <?php
                         $userData = $data['userData'];
+                        $guideData = $data['guideData'];
                     ?>
                     <!-- Rectangle 1: Basic Info -->
                     <div class="basic-info-content">
@@ -47,7 +48,7 @@ include 'navigation.php';
                             <h6>Email</h6>
                             <p><?=($userData->email)?></p>
                             <h6>Location</h6>
-                            <!--                            <p>--><?php //echo $hotelData['add']; ?><!-- </p>-->
+                            <p><?=($guideData->address)?></p>
                         </div>
                         <a href="<?php echo URLROOT; ?>packages/packagesedit">
                             <button class="edit-button">Edit</button>
@@ -112,24 +113,6 @@ include 'navigation.php';
                     <img class="slideshow-image" src="<?php echo URLROOT?>/images/hotel/hotel-01.jpg" alt="Image 1">
                 </div>
 
-
-                <div class="rectangle">
-                    <!-- Rectangle 2: Rooms Allocated -->
-                    <div class="basic-info-content">
-                        <div class="hotel-details">
-                            <h2>Rooms Allocated</h2>
-                            <h6>No.of Rooms</h6>
-                            <?php
-                            $roomCount = $data;
-                            //                print_r($data);
-                            ?>
-                            <p><?php echo $roomCount['roomCount']; ?></p>
-                        </div>
-                        <a href="<?php echo URLROOT; ?>packages/addpackages">
-                            <button  class ="edit-button">Add</button>
-                        </a>
-                    </div>
-                </div>
 
                 <div class="rectangle">
                     <!-- Rectangle 3: Profile Deletion -->

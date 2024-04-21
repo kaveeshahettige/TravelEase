@@ -69,22 +69,22 @@ include 'navigation.php';
     <div class="review-content">
         <?php
         $reviews = $data["reviews"];
-        //           var_dump($reviews);
         foreach ($reviews as $review): ?>
             <div class="review-box">
                 <div class="review-sub-content">
                     <div class="review-image">
                         <!-- You may want to display the actual user image if available -->
-                        <img src="<?php echo URLROOT; ?>/images/hotel/wikum.jpg" alt="Guest Photo">
+                        <img src="<?php echo URLROOT; ?>/images/hotel/<?php echo $review->profile_picture; ?>" alt="Guest Photo">
                     </div>
-                    <h2><?= $review->fname; ?></h2>
-                    <!--                        <p>Date: --><?php //= $review->created_at; ?><!--</p>-->
-                    <p class="review-text"><?= $review->comment; ?></p>
-                    <button class="read-more-btn" onclick="openModal('<?= $review->fname; ?>', '<?= $review->created_at; ?>', '<?= $review->comment; ?>')">Read More</button>
+                    <h2><?php echo $review->fname; ?></h2>
+                    <p>Date: <?php echo $review->time; ?></p>
+                    <p class="review-text"><?php echo $review->feedback; ?></p>
+                    <button class="read-more-btn" onclick="openModal('<?php echo $review->fname; ?>', '<?php echo $review->created_at; ?>', '<?php echo $review->comment; ?>')">Read More</button>
                 </div>
             </div>
         <?php endforeach; ?>
     </div>
+
 
 
 

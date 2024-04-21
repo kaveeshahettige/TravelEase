@@ -65,38 +65,48 @@ include 'navigation.php';
             <table class="transaction-table">
                 <thead>
                 <tr>
-                    <th>Service Provider</th>
+                    <th>Service Provider Name</th>
+                    <th>Service Type</th>
                     <th>Total Amount</th>
                     <th>To Paid</th>
-                    <th>Booking Date</th>
+                    <th>Current Date</th>
                     <th>Account Number</th>
-                    <th>Payment Status</th>
+<!--                    <th>Payment Status</th>-->
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
                 $transactions = $data['transactionData'];
-                foreach ($transactions as $transaction): ?>
+                foreach ($transactions as $transaction):
+                    ?>
                     <tr>
                         <td>
                             <div class="service-provider-info">
+                                <!-- Assuming there's a profile_picture property in the transaction object -->
                                 <img src="<?php echo $transaction->profile_picture ?>" alt="Service Provider Photo">
                                 <span><?php echo $transaction->service_provider_name; ?></span>
                             </div>
                         </td>
-                        <td><?php echo $transaction->amount; ?> LKR</td>
-                        <td><?php echo ($transaction->amount * 0.85); ?> LKR</td>
-                        <td><?php echo date('Y-m-d', strtotime($transaction->date)); ?></td>
+                        <td><?php echo $transaction->service_type; ?></td>
+                        <td><?php echo number_format($transaction->total_amount, 2); ?> LKR</td>
+                        <td><?php echo number_format($transaction->total_amount * 0.90, 2); ?> LKR</td>
+                        <td><?php echo date('Y-m-d'); ?></td>
                         <td><?php echo $transaction->account_number; ?></td>
+<!--                        <td class="--><?php //echo strtolower($transaction->payment_status); ?><!--">-->
+<!--                            --><?php //echo ($transaction->payment_status == 'Paid') ? 'Paid' : 'Pending'; ?>
+<!--                        </td>-->
+                        <td>
+                            <a href="<?php echo URLROOT; ?>businessmanager/payment?serviceProvider_id=<?php echo $transaction->serviceProvider_id; ?>&total_amount=<?php echo $transaction->total_amount; ?>" class="view-button">
+                                View
+                            </a>
 
-                        <td class="<?php echo strtolower($transaction->payment_status); ?>">
-                            <?php echo ($transaction->payment_status == 'Paid') ? 'Paid' : 'Pending'; ?>
+
                         </td>
 
-
-                        <td><button class="view-button" onclick="openPopup(<?php echo $transaction->transaction_id; ?>)">View</button></td>
                     </tr>
+
+
                 <?php endforeach; ?>
                 </tbody>
             </table>

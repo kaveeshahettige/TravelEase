@@ -81,19 +81,17 @@ $userData= $data['basicInfo']['userData'];
                     </div>
                     <div id="calendar-days" class="calendar-days"></div>
                 </div>
+
                 <div class="availability-content" id="availability-content">
                     <div id="selected-date"></div>
-<!--                    <div id="availability-info"></div>-->
                     <div class="calendar-buttons">
                         <div class="calendar-buttons">
                             <div class="calendar-buttons">
 
                                 <form id="availabilityForm" action="<?= URLROOT?>/hotel/availablerooms" method="get" onsubmit="return handleFormSubmit()">
                                     <input type="hidden" name="action" value="check_availability">
-                                    <input name="date" type="hidden" id="selectedDate" value="<?php
-                                    echo htmlspecialchars($data["selectedDate"]); ?>">
+                                    <input name="date" type="hidden" id="selectedDate" value="<?php echo htmlspecialchars($data["selectedDate"]); ?>">
                                     <button type="submit" id="checkAvailabilityBtn" disabled>Check Availability</button>
-<!--                                    <p id="dateError" style="color: red; display: none;">Please select a date.</p>-->
                                 </form>
 
                             </div>

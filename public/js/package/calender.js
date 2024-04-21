@@ -55,12 +55,35 @@ function createDayCell(date) {
     dayNumber.innerText = date.getDate();
     cell.appendChild(dayNumber);
 
-    cell.addEventListener("click", function () {
-        handleDayClick(date);
-    });
+    // Check if the date is today
+    const today = new Date();
+    if (isSameDate(date, today)) {
+        cell.classList.add("today"); // Add the "today" class
+    }
+
+    // Check if the date is in the past
+    if (date < today && !isSameDate(date, today)) {
+        // If the date is in the past (excluding today), disable the click event handler
+        cell.classList.add("disabled");
+    } else {
+        // If the date is today or in the future, attach the click event handler
+        cell.addEventListener("click", function () {
+            handleDayClick(date);
+        });
+    }
 
     return cell;
 }
+
+function isSameDate(date1, date2) {
+    return (
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate()
+    );
+}
+
+
 
 function getFormattedDateStringForSQL(date) {
     const year = date.getFullYear();
@@ -69,7 +92,6 @@ function getFormattedDateStringForSQL(date) {
 
     return `${year}-${month}-${day}`;
 }
-
 
 function handleDayClick(date) {
     const selectedDateElement = document.getElementById("selected-date");
@@ -83,7 +105,6 @@ function handleDayClick(date) {
     // Add logic here to fetch and display availability information for the selected date
     availabilityInfoElement.innerText = "Availability: Available";
 }
-
 
 function getFormattedDateString(date) {
     const options = { weekday: "short", day: "numeric" };
@@ -163,6 +184,14 @@ function makeUnavailable(roomId) {
 
 function deleteRoom(roomId) {
     updateRoomStatus('delete_room', roomId);
+}
+
+function handleFormSubmit() {
+    // var selectedDate = document.getElementById('selectedDate').value;
+    // if (!selectedDate) {
+    //     alert('Please select a date.');
+    //     return false; // Prevent form submission
+    // }
 }
 
 

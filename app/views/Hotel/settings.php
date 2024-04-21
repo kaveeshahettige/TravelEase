@@ -158,7 +158,7 @@ include 'navigation.php';
                     <div class="basic-info-content">
                         <h2>Profile Deletion</h2>
                         <!-- Add profile deletion option here -->
-                        <a href="<?php echo URLROOT; ?>hotel/hoteledit">
+                        <a href="<?php echo URLROOT; ?>hotel/sendSMS">
                             <button class ="delete-button">Delete</button></a>
                     </div>
             </div>

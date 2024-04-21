@@ -34,7 +34,7 @@ $userData = $data['userData'];
         ['url' => 'packages/bookings', 'icon' => 'bx bxs-calendar bx-sm bx-fw', 'text' => 'Bookings'],
 //        ['url' => 'packages/galllery', 'icon' => 'bx bx-images bx-sm bx-fw', 'text' => 'Gallery'],
         ['url' => 'packages/revenue', 'icon' => 'bx bxs-wallet bx-sm bx-fw', 'text' => 'Revenue'],
-//        ['url' => 'packages/packages', 'icon' => 'bx bxs-star bx-sm bx-fw', 'text' => 'Packages'],
+        ['url' => 'packages/notifications', 'icon' => 'bx bxs-bell bx-sm bx-fw', 'text' => 'Notifications'],
         ['url' => 'packages/review', 'icon' => 'bx bxs-star bx-sm bx-fw', 'text' => 'Reviews'],
         ['url' => 'packages/settings', 'icon' => 'bx bxs-cog bx-sm bx-fw', 'text' => 'Settings'],
     ];

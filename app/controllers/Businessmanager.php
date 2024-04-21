@@ -78,7 +78,7 @@ class Businessmanager extends Controller{
     public function financialmanagement(){
 
         $profilePicture = $this->getProfilePicture();
-        $transactionData = $this->getTransactions();
+        $transactionData = $this->bookingTransactions();
 
         $data = [
             'profilePicture' => $profilePicture,
@@ -140,6 +140,32 @@ class Businessmanager extends Controller{
 
         $this->view('businessmanager/navigation',$data);
     }
+
+    public function payment(){
+
+        $profilePicture = $this->getProfilePicture();
+
+        // Retrieve the serviceProvider_id from the URL parameter
+        $serviceProvider_id = isset($_GET['serviceProvider_id']) ? $_GET['serviceProvider_id'] : null;
+        $total_amount = isset($_GET['total_amount']) ? $_GET['total_amount'] : null;
+
+        $transactionData = $this->bookingTransactions();
+
+        $bookingDetails = $this->BusinessmanagersModel-> getBookingDetails($serviceProvider_id);
+
+        // Prepare data to be passed to the view
+        $data = [
+            'profilePicture' => $profilePicture,
+            'bookingDetails' => $bookingDetails,
+            'total_amount' => $total_amount,
+            'serviceProvider_id' => $serviceProvider_id,
+            'transactionData' => $transactionData
+        ];
+
+        // Load the view and pass data to it
+        $this->view('businessmanager/payment', $data);
+    }
+
 
     public function changeProfilePicture()
     {
@@ -205,9 +231,9 @@ class Businessmanager extends Controller{
         }
     }
 
-    public function getTransactions()
+    public function bookingTransactions()
     {
-        $transactionData = $this->BusinessmanagersModel->getTransactions();
+        $transactionData = $this->BusinessmanagersModel->getCombinedTransactions();
 
         if ($transactionData) {
             return $transactionData;
@@ -215,6 +241,30 @@ class Businessmanager extends Controller{
             return [];
         }
     }
+
+//    public function bookingTransactions(){
+//        $bookingTransactionData = $this->BusinessmanagersModel->getTransactions();
+//
+//        var_dump($bookingTransactionData);
+//
+//        if ($bookingTransactionData) {
+//            return $bookingTransactionData;
+//        } else {
+//            return [];
+//        }
+//    }
+
+//    public function bookingTransactions(){
+//        $bookingTransactionData = $this->BusinessmanagersModel->getCartTransactions();
+//
+//        var_dump($bookingTransactionData);
+//
+//        if ($bookingTransactionData) {
+//            return $bookingTransactionData;
+//        } else {
+//            return [];
+//        }
+//    }
 
 
 
@@ -250,6 +300,105 @@ class Businessmanager extends Controller{
 
         $pdf->Output();
     }
+
+    public function makePayment(){
+
+        // Check if required parameters are set
+        if(!isset($_POST['serviceProvider_id']) || !isset($_POST['total_amount'])) {
+            // Handle the error, maybe return an error response
+            echo json_encode(['error' => 'Missing required parameters']);
+            exit();
+        }
+
+        // Sanitize input data to prevent injection attacks
+        $serviceProvider_id = htmlspecialchars($_POST['serviceProvider_id']);
+        $total_amount = floatval($_POST['total_amount']);
+
+        // Load Stripe library
+        require_once __DIR__ . '/../libraries/stripe/vendor/autoload.php';
+
+        // Set your Stripe secret key
+        $stripe_secret_key = "sk_test_51P7g7lRpkbdEng6u4lHC2VAZ2XUjWdriCirYwNOfRnOeKcNoPxSYViS5IqSTggVTacRhvAyvXhKLpqS5vqZT0fU200ytYtmU0N";
+
+        // Set Stripe secret key
+        \Stripe\Stripe::setApiKey($stripe_secret_key);
+
+        // Create a Stripe checkout session
+        $checkout_session = \Stripe\Checkout\Session::create([
+            "mode" => "payment",
+            "success_url" => "http://localhost/Travelease/businessmanager/success?serviceProvider_id=$serviceProvider_id&total_amount=$total_amount",
+            "cancel_url" => "http://localhost/Travelease/businessmanager/cancel",
+            "line_items" => [
+                [
+                    "quantity" => 1,
+                    "price_data" => [
+                        "currency" => "lkr",
+                        "unit_amount" => $total_amount * 100, // Convert to cents
+                        "product_data" => [
+                            "name" => "Payment for service provider" . $serviceProvider_id,
+                            // "images" => ["https://example.com/t-shirt.png"]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+
+        // Redirect to the checkout page
+//        http_response_code(303);
+//        header('Location: ' . $checkout_session->url);
+
+        echo json_encode(['url' => $checkout_session->url]);
+
+    }
+
+
+    public function success(){
+
+        $serviceProvider_id = $_GET['serviceProvider_id'];
+        $total_amount = $_GET['total_amount'];
+        $paidDate = date('Y-m-d');
+
+        $successPayment = $this->BusinessmanagersModel->insertFinalPayment($serviceProvider_id,$paidDate, $total_amount);
+
+        // Redirect to the financialmanagement page
+        redirect('businessmanager/financialmanagement');
+    }
+
+    public function cancel(){
+        echo "Payment Cancelled";
+    }
+
+    public function makeInvoice(){
+
+        require_once __DIR__ . '/../libraries/dompdf/vendor/autoload.php';
+
+        // Import the Dompdf class
+//    use Dompdf\Dompdf;
+
+        $dompdf = new Dompdf\Dompdf();
+
+        $html = '<h1>Invoice</h1>
+             <p>Invoice Number: INV-001</p>
+             <p>Date: 2024-04-21</p>
+             <p>Customer: John Doe</p>
+             <p>Amount: $100.00</p>';
+
+        $dompdf->loadHtml($html);
+
+        // (Optional) Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $dompdf->stream("invoice.pdf", array("Attachment" => 0));
+
+    }
+
+
+
 
 
 

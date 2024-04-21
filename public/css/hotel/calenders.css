@@ -1,9 +1,9 @@
 /* Calendar Container */
 .calendar-container {
     font-family: 'Poppins', sans-serif;
-    background-color: #fff;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
     max-width: 800px;
     margin: 20px auto;
     overflow: hidden;
@@ -11,15 +11,15 @@
 
 /* Calendar Header */
 .calendar-header {
-    background-color: #FFCC5B;
+    background-color: #FDDD95;
     color: #333;
     padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-weight: bold;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
 }
 
 .calendar-header button {
@@ -50,13 +50,14 @@
     height: 60px;
     cursor: pointer;
     position: relative;
-    border-radius: 8px;
+    border-radius: 12px;
     transition: background-color 0.3s ease;
+    background-color: #ffffff;
+    color: #333;
 }
 
 .day:hover {
-    background-color: #FFCC5B;
-    color: #fff;
+    background-color: #FFD699;
 }
 
 .day-number {
@@ -69,7 +70,7 @@
 }
 
 .empty-cell {
-    background-color: #fff;
+    background-color: #ffffff;
 }
 
 /* Date Info Container */
@@ -82,26 +83,22 @@
 
 #selected-date {
     font-size: 24px;
-    margin-bottom: 15px;
+    margin-top: 30px;
+    color: #333;
+    align-items: center;
+    margin-left: 350px;
 }
 
 #availability-content {
-    font-family: 'Poppins', sans-serif;
     width: 100%;
     padding: 20px;
-    background-color: #FFCC5B;
+    background-color: #FDDD95;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    border-radius: 12px;
     margin-top: 20px;
     overflow: hidden;
     font-weight: bold;
     color: #333;
-}
-
-#availability-info {
-    font-size: 18px;
-    margin-bottom: 10px;
-    align-items: center;
 }
 
 /* Calendar Buttons */
@@ -126,3 +123,24 @@
 .calendar-buttons button:hover {
     background-color: #FFAA00;
 }
+
+.day.disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.today {
+    border: 2px solid #ffd997;
+}
+
+@media screen and (max-width: 768px) {
+    #selected-date {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        margin-top: 20px; /
+    }
+}
+
+

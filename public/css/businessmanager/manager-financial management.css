@@ -101,8 +101,65 @@ td.pending {
     background-color: #FFDB8B;
 }
 
+.final-transaction {
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.transaction-heading {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.transaction-details {
+    display: flex;
+    justify-content: space-between;
+}
+
+.total-amount, .commission, .final-payment {
+    flex-basis: 30%;
+}
+
+.total-amount h4, .commission h4, .final-payment h4 {
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.total-amount .amount, .commission .percentage, .final-payment .amount {
+    font-weight: bold;
+    color: #333;
+}
 
 
+
+/* Style for action buttons */
+.action-buttons {
+    margin-top: 70px;
+    display: flex;
+    justify-content: center;
+    margin-left: 120px;
+}
+
+.action-buttons button {
+    border: 1px solid #fdc101; /* Yellow stroke */
+    color: #edb202; /* Text color matches the stroke */
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+.action-buttons button:hover {
+    background-color: #F9B314; /* Yellow background on hover */
+    color: #fff; /* Text color becomes white on hover */
+}
+
+.action-buttons button i {
+    margin-right: 5px;
+}
 
 
 /* Media Query for Responsive Design */
@@ -111,7 +168,7 @@ td.pending {
         padding-left: 10px;
         text-align: center;
     }
-    
+
     .dashboard-content h1 {
         font-size: 24px; /* Reduce font size for smaller screens */
     }
@@ -155,5 +212,7 @@ td.pending {
         padding: 8px 16px; /* Reduce padding for smaller screens */
     }
 
-
+    .total-amount {
+       margin-left:100px;
+    }
 }
