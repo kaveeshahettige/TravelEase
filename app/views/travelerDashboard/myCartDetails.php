@@ -52,6 +52,15 @@
     <?php foreach ($data['resultArray'] as $data1): ?>
         
         <div class="hotel-details">
+        <?php if ($data1['checkAvailbility'] === false): ?>
+    <div class="not-available">
+        <p class="not-available-text"><i class="fas fa-exclamation-circle"></i> Not Available</p>
+    </div>
+    <?php else: ?>
+        <div class="available">
+            <p class="available-text"><i class="fas fa-check-circle"></i> Available</p>
+        </div>
+    <?php endif; ?>
             <div class="image-container">
                 <img src="<?php echo URLROOT ?>/images/<?php echo $data1['furtherBookingDetails']->image ?>" alt="Image">
             </div>
@@ -73,9 +82,9 @@
                             <p><strong>Pet policy:</strong> <?php echo $data1['furtherBookingDetails']->petPolicy ?></p>
                             <br><br>
                             <?php if ($data1['checkAvailbility'] === false): ?>
-    <div class="not-available">
+    <!-- <div class="not-available">
         <p class="not-available-text"><i class="fas fa-exclamation-circle"></i> Not Available</p>
-    </div>
+    </div> -->
 <?php endif; ?>
                         </div>
                     <?php elseif ($data1['type'] == 4): ?>
@@ -95,11 +104,11 @@
                                     }
                                 ?>
                             </p>
-                            <?php if ($data1['checkAvailbility'] === false): ?>
+                            <!-- <?php if ($data1['checkAvailbility'] === false): ?>
     <div class="not-available">
         <p class="not-available-text"><i class="fas fa-exclamation-circle"></i> Not Available</p>
     </div>
-<?php endif; ?>
+<?php endif; ?> -->
                         </div>
                         <?php elseif ($data1['type'] == 5): ?>
     <div class="reservation-details">
@@ -114,11 +123,11 @@
         <p><strong>Instagram:</strong> <?php echo $data1['furtherBookingDetails']->instagram ?></p>
         <p><strong>Contact number:</strong> <?php echo $data1['furtherBookingDetails']->number ?></p>
 </p>
-<?php if ($data1['checkAvailbility'] === false): ?>
+<!-- <?php if ($data1['checkAvailbility'] === false): ?>
     <div class="not-available">
         <p class="not-available-text"><i class="fas fa-exclamation-circle"></i> Not Available</p>
     </div>
-<?php endif; ?>
+<?php endif; ?> -->
         
     </div>
                     <?php else: ?>
@@ -255,6 +264,8 @@
 // Calculate the total amount
 $total = 0;
 foreach ($data['resultArray'] as $bookingData):
+
+if ($bookingData['checkAvailbility'] === true): 
     if ($bookingData['type'] == 4) {
         $total += $bookingData['price'];
     } elseif ($bookingData['type'] == 3) {
@@ -266,6 +277,7 @@ foreach ($data['resultArray'] as $bookingData):
     }elseif($bookingData['type'] == 5){
         $total += $bookingData['price'];
     }
+  endif;  
 endforeach;
             echo $total . ".00 LKR";
         ?>
@@ -273,6 +285,7 @@ endforeach;
     <p>
     <ul>
     <?php foreach ($data['resultArray'] as $bookingData): ?>
+    <?php if ($bookingData['checkAvailbility'] === true): ?>
         <?php if ($bookingData['type'] == 4): ?>
             <!-- <li class="vehicle-booking-price" data-price="<?php echo $bookingData['price'] ?>">Vehicle Booking - Price : <?php echo $bookingData['price'] ?> LKR</li> -->
             <li class="vehicle-booking-price"><strong> <?php  echo $bookingData['furtherBookingDetails']->brand.' '. $bookingData['furtherBookingDetails']->model ?></strong></li>
@@ -282,6 +295,7 @@ endforeach;
         <?php elseif ($bookingData['type'] == 5): ?>
             <!-- <li class="room-booking-price" data-price="<?php echo $daysD * $bookingData['furtherBookingDetails']->price ?>">Room Booking - Price : <?php echo $daysD * $bookingData['furtherBookingDetails']->price ?> LKR</li> -->
             <li class="guide-booking-price"><strong>Guide&nbsp<?php  echo $bookingData['furtherBookingDetails']->fname?></strong></li>
+    <?php endif; ?>    
         <?php endif; ?>
     <?php endforeach; ?>
 </ul>
@@ -355,5 +369,6 @@ setTimeout(function() {
     
     <!-- <?php echo var_dump($data['resultArray'])?> -->
     <div id="removecartNotification" class="cart-notification">Item removed from the cart!</div>
+
 </body>
 </html>

@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
     <style>
 
     </style>
@@ -64,86 +66,103 @@
             <div class="bookingdetails">
                 <div class="leftdiv">
                     <div class="ldiv1">
-                        <div class="booking-label">Hotel name:</div>
-                        <div class="booking-value"><?php echo ucfirst($data['serviceProviderName']) ?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Hotel type:</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->hotel_type?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Address:</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->add?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">City:</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->city?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Room type:</div>
-                        <div class="booking-value"><?php echo $data['furtherBookingDetails']->roomType?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Room detail:</div>
-                        <div class="booking-value"><?php echo $data['furtherBookingDetails']->description?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">A/C Availablility:</div>
-                        <div class="booking-value"><?php echo $data['furtherBookingDetails']->acAvailability?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">TV Availablility:</div>
-                        <div class="booking-value"><?php echo $data['furtherBookingDetails']->tvAvailability?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Wifi Availablility:</div>
-                        <div class="booking-value"><?php echo $data['furtherBookingDetails']->wifiAvailability?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Smoking policy:</div>
-                        <div class="booking-value"><?php echo $data['furtherBookingDetails']->smokingPolicy?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Pet policy:</div>
-                        <div class="booking-value"><?php echo $data['furtherBookingDetails']->petPolicy?></div>
-                    </div>
-                    
-                </div>
+    <div class="booking-label"><i class="fas fa-hotel"></i> Hotel name:</div>
+    <div class="booking-value"><?php echo ucfirst($data['serviceProviderName']) ?></div>
+</div>
 
-                <div class="rightdiv">
-                    <div class="ldiv1">
-                        <div class="booking-label">Price:</div>
-                        <div class="booking-value"><?php echo $data['furtherBookingDetails']->price?> &nbsp SLR</div>
-                    </div>
-                     
-                    <div class="ldiv1">
-                        <div class="booking-label">Contact number :</div>
-                        <div class="booking-value"><?php echo $data['number']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">web Site:</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->website?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Twitter :</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->twitter?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Instargram :</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->instagram?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Start date:</div>
-                        <div class="booking-value"><?php echo $data['booking']->startDate?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">End date:</div>
-                        <div class="booking-value"><?php echo $data['booking']->endDate?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Cancellation eligibility:</div>
-                        <div class="booking-value"><?php echo  $data['cancellationEligibility']?></div>
-                    </div> 
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-building"></i> Hotel type:</div>
+    <div class="booking-value"><?php echo $data['mainbookingDetails']->hotel_type?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-map-marker-alt"></i> Address:</div>
+    <div class="booking-value"><?php echo $data['mainbookingDetails']->add?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-city"></i> City:</div>
+    <div class="booking-value"><?php echo $data['mainbookingDetails']->city?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-bed"></i> Room type:</div>
+    <div class="booking-value"><?php echo $data['furtherBookingDetails']->roomType?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-info-circle"></i> Room detail:</div>
+    <div class="booking-value"><?php echo $data['furtherBookingDetails']->description?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-snowflake"></i> A/C Availability:</div>
+    <div class="booking-value"><?php echo $data['furtherBookingDetails']->acAvailability?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-tv"></i> TV Availability:</div>
+    <div class="booking-value"><?php echo $data['furtherBookingDetails']->tvAvailability?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-wifi"></i> WiFi Availability:</div>
+    <div class="booking-value"><?php echo $data['furtherBookingDetails']->wifiAvailability?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-smoking-ban"></i> Smoking Policy:</div>
+    <div class="booking-value"><?php echo $data['furtherBookingDetails']->smokingPolicy?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-paw"></i> Pet Policy:</div>
+    <div class="booking-value"><?php echo $data['furtherBookingDetails']->petPolicy?></div>
+</div>
+        </div>
+
+<div class="rightdiv">
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fas fa-money-bill"></i> Price:</div>
+        <div class="booking-value"><?php echo $data['furtherBookingDetails']->price?> &nbsp SLR</div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fas fa-phone"></i> Contact number :</div>
+        <div class="booking-value"><?php echo $data['number']?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fas fa-globe"></i> Web Site:</div>
+        <div class="booking-value"><?php echo $data['mainbookingDetails']->website?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fab fa-twitter"></i> Twitter :</div>
+        <div class="booking-value"><?php echo $data['mainbookingDetails']->twitter?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fab fa-instagram"></i> Instagram :</div>
+        <div class="booking-value"><?php echo $data['mainbookingDetails']->instagram?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="far fa-calendar-alt"></i> Start date:</div>
+        <div class="booking-value"><?php echo $data['booking']->startDate?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="far fa-calendar-alt"></i> End date:</div>
+        <div class="booking-value"><?php echo $data['booking']->endDate?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fas fa-ban"></i> Cancellation eligibility:</div>
+        <div class="booking-value"><?php echo  $data['cancellationEligibility']?></div>
+    </div>
+</div>
+
                 </div>
 
         </div>
@@ -175,103 +194,120 @@
             <div class="bookingdetails">
                 <div class="leftdiv">
                     <div class="ldiv1">
-                        <div class="booking-label">Hotel name:</div>
-                        <div class="booking-value"><?php echo ucfirst($data['serviceProviderName']) ?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Agency Registered Number:</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->reg_number?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Address:</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->address?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">City:</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->city?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Vehicle Brand:</div>
-                        <div class="booking-value"><?php echo $data['furtherBookingDetails']->brand?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Vehicle Model:</div>
-                        <div class="booking-value"><?php echo $data['furtherBookingDetails']->model?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Plate Number:</div>
-                        <div class="booking-value"><?php echo $data['furtherBookingDetails']->plate_number?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Year:</div>
-                        <div class="booking-value"><?php echo $data['furtherBookingDetails']->year?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Price per day:</div>
-                        <div class="booking-value"><?php echo $data['furtherBookingDetails']->priceperday?>&nbsp SLR</div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Seating capacity:</div>
-                        <div class="booking-value"><?php echo $data['furtherBookingDetails']->seating_capacity?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Air condition:</div>
-                        <div class="booking-value">
-                        <?php if ($data['furtherBookingDetails']->ac_type == 1): ?>
-                            <?php echo "Available"; ?>
-                            <?php else: ?>
-                            <?php echo "Not available"; ?>
-                            <?php endif; ?>
-                        </div>
+    <div class="booking-label"><i class="fas fa-hotel"></i> Hotel name:</div>
+    <div class="booking-value"><?php echo ucfirst($data['serviceProviderName']) ?></div>
+</div>
 
-                    </div>
-                    
-                </div>
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-id-card"></i> Agency Registered Number:</div>
+    <div class="booking-value"><?php echo $data['mainbookingDetails']->reg_number?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-map-marker-alt"></i> Address:</div>
+    <div class="booking-value"><?php echo $data['mainbookingDetails']->address?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-city"></i> City:</div>
+    <div class="booking-value"><?php echo $data['mainbookingDetails']->city?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-car"></i> Vehicle Brand:</div>
+    <div class="booking-value"><?php echo $data['furtherBookingDetails']->brand?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-car-side"></i> Vehicle Model:</div>
+    <div class="booking-value"><?php echo $data['furtherBookingDetails']->model?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-car"></i> Plate Number:</div>
+    <div class="booking-value"><?php echo $data['furtherBookingDetails']->plate_number?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-calendar-alt"></i> Year:</div>
+    <div class="booking-value"><?php echo $data['furtherBookingDetails']->year?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-money-bill"></i> Price per day:</div>
+    <div class="booking-value"><?php echo $data['furtherBookingDetails']->priceperday?> &nbsp SLR</div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-chair"></i> Seating capacity:</div>
+    <div class="booking-value"><?php echo $data['furtherBookingDetails']->seating_capacity?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-snowflake"></i> Air condition:</div>
+    <div class="booking-value">
+        <?php if ($data['furtherBookingDetails']->ac_type == 1): ?>
+            <?php echo "Available"; ?>
+        <?php else: ?>
+            <?php echo "Not available"; ?>
+        <?php endif; ?>
+    </div>
+</div>
+        </div>
                 
-                <div class="rightdiv">
-                    <div class="ldiv1">
-                        <div class="booking-label">Price:</div>
-                        <div class="booking-value">
-                            <?php echo $data['vehicleprice']->amount?> &nbsp SLR</div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Driver:</div>
-                        <div class="booking-value"><?php if ($data['driver']->withDriver== 1): ?>
-                            <?php echo "With"; ?>
-                            <?php else: ?>
-                            <?php echo "Without"; ?>
-                            <?php endif; ?>&nbspDriver</div>
-                    </div>
-                     
-                    <div class="ldiv1">
-                        <div class="booking-label">Contact number :</div>
-                        <div class="booking-value"><?php echo $data['number']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">web Site:</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->website?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Twitter :</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->twitter?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Instargram :</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->instagram?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Start date:</div>
-                        <div class="booking-value"><?php echo $data['booking']->startDate?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">End date:</div>
-                        <div class="booking-value"><?php echo $data['booking']->endDate?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Cancellation eligibility:</div>
-                        <div class="booking-value"><?php echo  $data['cancellationEligibility']?></div>
-                    </div> 
-                </div>
+        <div class="rightdiv">
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fas fa-money-bill"></i> Price:</div>
+        <div class="booking-value"><?php echo $data['vehicleprice']->amount?> &nbsp SLR</div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fas fa-user-tie"></i> Driver:</div>
+        <div class="booking-value">
+            <?php if ($data['driver']->withDriver== 1): ?>
+                <?php echo "With"; ?>
+            <?php else: ?>
+                <?php echo "Without"; ?>
+            <?php endif; ?>&nbspDriver
+        </div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fas fa-phone"></i> Contact number:</div>
+        <div class="booking-value"><?php echo $data['number']?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fas fa-globe"></i> Website:</div>
+        <div class="booking-value"><?php echo $data['mainbookingDetails']->website?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fab fa-twitter"></i> Twitter:</div>
+        <div class="booking-value"><?php echo $data['mainbookingDetails']->twitter?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fab fa-instagram"></i> Instagram:</div>
+        <div class="booking-value"><?php echo $data['mainbookingDetails']->instagram?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="far fa-calendar-alt"></i> Start date:</div>
+        <div class="booking-value"><?php echo $data['booking']->startDate?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="far fa-calendar-alt"></i> End date:</div>
+        <div class="booking-value"><?php echo $data['booking']->endDate?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fas fa-ban"></i> Cancellation eligibility:</div>
+        <div class="booking-value"><?php echo $data['cancellationEligibility']?></div>
+    </div>
+</div>
+
 
         </div>
         
@@ -283,16 +319,7 @@
             </div>
             <div class="images">
                 <div class="mainimage">
-                <img src="<?php echo URLROOT . '/images/' . $element['furtherBookingDetails']['image']; ?>" alt="">
-
-                </div>
-                <div class="submimages">
-                    <div><img src="<?php echo URLROOT . '/images/' . $element['furtherBookingDetails']['image']; ?>" alt=""></div>
-                    <div><img src="<?php echo URLROOT . '/images/' . $element['furtherBookingDetails']['image']; ?>" alt=""></div>
-                </div>
-                <div class="submimages">
-                    <div><img src="<?php echo URLROOT . '/images/' . $element['furtherBookingDetails']['image']; ?>" alt=""></div>
-                    <div><img src="<?php echo URLROOT . '/images/' . $element['furtherBookingDetails']['image']; ?>" alt=""></div>
+                <img src="<?php echo URLROOT . '/images/' . $data['furtherBookingDetails']->image; ?>" alt="">
                 </div>
 
             </div>
@@ -301,89 +328,66 @@
                 <p><?php echo $data['mainbookingDetails']->description?></p> 
             </div> 
             <div class="bookingdetails">
-                <div class="leftdiv">
-                    <div class="ldiv1">
-                        <div class="booking-label">Hotel name:</div>
-                        <div class="booking-value"><?php echo ucfirst($data['serviceProviderName']) ?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Hotel type:</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->hotel_type?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Address:</div>
-                        <div class="booking-value"><?php echo $element['mainbookingDetails']->add?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">City:</div>
-                        <div class="booking-value"><?php echo $element['mainbookingDetails']->city?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Room type:</div>
-                        <div class="booking-value"><?php echo $element['furtherBookingDetails']['roomType']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Room detail:</div>
-                        <div class="booking-value"><?php echo $element['furtherBookingDetails']['description']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">A/C Availablility:</div>
-                        <div class="booking-value"><?php echo $element['furtherBookingDetails']['acAvailability']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">TV Availablility:</div>
-                        <div class="booking-value"><?php echo $element['furtherBookingDetails']['tvAvailability']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Wifi Availablility:</div>
-                        <div class="booking-value"><?php echo $element['furtherBookingDetails']['wifiAvailability']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Smoking policy:</div>
-                        <div class="booking-value"><?php echo $element['furtherBookingDetails']['smokingPolicy']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Pet policy:</div>
-                        <div class="booking-value"><?php echo $element['furtherBookingDetails']['petPolicy']?></div>
-                    </div>
-                    
+            <div class="leftdiv">
+            <div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-user"></i> Guide name:</div>
+    <div class="booking-value"><?php echo ucfirst($data['serviceProviderName'])?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-id-card"></i> Registration Number:</div>
+    <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->GuideRegNumber)?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-list-alt"></i> Category:</div>
+    <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->category)?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-language"></i> Languages:</div>
+    <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->languages)?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="far fa-calendar-alt"></i> License Expiry Date:</div>
+    <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->LisenceExpDate)?></div>
+</div>
+
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-map-marked-alt"></i> Places:</div>
+    <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->sites)?></div>
+</div>
+
                 </div>
 
                 <div class="rightdiv">
-                    <div class="ldiv1">
-                        <div class="booking-label">Price:</div>
-                        <div class="booking-value"><?php echo $data['furtherbookingDetails']->price?> &nbsp SLR</div>
-                    </div>
-                     
-                    <div class="ldiv1">
-                        <div class="booking-label">Contact number :</div>
-                        <div class="booking-value"><?php echo $data['number']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">web Site:</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->website?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Twitter :</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->twitter?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Instargram :</div>
-                        <div class="booking-value"><?php echo $data['mainbookingDetails']->instagram?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Start date:</div>
-                        <div class="booking-value"><?php echo $data['start_date']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">End date:</div>
-                        <div class="booking-value"><?php echo $data['end_date']?></div>
-                    </div>
-                    <div class="ldiv1">
-                        <div class="booking-label">Cancellation eligibility:</div>
-                        <div class="booking-value"><?php echo $data['cancellationEligiblity']?></div>
-                    </div> 
-                </div>
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fas fa-map-marker-alt"></i> Address:</div>
+        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->address)?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fas fa-city"></i> City:</div>
+        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->city)?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fas fa-map"></i> Province:</div>
+        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->province)?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fab fa-facebook"></i> Facebook:</div>
+        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->facebook)?></div>
+    </div>
+
+    <div class="ldiv1">
+        <div class="booking-label"><i class="fab fa-instagram"></i> Instagram:</div>
+        <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->instagram)?></div>
+    </div>
+</div>
+
 
         </div>
         <?php endif; ?>

@@ -280,11 +280,29 @@ input[type="number"] {
     background-color: #f8d7da; /* Light red background */
     color: #721c24; /* Dark red text color */
     padding: 10px;
+    font-size: 18px;
     border-radius: 5px;
     display: inline-block; /* Ensures the background wraps around the text */
+    width: 15%;
+    text-align: center;
+}
+.available {
+    background-color: #d4edda; /* Light green background for available */
+    color: #155724; /* Dark green text color for available */
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 5px;
+    display: inline-block; /* Ensures the background wraps around the text */
+    width: 15%;
+    text-align: center;
 }
 
 .not-available .not-available-text {
+    margin: 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+.available .available-text {
     margin: 0;
     display: inline-block;
     vertical-align: middle;
@@ -294,6 +312,11 @@ input[type="number"] {
     font-size: 20px;
     margin-right: 5px;
     color: #721c24; /* Dark red icon color */
+}
+.available i {
+    font-size: 20px;
+    margin-right: 5px;
+    color: #155724; /* Dark green icon color */
 }
 
 

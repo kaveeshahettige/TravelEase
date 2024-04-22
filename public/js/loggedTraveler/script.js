@@ -398,9 +398,6 @@ totalAmountInput.value = totalAmount.toFixed(2); // Set the value of the hidden 
 }
 
 
-
-
-
 //////
 
 

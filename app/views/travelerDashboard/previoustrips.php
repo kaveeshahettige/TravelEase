@@ -134,7 +134,8 @@ if (!empty($data['previousTrips']) && is_array($data['previousTrips'])) {
             // Display the description from vehicles if vehicle_id is not null
             echo '<td>' . $booking->vehicle_description . '</td>'; // Assuming you alias it as vehicle_description
         } elseif ($booking->package_id !== null) {
-            // Display the description from another source (if applicable) based on the context
+            // Display the description from packages if package_id is not null
+            echo '<td>' . $booking->guide_description . '</td>'; // Assuming you alias it as package_description
         }
 
         

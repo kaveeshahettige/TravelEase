@@ -114,8 +114,8 @@
         
                     // Display names separated by commas
         
-                    echo '<p>Start Date: ' . $booking->startDate . '</p>';
-                    echo '<p>End Date: ' . $booking->endDate . '</p>';
+                    // echo '<p>Start Date: ' . $booking->startDate . '</p>';
+                    // echo '<p>End Date: ' . $booking->endDate . '</p>';
                     echo '<p>Added Date: ' . date('Y-m-d', strtotime($booking->bookingDate)) . '</p>';
                     echo '<div class="card-buttons">';
                     echo '<button class="viewbooking" onclick="proceedCart(\'' . $booking->cartbooking_id . '\')">';
@@ -146,6 +146,7 @@
   </div>
 </div>
 
+
    <!-- Hidden modal for cancellation confirmation -->
 <div id="confirmationModal" class="modal2">
   <div class="modal2-content">
@@ -157,6 +158,93 @@
   </div>
 </div>
 <iframe id="cancelFrame" style="display: none;"></iframe>
+
+<!-- // -->
+<!-- Date Modal -->
+<!-- Date Modal -->
+<div id="dateModal">
+    <div id="dateModal-content">
+        <span class="close-date-modal" onclick="closeDateModal()">&times;</span>
+        <h2>Enter Check-in and Check-out Dates</h2>
+        <form id="dateForm">
+            <!-- Hidden input for cartId -->
+            <input type="hidden" id="cartIdInput" name="cartIdInput">
+
+            <label for="checkin">Check-in Date:</label>
+            <input type="date" id="checkin" name="checkin" required>
+
+            <label for="checkout">Check-out Date:</label>
+            <input type="date" id="checkout" name="checkout" required>
+
+            <button type="button" onclick="submitDates()">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+        // Function to open the date modal
+        function openDateModal() {
+            document.getElementById("dateModal").style.display = "block";
+        }
+
+        // Function to close the date modal
+        function closeDateModal() {
+            document.getElementById("dateModal").style.display = "none";
+        }
+
+        // Function to handle "Proceed" button click
+        function proceedCart(cartId) {
+            // Open the date modal
+            openDateModal();
+            console.log("Proceeding with Cart ID: " + cartId);
+
+            // Save the cartId somewhere (e.g., a hidden field in the form)
+            document.getElementById("cartIdInput").value = cartId;
+        }
+
+        // Function to submit dates from the date modal
+       // Function to submit dates from the date modal
+function submitDates() {
+    // Get the selected dates
+    var checkinElement = document.getElementById("checkin");
+    var checkoutElement = document.getElementById("checkout");
+
+    // Check if the elements exist
+    if (!checkinElement || !checkoutElement) {
+        console.error("Check-in or Check-out element not found.");
+        return;
+    }
+
+    var checkinDate = checkinElement.value;
+    var checkoutDate = checkoutElement.value;
+
+    // Get the cartId from the hidden input
+    var cartIdInput = document.getElementById("cartIdInput");
+    if (!cartIdInput) {
+        console.error("Cart ID input not found.");
+        return;
+    }
+    var cartId = cartIdInput.value;
+
+    // Close the date modal
+    closeDateModal();
+
+    // You can now use the cartId, checkinDate, and checkoutDate
+    // For example, you can make an AJAX request to send this data to the server
+    console.log("Cart ID: " + cartId);
+    console.log("Check-in Date: " + checkinDate);
+    console.log("Check-out Date: " + checkoutDate);
+
+    // Here you can do further processing or send the data to the server
+    // For now, just an example alert
+    window.location.href = "<?php echo URLROOT; ?>travelerDashboard/myCartDetails/" + cartId + "/" + checkinDate + "/" + checkoutDate;
+    //alert("Proceeding with Cart ID: " + cartId + "\nCheck-in: " + checkinDate + "\nCheck-out: " + checkoutDate);
+}
+
+    </script>
+
 </body>
 
 </html>

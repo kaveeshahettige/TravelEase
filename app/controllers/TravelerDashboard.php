@@ -625,9 +625,9 @@ public function cancelBooking($temporyid,$booking_id){
       $bookingDetails=$this->userModel->findBookingDetails($booking_id);
       $bookingFurtherDetail=$this->userModel->findBookingFurtherDetail($bookingDetails);
       if($bookingDetails->type==4){
-        $message="Your Agency vehicle with ID ".$bookingFurtherDetail->vehicle_id."-".$bookingFurtherDetail->brand ." ".$bookingFurtherDetail->model." ".$bookingFurtherDetail->plate_number." ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+        $message="Agency vehicle with ID ".$bookingFurtherDetail->vehicle_id."-".$bookingFurtherDetail->brand ." ".$bookingFurtherDetail->model." ".$bookingFurtherDetail->plate_number." ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
       }elseif($bookingDetails->type==3){
-        $message="Your Hotel room with ID ".$bookingFurtherDetail->room_id."-".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+        $message="Hotel room with ID ".$bookingFurtherDetail->room_id."-".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
 
       }
       
@@ -643,17 +643,20 @@ public function cancelBooking($temporyid,$booking_id){
       
       //send a sms to service provider
 
-      //send notofuiaction
+      //send notofuiaction to service Provider
       $send=$this->userModel->sendBookingCancellationNotification($id,$bookingDetails->serviceProvider_id,$booking_id,$message);
+      $BMs=$this->userModel->findBusinessManagers();
+      //send notofuiaction to  Business Managers
+      $sendBM=$this->userModel->sendBookingCancellationNotificationtoBM($id,$booking_id,$message,$BMs);
       
     }else{
 
       $bookingDetails=$this->userModel->findCartBookingDetails($booking_id,$temporyid);
       $bookingFurtherDetail=$this->userModel->findBookingFurtherDetail($bookingDetails);
       if($bookingDetails->type==4){
-        $message="Your Agency vehicle with ID ".$bookingFurtherDetail->vehicle_id."-".$bookingFurtherDetail->brand ." ".$bookingFurtherDetail->model." ".$bookingFurtherDetail->plate_number." ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+        $message="Agency vehicle with ID ".$bookingFurtherDetail->vehicle_id."-".$bookingFurtherDetail->brand ." ".$bookingFurtherDetail->model." ".$bookingFurtherDetail->plate_number." ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
       }elseif($bookingDetails->type==3){
-        $message="Your Hotel room with ID ".$bookingFurtherDetail->room_id."-".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+        $message="Hotel room with ID ".$bookingFurtherDetail->room_id."-".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
 
       }
       
@@ -670,6 +673,9 @@ public function cancelBooking($temporyid,$booking_id){
     
        //send notofuiaction
        $send=$this->userModel->sendBookingCancellationNotification($id,$bookingDetails->serviceProvider_id,$booking_id,$message);
+       $BMs=$this->userModel->findBusinessManagers();
+       //send notofuiaction to  Business Managers
+       $sendBM=$this->userModel->sendBookingCancellationNotificationtoBM($id,$booking_id,$message,$BMs);
     }    
 }
 
@@ -735,7 +741,7 @@ public function removeCart($cartbooking_id){
 }
 
 //myCartDetails($cartbooking_id) from  bookingcart($bookingcart, $checkinDate, $checkoutDate, $pickupTime=null,$meetTime=null)
-public function myCartDetails($cartbooking_id){
+public function myCartDetails($cartbooking_id,$newcheckinDate,$newcheckoutDate){
   
   // Result array to store processed data
   $resultArray = [];
@@ -753,7 +759,7 @@ public function myCartDetails($cartbooking_id){
         $serviceId = $cartDetail->room_id ? $cartDetail->room_id : ($cartDetail->vehicle_id ? $cartDetail->vehicle_id : $cartDetail->package_id);;
           // Fetch booking details for each service
           $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($cartDetail->type, $serviceId);
-          $checkAvailbility=$this->userModel->checkAvailbility($cartDetail->type, $serviceId,$cartDetail->startDate,$cartDetail->endDate);
+          $checkAvailbility=$this->userModel->checkAvailbility($cartDetail->type, $serviceId,$newcheckinDate,$newcheckoutDate);
           
           
           // Initialize variables

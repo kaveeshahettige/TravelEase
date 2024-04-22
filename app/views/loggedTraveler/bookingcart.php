@@ -42,6 +42,8 @@
 </head>
 <body style="margin-top:50%">
 <!-- <?php echo var_dump($data['bookingcartArray'])?> -->
+
+<?php $servicePrices = [];?>
     <div class="payment-container" >
     <div class="booking-box">
     <!-- <?php echo var_dump($data['resultArray'])?> -->
@@ -143,7 +145,7 @@
                                 <label for="withoutDriver"></label>
                             </div>
                             <p id="totalPrice" class="t-price" data-initial-price="<?php echo htmlspecialchars($data1['price'], ENT_QUOTES, 'UTF-8') ?>"><strong>Price : <?php echo htmlspecialchars($data1['price'], ENT_QUOTES, 'UTF-8') ?> LKR</strong></p>
-    
+                           
                             <script>
                                 function updateFormAction(driverType, vehicleId, days, updatedPrice) {
     const form = document.getElementById('paymentForm');
@@ -175,7 +177,8 @@
                             </script>
     
                             <form id="paymentForm" action="<?php echo URLROOT ?>loggedTraveler/dopaymentVehicles/<?php echo $data1['type'] . '/' . $data1['furtherBookingDetails']->vehicle_id.'/'.$data['checkinDate'].'/'.$data['checkoutDate'].'/'.$data1['pickupTime'].'/'.$data1['price']?>/0" method="POST">
-                                <!-- <div class="buttons">
+                            <?php $servicePrices[] = $data1['price'];?>    
+                            <!-- <div class="buttons">
                                     <button type="submit" class="payment-button">Make Payment</button>
                                 </div> -->
                             </form>
@@ -186,6 +189,7 @@
                                 $diffTime = abs($date2 - $date1) + (60 * 60 * 24);
                                 $daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
                                 $tot = $daysD * $data1['furtherBookingDetails']->pricePerDay;
+                                $servicePrices[] = $tot;
                             ?>
                             <p class="t-price"><strong>Price : <?php echo $tot?> LKR</strong></p>
                         <?php else: ?>
@@ -195,6 +199,7 @@
                                 $diffTime = abs($date2 - $date1) ;
                                 $daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds to days
                                 $tot = $daysD * $data1['furtherBookingDetails']->price;
+                                $servicePrices[] = $tot;
                             ?>
                             <p class="t-price"><strong>Price : <?php echo $tot?> LKR</strong></p>
                             <!-- <form action="<?php echo URLROOT ?>loggedTraveler/dopayment/<?php echo $data1['furtherBookingDetails']->type . '/' . $data1['furtherBookingDetails']->room_id.'/'.$data1['checkinDate'].'/'.$data1['checkoutDate'] ?>">
@@ -293,7 +298,7 @@ endforeach;
     </div>
 </form> -->
 
-<form id="paymentFormMain" action="<?php echo URLROOT ?>loggedTraveler/cartpayment/<?php echo urlencode(json_encode($data['bookingcartArray'])) . '/' .$data['checkinDate'].'/'.$data['checkoutDate'] . '/' . $data['pickupTime'] . '/' .$data1['meetTime']?>" method="POST">
+<form id="paymentFormMain" action="<?php echo URLROOT ?>loggedTraveler/cartpayment/<?php echo urlencode(json_encode($data['bookingcartArray'])) . '/' .urlencode(json_encode($servicePrices)).'/'.$data['checkinDate'].'/'.$data['checkoutDate'] . '/' . $data['pickupTime'] . '/' .$data1['meetTime']?>" method="POST">
     <input type="hidden" name="totalAmount" id="totalAmountInput" value="<?php echo $total; ?>">
     <input type="hidden" name="driverType" id="driverTypeInput" value="">
     <div class="buttons">
@@ -307,7 +312,7 @@ endforeach;
 
     </div>
     
-    <!-- <?php echo var_dump($data['resultArray'])?> -->
+    <?php echo var_dump($servicePrices)?>
     
 </body>
 </html>

@@ -911,4 +911,83 @@ li {
     transition: background-color 0.3s;
 
 }
+
+
+/* Style for date modal */
+#dateModal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Style for date modal content */
+#dateModal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 90%;
+}
+
+/* Close button style */
+.close-date-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-date-modal:hover,
+.close-date-modal:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+/* Form styles */
+#dateForm {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Label styles */
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Input styles */
+input[type="date"] {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+/* Button styles */
+button[type="button"] {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+
   

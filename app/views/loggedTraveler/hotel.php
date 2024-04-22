@@ -151,5 +151,33 @@
         </div>
     </section>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const locationInput = document.getElementById("location-input");
+            const options = {
+                types: ['(cities)'],
+                componentRestrictions: { country: 'LK' } // Restrict to Sri Lanka (LK)
+            };
+            const autocomplete = new google.maps.places.Autocomplete(locationInput, options);
+
+            // Listen for place selection
+            autocomplete.addListener("place_changed", function() {
+                const place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    console.error("Place selection failed:", place);
+                    return;
+                }
+                // Extract city name without country
+                const city = place.address_components.find(component => {
+                    return component.types.includes("locality");
+                });
+                if (city) {
+                    locationInput.value = city.long_name;
+                }
+            });
+        });
+    </script>
+
+
 </body>
 </html>

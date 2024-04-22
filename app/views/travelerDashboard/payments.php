@@ -112,34 +112,25 @@ $count = 1;
 
 if (!empty($data['payments']) && is_array($data['payments'])) {
     // Initialize an array to store payments grouped by booking_id
-    $groupedPayments = [];
+    
 
-    // Group payments by booking_id
-    foreach ($data['payments'] as $payment) {
-        $bookingId = $payment->booking_id;
-        if (!isset($groupedPayments[$bookingId])) {
-            // Initialize an array for the booking_id if it doesn't exist
-            $groupedPayments[$bookingId] = [];
-        }
-        // Add the payment to the array for the booking_id
-        $groupedPayments[$bookingId][] = $payment;
-    }
+    // echo var_dump($data['payments']);
 
     // Loop through the grouped payments
-    foreach ($groupedPayments as $bookingId => $payments) {
+    foreach ($data['payments'] as $payments) {
         // Combine service provider names into a single string separated by commas
-        $providerNames = array_map(function ($payment) {
-            return ucfirst($payment->fname) . ' ' . $payment->lname;
-        }, $payments);
-        $providerNamesString = implode(', ', $providerNames);
+        // $providerNames = array_map(function ($payment) {
+        //     return ucfirst($payment->fname) . ' ' . $payment->lname;
+        // }, $payments);
+        // $providerNamesString = implode(', ', $providerNames);
 
         // Output the row for each booking_id
         echo '<tr class="t-row">';
         echo '<td>' . $count . '</td>';
         // echo '<td>' . $bookingId . '</td>';
-        echo '<td>' . $providerNamesString . '</td>';
-        echo '<td>' . $payments[0]->amount . '.00 </td>'; // Assuming all payments for the same booking have the same amount
-        echo '<td>' . date('Y-m-d', strtotime($payments[0]->bookingDate)) . '</td>'; // Assuming all payments for the same booking have the same booking date
+        echo '<td>' . $payments->fname . '</td>';
+        echo '<td>' . $payments->amount . '.00 </td>'; // Assuming all payments for the same booking have the same amount
+        echo '<td>' . $payments->payment_date . '</td>'; // Assuming all payments for the same booking have the same booking date
         echo '</tr>';
         $count++;
     }

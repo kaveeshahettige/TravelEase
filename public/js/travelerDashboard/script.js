@@ -120,45 +120,23 @@ window.onclick = function(event) {
   }
 }
 
-function openPopup(Tid,Sid, Bid) {
-  // Get the modal
-  var modal1 = document.getElementById("myModal");
-
-  // Get the iframe
-  var iframe = document.getElementById("popupFrame");
-
-  // Set the URL you want to open in the iframe
-  if(Tid==0){
-    var newPageURL = `../bookingdetails/${Sid}/${Bid}`;
-  }else{
-    //alert("Tid is not 0!");
-     //console.log("Tid", Tid);
-    var newPageURL = `../bookingdetailsCart/${Tid}/${Sid}/${Bid}`;
+function openPopup(Tid, Sid, Bid) {
+  var newPageURL;
+  if (Tid == 0) {
+    newPageURL = `../bookingdetails/${Sid}/${Bid}`;
+  } else {
+    newPageURL = `../bookingdetailsCart/${Tid}/${Sid}/${Bid}`;
   }
-  
 
-  // Set the iframe source
-  iframe.src = newPageURL;
-
-  // Display the modal
-  modal1.style.display = "block";
-
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close1")[0];
-
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function () {
-    modal1.style.display = "none";
-  };
-
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function (event) {
-    if (event.target == modal1) {
-      modal1.style.display = "none";
-    }
-  };
-  var elements = document.getElementsByClassName('navbar');
-
+  // Open the URL in a new tab
+  var newTab = window.open(newPageURL, '_blank');
+  if (newTab) {
+    // Focus on the new tab (optional)
+    newTab.focus();
+  } else {
+    // If pop-up blocking is enabled, inform the user
+    alert("Please allow pop-ups for this website to open the details in a new tab.");
+  }
 }
 
 
@@ -320,7 +298,8 @@ function openCart(Bid) {
 }
 
 //proceedCart(Bid)
-function proceedCart(Bid) {
-  window.location.href = `../myCartDetails/${Bid}`;
-}
+// function proceedCart(Bid) {
+//   window.location.href = `../myCartDetails/${Bid}`;
+// }
+
 

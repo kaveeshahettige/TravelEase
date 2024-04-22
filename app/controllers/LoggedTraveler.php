@@ -1368,8 +1368,10 @@ foreach ($vehicles as $vehicle) {
 }
 
 //cartpayment
-public function cartpayment($bookingcartArrayString, $checkinDate, $checkoutDate, $pickupTime=null,$meetTime=null) {
+public function cartpayment($bookingcartArrayString,$servicePricesArray, $checkinDate, $checkoutDate, $pickupTime=null,$meetTime=null) {
   $bookingcartArray = json_decode(urldecode($bookingcartArrayString), true);
+  $servicePricesArray = json_decode(urldecode($servicePricesArray), true);
+  // echo var_dump($servicePricesArray);
 
   $totalAmount = $_POST['totalAmount'];
   $driverType = $_POST['driverType'];
@@ -1415,7 +1417,7 @@ foreach ($bookingcartArray as $type => $serviceIds) {
       'furtherBookingDetails' => $furtherBookingDetails,
       'driver' => $driver,
       'meetTime' => $meetTime ? $meetTime : null,
-      
+      'servicePricesArray'=>$servicePricesArray,
       // Add any other relevant transaction details
   ];
 
@@ -1460,9 +1462,29 @@ public function cartpaymentSuccessful() {
       $transactionData = $_SESSION['transaction_data'];
       $this->userModel->addBookingfromCart($transactionData);
       $lastcartBooking = $this->userModel->getLastCartBooking();
-      $this->userModel->addCartPaymentDetails($transactionData, $lastcartBooking->booking_id);
+      $temporyIds=$this->userModel->getTemportIdsByBookingId($lastcartBooking->booking_id);
+      $servicePricesArray = $transactionData['servicePricesArray'];
+    
+      // Ensure both arrays have the same length
+      if (count($temporyIds) === count($servicePricesArray)) {
+        $count = count($temporyIds); // Get the length of the arrays
+    
+        // Iterate through each temporyId
+        for ($i = 0; $i < $count; $i++) {
+            $temporyId = $temporyIds[$i]->temporyid; // Assuming the ID property is 'id'
+            $servicePrice = $servicePricesArray[$i]; // Get the corresponding service price
+    
+            // Call your function with the temporyId and corresponding service price
+            $this->userModel->addCartPaymentDetails($temporyId, $servicePrice, $lastcartBooking->booking_id);
+        }
+    } else {
+  // Handle error: Arrays are not of equal length
+  // You might want to log an error or handle this case appropriately
+}
+      
+      
 
-      // Iterate over each booking detail in $transactionData['furtherBookingDetails']
+      //Iterate over each booking detail in $transactionData['furtherBookingDetails']
       foreach ($transactionData['furtherBookingDetails'] as $bookingDetail) {
           $type = $bookingDetail->type; 
           $driver = isset($transactionData['driver']) ? $transactionData['driver'] : null; 

@@ -611,11 +611,11 @@ public function updatePicture($data){
     $daysStart = round($diffStart / 86400); // Convert seconds to days
 
     // Calculate the difference in days between the booking date and the start date of the booking
-    $diffBooking = strtotime($start) - strtotime($bookingDate);
+    $diffBooking = strtotime($today) - strtotime($bookingDate);
     $daysBooking = round($diffBooking / 86400); // Convert seconds to days
 
     // Check both conditions
-    if ($daysStart > 3 && $daysBooking > 7) {
+    if ($daysStart > 3 && $daysBooking < 7) {
         return "Available";
     } else {
         return "Unavailable";
@@ -944,6 +944,19 @@ return true;
     
 }
 
+//getTemportIdsByBookingId($lastcartBooking)
+public function getTemportIdsByBookingId($lastcartBooking){
+    $this->db->query('SELECT temporyid FROM cartbookings WHERE booking_id = :id');
+    $this->db->bind(':id', $lastcartBooking);
+    $data = $this->db->resultSet();
+    if($this->db->rowcount()>0){
+        return $data;
+     }
+     else{
+        return false;
+    }
+}
+
 //addtoCartTable
 public function addtoCartTable($transactionData){
     $currentDate = date('Y-m-d');  //this is a dummy
@@ -1099,10 +1112,11 @@ public function addPaymentDetails($transactionData,$booking_id){
 }
 //
 
-public function addCartPaymentDetails($transactionData,$booking_id){
-    $this->db->query('INSERT INTO cartpayments (booking_id, amount) VALUES (:booking_id, :amount)');
+public function addCartPaymentDetails($temporyId, $servicePrice,$booking_id){
+    $this->db->query('INSERT INTO cartpayments (tempory_id,booking_id, amount) VALUES (:tempory_id,:booking_id, :amount)');
+    $this->db->bind(':tempory_id',$temporyId);
     $this->db->bind(':booking_id',$booking_id);
-    $this->db->bind(':amount', $transactionData['price']);
+    $this->db->bind(':amount',$servicePrice);
 
     if($this->db->execute()){
         return true;
@@ -1890,9 +1904,10 @@ public function amountPaymentMonthly($id){
 public function findPayment($id){
     $this->db->query('
     SELECT 
-    payments.*, 
-    bookings.*, 
-    users.*
+    payments.amount, 
+    payments.payment_date, 
+    bookings.booking_id, 
+    users.fname
 FROM 
     payments
 JOIN 
@@ -1905,9 +1920,10 @@ WHERE
 UNION ALL
 
 SELECT 
-    cartpayments.*, 
-    cartbookings.*, 
-    users.*
+    cartpayments.amount,
+    cartpayments.payment_date, 
+    cartbookings.booking_id, 
+    users.fname
 FROM 
     cartpayments
 JOIN 
@@ -2100,41 +2116,51 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
     //findPreviousTrips($id)
     public function findPreviousTrips($id) {
         $this->db->query('
-            SELECT 
-                bookings.*, 
-                users.*, 
-                hotel_rooms.description AS hotel_description,  -- Alias for description from hotel_rooms
-                vehicles.description AS vehicle_description   -- Alias for description from vehicles
-            FROM 
-                bookings
-            INNER JOIN 
-                users ON bookings.serviceProvider_id = users.id
-            LEFT JOIN 
-                hotel_rooms ON bookings.room_id IS NOT NULL AND bookings.room_id = hotel_rooms.room_id
-            LEFT JOIN 
-                vehicles ON bookings.vehicle_id IS NOT NULL AND bookings.vehicle_id = vehicles.vehicle_id
-            WHERE 
-                bookings.user_id = :id
-                AND bookings.endDate < CURDATE()
-            UNION ALL
-            SELECT 
-                cartbookings.*, 
-                users.*, 
-                hotel_rooms.description AS hotel_description,  -- No hotel description for cart bookings
-                vehicles.description AS vehicle_description  -- No vehicle description for cart bookings
-            FROM 
-            cartbookings
-            INNER JOIN 
-                users ON cartbookings.serviceProvider_id = users.id
-            LEFT JOIN 
-                hotel_rooms ON cartbookings.room_id IS NOT NULL AND cartbookings.room_id = hotel_rooms.room_id
-            LEFT JOIN 
-                vehicles ON cartbookings.vehicle_id IS NOT NULL AND cartbookings.vehicle_id = vehicles.vehicle_id
-            WHERE 
-            cartbookings.user_id = :id
-                AND cartbookings.endDate < CURDATE()
-            ORDER BY 
-                endDate DESC; -- Order by endDate in descending order
+        SELECT 
+        bookings.*, 
+        users.*, 
+        hotel_rooms.description AS hotel_description,  -- Alias for description from hotel_rooms
+        vehicles.description AS vehicle_description,   -- Alias for description from vehicles
+        guides.description AS guide_description        -- Alias for description from guides
+    FROM 
+        bookings
+    INNER JOIN 
+        users ON bookings.serviceProvider_id = users.id
+    LEFT JOIN 
+        hotel_rooms ON bookings.room_id IS NOT NULL AND bookings.room_id = hotel_rooms.room_id
+    LEFT JOIN 
+        vehicles ON bookings.vehicle_id IS NOT NULL AND bookings.vehicle_id = vehicles.vehicle_id
+    LEFT JOIN 
+        guides ON bookings.package_id IS NOT NULL AND bookings.package_id = guides.user_id
+    WHERE 
+        bookings.user_id = :id
+        AND bookings.endDate < CURDATE()
+    
+    UNION ALL
+    
+    SELECT 
+        cartbookings.*, 
+        users.*, 
+        hotel_rooms.description AS hotel_description,  -- No hotel description for cart bookings
+        vehicles.description AS vehicle_description,  -- No vehicle description for cart bookings
+        guides.description AS guide_description       -- No guide description for cart bookings
+    FROM 
+        cartbookings
+    INNER JOIN 
+        users ON cartbookings.serviceProvider_id = users.id
+    LEFT JOIN 
+        hotel_rooms ON cartbookings.room_id IS NOT NULL AND cartbookings.room_id = hotel_rooms.room_id
+    LEFT JOIN 
+        vehicles ON cartbookings.vehicle_id IS NOT NULL AND cartbookings.vehicle_id = vehicles.vehicle_id
+    LEFT JOIN 
+        guides ON cartbookings.package_id IS NOT NULL AND cartbookings.package_id = guides.user_id
+    WHERE 
+        cartbookings.user_id = :id
+        AND cartbookings.endDate < CURDATE()
+        
+    ORDER BY 
+        endDate DESC; -- Order by endDate in descending order
+    
         ');
         $this->db->bind(':id', $id);
         $result = $this->db->resultSet();
@@ -2302,6 +2328,38 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
         }else{
             return false;
         }
+    }
+
+    //findBusinessManagers
+    public function findBusinessManagers(){
+        $this->db->query('SELECT * FROM users WHERE type = 2');
+        $result = $this->db->resultSet();
+        if ($this->db->rowCount() > 0) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
+    //sendBookingCancellationNotificationtoBM($id,$booking_id,$message)
+    public function sendBookingCancellationNotificationtoBM($id,$booking_id,$message,$BMs){
+        $success = true; // Assume success
+
+foreach ($BMs as $BM) {
+    $this->db->query('INSERT INTO notifications (booking_id,sender_id,receiver_id, notification) VALUES (:booking_id,:sender_id, :receiver_id, :notification)');
+    
+    $this->db->bind(':booking_id', $booking_id);
+    $this->db->bind(':sender_id', $id);
+    $this->db->bind(':receiver_id', $BM->id);
+    $this->db->bind(':notification', $message);
+
+    if (!$this->db->execute()) {
+        $success = false; // Set success to false if any insertion fails
+    }
+}
+
+return $success; // Return success status after the loop
+
     }
 
     //makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 
