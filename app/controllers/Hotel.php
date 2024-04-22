@@ -132,8 +132,11 @@ class Hotel extends Controller
 
     public function revenue()
     {
+        $finalPayment = $this->getFinalPayment();
+
         $data=[
             'basicInfo' => $this->basicInfo(),
+            'finalPayment' => $finalPayment,
         ];
         $this->view('hotel/revenue', $data);
     }
@@ -320,32 +323,21 @@ class Hotel extends Controller
 
             // Validate other fields similarly
 
+            // Handle file upload for room images
+            $uploadedImages = [];
             if (isset($_FILES['roomImages']) && !empty($_FILES['roomImages']['name'][0])) {
                 $images = $_FILES['roomImages'];
-                $uploadedImages = [];
-
-                // Loop through each uploaded image
                 foreach ($images['tmp_name'] as $key => $tmp_name) {
-                    $file_name = $images['name'][$key];
-                    $file_tmp = $images['tmp_name'][$key];
-                    $file_size = $images['size'][$key];
-                    $file_type = $images['type'][$key];
-
-                    // Generate a unique filename
-                    $file_unique_name = uniqid() . '_' . $file_name;
-
-                    // Define the upload directory
-                    $upload_dir = "../public/uploads/Hotel/" . $file_unique_name;
-
-                    // Move the uploaded file to the upload directory
-                    if (move_uploaded_file($file_tmp, $upload_dir)) {
-                        $uploadedImages[] = $upload_dir;
+                    $file_name = $images['name'][$key]; // Original file name
+                    $upload_dir = "../public/images/" . $file_name; // Destination directory
+                    if (move_uploaded_file($tmp_name, $upload_dir)) {
+                        $uploadedImages[] = $file_name; // Store the original file name
                     }
                 }
-
-                // Add the uploaded image paths to the $roomData array
-                $roomData['roomImages'] = $uploadedImages;
             }
+
+
+
 
 
             // Check if there are no errors
@@ -365,7 +357,7 @@ class Hotel extends Controller
             ) {
                 // Set the correct hotel_id before inserting into the database
                 // Set the uploaded images data
-                $roomData['roomImages'] = $_FILES['roomImages'];
+                $roomData['roomImages'] = $uploadedImages;
                 $roomData['hotel_id'] = $hotel_id;
 
                 // Call the model method to add or edit hotel rooms
@@ -438,6 +430,7 @@ class Hotel extends Controller
                 'dinnerIncluded_err' => '',
                 'description_err' => '',
                 'cancellationPolicy_err' => '',
+                'roomImages' => [],
             ];
             $data = [
                 'basicInfo' => $this->basicInfo(),
@@ -503,8 +496,23 @@ class Hotel extends Controller
                 'breakfastIncluded_err' => '', // New field
                 'lunchIncluded_err' => '', // New field
                 'dinnerIncluded_err' => '', // New field
+                'roomImages' => [],
             ];
 
+            $uploadedImages = [];
+            if (isset($_FILES['roomImages']) && !empty($_FILES['roomImages']['name'][0])) {
+                $images = $_FILES['roomImages'];
+                foreach ($images['tmp_name'] as $key => $tmp_name) {
+                    $file_name = $images['name'][$key]; // Original file name
+                    $upload_dir = "../public/images/" . $file_name; // Destination directory
+                    if (move_uploaded_file($tmp_name, $upload_dir)) {
+                        $uploadedImages[] = $file_name; // Store the original file name
+                    }
+                }
+            }
+
+
+            $roomData['roomImages'] = $uploadedImages;
             // Validate form fields (you need to implement this)
 
             // Check for any validation errors
@@ -651,10 +659,16 @@ class Hotel extends Controller
                 'street_address' => $_POST['street_address'],
                 'city' => $_POST['city'],
                 'state' => $_POST['state'],
+                'check_in_time' => $_POST['check_in_time'],
+                'check_out_time' => $_POST['check_out_time'],
                 'website' => $_POST['website'],
                 'facebook' => $_POST['facebook'],
                 'twitter' => $_POST['twitter'],
                 'instagram' => $_POST['instagram'],
+                'bank_name'=>$_POST['bank_name'],
+                'branch' => $_POST['branch'],
+                'account_number' => $_POST['account_number'],
+                'card_holder_name' => $_POST['card_holder_name'],
                 'additionalNotes' => $_POST['additionalNotes'],
                 'user_id' => $user_id,
             ];
@@ -798,8 +812,10 @@ class Hotel extends Controller
         // Get bookings for the specific hotel
         $bookingData1 = $this->hotelsModel->getBookingsByHotel($hotel_id);
 
+
         // Get cart bookings for the specific hotel
         $cartBookingData = $this->hotelsModel->getCartBookingsByHotel($hotel_id);
+
 
         // Merge the booking data and cart booking data
         $bookingData = array_merge($bookingData1, $cartBookingData);
@@ -869,16 +885,17 @@ class Hotel extends Controller
     {
         // Check if a file was uploaded
         if ($_FILES['profile-picture']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = '../public/uploads/profile-pictures/';
+            $uploadDir = '../public/images/';
             $uploadFile = $uploadDir . basename($_FILES['profile-picture']['name']);
+            $fileName = basename($_FILES['profile-picture']['name']); // Extracting the file name
 
             // Move the uploaded file to the desired directory
             if (move_uploaded_file($_FILES['profile-picture']['tmp_name'], $uploadFile)) {
                 // Update the session with the new file path
                 $_SESSION['user_profile_picture'] = $uploadFile;
 
-                // Update the profile picture in the database
-                $this->hotelsModel->updateProfilePicture($_SESSION['user_id'], $uploadFile);
+                // Update the profile picture file name in the database
+                $this->hotelsModel->updateProfilePicture($_SESSION['user_id'], $fileName);
             } else {
                 echo 'Error uploading the file.';
             }
@@ -890,6 +907,7 @@ class Hotel extends Controller
         header('Location: ' . URLROOT . '/hotel/settings');
         exit;
     }
+
 
     public function basicInfo()
     {
@@ -995,7 +1013,6 @@ class Hotel extends Controller
     }
 
 
-
     public function updateBookingStatus()
     {
         // Retrieve room_id, booking_id, and temporyid from the POST request
@@ -1007,6 +1024,7 @@ class Hotel extends Controller
         $startDate = $_POST['startDate'];
         $endDate = $_POST['endDate'];
         $roomType = $_POST['roomType'];
+        $amount = $_POST['amount'];
 
         $basicinfo = $this->basicInfo();
         $sender_name = $basicinfo['userData']->fname;
@@ -1029,7 +1047,10 @@ class Hotel extends Controller
         // Insert notification
         $notification_inserted = $this->hotelsModel->insertNotification($booking_id, $sender_id, $receiver_id, $notification_message);
 
+        //Update the refund table
+        $refund = $this->hotelsModel->updateRefund($temporyid,$booking_id,$sender_id,$receiver_id,$amount,);
 
+//        (tempory_id, booking_id, serviceProvider_id,user_id,refund_amount)
 
         require_once __DIR__ . '/../libraries/sms/vendor/autoload.php';
 
@@ -1051,15 +1072,20 @@ class Hotel extends Controller
         }
 
         // Return JSON response based on the result
-        if ($updated && $notification_inserted && $message->getStatus() == 0) {
+        if ($updated && $notification_inserted && $refund && $message->getStatus() == 0) {
             echo json_encode(['success' => true]);
         } else {
             echo json_encode(['success' => false]);
         }
     }
 
+    public function getFinalPayment(){
+        $user_id = $_SESSION['user_id'];
 
+        $finalPayment = $this->hotelsModel->getFinalPayment($user_id);
 
+        return $finalPayment;
+    }
 
 
 

@@ -142,6 +142,7 @@ class Hotels
             $this->db->bind(':roomImages3', $roomData['roomImages'][2] ?? '');
             $this->db->bind(':roomImages4', $roomData['roomImages'][3] ?? '');
 
+
             // Execute
             if ($this->db->execute()) {
                 return true;
@@ -197,7 +198,11 @@ class Hotels
         kitchenAvailability = :kitchenAvailability,
         breakfastIncluded = :breakfastIncluded,
         lunchIncluded = :lunchIncluded,
-        dinnerIncluded = :dinnerIncluded 
+        dinnerIncluded = :dinnerIncluded, 
+        roomImages1 = :roomImages1,
+        roomImages2 = :roomImages2,
+        roomImages3 = :roomImages3,
+        roomImages4 = :roomImages4           
         WHERE room_id = :room_id');
 
         // Bind values
@@ -225,6 +230,10 @@ class Hotels
         $this->db->bind(':breakfastIncluded', $roomData['breakfastIncluded']);
         $this->db->bind(':lunchIncluded', $roomData['lunchIncluded']);
         $this->db->bind(':dinnerIncluded', $roomData['dinnerIncluded']);
+        $this->db->bind(':roomImages1', $roomData['roomImages'][0] ?? '');
+        $this->db->bind(':roomImages2', $roomData['roomImages'][1] ?? '');
+        $this->db->bind(':roomImages3', $roomData['roomImages'][2] ?? '');
+        $this->db->bind(':roomImages4', $roomData['roomImages'][3] ?? '');
 
         // Execute
         if ($this->db->execute()) {
@@ -276,11 +285,17 @@ class Hotels
         street_address = :street_address,
         city = :city,
         state_province = :state,
+        check_in_time = :check_in_time,
+        check_out_time = :check_out_time,
         website = :website,
         facebook = :facebook,
         twitter = :twitter,
         instagram = :instagram,
-        additional_notes = :additionalNotes
+        bank_name = :bank_name,
+        branch = :branch,
+        card_holder_name = :card_holder_name,
+        account_number = :account_number,
+        additional_notes = :additionalNotes     
         WHERE user_id = :user_id');
 
         // Bind values for hotels table
@@ -292,10 +307,16 @@ class Hotels
         $this->db->bind(':street_address', $hotelData['street_address']);
         $this->db->bind(':city', $hotelData['city']);
         $this->db->bind(':state', $hotelData['state']);
+        $this->db->bind(':check_in_time', $hotelData['check_in_time']);
+        $this->db->bind(':check_out_time', $hotelData['check_out_time']);
         $this->db->bind(':website', $hotelData['website']);
         $this->db->bind(':facebook', $hotelData['facebook']);
         $this->db->bind(':twitter', $hotelData['twitter']);
         $this->db->bind(':instagram', $hotelData['instagram']);
+        $this->db->bind(':bank_name', $hotelData['bank_name']);
+        $this->db->bind(':branch', $hotelData['branch']);
+        $this->db->bind(':card_holder_name', $hotelData['card_holder_name']);
+        $this->db->bind(':account_number', $hotelData['account_number']);
         $this->db->bind(':additionalNotes', $hotelData['additionalNotes']);
 
         // Execute hotels table update
@@ -384,31 +405,92 @@ class Hotels
 
     public function getBookingsByHotel($hotel_id)
     {
-        $this->db->query('SELECT b.*, u.fname, u.profile_picture, hr.roomType, hr.registration_number, p.payment_id, p.amount
+        $this->db->query('SELECT b.*, u.fname, u.profile_picture,u.number, hr.roomType, hr.registration_number, p.payment_id, p.amount
                       FROM bookings b
                       JOIN users u ON b.user_id = u.id
                       LEFT JOIN hotel_rooms hr ON b.room_id = hr.room_id
                       LEFT JOIN payments p ON b.booking_id = p.booking_id
-                      WHERE hr.hotel_id = :hotel_id
-                      ORDER BY ABS(DATEDIFF(b.startDate, CURDATE()))');
+                      WHERE hr.hotel_id = :hotel_id AND b.bookingCondition ="pending"');
 
         $this->db->bind(':hotel_id', $hotel_id);
 
         return $this->db->resultSet();
     }
+
+    public function getCancelledBookings($hotel_id)
+    {
+        $this->db->query('SELECT b.*, u.fname, u.profile_picture,u.number, hr.roomType, hr.registration_number, p.payment_id, p.amount
+                      FROM bookings b
+                      JOIN users u ON b.user_id = u.id
+                      LEFT JOIN hotel_rooms hr ON b.room_id = hr.room_id
+                      LEFT JOIN payments p ON b.booking_id = p.booking_id
+                      WHERE hr.hotel_id = :hotel_id AND b.bookingCondition ="cancelled"');
+
+        $this->db->bind(':hotel_id', $hotel_id);
+
+        return $this->db->resultSet();
+    }
+
+//    public function getCancelledBookings($hotel_id)
+//    {
+//        $this->db->query('SELECT b.*, u.fname, u.profile_picture,u.number, hr.roomType, hr.registration_number, p.payment_id, p.amount
+//                      FROM bookings b
+//                      JOIN users u ON b.user_id = u.id
+//                      LEFT JOIN hotel_rooms hr ON b.room_id = hr.room_id
+//                      LEFT JOIN payments p ON b.booking_id = p.booking_id
+//                      WHERE hr.hotel_id = :hotel_id AND b.bookingCondition ="cancelled"');
+//
+//        $this->db->bind(':hotel_id', $hotel_id);
+//
+//        return $this->db->resultSet();
+//    }
+
+
 
     public function getCartBookingsByHotel($hotel_id)
     {
-        $this->db->query('SELECT cb.*, u.fname, u.profile_picture, hr.roomType, hr.registration_number 
-                  FROM cartbookings cb
-                  JOIN users u ON cb.user_id = u.id
-                  LEFT JOIN hotel_rooms hr ON cb.room_id = hr.room_id
-                  WHERE hr.hotel_id = :hotel_id');
+        $this->db->query('SELECT cb.*, u.fname, u.profile_picture, hr.roomType, hr.registration_number, cp.amount, cp.payment_id
+              FROM cartbookings cb
+              JOIN users u ON cb.user_id = u.id
+              LEFT JOIN hotel_rooms hr ON cb.room_id = hr.room_id
+              LEFT JOIN cartpayments cp ON cb.booking_id = cp.booking_id AND cb.temporyid  = cp.temporyid 
+              WHERE hr.hotel_id = :hotel_id AND cb.bookingCondition = "pending"');
 
         $this->db->bind(':hotel_id', $hotel_id);
 
         return $this->db->resultSet();
     }
+
+    public function getCancelledCartBookings($hotel_id)
+    {
+        $this->db->query('SELECT cb.*, u.fname, u.profile_picture, hr.roomType, hr.registration_number, cp.amount, cp.payment_id
+              FROM cartbookings cb
+              JOIN users u ON cb.user_id = u.id
+              LEFT JOIN hotel_rooms hr ON cb.room_id = hr.room_id
+              LEFT JOIN cartpayments cp ON cb.booking_id = cp.booking_id AND cb.temporyid  = cp.temporyid 
+              WHERE hr.hotel_id = :hotel_id AND cb.bookingCondition = "cancelled"');
+
+        $this->db->bind(':hotel_id', $hotel_id);
+
+        return $this->db->resultSet();
+    }
+
+    public function getCompletedCartBookings($hotel_id)
+    {
+        $this->db->query('SELECT cb.*, u.fname, u.profile_picture, hr.roomType, hr.registration_number, cp.amount, cp.payment_id
+              FROM cartbookings cb
+              JOIN users u ON cb.user_id = u.id
+              LEFT JOIN hotel_rooms hr ON cb.room_id = hr.room_id
+              LEFT JOIN cartpayments cp ON cb.booking_id = cp.booking_id AND cb.temporyid  = cp.temporyid 
+              WHERE hr.hotel_id = :hotel_id AND cb.bookingCondition = "completed"');
+
+        $this->db->bind(':hotel_id', $hotel_id);
+
+        return $this->db->resultSet();
+    }
+
+
+
 
     public function getReviews($hotel_id)
     {
@@ -429,7 +511,6 @@ class Hotels
         // Fetch and return the result set
         return $this->db->resultSet();
     }
-
 
 
     public function insertPdf($filename, $userId)
@@ -656,7 +737,41 @@ class Hotels
     }
 
     public function insertMessage(){
+    }
+
+   public function getFinalPayment($user_id){
+        $this->db->query('SELECT * FROM final_payment
+                             WHERE serviceProvider_id = :user_id ');
+
+        $this->db->bind(':user_id', $user_id);
+        $finalPayment = $this->db->resultSet();
+
+        // Check row
+        if ($this->db->rowCount() > 0) {
+            return $finalPayment;
+        } else {
+            return [];
+        }
+    }
+
+       public function updateRefund($temporyid,$booking_id,$sender_id,$receiver_id,$amount,){
+
+        $sql = "INSERT INTO refunds (tempory_id, booking_id, serviceProvider_id,user_id,refund_amount) 
+                VALUES (:temporyid, :booking_id,:sender_id,:receiver_id,:amount)";
+
+        $this->db->query($sql);
+
+        $this->db->bind(':temporyid', $temporyid);
+        $this->db->bind(':booking_id', $booking_id);
+        $this->db->bind(':sender_id', $sender_id);
+        $this->db->bind(':receiver_id', $receiver_id);
+        $this->db->bind(':amount', $amount);
+
+        // Execute the query
+           return $this->db->execute();
 
     }
+
+
 
 }

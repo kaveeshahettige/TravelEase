@@ -215,6 +215,53 @@ include 'navigation.php';
                         </div>
                     </div>
 
+                    <h3>Room Images</h3>
+
+                    <div>
+                        <div>
+                            <div class="form-group">
+                                <label for="roomImages1">Room Images 1:</label>
+                                <input type="file" id="roomImages1" name="roomImages[]" accept="image/*" required>
+                                <?php if (!empty($roomData['roomImages'][0])): ?>
+                                    <img src="<?php echo $roomData['roomImages'][0]; ?>" alt="Room Image 1">
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-group">
+                                <label for="roomImages2">Room Images 2:</label>
+                                <input type="file" id="roomImages2" name="roomImages[]" accept="image/*" required>
+                                <?php if (!empty($roomData['roomImages'][1])): ?>
+                                    <img src="<?php echo $roomData['roomImages'][1]; ?>" alt="Room Image 2">
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div>
+                            <div class="form-group">
+                                <label for="roomImages3">Room Images 3:</label>
+                                <input type="file" id="roomImages3" name="roomImages[]" accept="image/*" required>
+                                <?php if (!empty($roomData['roomImages'][2])): ?>
+                                    <img src="<?php echo $roomData['roomImages'][2]; ?>" alt="Room Image 3">
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-group">
+                                <label for="roomImages4">Room Images 4:</label>
+                                <input type="file" id="roomImages4" name="roomImages[]" accept="image/*" required>
+                                <?php if (!empty($roomData['roomImages'][3])): ?>
+                                    <img src="<?php echo $roomData['roomImages'][3]; ?>" alt="Room Image 4">
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+
+
 
                     <h3>Further Descriptions</h3>
                     <div>

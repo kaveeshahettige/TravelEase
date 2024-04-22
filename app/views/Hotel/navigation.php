@@ -19,9 +19,9 @@
     ?>
 
     <div class="user-profile">
-        <img src="<?= isset($userData->profile_picture) ? $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="User Profile Photo">
+        <img id="profile-picture" src="<?= isset($userData->profile_picture) ? '../public/images/' . $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="User Profile Photo">
         <span class="user-name"><?=($userData->fname)?></span>
-        <button class="notification-button" onclick="showNotifications()">
+        <button class="notification-button" href="hotel/gallery">
             <i class="bx bx-bell"></i> <!-- Bell icon from Boxicons -->
         </button>
     </div>

@@ -66,3 +66,63 @@ function makePayment(serviceProvider_id,total_amount) {
         //     // window.location.reload();
         // });
 }
+
+function InvoicePopup(serviceProvider_id,total_amount) {
+    console.log(serviceProvider_id, total_amount);
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+
+    const confirmDialog = document.createElement('div');
+    confirmDialog.className = 'confirm-dialog';
+    confirmDialog.innerHTML = `
+        <div class="confirm-message">Are you sure you want to make the Invoice?</div>
+        <div class="buttons">
+            <button class="btn btn-yes" onclick="makeInvoice('${serviceProvider_id}', '${total_amount}')">Yes</button>
+            <button class="btn btn-no" onclick="cancelCancel()">No</button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(confirmDialog);
+
+}
+
+function makeInvoice(serviceProvider_id, total_amount) {
+    console.log(serviceProvider_id);
+    // Prepare the data to send
+    var requestData = {
+        serviceProvider_id: serviceProvider_id,
+        total_amount: total_amount,
+    };
+
+    const form = new FormData();
+    form.append('serviceProvider_id', serviceProvider_id);
+    form.append('total_amount', total_amount);
+
+    // Make an AJAX request
+    fetch(
+        'http://localhost/TravelEase/businessmanager/makeInvoice',
+        {
+            method: 'POST',
+            body: form
+        }
+    )
+        .then(async function(response) {
+            if (response.ok) {
+                // Handle successful response
+                const data = await response.blob(); // Get the PDF blob
+                const url = window.URL.createObjectURL(data); // Create a URL for the blob
+                window.open(url); // Open the PDF in a new tab
+            } else {
+                console.error('Error in generating invoice:', response.status);
+            }
+        })
+        .catch(function(error) {
+            console.error('Error in generating invoice:', error);
+        })
+
+        .finally(function() {
+            // Close the pop-up after the operation is completed
+            cancelCancel();
+        });
+}

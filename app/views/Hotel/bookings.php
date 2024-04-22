@@ -130,7 +130,7 @@ $userData= $data['basicInfo']['userData'];
                     <th>Room Number</th>
                     <th>Room Type</th>
                     <th>Booking Status</th>
-                    <th>Action</th>p
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -138,7 +138,9 @@ $userData= $data['basicInfo']['userData'];
 
                 <?php
                 $bookingData = $data["bookingData"];
+//                var_dump($bookingData[6]);
                 foreach ($bookingData as $key => $booking):
+
                  ?>
 
                     <tr>
@@ -153,7 +155,7 @@ $userData= $data['basicInfo']['userData'];
                                 <i class='bx bx-show'></i>
                             </button>
 
-                            <button class="cancel-button" <?php if ($booking->bookingCondition === 'cancelled') echo 'disabled'; ?> onclick="showCancelPopup(<?php echo $booking->room_id; ?>, <?php echo $booking->user_id; ?>, '<?php echo $booking->booking_id; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->endDate; ?>', <?php echo $booking->temporyid; ?>, '<?php echo $booking->roomType; ?>')">
+                            <button class="cancel-button" <?php if ($booking->bookingCondition === 'cancelled') echo 'disabled'; ?> onclick="showCancelPopup(<?php echo $booking->room_id; ?>, <?php echo $booking->user_id; ?>, '<?php echo $booking->booking_id; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->endDate; ?>', <?php echo $booking->temporyid; ?>, '<?php echo $booking->roomType; ?>',<?php echo $booking->amount; ?>)">
                                 <i class='bx bx-x'></i>
                             </button>
 

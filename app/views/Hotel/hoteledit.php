@@ -22,7 +22,10 @@ include 'navigation.php';
         <span class="logo-text">TravelEase</span>
     </div>
     <div class="dashboard-content">
-        <div><h1>Settings</h1> </div>
+        <div>
+            <h1>Setting </h1>
+        </div>
+
 
 
         <div id="base">
@@ -115,6 +118,21 @@ include 'navigation.php';
                         </div>
                     </div>
 
+                    <h3>Check in/out Time</h3>
+
+                    <div>
+                        <div class="form-group">
+                            <label for="check_in_time">Check in Time</label>
+                            <input type="time" id="check_in_time" name="check_in_time" value="<?php echo $hotelData->check_in_time; ?>">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="check_out_time">Check out Time</label>
+                            <input type="time" id="check_out_time" name="check_out_time" value="<?php echo $hotelData->check_out_time; ?>">
+                        </div>
+                    </div>
+
+                    <h3>Social Media Accounts</h3>
                     <div>
                         <div class="form-group">
                             <label for="website">Website</label>
@@ -137,12 +155,37 @@ include 'navigation.php';
                         </div>
                     </div>
 
+                    <h3>Bank Details</h3>
+                    <div>
+                        <div class="form-group">
+                            <label for="bank_name">Bank Name</label>
+                            <input type="text" id="bank_name" name="bank_name" placeholder="Bank Name" value="<?php echo $hotelData->bank_name; ?>">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="branch">Branch</label>
+                            <input type="text" id="branch" name="branch" placeholder="Branch" value="<?php echo $hotelData->branch; ?>">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label for="card_holder_name">Card Holder Name</label>
+                            <input type="text" id="card_holder_name" name="card_holder_name" placeholder="Card Holder Name" value="<?php echo $hotelData->card_holder_name; ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="account_number">Bank Account Number</label>
+                            <input type="text" id="account_number" name="account_number" placeholder="Account Number" value="<?php echo $hotelData->account_number; ?>">
+                        </div>
+                    </div>
+
                     <div>
                         <div class="form-group">
                             <label for="additionalNotes">Additional Comments/Notes</label>
                             <textarea id="additionalNotes" name="additionalNotes" rows="4" placeholder="Any other relevant information or special requests"><?php echo $hotelData->additional_notes; ?></textarea>
                         </div>
                     </div>
+
 
                     <div>
                         <div class="baseButtons">

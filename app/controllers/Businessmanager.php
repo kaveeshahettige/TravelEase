@@ -15,13 +15,16 @@ class Businessmanager extends Controller{
     public function index(){
 
         $profilePicture = $this->getProfilePicture();
+        $bookingCount = $this->getBookingCount();
 
         $data = [
-            'profilePicture' => $profilePicture
+            'profilePicture' => $profilePicture,
+            'bookingCount' => $bookingCount
         ];
 
         $this->view('businessmanager/index', $data);
     }
+
     public function addpackage(){
 
         $profilePicture = $this->getProfilePicture();
@@ -32,6 +35,7 @@ class Businessmanager extends Controller{
 
         $this->view('businessmanager/addpackage', $data);
     }
+
     public function bookings(){
 
         $bookingData = $this->getBookings();
@@ -45,6 +49,7 @@ class Businessmanager extends Controller{
             $this->view('businessmanager/bookings', $data);
 
     }
+
     public function notifications(){
 
         $profilePicture = $this->getProfilePicture();
@@ -55,6 +60,7 @@ class Businessmanager extends Controller{
 
         $this->view('businessmanager/notifications', $data);
     }
+
     public function businessmanageredit(){
 
         $profilePicture = $this->getProfilePicture();
@@ -65,6 +71,7 @@ class Businessmanager extends Controller{
 
         $this->view('businessmanager/businessmanageredit', $data);
     }
+
     public function businessmanagerpassword(){
 
         $profilePicture = $this->getProfilePicture();
@@ -75,6 +82,7 @@ class Businessmanager extends Controller{
 
         $this->view('businessmanager/businessmanagerpassword', $data);
     }
+
     public function financialmanagement(){
 
         $profilePicture = $this->getProfilePicture();
@@ -87,6 +95,7 @@ class Businessmanager extends Controller{
 //              var_dump($data);
         $this->view('businessmanager/financialmanagement', $data);
     }
+
     public function packageedit(){
 
         $profilePicture = $this->getProfilePicture();
@@ -97,7 +106,8 @@ class Businessmanager extends Controller{
 
         $this->view('businessmanager/packageedit', $data);
     }
-    public function packages(){
+
+    public function refund(){
 
         $packageData = $this->getPackages();
         $profilePicture = $this->getProfilePicture();
@@ -107,9 +117,11 @@ class Businessmanager extends Controller{
             'packageData' => $packageData
         ];
 //              var_dump($data);
-        $this->view('businessmanager/packages', $data);
+        $this->view('businessmanager/refund', $data);
 
-    }   public function reports(){
+    }
+
+    public function reports(){
 
     $profilePicture = $this->getProfilePicture();
 
@@ -130,6 +142,7 @@ class Businessmanager extends Controller{
 
         $this->view('businessmanager/settings', $data);
     }
+
     public function navigation(){
 
         $profilePicture = $this->getProfilePicture();
@@ -165,7 +178,6 @@ class Businessmanager extends Controller{
         // Load the view and pass data to it
         $this->view('businessmanager/payment', $data);
     }
-
 
     public function changeProfilePicture()
     {
@@ -204,7 +216,6 @@ class Businessmanager extends Controller{
         }
     }
 
-
     public function getBookings()
     {
         // Get bookings from the bookings table
@@ -218,7 +229,6 @@ class Businessmanager extends Controller{
 
         return $bookingData;
     }
-
 
     public function getPackages()
     {
@@ -234,6 +244,8 @@ class Businessmanager extends Controller{
     public function bookingTransactions()
     {
         $transactionData = $this->BusinessmanagersModel->getCombinedTransactions();
+
+//        var_dump($transactionData[1]);
 
         if ($transactionData) {
             return $transactionData;
@@ -266,41 +278,6 @@ class Businessmanager extends Controller{
 //        }
 //    }
 
-
-
-    public function generateReport()
-    {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $serviceType = $_POST['serviceType'];
-            $reportType = $_POST['reportType'];
-            $startDate = $_POST['startDate'];
-            $endDate = $_POST['endDate'];
-
-            $this->BusinessmanagersModel->generateReport($serviceType, $reportType, $startDate, $endDate);
-        }
-
-
-    }
-
-    public function generatePDFReport($serviceType, $startDate, $endDate)
-    {
-        $reportData = $this->BusinessmanagersModel->generateReport($serviceType, $startDate, $endDate);
-
-        $pdf = new FPDF();
-        $pdf->AddPage();
-        $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(40, 10, 'Report');
-
-        foreach ($reportData as $report) {
-            $pdf->Cell(40, 10, $report['time_range']);
-            $pdf->Cell(40, 10, $report['service_type']);
-            $pdf->Cell(40, 10, $report['service_provider_name']);
-            $pdf->Cell(40, 10, $report['report_type']);
-        }
-
-        $pdf->Output();
-    }
-
     public function makePayment(){
 
         // Check if required parameters are set
@@ -314,6 +291,9 @@ class Businessmanager extends Controller{
         $serviceProvider_id = htmlspecialchars($_POST['serviceProvider_id']);
         $total_amount = floatval($_POST['total_amount']);
 
+        // Calculate 90% of the total amount
+        $final_amount = $total_amount * 0.9;
+
         // Load Stripe library
         require_once __DIR__ . '/../libraries/stripe/vendor/autoload.php';
 
@@ -326,17 +306,17 @@ class Businessmanager extends Controller{
         // Create a Stripe checkout session
         $checkout_session = \Stripe\Checkout\Session::create([
             "mode" => "payment",
-            "success_url" => "http://localhost/Travelease/businessmanager/success?serviceProvider_id=$serviceProvider_id&total_amount=$total_amount",
+            "success_url" => "http://localhost/Travelease/businessmanager/success?serviceProvider_id=$serviceProvider_id&final_amount=$final_amount&total_amount=$total_amount",
             "cancel_url" => "http://localhost/Travelease/businessmanager/cancel",
             "line_items" => [
                 [
                     "quantity" => 1,
                     "price_data" => [
                         "currency" => "lkr",
-                        "unit_amount" => $total_amount * 100, // Convert to cents
+                        "unit_amount" => $final_amount * 100, // Convert to cents
                         "product_data" => [
                             "name" => "Payment for service provider" . $serviceProvider_id,
-                            // "images" => ["https://example.com/t-shirt.png"]
+//                            images" => ["https://example.com/t-shirt.png"]
                         ]
                     ]
                 ]
@@ -349,17 +329,28 @@ class Businessmanager extends Controller{
 //        header('Location: ' . $checkout_session->url);
 
         echo json_encode(['url' => $checkout_session->url]);
-
     }
-
 
     public function success(){
 
-        $serviceProvider_id = $_GET['serviceProvider_id'];
-        $total_amount = $_GET['total_amount'];
+       $serviceProvider_id = $_GET['serviceProvider_id'];
+       $paidAmount = $_GET['final_amount'];
+         $total_amount = $_GET['total_amount'];
         $paidDate = date('Y-m-d');
+//        $paidAmount = $total_amount * 0.9;
 
-        $successPayment = $this->BusinessmanagersModel->insertFinalPayment($serviceProvider_id,$paidDate, $total_amount);
+        $invoiceData = $this->makePaymentInvoice($serviceProvider_id, $total_amount);
+
+        $Invoicepdf = $invoiceData['Invoicepdf'];
+        $file_path = $invoiceData['file_path'];
+
+        $bookingStatus = $this->BusinessmanagersModel->updateBookingCondition($serviceProvider_id);
+        $CartBookingStatus = $this->BusinessmanagersModel->updateCartBookingCondition($serviceProvider_id);
+
+        // Insert final payment with $file_path
+        $successPayment = $this->BusinessmanagersModel->insertFinalPayment($serviceProvider_id, $paidDate, $paidAmount, $file_path);
+
+
 
         // Redirect to the financialmanagement page
         redirect('businessmanager/financialmanagement');
@@ -369,33 +360,353 @@ class Businessmanager extends Controller{
         echo "Payment Cancelled";
     }
 
-    public function makeInvoice(){
+    public function makeInvoice() {
+        // Retrieve data from the request
+        $serviceProvider_id = $_POST['serviceProvider_id'];
+        $total_amount = $_POST['total_amount'];
+
+        // Fetch booking details based on the serviceProvider_id
+        $bookingDetails = $this->BusinessmanagersModel->getBookingDetails($serviceProvider_id);
+
+        $invoice_number = 'IV-' . uniqid();
+
+        // Current date
+        $current_date = date('Y-m-d');
 
         require_once __DIR__ . '/../libraries/dompdf/vendor/autoload.php';
 
-        // Import the Dompdf class
-//    use Dompdf\Dompdf;
-
+        // Create a new Dompdf instance
         $dompdf = new Dompdf\Dompdf();
 
-        $html = '<h1>Invoice</h1>
-             <p>Invoice Number: INV-001</p>
-             <p>Date: 2024-04-21</p>
-             <p>Customer: John Doe</p>
-             <p>Amount: $100.00</p>';
+        // HTML content for the invoice with booking details
+        $html = '
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Invoice</title>
+        <style>
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #ffffff;
+            }
+            .header {
+                text-align: center;
+            }
+            .logo {
+                max-width: 120px;
+            }
+            h1 {
+                font-size: 32px;
+                color: #333;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                font-size: 12px;
+            }
+            th, td {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 12px;
+            }
+            th {
+                font-weight: bold;
+            }
+            .total-section {
+                margin-top: 30px;
+                padding-top: 10px;
+                border-top: 2px solid #ddd;
+            }
+            .footer {
+                margin-top: 50px;
+                text-align: center;
+                font-size: 14px;
+            }
+        </style>
+    </head>
+    <body>
+            <div class="header">
+                <img src="http://localhost/TravelEase/public/images/TravelEase.png" alt="TravelEase Logo" class="logo">
+                <h1>Invoice</h1>
+            </div>
+            <div class="invoice-details">
+                <p><strong>Invoice Number:</strong>' . $invoice_number. '</p>
+                <p><strong>Billed To:</strong> ' . $bookingDetails[0]->service_provider_name . '</p>
+                <p><strong>Date:</strong> ' . $current_date . '</p>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Traveler Name</th>
+                        <th>Booking Type</th>
+                        <th>Booking Date</th>
+                        <th>Check-in Date</th>
+                        <th>Check-out Date</th>
+                        <th>Service Detail</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>';
+        foreach ($bookingDetails as $bookingDetail) {
+            $html .= '<tr>
+                <td>' . $bookingDetail->traveler_name . '</td>
+                <td>' . $bookingDetail->booking_type . '</td>
+                <td>' . $bookingDetail->booking_date . '</td>
+                <td>' . $bookingDetail->checkin_date . '</td>
+                <td>' . $bookingDetail->checkout_date . '</td>
+                <td>' . $bookingDetail->service_detail . '</td>
+                <td>Rs' . $bookingDetail->amount . '</td>
+            </tr>';
+        }
+        $html .= '</tbody>
+            </table>
+            <div class="total-section">
+                <p><strong>Total Amount:</strong> Rs' . $total_amount . '</p>
+                <p><strong>Commission Fee (10%):</strong> Rs' . ($total_amount * 0.1) . '</p>
+                <p><strong>Final Payment:</strong> Rs' . ($total_amount * 0.9) . '</p>
+            </div>
+            <div class="footer">
+                <p>Thank you for your business!</p>
+                <p>For any inquiries regarding this invoice, please contact TravelEase at 0701184956 or traveease@gmail.com.</p>
+            </div>
+    </body>
+    </html>';
 
+        // Load HTML content into Dompdf
         $dompdf->loadHtml($html);
 
-        // (Optional) Set paper size and orientation
+        // Set paper size and orientation
         $dompdf->setPaper('A4', 'portrait');
+
+        $dompdf->set_option('isRemoteEnabled', true);
 
         // Render the HTML as PDF
         $dompdf->render();
 
-        // Output the generated PDF to Browser
-        $dompdf->stream("invoice.pdf", array("Attachment" => 0));
+        // Get the PDF content
+        $pdfContent = $dompdf->output();
 
+        // Define the directory where PDF invoices will be stored
+        $directory = '../public/invoice/';
+
+        // Generate a unique filename for the PDF invoice
+        $filename = 'invoice_' . uniqid() . '.pdf';
+
+        // Save the PDF file to the directory
+        file_put_contents($directory . $filename, $pdfContent);
+
+        $file_path = $filename;
+        $invoice_date = date('Y-m-d');
+        $final_amount = $total_amount * 0.9;
+
+        // Assuming you have a method to insert data into your database
+        $Invoicepdf = $this->BusinessmanagersModel->insertInvoice($serviceProvider_id, $total_amount,$final_amount, $invoice_date, $file_path);
+
+        // Open the PDF invoice in a new browser window
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: inline; filename="invoice.pdf"');
+        header('Content-Length: ' . strlen($pdfContent));
+        echo $pdfContent;
+
+//        // Return the PDF content as response
+//        header('Content-Type: application/pdf');
+//        header('Content-Disposition: inline; filename="invoice.pdf"');
+//        header('Content-Length: ' . strlen($pdfContent));
+//        echo $pdfContent;
     }
+
+    public function makePaymentInvoice($serviceProvider_id, $total_amount) {
+
+
+
+        // Fetch booking details based on the serviceProvider_id
+        $bookingDetails = $this->BusinessmanagersModel->getBookingDetails($serviceProvider_id);
+
+        $invoice_number = 'IV-' . uniqid();
+
+        // Current date
+        $current_date = date('Y-m-d');
+
+        require_once __DIR__ . '/../libraries/dompdf/vendor/autoload.php';
+
+        // Create a new Dompdf instance
+        $dompdf = new Dompdf\Dompdf();
+
+        // HTML content for the invoice with booking details
+        $html = '
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Invoice</title>
+        <style>
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #ffffff;
+            }
+            .header {
+                text-align: center;
+            }
+            .logo {
+                max-width: 120px;
+            }
+            h1 {
+                font-size: 32px;
+                color: #333;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                font-size: 12px;
+            }
+            th, td {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 12px;
+            }
+            th {
+                font-weight: bold;
+            }
+            .total-section {
+                margin-top: 30px;
+                padding-top: 10px;
+                border-top: 2px solid #ddd;
+            }
+            .footer {
+                margin-top: 50px;
+                text-align: center;
+                font-size: 14px;
+            }
+        </style>
+    </head>
+    <body>
+            <div class="header">
+                <img src="http://localhost/TravelEase/public/images/TravelEase.png" alt="TravelEase Logo" class="logo">
+                <h1>Invoice</h1>
+            </div>
+            <div class="invoice-details">
+                <p><strong>Invoice Number:</strong>' . $invoice_number. '</p>
+                <p><strong>Billed To:</strong> ' . $bookingDetails[0]->service_provider_name . '</p>
+                <p><strong>Date:</strong> ' . $current_date . '</p>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Traveler Name</th>
+                        <th>Booking Type</th>
+                        <th>Booking Date</th>
+                        <th>Check-in Date</th>
+                        <th>Check-out Date</th>
+                        <th>Service Detail</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>';
+        foreach ($bookingDetails as $bookingDetail) {
+            $html .= '<tr>
+                <td>' . $bookingDetail->traveler_name . '</td>
+                <td>' . $bookingDetail->booking_type . '</td>
+                <td>' . $bookingDetail->booking_date . '</td>
+                <td>' . $bookingDetail->checkin_date . '</td>
+                <td>' . $bookingDetail->checkout_date . '</td>
+                <td>' . $bookingDetail->service_detail . '</td>
+                <td>Rs' . $bookingDetail->amount . '</td>
+            </tr>';
+        }
+        $html .= '</tbody>
+            </table>
+            <div class="total-section">
+                <p><strong>Total Amount:</strong> Rs' . $total_amount . '</p>
+                <p><strong>Commission Fee (10%):</strong> Rs' . ($total_amount * 0.1) . '</p>
+                <p><strong>Final Payment:</strong> Rs' . ($total_amount * 0.9) . '</p>
+            </div>
+            <div class="footer">
+                <p>Thank you for your business!</p>
+                <p>For any inquiries regarding this invoice, please contact TravelEase at 0701184956 or traveease@gmail.com.</p>
+            </div>
+    </body>
+    </html>';
+
+        // Load HTML content into Dompdf
+        $dompdf->loadHtml($html);
+
+        // Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        $dompdf->set_option('isRemoteEnabled', true);
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Get the PDF content
+        $pdfContent = $dompdf->output();
+
+        // Define the directory where PDF invoices will be stored
+        $directory = '../public/invoice/';
+
+        // Generate a unique filename for the PDF invoice
+        $filename = 'invoice_' . uniqid() . '.pdf';
+
+        // Save the PDF file to the directory
+        file_put_contents($directory . $filename, $pdfContent);
+
+        $file_path = $filename;
+        $invoice_date = date('Y-m-d');
+        $final_amount = $total_amount * 0.9;
+
+        // Assuming you have a method to insert data into your database
+        $Invoicepdf = $this->BusinessmanagersModel->insertInvoice($serviceProvider_id, $total_amount,$final_amount, $invoice_date, $file_path);
+
+        return [
+            'Invoicepdf' => $Invoicepdf,
+            'file_path' => $file_path
+        ];
+    }
+
+
+    public function getBookingCount(){
+        $bookingCount = $this->BusinessmanagersModel->getBookingCount();
+//        var_dump($bookingCount);
+
+        if ($bookingCount) {
+            return $bookingCount;
+        } else {
+            return [];
+        }
+    }
+
+    public function getCartBookingCount(){
+        $cartBookingCount = $this->BusinessmanagersModel->getCartBookingCount();
+        var_dump($cartBookingCount);
+
+        if ($cartBookingCount) {
+            return $cartBookingCount;
+        } else {
+            return [];
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

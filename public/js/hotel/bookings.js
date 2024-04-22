@@ -19,7 +19,7 @@ function updatePopupDetails(profilePicture, guestName, checkInDate, roomType) {
     // Add more details as needed
 }
 
-function showCancelPopup(room_id, user_id, booking_id, startDate, endDate, temporyid, roomType) {
+function showCancelPopup(room_id, user_id, booking_id, startDate, endDate, temporyid, roomType,amount) {
     // Create overlay div
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
@@ -29,7 +29,7 @@ function showCancelPopup(room_id, user_id, booking_id, startDate, endDate, tempo
     confirmDialog.innerHTML = `
         <div class="confirm-message">Are you sure you want to cancel this booking?</div>
         <div class="buttons">
-            <button class="btn btn-yes" onclick="cancelBooking('${room_id}', '${user_id}', '${booking_id}', '${startDate}', '${endDate}', '${temporyid}', '${roomType}')">Yes</button>
+            <button class="btn btn-yes" onclick="cancelBooking('${room_id}', '${user_id}', '${booking_id}', '${startDate}', '${endDate}', '${temporyid}', '${roomType}',${amount} )">Yes</button>
             <button class="btn btn-no" onclick="cancelCancel()">No</button>
         </div>
     `;
@@ -45,7 +45,7 @@ function cancelCancel() {
     document.body.removeChild(document.querySelector('.confirm-dialog'));
 }
 
-function cancelBooking(room_id, user_id, booking_id, startDate, endDate,temporyid, roomType) {
+function cancelBooking(room_id, user_id, booking_id, startDate, endDate,temporyid, roomType,amount) {
     console.log(endDate);
     // Prepare the data to send
     var requestData = {
@@ -56,6 +56,7 @@ function cancelBooking(room_id, user_id, booking_id, startDate, endDate,temporyi
         endDate: endDate,
         temporyid: temporyid,
         roomType: roomType,
+        amount: amount
     };
 
     const form = new FormData();
@@ -66,6 +67,8 @@ function cancelBooking(room_id, user_id, booking_id, startDate, endDate,temporyi
     form.append('endDate', endDate);
     form.append('temporyid', temporyid);
     form.append('roomType', roomType);
+    form.append('amount', amount);
+
 
     // Make an AJAX request
     fetch(

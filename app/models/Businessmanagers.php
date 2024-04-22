@@ -72,24 +72,14 @@ class Businessmanagers
           ORDER BY cartbookings.bookingDate DESC'); // Ordering by booking_date in descending order
 
         $results = $this->db->resultSet();
-        return $results;
-    }
 
-
-
-
-
-    public function getPackages()
-    {
-        $this->db->query('SELECT * FROM packages');
-        $results = $this->db->resultSet();
         return $results;
     }
 
     public function getCombinedTransactions()
     {
         $transactionsQuery = '
-    SELECT 
+    SELECT
         serviceProvider_id,
         service_provider_name,
         service_type,
@@ -97,18 +87,18 @@ class Businessmanagers
         GROUP_CONCAT(booking_ids) AS booking_ids,
         account_number
     FROM (
-        SELECT 
+        SELECT
             u.id AS serviceProvider_id,
             u.fname AS service_provider_name,
-            CASE 
+            CASE
                 WHEN u.type = 3 THEN "Hotel"
                 WHEN u.type = 4 THEN "Travel Agency"
                 WHEN u.type = 5 THEN "Tour Guide"
                 ELSE "Unknown"
             END AS service_type,
-            SUM(p.amount) AS total_amount, 
+            SUM(p.amount) AS total_amount,
             GROUP_CONCAT(p.booking_id) AS booking_ids,
-            CASE 
+            CASE
                 WHEN u.type = 3 THEN h.account_number
                 WHEN u.type = 4 THEN t.account_number
                 WHEN u.type = 5 THEN g.account_number
@@ -125,10 +115,10 @@ class Businessmanagers
 
         UNION
 
-        SELECT 
+        SELECT
             cb.serviceProvider_id,
             u.fname AS service_provider_name,
-            CASE 
+            CASE
                 WHEN u.type = 3 THEN "Hotel"
                 WHEN u.type = 4 THEN "Travel Agency"
                 WHEN u.type = 5 THEN "Tour Guide"
@@ -137,7 +127,7 @@ class Businessmanagers
             SUM(
                 CASE
                     WHEN u.type = 3 THEN hr.price * DATEDIFF(cb.endDate, cb.startDate)
-                    WHEN u.type = 4 THEN 
+                    WHEN u.type = 4 THEN
                         CASE
                             WHEN vb.withDriver = 1 THEN (v.priceperday + v.withDriverPerDay) * (DATEDIFF(cb.endDate, cb.startDate) + 1)
                             ELSE v.priceperday * (DATEDIFF(cb.endDate, cb.startDate) + 1)
@@ -147,7 +137,7 @@ class Businessmanagers
                 END
             ) AS total_amount,
             GROUP_CONCAT(cb.booking_id) AS booking_ids,
-            CASE 
+            CASE
                 WHEN u.type = 3 THEN h.account_number
                 WHEN u.type = 4 THEN t.account_number
                 WHEN u.type = 5 THEN gg.account_number
@@ -175,6 +165,118 @@ class Businessmanagers
     }
 
 
+//    public function getTransactionsFromPayments() {
+//        $this->db->query("
+//            SELECT
+//                u.id AS serviceProvider_id,
+//                u.fname AS service_provider_name,
+//                CASE
+//                    WHEN u.type = 3 THEN 'Hotel'
+//                    WHEN u.type = 4 THEN 'Travel Agency'
+//                    WHEN u.type = 5 THEN 'Tour Guide'
+//                    ELSE 'Unknown'
+//                END AS service_type,
+//                SUM(p.amount) AS total_amount,
+//                GROUP_CONCAT(p.booking_id) AS booking_ids,
+//                CASE
+//                    WHEN u.type = 3 THEN h.account_number
+//                    WHEN u.type = 4 THEN t.account_number
+//                    WHEN u.type = 5 THEN g.account_number
+//                    ELSE NULL
+//                END AS account_number
+//            FROM payments p
+//            INNER JOIN bookings b ON p.booking_id = b.booking_id
+//            INNER JOIN users u ON b.serviceProvider_id = u.id
+//            LEFT JOIN hotel h ON u.type = 3 AND u.id = h.user_id
+//            LEFT JOIN travelagency t ON u.type = 4 AND u.id = t.user_id
+//            LEFT JOIN guides g ON u.type = 5 AND u.id = g.user_id
+//            WHERE b.bookingCondition = 'completed'
+//            GROUP BY u.id
+//        ");
+//
+//        return $this->db->resultSet();
+//    }
+//
+//    public function getTransactionsFromCartBookings() {
+//        $this->db->query("
+//            SELECT
+//                cb.serviceProvider_id,
+//                u.fname AS service_provider_name,
+//                CASE
+//                    WHEN u.type = 3 THEN 'Hotel'
+//                    WHEN u.type = 4 THEN 'Travel Agency'
+//                    WHEN u.type = 5 THEN 'Tour Guide'
+//                    ELSE 'Unknown'
+//                END AS service_type,
+//                SUM(
+//                    CASE
+//                        WHEN u.type = 3 THEN hr.price * DATEDIFF(cb.endDate, cb.startDate)
+//                        WHEN u.type = 4 THEN
+//                            CASE
+//                                WHEN vb.withDriver = 1 THEN (v.priceperday + v.withDriverPerDay) * (DATEDIFF(cb.endDate, cb.startDate) + 1)
+//                                ELSE v.priceperday * (DATEDIFF(cb.endDate, cb.startDate) + 1)
+//                            END
+//                        WHEN u.type = 5 THEN g.pricePerDay * (DATEDIFF(cb.endDate, cb.startDate) + 1)
+//                        ELSE 0
+//                    END
+//                ) AS total_amount,
+//                GROUP_CONCAT(cb.booking_id) AS booking_ids,
+//                CASE
+//                    WHEN u.type = 3 THEN h.account_number
+//                    WHEN u.type = 4 THEN t.account_number
+//                    WHEN u.type = 5 THEN gg.account_number
+//                    ELSE NULL
+//                END AS account_number
+//            FROM cartbookings cb
+//            INNER JOIN users u ON cb.serviceProvider_id = u.id
+//            LEFT JOIN hotel_rooms hr ON cb.room_id = hr.room_id
+//            LEFT JOIN vehicles v ON cb.vehicle_id = v.vehicle_id
+//            LEFT JOIN vehicle_bookings vb ON cb.booking_id = vb.booking_id
+//            LEFT JOIN guides g ON cb.package_id = g.guide_id
+//            LEFT JOIN hotel h ON u.type = 3 AND u.id = h.user_id
+//            LEFT JOIN travelagency t ON u.type = 4 AND u.id = t.user_id
+//            LEFT JOIN guides gg ON u.type = 5 AND u.id = gg.user_id
+//            WHERE cb.bookingCondition = 'completed'
+//            GROUP BY cb.serviceProvider_id
+//        ");
+//
+//        return $this->db->resultSet();
+//    }
+//
+//    public function getCombinedTransactions() {
+//        // Fetch transactions from payments
+//        $transactionsFromPayments = $this->getTransactionsFromPayments();
+//
+//        // Fetch transactions from cart bookings
+//        $transactionsFromCartBookings = $this->getTransactionsFromCartBookings();
+//
+//        // Merge transaction data from both sources
+//        $combinedTransactions = array_merge($transactionsFromPayments, $transactionsFromCartBookings);
+//
+//        // Group transactions by serviceProvider_id
+//        $groupedTransactions = [];
+//        foreach ($combinedTransactions as $transaction) {
+//            $serviceProviderId = $transaction->serviceProvider_id;
+//            if (!isset($groupedTransactions[$serviceProviderId])) {
+//                $groupedTransactions[$serviceProviderId] = [
+//                    'serviceProvider_id' => $serviceProviderId,
+//                    'service_provider_name' => $transaction->service_provider_name,
+//                    'service_type' => $transaction->service_type,
+//                    'total_amount' => 0,
+//                    'booking_ids' => [],
+//                    'account_number' => $transaction->account_number
+//                ];
+//            }
+//
+//            $groupedTransactions[$serviceProviderId]['total_amount'] += $transaction->total_amount;
+//            $groupedTransactions[$serviceProviderId]['booking_ids'][] = $transaction->booking_ids;
+//        }
+//
+//        // Convert grouped transactions array to indexed array
+//        $finalTransactions = array_values($groupedTransactions);
+//
+//        return $finalTransactions;
+//    }
 
     public function getBookingDetails($serviceProvider_id)
     {
@@ -284,55 +386,36 @@ class Businessmanagers
     }
 
 
-
-
-
-
-
-
-
-
-
-    public function generateReport($serviceType, $reportType, $startDate, $endDate)
-    {
-        $bookingsReport = $this->getBookingsReport($serviceType, $startDate, $endDate);
-        $transactionsReport = $this->getTransactionsReport($serviceType, $startDate, $endDate);
-        $reportData = array_merge($bookingsReport, $transactionsReport);
-        return $reportData;
-    }
-
-    private function getBookingsReport($serviceType, $startDate, $endDate)
-    {
-        $this->db->query('SELECT * FROM bookings 
-                      WHERE service_type = :serviceType 
-                      AND date BETWEEN :startDate AND :endDate');
-        $this->db->bind(':serviceType', $serviceType);
-        $this->db->bind(':startDate', $startDate);
-        $this->db->bind(':endDate', $endDate);
-        $results = $this->db->resultSet();
-        return $results;
-    }
-
-    private function getTransactionsReport($serviceType, $startDate, $endDate)
-    {
-        $this->db->query('SELECT * FROM payments 
-                      WHERE service_type = :serviceType 
-                      AND date BETWEEN :startDate AND :endDate');
-        $this->db->bind(':serviceType', $serviceType);
-        $this->db->bind(':startDate', $startDate);
-        $this->db->bind(':endDate', $endDate);
-        $results = $this->db->resultSet();
-        return $results;
-    }
-
-    public function insertFinalPayment($serviceProvider_id, $paidDate, $total_amount) {
-        $query = 'INSERT INTO final_payment (serviceProvider_id, paidDate, paidAmount) 
-              VALUES (:serviceProvider_id, :paidDate, :paidAmount)';
+    public function insertFinalPayment($serviceProvider_id, $paidDate, $paidAmount, $file_path) {
+        $query = 'INSERT INTO final_payment (serviceProvider_id, paidDate, paidAmount, invoice) 
+              VALUES (:serviceProvider_id, :paidDate, :paidAmount, :file_path)';
 
         $this->db->query($query);
         $this->db->bind(':serviceProvider_id', $serviceProvider_id);
         $this->db->bind(':paidDate', $paidDate);
-        $this->db->bind(':paidAmount', $total_amount); // Assuming total_amount represents paidAmount
+        $this->db->bind(':paidAmount', $paidAmount);
+        $this->db->bind(':file_path', $file_path);
+
+        $this->db->execute();
+    }
+
+    public function updateBookingCondition($serviceProvider_id) {
+        $query = 'UPDATE bookings SET bookingCondition = "Paid" 
+                  WHERE serviceProvider_id = :serviceProvider_id AND bookingCondition = "completed"';
+
+        $this->db->query($query);
+        $this->db->bind(':serviceProvider_id', $serviceProvider_id);
+
+        $this->db->execute();
+
+    }
+
+    public function updateCartBookingCondition($serviceProvider_id) {
+        $query = 'UPDATE cartbookings SET bookingCondition = "Paid" 
+              WHERE serviceProvider_id = :serviceProvider_id AND bookingCondition = "completed"';
+
+        $this->db->query($query);
+        $this->db->bind(':serviceProvider_id', $serviceProvider_id);
 
         $this->db->execute();
     }
@@ -341,6 +424,33 @@ class Businessmanagers
 
 
 
+    public function insertInvoice($service_provider_id, $total_amount, $final_amount, $invoice_date, $file_path) {
+        $query = 'INSERT INTO invoices (service_provider_id, total_amount, final_amount, invoice_date, file_path) 
+              VALUES (:service_provider_id, :total_amount, :final_amount, :invoice_date, :file_path)';
 
+        $this->db->query($query);
+        $this->db->bind(':service_provider_id', $service_provider_id);
+        $this->db->bind(':total_amount', $total_amount);
+        $this->db->bind(':final_amount', $final_amount);
+        $this->db->bind(':invoice_date', $invoice_date);
+        $this->db->bind(':file_path', $file_path);
+
+        $this->db->execute();
+    }
+
+    public function getBookingCount(){
+
+        $this->db->query('SELECT COUNT(*) AS booking_count FROM bookings');
+        $result = $this->db->single();
+        return $result;
+    }
+
+
+    public function getCartBookingCount(){
+
+        $this->db->query('SELECT COUNT(*) AS cart_booking_count FROM cartbookings');
+        $result = $this->db->single();
+        return $result;
+    }
 
 }

@@ -88,11 +88,15 @@ include 'navigation.php';
 
         <div class="action-buttons">
 
-            <a href="<?php echo URLROOT; ?>businessmanager/makeInvoice" class="payment-button">
-                <i class='bx bx-download'></i> Download Invoice
-            </a>
+<!--            <a href="--><?php //echo URLROOT; ?><!--businessmanager/makeInvoice" class="">-->
+<!--                <i class=''></i> -->
+<!--            </a>-->
 
-            <button class="download-button" onclick="PaymentPopup(<?php echo $data['serviceProvider_id']; ?>, <?php echo floatval(str_replace(',', '', $data['total_amount'])); ?>)">
+            <button class="download-button" onclick="InvoicePopup(<?php echo $data['serviceProvider_id']; ?>, <?php echo floatval(str_replace(',', '', $data['total_amount'])); ?>)">
+                <i class='bx bx-download'></i> Download Invoice
+            </button>
+
+            <button class="payment-button" onclick="PaymentPopup(<?php echo $data['serviceProvider_id']; ?>, <?php echo floatval(str_replace(',', '', $data['total_amount'])); ?>)">
                 <i class='bx bx-credit-card'></i> Make Payment
             </button>
 

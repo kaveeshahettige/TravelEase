@@ -1,4 +1,6 @@
-function confirmDelete(room_id) {
+function confirmDelete(event,room_id) {
+    event.preventDefault();
+    event.stopPropagation();
     // Create overlay div
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
