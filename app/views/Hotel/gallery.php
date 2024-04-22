@@ -61,21 +61,19 @@ include 'navigation.php';
             <?php
                 $notifications = $data["notifications"];
                 foreach ($notifications as $key => $notification):
-                var_dump($notification);
                 ?>
 
                 <div class="notification-item">
                     <!-- Assuming you have an image path stored in $notification->sender_image -->
-                    <img src="<?php echo $notification->sender_image; ?>" alt="Sender Image" class="sender-image">
+                    <img src="<?php echo $notification->sender_profile_picture; ?>" alt="Sender Image" class="sender-image">
 
                     <div class="notification-text-container">
                         <span class="sender-name"><?php echo $notification->sender_name; ?></span>
-                        <span class="notification-date"><?php echo $notification->created_at; ?></span>
-                        <p class="notification-text"><?php echo $notification->message; ?></p>
-                        <a href="<?php echo URLROOT . '/hotel/markNotificationAsRead/' . $notification->id; ?>" class="mark-as-read-btn">Mark as Read</a>
+                        <span class="notification-date"><?php echo $notification->nDate; ?></span>
+                        <p class="notification-text"><?php echo $notification->notification; ?></p>
+                        <button onclick="markAsRead(<?php echo $notification->notification_id; ?>)" class="mark-as-read-btn">Mark as read</button>
                     </div>
 
-                    <div class="read-status-dot <?php echo $notification->is_read ? 'read' : 'unread'; ?>"></div>
                 </div>
             <?php endforeach; ?>
         </div>

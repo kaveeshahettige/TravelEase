@@ -14,6 +14,9 @@
 </head>
 <body>
 <?php
+$userData = $data['userData'];
+?>
+<?php
 $activePage = 'packages/calender';
 include 'navigation.php';
 ?>
@@ -57,6 +60,7 @@ include 'navigation.php';
 
     <div class ="dashboard-sub-content">
         <div class="calendar-container">
+
             <div class="calendar-content">
                 <div class="calendar-header">
                     <button onclick="navigateMonth(-1)">←</button>
@@ -65,31 +69,28 @@ include 'navigation.php';
                 </div>
                 <div id="calendar-days" class="calendar-days"></div>
             </div>
-            <div class="booking-details">
-                <div class="date-info-container">
-                    <!-- Selected date display -->
-                    <div id="selected-date"></div>
-                </div>
-            </div>
+
+
             <div class="availability-content" id="availability-content">
                 <div id="selected-date"></div>
-                <div id="availability-info"></div>
                 <div class="calendar-buttons">
                     <div class="calendar-buttons">
-                        <form id="availabilityForm" action="<?php echo URLROOT; ?>hotel/availablerooms/.php" method="get" onsubmit="return validateForm()">
+
+                        <form id="availabilityForm" action="<?php echo URLROOT; ?>packages/availability/.php" method="get" onsubmit="return validateForm()">
                             <input type="hidden" name="action" value="check_availability">
-                            <input type="hidden" name="date" id="selectedDate" value="<?php echo $selectedDate; ?>">
+                            <input type="hidden" name="date" id="selectedDate" value="<?php echo htmlspecialchars($data["selectedDate"]);?>">
                             <button type="submit" id="checkAvailabilityBtn" disabled>Check Availability</button>
                         </form>
                     </div>
 
                 </div>
             </div>
+
         </div>
-        <script src= "<?php echo URLROOT?>/public/js/hotel/calender.js"></script>
+
+        <script src= "<?php echo URLROOT?>/public/js/package/calender.js"></script>
+
     </div>
-
-
 
 </main>
 </body>

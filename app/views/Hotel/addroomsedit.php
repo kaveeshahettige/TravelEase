@@ -13,9 +13,6 @@
 </head>
 <body>
 <?php
-//$userData= $data['basicInfo']['userData'];
-//?>
-<?php
 $activePage = 'hotel/settings'; // Set the active page dynamically based on your logic
 include 'navigation.php';
 ?>
@@ -29,13 +26,13 @@ include 'navigation.php';
             <h1>Settings</h1>
         </div>
 
-
         <div id="base">
             <h3>Add Rooms</h3>
-            <!-- ... existing code ... -->
+
 
             <div id="form">
-                <form action="" method="POST" class="registration-form">
+                <form action="" method="POST" class="registration-form" enctype="multipart/form-data">
+
                     <div>
                         <div class="form-group">
                             <label for="roomType">Room Type</label>
@@ -44,28 +41,39 @@ include 'navigation.php';
 
                         <div class="form-group">
                             <label for="numOfBeds">Number of Beds</label>
-                            <select id="numOfBeds" name="numOfBeds">
-                                <option value="1">1 Bed</option>
-                                <option value="2">2 Beds</option>
-                                <option value="3">3 Beds</option>
-                                <option value="4">4 Beds</option>
-                            </select>
+                            <input type="number" id="numOfBeds" name="numOfBeds" min="1" required>
                         </div>
                     </div>
-                    <div>
 
+                    <div>
+                        <div>
+                            <div class="form-group">
+                                <label for="numAdults">Number of Adults</label>
+                                <input type="number" id="numAdults" name="numAdults" min="1" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-group">
+                                <label for="numChildren">Number of Children</label>
+                                <input type="number" id="numChildren" name="numChildren" min="0" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
                         <div class="form-group">
                             <label for="price">Price (per night)</label>
                             <input type="number" id="price" name="price" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="roomImages">Room Images:</label>
-                            <input type="file" id="roomImages" name="roomImages[]" accept="image/*" multiple required>
+                            <label for="roomSize">Room Size:</label>
+                            <input type="text" id="roomSize" name="roomSize" placeholder="Enter Room Size">
                         </div>
                     </div>
 
-                    <!-- New attributes -->
+                    <h3>Room Facilities</h3>
                     <div>
                         <div class="form-group">
                             <label for="acAvailability">AC Availability:</label>
@@ -82,7 +90,6 @@ include 'navigation.php';
                                 <option value="no">No</option>
                             </select>
                         </div>
-
                     </div>
 
                     <div>
@@ -111,23 +118,171 @@ include 'navigation.php';
                                 <option value="not-allowed">Not Allowed</option>
                             </select>
                         </div>
+
+                        <div>
+                            <div class="form-group">
+                                <label for="balconyAvailability">Balcony Availability:</label>
+                                <select id="balconyAvailability" name="balconyAvailability">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Further Facilities</h3>
+
+                    <div>
+                        <div>
+                            <div class="form-group">
+                                <label for="privatePoolAvailability">Private Pool Availability:</label>
+                                <select id="privatePoolAvailability" name="privatePoolAvailability">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-group">
+                                <label for="hotTubAvailability">Hot Tub Availability:</label>
+                                <select id="hotTubAvailability" name="hotTubAvailability">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div>
+                        <div>
+                            <div class="form-group">
+                                <label for="refrigeratorAvailability">Refrigerator Availability:</label>
+                                <select id="refrigeratorAvailability" name="refrigeratorAvailability">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-group">
+                                <label for="hotShowerHeaterAvailability">Hot Shower Heater Availability:</label>
+                                <select id="hotShowerHeaterAvailability" name="hotShowerHeaterAvailability">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div>
+                        <div>
+                            <div class="form-group">
+                                <label for="washingMachineAvailability">Washing Machine Availability:</label>
+                                <select id="washingMachineAvailability" name="washingMachineAvailability">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-group">
+                                <label for="kitchenAvailability">Kitchen Availability:</label>
+                                <select id="kitchenAvailability" name="kitchenAvailability">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <h3>Meal Options</h3>
+
+                    <div>
                         <div class="form-group">
-                            <label for="roomDescription">Room Description:</label>
-                            <textarea id="roomDescription" name="roomDescription" rows="4" required></textarea>
+                            <label for="breakfastIncluded">Breakfast Included:</label>
+                            <select id="breakfastIncluded" name="breakfastIncluded">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lunchIncluded">Lunch Included:</label>
+                            <select id="lunchIncluded" name="lunchIncluded">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
                         </div>
                     </div>
 
                     <div>
                         <div class="form-group">
-                            <label for="cancellationPolicy">Cancellation Policy:</label>
-                            <textarea id="cancellationPolicy" name="cancellationPolicy" rows="4" required></textarea>
+                            <label for="dinnerIncluded">Dinner Included:</label>
+                            <select id="dinnerIncluded" name="dinnerIncluded">
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h3>Add Images</h3>
+
+                    <div>
+                        <div>
+                            <div class="form-group">
+                                <label for="roomImages1">Room Images 1:</label>
+                                <input type="file" id="roomImages1" name="roomImages[]" accept="image/*" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-group">
+                                <label for="roomImages2">Room Images 2:</label>
+                                <input type="file" id="roomImages2" name="roomImages[]" accept="image/*" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div>
+                            <div class="form-group">
+                                <label for="roomImages3">Room Images 3:</label>
+                                <input type="file" id="roomImages3" name="roomImages[]" accept="image/*" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-group">
+                                <label for="roomImages4">Room Images 4:</label>
+                                <input type="file" id="roomImages4" name="roomImages[]" accept="image/*" required>
+                            </div>
                         </div>
                     </div>
 
 
+                    <h3>Further Descriptions</h3>
+
+                    <div>
+                        <div>
+                            <div class="form-group">
+                                <label for="roomDescription">Room Description:</label>
+                                <textarea id="description" name="description" rows="4" required></textarea>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-group">
+                                <label for="cancellationPolicy">Cancellation Policy:</label>
+                                <textarea id="cancellationPolicy" name="cancellationPolicy" rows="4" required></textarea>
+                            </div>
+                        </div>
+
+                    </div>
 
                     <div>
                         <div class="baseButtons">

@@ -38,21 +38,27 @@ include 'navigation.php';
            
 
             <!-- Total Bookings Box -->
+            <?php
+            $reviewCount = $data["reviewCount"]; ?>
             <div class="box">
                 <h2>Total Reviews</h2>
-                <p>100</p>
+                <p><?php echo $reviewCount ?></p>
             </div>
         
             <!-- Ongoing Bookings Box -->
+            <?php
+            $bookingsCount = $data["bookingsCount"]; ?>
             <div class="box">
                 <h2>Total Bookings</h2>
-                <p>100</p>
+                <p><?php echo $bookingsCount ?></p>
             </div>
         
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"]; ?>
             <div class="box">
                 <h2>Total Customers</h2>
-                <p>50</p>
+                <p><?php echo $guestCount?></p>
             </div>
         </div>
         </div>
@@ -97,22 +103,32 @@ include 'navigation.php';
         <div class="review-content">
             <?php
             $reviews = $data["reviews"];
-//           var_dump($reviews);
             foreach ($reviews as $review): ?>
                 <div class="review-box">
+                    <div class="review-image">
+                        <img src="<?php echo $review->user_profile_picture ? URLROOT . '/images/' . $review->user_profile_picture : URLROOT . '/images/hotel/wikum.jpg'; ?>" alt="User Photo">
+                    </div>
                     <div class="review-sub-content">
-                        <div class="review-image">
-                            <!-- You may want to display the actual user image if available -->
-                            <img src="<?php echo URLROOT; ?>/images/hotel/wikum.jpg" alt="Guest Photo">
-                        </div>
-                        <h2><?= $review->fname; ?></h2>
-<!--                        <p>Date: --><?php //= $review->created_at; ?><!--</p>-->
-                        <p class="review-text"><?= $review->comment; ?></p>
-                        <button class="read-more-btn" onclick="openModal('<?= $review->fname; ?>', '<?= $review->created_at; ?>', '<?= $review->comment; ?>')">Read More</button>
+                        <h2><?= $review->user_fname; ?></h2>
+                        <p class="review-text"><?= $review->feedback; ?></p>
+                        <p>Rating: <?= getStarRating($review->rating); ?></p>
+                        <p>Date: <?= $review->time; ?></p>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
+
+        <?php
+        function getStarRating($rating) {
+            $stars = '';
+            for ($i = 0; $i < $rating; $i++) {
+                $stars .= '<i class="bx bxs-star"></i>';
+            }
+            return $stars;
+        }
+        ?>
+
+
 
 
 

@@ -55,6 +55,31 @@
     color: #fff;
 }
 
+.available-button {
+    background-color: #fff;
+    color: #28a745;
+    border: 1px solid #28a745;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 5px;
+    margin-right: auto;
+}
+
+.unavailable-button {
+    background-color: #fff;
+    border: 1px solid #dc3545;
+    color: #dc3545;;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 5px;
+    margin-right: auto;
+}
+
+
 
 
 

@@ -1,5 +1,6 @@
 function openPopup() {
     document.getElementById('popup').style.display = 'block';
+    console.log('Popup opened.');
 }
 
 function closePopup() {
@@ -7,7 +8,6 @@ function closePopup() {
 }
 
 function updatePopupDetails(profilePicture, guestName, providerType, providerName, paymentStatus) {
-
     // Update the profile picture
     var profilePictureDiv = document.getElementById('profile-picture');
     profilePictureDiv.style.backgroundImage = "url('" + profilePicture + "')";
@@ -16,28 +16,25 @@ function updatePopupDetails(profilePicture, guestName, providerType, providerNam
     // Update other details
     document.getElementById('guestName').innerText = 'Guest Name: ' + guestName;
 
-    // Ensure providerType is a number
-    providerType = parseInt(providerType);
-
     // Translate provider type number to text
     var providerTypeText;
     switch (providerType) {
-        case 0:
+        case '0':
             providerTypeText = 'Admin';
             break;
-        case 1:
+        case '1':
             providerTypeText = 'Traveler';
             break;
-        case 2:
+        case '2':
             providerTypeText = 'Business Manager';
             break;
-        case 3:
+        case '3':
             providerTypeText = 'Hotel';
             break;
-        case 4:
+        case '4':
             providerTypeText = 'Transport Provider';
             break;
-        case 5:
+        case '5':
             providerTypeText = 'Guide';
             break;
         default:
@@ -53,9 +50,9 @@ function updatePopupDetails(profilePicture, guestName, providerType, providerNam
         console.error('Element with ID "providerType" not found.');
     }
 
-    // Debugging: Log providerType to the console
-    console.log("Provider Type:", providerType);
-    console.log("Provider Type Text:", providerTypeText);
+    // Update provider name in the popup
     document.getElementById('providerName').innerText = 'Provider Name: ' + providerName;
+
+    // Update payment status in the popup
     document.getElementById('paymentStatus').innerText = 'Payment Status: ' + paymentStatus;
 }

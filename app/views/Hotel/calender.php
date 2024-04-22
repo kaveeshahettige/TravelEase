@@ -44,22 +44,29 @@ $userData= $data['basicInfo']['userData'];
 
 
                 <!-- Total Bookings Box -->
+
+
+                <?php
+                $roomCount = $data['roomCount']; ?>
                 <div class="box">
                     <h2>Total Rooms Allocated</h2>
-                    <p>10</p>
+                    <p><?php echo $data['roomCount']; ?></p>
                 </div>
 
-                <!-- Ongoing Bookings Box -->
+                <?php
+                $bookingsCount = $data["bookingsCount"]; ?>
                 <div class="box">
-                    <h2>Booked Rooms</h2>
-                    <p>5</p>
+                    <h2>Total Bookings</h2>
+                    <p><?php echo $bookingsCount ?></p>
                 </div>
 
-                <!-- Customers Box -->
+                <?php
+                $guestCount = $data["guestCount"]; ?>
                 <div class="box">
-                    <h2>Available Rooms</h2>
-                    <p>5</p>
+                    <h2>Total Customers</h2>
+                    <p><?php echo $guestCount?></p>
                 </div>
+
             </div>
         </div>
 
@@ -74,19 +81,17 @@ $userData= $data['basicInfo']['userData'];
                     </div>
                     <div id="calendar-days" class="calendar-days"></div>
                 </div>
+
                 <div class="availability-content" id="availability-content">
                     <div id="selected-date"></div>
-<!--                    <div id="availability-info"></div>-->
                     <div class="calendar-buttons">
                         <div class="calendar-buttons">
                             <div class="calendar-buttons">
 
                                 <form id="availabilityForm" action="<?= URLROOT?>/hotel/availablerooms" method="get" onsubmit="return handleFormSubmit()">
                                     <input type="hidden" name="action" value="check_availability">
-                                    <input name="date" type="hidden" id="selectedDate" value="<?php
-                                    echo htmlspecialchars($data["selectedDate"]); ?>">
+                                    <input name="date" type="hidden" id="selectedDate" value="<?php echo htmlspecialchars($data["selectedDate"]); ?>">
                                     <button type="submit" id="checkAvailabilityBtn" disabled>Check Availability</button>
-<!--                                    <p id="dateError" style="color: red; display: none;">Please select a date.</p>-->
                                 </form>
 
                             </div>

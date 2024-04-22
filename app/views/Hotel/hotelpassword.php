@@ -16,7 +16,7 @@
 $userData= $data['basicInfo']['userData'];
 ?>
 <?php
-$activePage = 'hotel/settings'; // Set the active page dynamically based on your logic
+$activePage = 'hotel/settings';
 include 'navigation.php';
 ?>
     <main>
@@ -30,17 +30,14 @@ include 'navigation.php';
             <div id="base">
                 <h3 style="padding-left:20px;">Password</h3>
                 <div id="form">
-                    <form class="registration-form">
+                    <form action="<?php echo URLROOT; ?>/hotel/changePassword" method="POST" class="registration-form">
+
                         <div>
                             <div class="form-group">
                                 <label for="current-password">Current Password</label>
                                 <input type="password" id="current-password" name="current-password" placeholder="Current Password" required>
                             </div>
-                            <div>
-                                
-                            </div>
                         </div>
-                        
 
                         <div>
                             <div class="form-group">
@@ -56,16 +53,12 @@ include 'navigation.php';
                             </div>                            
                         </div>
 
-                        <div >
+                        <div>
                             <div class="baseButtons">
                                 <button id="saveBut" type="submit">Save</button>
                             </div>
                         </div>
-                       
-                        
-                    
-                    
-                    
+
                     </form>
                 </div>
             </div>

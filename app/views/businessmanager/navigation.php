@@ -13,8 +13,14 @@
 <body>
 <nav class="left-menu">
     <div class="user-profile">
-        <img src="<?= isset($_SESSION['user_profile_picture']) ? $_SESSION['user_profile_picture'] : '../Images/wikum.jpg'; ?> " alt="User Profile Photo">
+
+        <?php
+        $profilePicture = $data["profilePicture"];
+        ?>
+
+        <img id="profile-picture" src="<?= isset($profilePicture->profile_picture) ? $profilePicture->profile_picture : '../Images/wikum.jpg'; ?>" alt="User Profile Photo">
         <span class="user-name"><?=$_SESSION['user_fname']?></span>
+
     </div>
 
     <div class="search-bar">
@@ -29,8 +35,7 @@
     $businessManagerMenu = [
         ['url' => 'businessmanager/index', 'icon' => 'bx bxs-dashboard bx-sm', 'text' => 'Overview'],
         ['url' => 'businessmanager/bookings', 'icon' => 'bx bxs-book bx-sm', 'text' => 'Bookings'],
-        ['url' => 'businessmanager/packages', 'icon' => 'bx bxs-package bx-sm', 'text' => 'Packages'],
-        ['url' => 'businessmanager/reports', 'icon' => 'bx bxs-report bx-sm', 'text' => 'Reports'],
+        ['url' => 'businessmanager/refund', 'icon' => 'bx bx-arrow-back bx-sm', 'text' => 'Refunds'],
         ['url' => 'businessmanager/financialmanagement', 'icon' => 'bx bx-line-chart bx-sm', 'text' => 'Financial Management'],
         ['url' => 'businessmanager/notifications', 'icon' => 'bx bx-bell bx-sm bx-fw', 'text' => 'Notifications'],
         ['url' => 'businessmanager/settings', 'icon' => 'bx bxs-cog bx-sm', 'text' => 'Settings'],

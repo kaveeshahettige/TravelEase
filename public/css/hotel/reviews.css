@@ -9,17 +9,37 @@
 /* Review Box Styles */
 .review-box {
     display: flex;
-    background-color: #ffffff;
-    border: 1px solid #e9e7e7;
-    border-left: 10px solid #FFEFCC;
+    background-color: #f8f9fa; /* Light gray background */
+    border: 1px solid #ced4da; /* Light gray border */
+    border-left: 10px solid #F9B314; /* Yellow left border */
     margin: 10px;
-    border-radius: 5px;
+    border-radius: 10px; /* Increased border radius for rounded corners */
     overflow: hidden;
 }
 
+/* Review Image Styles */
+.review-image {
+    flex: 0 0 120px; /* Fixed width for the image */
+    overflow: hidden;
+    display: flex;
+    justify-content: center; /* Align image horizontally to center */
+    align-items: center; /* Align image vertically to center */
+}
+
+.review-image img {
+    width: 60%; /* Set the width to 100% */
+    height: 50%; /* Auto height to maintain aspect ratio */
+    border-radius: 50%; /* Make it a circle */
+    object-fit: cover;
+}
+
+
 /* Review Content Styles */
 .review-sub-content {
+    flex: 1; /* Fill remaining space */
     padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .review-sub-content h2 {
@@ -35,24 +55,11 @@
     font-size: 14px;
 }
 
-/* Review Image Styles */
-.review-image {
-    flex: 0 0 120px; /* Fixed width for the image */
-    overflow: hidden;
-}
-
-.review-image img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 10px;
-}
-
 .review-text {
     max-height: 100px; /* Adjust the height as needed */
     overflow: hidden;
 }
+
 
 /* "Read More" Button Styles */
 .read-more-btn {
@@ -176,6 +183,14 @@
     font-weight: bold;
     cursor: pointer;
 }
+
+/* CSS for star icons */
+.bx.bxs-star {
+    color: #ffc107;
+    font-size: 15px;
+    margin-right: 3px;
+}
+
 
 /* Media Query for Responsive Design */
 @media screen and (max-width: 768px) {

@@ -409,7 +409,7 @@ use PHPMailer\PHPMailer\Exception;
         if($document=$this->userModel->acceptUser($id)){
           //send email accept
           require  __DIR__."./../libraries/phpma/vendor/autoload.php";
-          
+
           
 
           $mail = new PHPMailer(true);
