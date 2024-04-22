@@ -20,24 +20,6 @@ class Travel{
         return $row;
     }
         
-    public function addAgency($agency_name, $reg_number, $address, $description, $website, $facebook, $twitter, $instagram, $location, $user_id) {
-        $this->db->query('INSERT INTO travelagency (agency_name, reg_number, address, description, website, facebook, twitter, instagram, city, user_id) VALUES (:agency_name, :reg_number, :address, :description, :website, :facebook, :twitter, :instagram, :location, :user_id)');
-        $this->db->bind(':agency_name', $agency_name);
-        $this->db->bind(':reg_number', $reg_number);
-        $this->db->bind(':address', $address);
-        $this->db->bind(':description', $description);
-        $this->db->bind(':website', $website);
-        $this->db->bind(':facebook', $facebook);
-        $this->db->bind(':twitter', $twitter);
-        $this->db->bind(':instagram', $instagram);
-        $this->db->bind(':location', $location);
-        $this->db->bind(':user_id', $user_id);
-        if ($this->db->execute()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
     
 
     public function addAgencyDetails($agencyDetails, $userId) {
@@ -421,6 +403,8 @@ class Travel{
             return $this->db->resultSet();
         }
 
+
+      
      
         
         public function getPlateNumberForVehicle($vehicleId) {
@@ -598,7 +582,7 @@ class Travel{
         }
          
         public function getVehicleCount($agencyId){
-            $this->db->query('SELECT COUNT(*) AS count FROM vehicles WHERE agency_id = :agency_id');
+            $this->db->query('SELECT COUNT(*) AS count FROM vehicles WHERE agency_id = :agency_id AND status=1');
             $this->db->bind(':agency_id', $agencyId);
             $row = $this->db->single();
             return $row->count;
@@ -779,6 +763,82 @@ public function saveVehicle($data) {
     return $this->db->execute();
 }
 
+
+public function addAgency($data) {
+    $query = "INSERT INTO travelagency (agency_name, reg_number, address, city, description, website, facebook, twitter, instagram, card_holder_name, account_number, user_id) VALUES (:agency_name, :reg_number, :address, :city, :description, :website, :facebook, :twitter, :instagram, :card_holder_name, :account_number, :user_id)";
+    
+    $this->db->query($query);
+    $this->db->bind(':agency_name', $data['agency_name']);
+    $this->db->bind(':reg_number', $data['reg_number']);
+    $this->db->bind(':address', $data['address']);
+    $this->db->bind(':city', $data['city']);
+    $this->db->bind(':description', $data['description']);
+    $this->db->bind(':website', $data['website']);
+    $this->db->bind(':facebook', $data['facebook']);
+    $this->db->bind(':twitter', $data['twitter']);
+    $this->db->bind(':instagram', $data['instagram']);
+    $this->db->bind(':card_holder_name', $data['card_holder_name']);
+    $this->db->bind(':account_number', $data['account_number']);
+    $this->db->bind(':user_id', $data['user_id']);
+
+    // Execute the query
+    return $this->db->execute();
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// cancel bookings
+
+public function updateBookingStatus($booking_id)
+{
+   // Prepare and execute the SQL query to update the booking status
+   $sql = "UPDATE bookings SET bookingCondition = 'cancelled' WHERE booking_id = :booking_id";
+   $this->db->query($sql);
+   $this->db->bind(':booking_id', $booking_id);
+
+
+   // Execute the query
+   if ($this->db->execute()) {
+       return true;
+   } else {
+       return false;
+   }
+}
+
+
+public function updateCartBookingStatus($booking_id, $vehicle_id)
+{
+   // Prepare and execute the SQL query to update the booking status
+   $sql = "UPDATE cartbookings SET bookingCondition = 'cancelled' WHERE booking_id = :booking_id AND agency_id = :agency_id";
+   $this->db->query($sql);
+   $this->db->bind(':booking_id', $booking_id);
+   $this->db->bind(':vehicle_id', $vehicle_id);
+
+
+   // Execute the query
+   if ($this->db->execute()) {
+       return true; // Return true if the update was successful
+   } else {
+       return false; // Return false if the update failed
+   }
+
+
+}
+
+
+public function insertNotification($booking_id, $sender_id, $receiver_id, $notification_message)
+{
+   $sql = "INSERT INTO notifications (booking_id, sender_id, receiver_id, notification) VALUES (:booking_id, :sender_id, :receiver_id, :notification_message)";
+   $this->db->query($sql);
+   $this->db->bind(':booking_id', $booking_id);
+   $this->db->bind(':sender_id', $sender_id);
+   $this->db->bind(':receiver_id', $receiver_id);
+   $this->db->bind(':notification_message', $notification_message);
+
+
+   return $this->db->execute();
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
        
     
         

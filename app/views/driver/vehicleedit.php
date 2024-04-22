@@ -113,6 +113,8 @@
 
                         </div>
 
+                        
+
                         <label for="description">Description :</label>
                         <textarea id="description" name="description"
                             rows="4"><?php echo $data['description']; ?></textarea>
@@ -122,7 +124,7 @@
 
 
                         <h2>Pricing</h2>
-                        <div id="with_driver_fields" style="">
+                        <div id="with_driver_fields">
                             <h3>With Driver Pricing:</h3>
                             <div class="form-group">
                                 <label for="withDriverPerDayr">Per Day Price (LKR)*:</label>
@@ -131,7 +133,7 @@
                             </div>
                         </div>
 
-                        <div id="without_driver_fields" style="">
+                        <div id="without_driver_fields">
                             <h3>Without Driver Pricing:</h3>
                             <div class="form-group">
                                 <label for="priceperday">Per Day Price (LKR)*:</label>

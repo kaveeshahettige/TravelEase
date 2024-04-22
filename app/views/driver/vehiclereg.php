@@ -252,7 +252,7 @@
                             </div>
                             <div class="uploadContainer">
                                 <div class="imagePreview" id="imagePreview7"></div>
-                                <label for="revenue" class="uploadButton">Registration card</label>
+                                <label for="revenue" class="uploadButton">Revenue</label>
                                 <input type="file" id="revenue" name="revenue" class="imageUpload" accept="image/*">
                             </div>
                         </div>

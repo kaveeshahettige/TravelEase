@@ -15,10 +15,11 @@
 
 <body>
     <nav class="left-menu">
-        <div class="user-profile">
-        <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
+       <div class="user-profile">
+            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
         </div>
+
 
         <div class="search-bar">
             <form action="#" method="GET">
@@ -121,7 +122,7 @@
                         </div>
                         
                             <div class="form-group">
-                                <label for="city">city</label>
+                                <label for="city">City</label>
                                 <input type="text" id="city" name="city" placeholder="city" value="<?php echo $data['agencyDetails']->city; ?>" required>
                             </div>
                         
@@ -130,7 +131,7 @@
                     <div>
                        
                         <div class="form-group">
-                            <label for="description">description</label>
+                            <label for="description">Description</label>
                             <input type="text" id="description" name="description" placeholder="description" value="<?php echo $data['agencyDetails']->description; ?>">
                         </div>
                     </div>

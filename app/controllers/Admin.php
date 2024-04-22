@@ -1,18 +1,18 @@
-    <?php
+<?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-    class Admin extends Controller{
-    
 
-        private $postModel;
-        
-        public function __construct(){
-            if(!isLoggedIn()){
-              redirect('users/login');
-            }
-            $this->userModel=$this->model('AdminM');
-            
-          }
+class Admin extends Controller{
+
+    private $userModel; // Changed from $postModel to $userModel
+
+    public function __construct(){
+        if(!isLoggedIn()){
+            redirect('users/login');
+        }
+        $this->userModel = $this->model('AdminM'); // Changed from $postModel to $userModel
+    }
 
         public function index(){
           $admindetail=$this->userModel->getadmindata();
@@ -48,20 +48,49 @@ use PHPMailer\PHPMailer\Exception;
           ];
             $this->view('admin/request',$data);
         }
+      
+
         public function hotel(){
-          $admindetail=$this->userModel->getadmindata();
-            $no=$this->userModel->noOfHotels(); 
-            $hotel=$this->userModel->findHotelDetail();
-            $data = [
-              'no'=>$no,
-              'hotel'=>$hotel,
-              
-              // 'lname' => $traveler->lname,
-               'fname' => $admindetail->fname,
-              // 'number' => $user->number,   
-            ];
-            $this->view('admin/hotel',$data);
-        }
+          $admindetail = $this->userModel->getadmindata();
+          $no = $this->userModel->noOfHotels(); 
+          // $hoteluserId = $this->userModel->gethotelUserID(); // Assuming this returns an array of stdClass objects
+          $hotel = $this->userModel->findHotelDetail();
+
+
+          $hoteldetails = $this->userModel->getHotel();
+
+          // var_dump($hoteldetails);
+
+
+      
+          $data = [
+              'no' => $no,
+              // 'hotel' => $hotel,
+              'fname' => $admindetail->fname,
+              'hoteldetails'=>$hoteldetails,
+          ];
+      
+          $this->view('admin/hotel', $data);
+      }
+      
+      public function deleteTraveler() {
+
+
+        
+            $userId = $_POST['id'];
+            
+            $success = $this->userModel->updateProfileStatus($userId);
+            
+            if ($success) {
+              redirect('admin/traveler');
+                // Redirect or show success message
+            } else {
+              redirect('admin/traveler');
+                // Handle deletion failure
+            }
+        
+    }
+    
         public function agency(){
           $admindetail=$this->userModel->getadmindata();
           $no=$this->userModel->noOfAgencies();
@@ -78,10 +107,10 @@ use PHPMailer\PHPMailer\Exception;
         public function package(){
           $admindetail=$this->userModel->getadmindata();
           $no=$this->userModel->noOfpackages();
-          $package=$this->userModel->findPackageDetail();
+          $guide=$this->userModel->getGuide();
           $data = [
             'no'=>$no,
-            'package'=>$package,
+            'guide'=>$guide,
             // 'lname' => $traveler->lname,
             'fname' => $admindetail->fname,
             // 'number' => $user->number,   
@@ -347,7 +376,7 @@ use PHPMailer\PHPMailer\Exception;
                 'password'=>'',
                 'confirm_password'=>'',
                 'number'=>'',
-                'name_err'=>'',
+                // 'name_err'=>'',
                 'email_err'=>'',
                 'password_err'=>'',
                 'confirm_password_err'=>'',
@@ -362,6 +391,8 @@ use PHPMailer\PHPMailer\Exception;
             $no=$this->userModel->noOfTravelers();
             $traveler=$this->userModel->findTravelerDetail();
 
+            // var_dump($admindetail);
+
             $data = [
               'no'=>$no,
               'traveler'=>$traveler,
@@ -373,9 +404,9 @@ use PHPMailer\PHPMailer\Exception;
             $this->view('admin/traveler',$data); 
 
         }
-        public function deleteTraveler($id){
-          $user=$this->userModel->deleteTraveler($id);
-        }
+        // public function deleteTraveler($id){
+        //   $user=$this->userModel->deleteTraveler($id);
+        // }
         public function deleteHotel($id){
           $user=$this->userModel->deleteHotel($id);
         }
@@ -396,7 +427,7 @@ use PHPMailer\PHPMailer\Exception;
          return $data;
 
         }
-        function getDocumentName($userId) {
+        function getDocumentName($id) {
           // Implement your database query to get the document name based on the user ID
           $documentName=$this->userModel->viewDocument($id);
           // For example, $documentName = ...;

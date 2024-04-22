@@ -2,8 +2,12 @@ body, ul {
     margin: 0;
     padding: 0;
     font-family: "Poppins", sans-serif;
-    border: 5px saddlebrown;
+    /* border: 5px saddlebrown;
+     */
+}
 
+.main{
+    background: white;
 }
 
 .service-validation-form p {
@@ -282,6 +286,9 @@ a img.menu-icon {
     margin-right: 50px;
     padding-top: 25px;
     font-family: "Poppins", sans;
+    background: white;
+
+    
 }
 
 .dashboard-subcontent {
@@ -289,6 +296,8 @@ a img.menu-icon {
     margin-right: auto;
     padding-top: 15px;
     font-family: "Poppins", sans;
+    /* background: #976666; */background: white;
+
 }
 
 
@@ -363,8 +372,9 @@ a img.menu-icon {
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
-    margin-left: 500px;
-    margin-top: 10px;
+    margin-left: 450px;
+   
+    /* border: 1px solid red; */
 }
 
 /* Style for the file input and file name display */
@@ -448,6 +458,7 @@ input[type="file"] {
 
     .edit-button{
         margin-left: auto;
+        /* margin-bottom: 100px; */
     }
 
     .delete-button{
@@ -478,6 +489,7 @@ input[type="file"] {
     .dashboard-subcontent {
         padding-left: 10px;
         text-align: center;
+        background-color: #c53e3e;
     }
 
     .left-content,

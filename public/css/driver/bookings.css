@@ -4,6 +4,67 @@ body, ul {
     font-family: "Poppins", sans-serif;
 }
 
+.main{
+    background: white;
+}
+/* Custom Popup Style */
+.popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.popup-content h3 {
+    margin-bottom: 10px;
+}
+
+.booking-detail {
+    margin-bottom: 10px;
+}
+
+.rating-stars {
+    color: gold;
+}
+
+.rating-stars.empty {
+    color: #ccc;
+}
+
+
+.rating-stars {
+    display: inline-block;
+    color: #FFD700;
+    font-size: 20px;
+}
+
+.rating-stars::before {
+    content: "★";
+}
+
+.rating-stars.empty::before {
+    content: "☆";
+}
 
 
 
@@ -341,6 +402,7 @@ li {
     box-sizing: border-box; /* Include padding and border in box width */
     overflow: hidden; /* Hide overflow content */
     border-left: 10px solid #FFEFCC;
+    padding-bottom: 20px;
 }
 
 /* Style for box heading */
@@ -353,9 +415,19 @@ li {
     padding-left: 10px;
 }
 
+.box h1 {
+    font-size: 30px;
+    margin: 5;
+    font-weight: bold;
+    color: #000000;
+    text-align: left;
+    padding-left: 10px;
+}
+
+
 /* Style for box content */
 .box p {
-    font-size: 32px;
+    font-size: 22px;
     margin: 5px 0;
     font-weight: bold;
     color: #000000;
@@ -424,6 +496,19 @@ li {
     width: 100px; 
     height: 30px; 
 }
+.action-button {
+    background-color: #F9B314;
+    color: #ffffff;
+    border: none;
+    padding: 5px 12px;
+    margin-top: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 30px; 
+    height: 30px; 
+    /* border:2px solid red; */
+}
 
 .view-button:hover {
     background-color: #E88E0C; 
@@ -431,7 +516,7 @@ li {
 
 
 
-.view-button:hover {
+.action-button:hover {
     background-color: #FFDB8B;
 }
 

@@ -127,7 +127,7 @@ class AdminM{
     }
     //findTravelerDetail
     public function findTravelerDetail(){
-        $this->db->query("SELECT * from users where type='1'");
+        $this->db->query("SELECT * from users where type='1'AND profile_status='1'");
         $data=$this->db->resultSet();
 
         //check row
@@ -137,7 +137,96 @@ class AdminM{
             return null;
         }
     }
-    //findHotelDetail
+
+    public function gethotelUserID(){
+      $this->db->query("SELECT id from users where type='3' and approval='1' and profile_status='1'");
+        $data=$this->db->resultSet();
+
+        //check row
+        if($this->db->rowCount()>0){
+            return $data;
+        }else{
+            return null;
+        }
+      }
+
+      
+      public function getHotel(){
+        $this->db->query("SELECT * FROM hotel
+                          RIGHT JOIN users ON hotel.user_id = users.id
+                          WHERE users.type = '3' AND users.approval = '1' AND users.profile_status = '1'");
+        
+        $data = $this->db->resultSet();
+    
+        // Check row count
+        if($this->db->rowCount() > 0){
+            return $data;
+        } else {
+            return null;
+        }
+    }
+    public function getGuide(){
+      $this->db->query("SELECT * FROM guides
+                        RIGHT JOIN users ON guides.user_id = users.id
+                        WHERE users.type = '5' AND users.approval = '1' AND users.profile_status = '1'");
+      
+      $data = $this->db->resultSet();
+  
+      // Check row count
+      if($this->db->rowCount() > 0){
+          return $data;
+      } else {
+          return null;
+      }
+  }
+  
+    
+    
+       
+
+    
+    public function updateProfileStatus($userId) {
+      $this->db->query('UPDATE users SET profile_status = 0 WHERE id = :id');
+      // Bind values
+      $this->db->bind(':id', $userId);
+  
+      // Execute
+      if($this->db->execute()){
+          return true;
+      } else {
+          return false;
+      }
+  }
+  
+  
+  
+    public function getmorehotelDetails($hotelId){
+      $this->db->query("SELECT * FROM hotel WHERE user_id=:hotelId");
+      $this->db->bind(':hotelId', $hotelId); // Bind the integer value directly
+      $data = $this->db->resultSet();
+  
+      // Check row count
+      if($this->db->rowCount() > 0){
+          return $data;
+      } else {
+          return null;
+      }
+  }
+//   public function getroomsDetails($hotelIds){
+//     $this->db->query("SELECT * FROM hotel_rooms WHERE hotel_id=:hotelId");
+//       $this->db->bind(':hotelId', $hotelIds); // Bind the integer value directly
+//       $data = $this->db->resultSet();
+  
+//       // Check row count
+//       if($this->db->rowCount() > 0){
+//           return $data;
+//       } else {
+//           return null;
+//       }
+// }
+
+
+  
     public function findHotelDetail(){
         $this->db->query("SELECT * from users where type='3' and approval='1'");
         $data=$this->db->resultSet();

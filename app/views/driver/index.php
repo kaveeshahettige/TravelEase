@@ -13,17 +13,13 @@
 </head>
 
 <body>
-
-        <?php
-    // var_dump($data['profileimage']->profile_picture)
-
-        ?>
-
     <nav class="left-menu">
         <div class="user-profile">
-            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
+            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>"
+                alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
         </div>
+
 
         <div class="search-bar">
             <form action="#" method="GET">
@@ -55,160 +51,214 @@
             <a href="<?php echo URLROOT; ?>pages/indes" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
         </div> -->
     </nav>
-    <div class="logo-container">
-        <img src="<?php echo URLROOT; ?>/images/driver/TravelEase.png" alt="TravelEase Logo">
-        <span class="logo-text">TravelEase</span>
-    </div>
 
-    <div class="dashboard-content">
-        <h1>Overview</h1>
-    </div>
+    <div class="main">
 
-    <div class="dashboard-sub-content">
-        <div class="top-boxes">
-            <!-- Small Image Boxes -->
-            <div class="img-box">
-                <img src="<?php echo URLROOT; ?>/images/hotel/dashboard.jpg" alt="hotel Image">
-            </div>
+        <div class="logo-container">
+            <img src="<?php echo URLROOT; ?>/images/driver/TravelEase.png" alt="TravelEase Logo">
+            <span class="logo-text">TravelEase</span>
+        </div>
 
-            <!-- Total Bookings Box -->
-            <!-- <?php $bookingsCount = $data["bookingsCount"]; ?> -->
-            <div class="box">
-                <h2>Total Bookings</h2>
-                <p><?php echo $bookingsCount ?></p>
-            </div>
+        <div class="dashboard-content">
+            <h1>Overview</h1>
+        </div>
+        <div class="dashboard-sub-content">
+            <div class="top-boxes">
+                <div class="box">
+                    <?php if (empty($data['agencyDetails'])) : ?>
+                    <h2>Register Your Agency</h2>
+                    <a href="<?php echo URLROOT; ?>driver/addagency">
+                        <button class="edit-button">Click Here</button>
+                    </a>
+                    <?php else : ?>
+                    <h2>Welcome,</h2>
 
-    
+                    <h1><?php echo $data['agencyDetails']->agency_name;  ?></h1>
+                    <!-- Show other content or message -->
+                    <?php endif; ?>
+                </div>
 
-            <!-- <?php
-            $guestCount = $data["guestCount"]; ?> -->
-            <div class="box">
-                <h2>Total Customers</h2>
-                <!-- <p><?php echo $guestCount?></p> -->
+                <div class="box">
+                    <?php if ($data['userDetails']->approval == 0 && ($data['userDetails']->document == NULL)) : ?>
+                    <!-- <h2>Service Validation</h2> -->
+                    <h2>Please upload your service validation documents.</h2>
+                    <a href="<?php echo URLROOT; ?>driver/settings">
+                        <button class="edit-button">Click Here</button>
+                    </a>
+                    <?php elseif (!empty($data['userDetails']->document) && $data['userDetails']->approval == 0) : ?>
+                    <h2>Service Validation Pending.</h2>
+                    <p>Your documents have been submitted.</p>
+                    <?php elseif (!empty($data['userDetails']->document) && $data['userDetails']->approval == 1) : ?>
+                    <h2>Congratulations!</h2>
+                    <p>Service Validation Accepted.</p>
+                    <?php elseif (!empty($data['userDetails']->document) && $data['userDetails']->approval == 2) : ?>
+                    <h2>Service Validation Declined.</h2>
+                    <!-- <p>Unfortunately, your service validation has been declined. Please review the details and resubmit.</p> -->
+                    <a href="<?php echo URLROOT; ?>driver/settings">
+                        <button class="edit-button">Resubmit</button>
+                    </a>
+                    <?php endif; ?>
+                </div>
+
             </div>
         </div>
-    </div>
-
-    <div class="dashboard-subcontent">
-        <div class="content-container">
-            <div class="left-content">
-                <div class="rectangle">
-                    <div class="basic-info-content">
-                        <div class="center-image">
-                        <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
-                        </div>
-                        <div class="hotel-details">
-                            <h3><?php echo $_SESSION['user_fname'] . " " . $_SESSION['user_lname'] ?></h3>
-                            <h6>Contact Number</h6>
-                            <p><?php echo $_SESSION['user_number'] ?></p>
-                            <h6>Email</h6>
-                            <p><?php echo $_SESSION['user_email'] ?></p>
-
-                        </div>
 
 
+        <div class="dashboard-subcontent">
+            <div class="content-container">
+                <div class="left-content">
+                    <div class="rectangle">
+                        <div class="basic-info-content">
+                            <div class="center-image">
+
+                                <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture;; ?>"
+                                    alt="profile Picture">
+
+
+                            </div>
+
+                            <div class="hotel-details">
+                                <h3><?php echo $_SESSION['user_fname'] . " " . $_SESSION['user_lname'] ?></h3>
+                                <h6>Contact Number</h6>
+                                <p><?php echo $_SESSION['user_number'] ?></p>
+                                <h6>Email</h6>
+                                <p><?php echo $_SESSION['user_email'] ?></p>
+
+                            </div>
 
 
 
 
-                        <h2>Agency Details</h2>
-                        <div class="hotel-details">
-                            <?php if (!empty($data['agencyDetails'])) : ?>
-                            <h6>Agency Name </h6>
-                            <p><?php echo $data['agencyDetails']->agency_name; ?></p>
-                            <h6>Registration Number</h6>
-                            <p> <?php echo $data['agencyDetails']->reg_number; ?></p>
-                            <h6>Address </h6>
-                            <p><?php echo $data['agencyDetails']->address; ?></p>
-                            <h6>Description</h6>
-                            <p> <?php echo $data['agencyDetails']->description; ?></p>
-                            <h6>City</h6>
-                            <p><?php echo $data['agencyDetails']->city; ?></p>
-                            <?php else : ?>
-                            <p>No agency details found</p>
-                            <?php endif; ?>
 
 
+                            <h2>Agency Details</h2>
+                            <div class="hotel-details">
+                                <?php if (!empty($data['agencyDetails'])) : ?>
+                                <h6>Agency Name </h6>
+                                <p><?php echo $data['agencyDetails']->agency_name; ?></p>
+                                <h6>Registration Number</h6>
+                                <p> <?php echo $data['agencyDetails']->reg_number; ?></p>
+                                <h6>Address </h6>
+                                <p><?php echo $data['agencyDetails']->address; ?></p>
+                                <h6>Description</h6>
+                                <p> <?php echo $data['agencyDetails']->description; ?></p>
+                                <h6>City</h6>
+                                <p><?php echo $data['agencyDetails']->city; ?></p>
+                                <?php else : ?>
+                                <p>No agency details found</p>
+                                <?php endif; ?>
+
+
+                            </div>
                         </div>
                     </div>
+
+
+
+
+
+
+
+
+
+                </div>
+                <div class="right-content">
+                    <div class="table2-content">
+
+                        <?php
+// Check if $data exists and has the expected structure
+if (!empty($data) && isset($data['pendingBookings'])) {
+    if ($data['vehicleCount'] == 0 && $data['pendingBookings'] == NULL) {
+        echo '<div class="rectangle">
+                <div class="basic-info-content">
+                    <div class="hotel-details">
+                        <p>Add vehicles to get new Bookings.</p>
+                    </div>
+                </div>
+            </div>';
+    } elseif ($data['vehicleCount'] != 0 && $data['pendingBookings'] == NULL) {
+            
+            echo '<div class="rectangle">
+            <div class="basic-info-content">
+                <div class="hotel-details">
+                <p>No New Bookings to Show.</p>
+                </div>
+            </div>
+        </div>';
+
+
+        } else {
+            // Display the table if conditions are not met
+    ?>
+                        <h2>New Booking Details</h2>
+                        <table class="booking-table">
+                            <thead>
+                                <tr>
+                                    <th>Passenger Name</th>
+                                    <th>Start Date</th>
+                                    <th>Vehicle Number</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- PHP code here -->
+                                <?php
+            $pendingBookings = $data['pendingBookings'] ?? [];
+            $paymentAmounts = $data['paymentAmounts'] ?? [];
+
+            $count = 0; // Initialize a counter variable
+
+            foreach (array_map(null, $pendingBookings, $paymentAmounts) as [$booking, $payment]) {
+                $count++; // Increment the counter for each iteration
+            ?>
+                                <tr>
+                                    <td><?php echo $booking->traveler_details->fname . ' ' . $booking->traveler_details->lname; ?>
+                                    <td><?php echo $booking->startDate; ?></td>
+                                    <td><?php echo $booking->plate_number; ?></td>
+                                    <td>
+                                        <a class="view-button" href="<?php echo URLROOT; ?>driver/bookings" style="width: 15px;";>
+                                            <i class='bx bx-search'></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                        <?php } // End of else block
+    } // End of if $data check ?>
+                    </div>
+
+
+                    <?php
+                $vehicleCount = $data['vehicleCount'];
+                ?>
+
+                    <!-- Rooms Allocated Section -->
+                    <div class="rectangle">
+                        <div class="basic-info-content">
+                            <div class="hotel-details">
+                                <h2>Total Vehicles</h2>
+                                <!-- PHP code here -->
+
+                                <h2><?php echo $vehicleCount; ?></h2>
+                            </div>
+                            <a href="<?php echo URLROOT; ?>driver/vehiclereg">
+                                <button class="edit-button">Add a Vehicle</button>
+                            </a>
+                        </div>
+                    </div>
+
+
                 </div>
 
 
-
-
-
-
-
-
-
             </div>
-            <div class="right-content">
-    <!-- Table with Maximum 4 Rows -->
-    <div class="table2-content">
-        <h2>New Booking Details</h2>
-        <?php
-    // Check if $data exists and has the expected structure
-    if (!empty($data) && isset($data['pendingBookings'])) {
-    ?>
-        <table class="booking-table">
-            <thead>
-                <tr>
-                    <th>Passenger Name</th>
-                    <th>Start Date</th>
-                    <th>Vehicle Number</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- PHP code here -->
-                <?php
-                $pendingBookings = $data['pendingBookings'] ?? [];
-                $paymentAmounts = $data['paymentAmounts'] ?? [];
-
-                $count = 0; // Initialize a counter variable
-
-                foreach (array_map(null, $pendingBookings, $paymentAmounts) as [$booking, $payment]) {
-                    $count++; // Increment the counter for each iteration
-                ?>
-                    <tr>
-                    <td><?php echo $booking->traveler_details->fname . ' ' . $booking->traveler_details->lname; ?>
-                    <td><?php echo $booking->startDate; ?></td>
-                        <td><?php echo $booking->plate_number; ?></td>
-                        <td>
-                        <a class="view-button" href="<?php echo URLROOT; ?>driver/bookings">
-                                        <i class='bx bx-search'></i>
-                                    </a>
-                        </td>
-                    </tr>
-                    <?php } ?>
-            </tbody>
-        </table>
-        <?php } ?>
-    </div>
-
-    <!-- Rooms Allocated Section -->
-    <div class="rectangle">
-        <div class="basic-info-content">
-            <div class="hotel-details">
-                <h2>Total Vehicles</h2>
-                <!-- PHP code here -->
-                <?php
-                $vehicleCount = $data['vehicleCount'];
-                ?>
-                <p><?php echo $vehicleCount; ?></p>
-            </div>
-            <a href="<?php echo URLROOT; ?>driver/vehiclereg">
-                            <button class="edit-button">Add a Vehicle</button>
-                        </a>
-        </div>
-    </div>
-</div>
-
 
         </div>
 
-    </div>
 
+
+    </div>
 
 
 </body>

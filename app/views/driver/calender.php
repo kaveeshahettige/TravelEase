@@ -16,10 +16,11 @@
 
 <body>
     <nav class="left-menu">
-        <div class="user-profile">
-        <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
+       <div class="user-profile">
+            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
         </div>
+
         
         <div class="search-bar">
             <form action="#" method="GET">
@@ -58,33 +59,30 @@ $userData= $data['basicInfo']['userData'];
             <h1>Availability</h1>
         </div>
 
-        <div class="dashboard-sub-content">
+        <!-- <div class="dashboard-sub-content">
             <div class="top-boxes">
-                <!-- Small Image Boxes -->
-                <div class="img-box">
-                    <img src="<?php echo URLROOT; ?>/images/hotel/dashboard.jpg" alt="hotel Image">
-                </div>
+                
 
 
                 <!-- Total Bookings Box -->
-                <div class="box">
+                <!-- <div class="box">
                     <h2>Total Rooms Allocated</h2>
                     <p>10</p>
-                </div>
+                </div> -->
 
                 <!-- Ongoing Bookings Box -->
-                <div class="box">
+                <!-- <div class="box">
                     <h2>Booked Rooms</h2>
                     <p>5</p>
-                </div>
+                </div> -->
 
                 <!-- Customers Box -->
-                <div class="box">
+                <!-- <div class="box">
                     <h2>Available Rooms</h2>
                     <p>5</p>
                 </div>
             </div>
-        </div>
+        </div> --> 
 
         <div class="dashboard-sub-content">
 

@@ -25,6 +25,8 @@ class Driver extends Controller{
         // Get user ID from session
         $userId = $_SESSION['user_id'];
 
+        // var_dump($userId);
+
         $profileimage = $this->TravelsModel->getProfileImage($userId);
 
         // var_dump($profileimage);
@@ -35,6 +37,8 @@ class Driver extends Controller{
     
         // Call the model to get agency details for the user
         $agencyDetails = $this->TravelsModel->getAgencyDetails($userId);
+        // var_dump($agencyDetails);
+
         $agencyId = $this->TravelsModel->getAgencyId($userId);
 
         $userDetails = $this->TravelsModel->getUserDetails($_SESSION['user_id']);
@@ -80,10 +84,27 @@ class Driver extends Controller{
 
         $vehicleCount = $this->TravelsModel->getVehicleCount($agencyId);
 
-        // var_dump($vehicleCount);
+        
 
-        // $CpaymentAmounts = [];
+        $completedBookings = $this->TravelsModel->getCompletedBookings($agencyId);
 
+        // foreach ($completedBookings as $Cbooking ) {
+        //     $CpaymentAmounts[$Cbooking->booking_id] = $this->TravelsModel->getPaymentAmountForBooking($Cbooking->booking_id);
+        // }
+
+        foreach ($completedBookings as $key => $Cbooking) {
+           
+    //  $Cdetails = $this->TravelsModel->getTravelerDetails($Cbooking->user_id);
+    //         if ($Cdetails) {
+    //             $completedBookings[$key]->traveler_details = $Cdetails;
+    //         }
+    // $feedbacks=[];
+     $feedbacks = $this->TravelsModel->getFeedbacks($Cbooking->booking_id);
+            if ($feedbacks) {
+                  $completedBookings[$key]->feedbacks_details = $feedbacks;
+
+        }
+    }
        
         $data = [
             'agencyDetails' => $agencyDetails,
@@ -92,11 +113,53 @@ class Driver extends Controller{
            'userDetails' => $userDetails,
            'vehicleCount' => $vehicleCount,
            'profileimage' => $profileimage,
+        //    'feedbacks' =>$feedbacks,
+           'completedBookings'=> $completedBookings
             
         ];
+
+        // var_dump($completedBookings);
     
         $this->view('driver/index', $data);
     }
+
+    public function addagency() {
+        if (!isset($_SESSION['user_id'])) {
+            // Redirect to login page or handle unauthorized access
+            redirect('login');
+            return; // Add return statement to prevent further execution
+        }
+    
+        // Get user ID from session
+        $userId = $_SESSION['user_id'];
+    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Handle form data
+            $data = [
+                'agency_name' => $_POST['agency_name'],
+                'reg_number' => $_POST['reg_number'],
+                'address' => $_POST['address'],
+                'city' => $_POST['city'],
+                'description' => $_POST['description'],
+                'website' => $_POST['website'],
+                'facebook' => $_POST['facebook'],
+                'twitter' => $_POST['twitter'],
+                'instagram' => $_POST['instagram'],
+                'card_holder_name' => $_POST['card_holder_name'],
+                'account_number' => $_POST['account_number'],
+                'user_id' => $userId // Set user_id based on session
+            ];
+    
+            // Save data using model
+            $this->TravelsModel->addAgency($data);
+            // Redirect to desired page after saving
+            redirect('driver/index');
+        } else {
+            $this->view('driver/addagency');
+        }
+    }
+    
+    
     
     public function calender() {
         // Get the current date in UTC+05:30 timezone
@@ -263,6 +326,7 @@ class Driver extends Controller{
         }
 
         // var_dump($paymentAmounts);
+        $CpaymentAmounts = [];
 
         foreach ($completedBookings as $Cbooking ) {
             $CpaymentAmounts[$Cbooking->booking_id] = $this->TravelsModel->getPaymentAmountForBooking($Cbooking->booking_id);
@@ -293,7 +357,7 @@ class Driver extends Controller{
             }
         }
 
-        // $CpaymentAmounts = [];
+       
 
         foreach ($completedBookings as $key => $Cbooking) {
             $CplateNumber = $this->TravelsModel->getPlateNumberForVehicle($Cbooking->vehicle_id);
@@ -324,7 +388,8 @@ class Driver extends Controller{
         }
     }
 // 
-       
+// var_dump($pendingBookings);
+
 
     
         $data = [
@@ -341,75 +406,78 @@ class Driver extends Controller{
     
 }
 
+public function updateBookingStatus(){
 
 
-public function cancelBooking($temporyid,$booking_id){
-
-    echo '<script>console.log("cancelBooking function is running!");</script>';
-      $id = $_SESSION['user_id'];
-      $user=$this->TravelsModel->getUserDetails($id);
-      
-      //$bookingDetails=$this->userModel->findBookingDetails($booking_id,$temporyid);
-      
-      if ($temporyid==0) {
-        //detail of the booking
-        $bookingDetails=$this->TravelsModel->getPendingBookings($booking_id);
-        $bookingFurtherDetail=$this->TravelsModel->findBookingFurtherDetail($bookingDetails);
-        if($bookingDetails->type==4){
-          $message="Your Agency vehicle with ID ".$bookingFurtherDetail->vehicle_id."-".$bookingFurtherDetail->brand ." ".$bookingFurtherDetail->model." ".$bookingFurtherDetail->plate_number." ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
-        }elseif($bookingDetails->type==3){
-          $message="Your Hotel room with ID ".$bookingFurtherDetail->room_id."-".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
-  
-        }
-        
-        
-        //cancel from booking table
-        $cancel = $this->TravelsModel->cancelBooking($booking_id);
-  
-        //refund user
-        //$refund = $this->userModel->refundUser($booking_id);
-  
-        //check type and provide availibility of vehicle_bookings,room_availability
-        $availibility=$this->TravelsModel->makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 
-        
-        //send a sms to service provider
-  
-        //send notofuiaction
-        $send=$this->TravelsModel->sendBookingCancellationNotification($id,$bookingDetails->serviceProvider_id,$booking_id,$message);
-        
-      }else{
-  
-        $bookingDetails=$this->TravelsModel->findCartBookingDetails($booking_id,$temporyid);
-        $bookingFurtherDetail=$this->TravelsModel->findBookingFurtherDetail($bookingDetails);
-        if($bookingDetails->type==4){
-          $message="Your Agency vehicle with ID ".$bookingFurtherDetail->vehicle_id."-".$bookingFurtherDetail->brand ." ".$bookingFurtherDetail->model." ".$bookingFurtherDetail->plate_number." ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
-        }elseif($bookingDetails->type==3){
-          $message="Your Hotel room with ID ".$bookingFurtherDetail->room_id."-".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
-  
-        }
-        
-        //cancel from cartbookings table
-        $cancel = $this->TravelsModel->cancelCartBooking($temporyid,$booking_id);
-  
-        //refund user
-        //$refund = $this->userModel->refundUser($booking_id);
-  
-        //check type and provide availibility of vehicle_bookings,room_availability
-        $availibility=$this->TravelsModel->makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 
-        //send a sms to service provider
-  
-      
-         //send notofuiaction
-         $send=$this->TravelsModel->sendBookingCancellationNotification($id,$bookingDetails->serviceProvider_id,$booking_id,$message);
-      }    
-  }
-
-
-
-
+    // Retrieve room_id, booking_id, and temporyid from the POST request
+    $sender_id = $_SESSION['user_id'];
+    $receiver_id = $_POST['user_id'];
+    $temporyid = $_POST['temporyid'];
+    $vehicle_id = $_POST['vehicle_id'];
+    $booking_id = $_POST['booking_id'];
+    $startDate = $_POST['startDate'];
+    $endDate = $_POST['endDate'];
     
+ 
+ 
     
-    
+    $sender_name = $_SESSION['user_name'];
+ 
+ 
+    // Check if temporyid is 0
+    if ($temporyid == 0) {
+        // Call the model function to update the booking status
+        $updated = $this->TravelsModel->updateBookingStatus($booking_id);
+    } elseif ($temporyid !== 1) {
+        // Handle the case where temporyid is 1
+        $updated = $this->TravelsModel->updateCartBookingStatus($booking_id, $vehicle_id);
+    } else {
+        // Handle the case where temporyid is neither 0 nor 1
+        $updated = $this->TravelsModel->updateCartBookingStatus($booking_id, $vehicle_id);
+    }
+ 
+ 
+    // Construct the notification message
+    $notification_message = "Travel Agency,"." $sender_name" . " has cancelled your booking with the booking details were for vehicle" . " $startDate". " to" ." $endDate." ." We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
+ 
+ 
+    // Insert notification
+    $notification_inserted = $this->TravelsModel->insertNotification($booking_id, $sender_id, $receiver_id, $notification_message);
+ 
+ 
+    require_once __DIR__ . '/../libraries/sms/vendor/autoload.php';
+ 
+ 
+    // $basic  = new \Vonage\Client\Credentials\Basic("992a5e27", "YiQN3gXeYkIkfbcJ");
+    // $client = new \Vonage\Client($basic);
+ 
+ 
+    $messageBody = "Tour Guide,"." $sender_name" . " has cancelled your booking with the booking details were for tour guide room from" . " $startDate". " to" ." $endDate." ." We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
+ 
+ 
+    // $response = $client->sms()->send(
+    //     new \Vonage\SMS\Message\SMS("94768968161", 'Travelease', $messageBody)
+    // );
+ 
+ 
+    $message = $response->current();
+ 
+ 
+    if ($message->getStatus() == 0) {
+        echo "The message was sent successfully\n";
+    } else {
+        echo "The message failed with status: " . $message->getStatus() . "\n";
+    }
+ 
+ 
+    // Return JSON response based on the result
+    if ($updated && $notification_inserted && $message->getStatus() == 0) {
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['success' => false]);
+    }
+ }
+ 
     public function getPlateNumberForVehicle($vehicleId) {
         $plateNumber = $this->TravelsModel->getPlateNumberForVehicle($vehicleId);
         return $plateNumber;
@@ -514,7 +582,7 @@ public function cancelBooking($temporyid,$booking_id){
     ];
     
 
-    // var_dump($data);
+    // var_dump($completedBookings);
 
 
                
@@ -609,10 +677,10 @@ public function cancelBooking($temporyid,$booking_id){
             
                 $this->view('driver/settings', $data);
             }
-            
+        
      public function vehicle(){
                     // Get the user_id from session
-                    $user_id = $_SESSION['user_id'];
+                    
                     $userId = $_SESSION['user_id'];
 
 
@@ -620,13 +688,20 @@ public function cancelBooking($temporyid,$booking_id){
 
                 
                     // Retrieve agency_id from the travelagency table based on user_id
-                    $agency_id = $this->TravelsModel->getAgencyId($user_id);
+                   
+
+
+                    $agencyId = $this->TravelsModel->getAgencyId($userId);
+
+                    // var_dump($agencyId);
+
+                    $vehicleCount = $this->TravelsModel->getVehicleCount($agencyId);
                 
                     
                         // If agency_id is found, fetch vehicle details
-                        $vehicledetails = $this->TravelsModel->vehicleDetails($agency_id);
+                        $vehicledetails = $this->TravelsModel->vehicleDetails($agencyId);
                         $data=[
-
+                            'vehicleCount' =>$vehicleCount,
                             'profileimage' => $profileimage,
                             'vehicledetails'=> $vehicledetails
                         

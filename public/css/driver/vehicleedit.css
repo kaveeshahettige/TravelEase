@@ -20,6 +20,9 @@ body{
 
 
 .uploadContainer {
+    max-width: 300px;
+
+
     width: 100%;
     height: 100%;
       display: flex;
@@ -30,18 +33,31 @@ flex-direction: column !important;
 
   .imagePreview {
 
-    max-width: 300px;
+    max-width: 100%;
     height: 100%;
-    border: 1px solid #000000;
+    max-width: 100%;
+    /* border: 1px solid #000000; */
     border-radius: 2%;
     background-size: cover;
     background-position: center;
     overflow: hidden;
    
         object-fit: contain;
+        /* box-shadow: 0 0 10px rgba(0, 0, 0, 1); */
       
       
   }
+  .imagePreview img{
+    min-width: 300px;
+    box-shadow: 0 0px 10px rgba(0, 0, 0, 1);
+
+
+    /* max-height: fit-content; */
+    /* border:2px solid red; */
+
+
+  }
+
   
   .uploadButton {
     display: block;

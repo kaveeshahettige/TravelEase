@@ -4,20 +4,26 @@ body, ul {
     font-family: "Poppins", sans-serif;
 }
 
+/* 
+ */
+
+
 .feedback {
     border: 2px solid #efdc0b;
     border-radius: 10px;
     margin-bottom: 20px;
-    padding: 15px;
+    /* padding: 15px; */
     background-color: #f7f7f7;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    width: 1000px;
+    width: 100%;
+    /* border:2px solid rgb(0, 0, 0); */
 }
 
 .feedback-details {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+
 }
 
 .feedback-details img {
@@ -422,6 +428,14 @@ a.active, a:active {
     margin-right: 15px;
     padding-top: 5px;
     font-family: "Poppins", sans;
+    /* border:2px solid red; */
+    margin-top: 50px;
+    overflow: visible;
+}
+
+.card{
+   padding: 25px;
+
 }
 
 .review-box {

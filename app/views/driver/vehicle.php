@@ -61,10 +61,11 @@
 
 <body>
     <nav class="left-menu">
-        <div class="user-profile">
-        <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
+       <div class="user-profile">
+            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
         </div>
+
 
         <div class="search-bar">
             <form action="#" method="GET">
@@ -119,16 +120,16 @@
                 <!-- Total Request Box -->
                 <div class="box">
                     <h2>Total Vehicles</h2>
-                    <p>1</p>
+                    <p><?php echo $data['vehicleCount'] ?></p>
                 </div>
 
                 <div class="box">
                     <!-- Rectangle 2: Change Password -->
                     <div class="basic-info-content">
-                        <h2>Add Vehicle</h2>
+                        <h2>Add a New Vehicle</h2>
                         <!-- Add change password form here -->
                         <a href="<?php echo URLROOT; ?>driver/vehiclereg/<?php echo $_SESSION['user_id']?>">
-                            <button class="edit-button">Add</button>
+                            <button class="add-button">Add</button>
                         </a>
                     </div>
                 </div>
@@ -140,7 +141,7 @@
 
 
         <div class="interim_container">
-            <div class="dashboard-subcontent">
+            <div class="dashboard-subcontent" >
                 <div class="content-container">
                     <?php if (!empty($data['vehicledetails'])): ?>
                     <?php foreach ($data['vehicledetails'] as $vehicle): ?>
@@ -148,7 +149,7 @@
 
                     <div class="vehicle-card">
                         <div class="card-image">
-                            <div class="slider">
+                            <div class="slider" ">
                                 <img src="<?php echo URLROOT; ?>/images/<?php echo $vehicle['image']; ?>"
                                     alt="Vehicle Image 1">
                                 <img src="<?php echo URLROOT; ?>/images/<?php echo $vehicle['vehi_img2']; ?>"
@@ -161,7 +162,7 @@
                             <button class="prev-btn"><</button>
                             <button class="next-btn">></button>
                         </div>
-                        <div class="card-details">
+                        <div class="card-details" >
                             <h1><?php echo $vehicle['brand']; ?> <?php echo $vehicle['model']; ?></h1>
                             <p><strong>Plate Number:</strong> <?php echo $vehicle['plate_number']; ?></p>
                             <p><strong>Year:</strong> <?php echo $vehicle['year']; ?></p>

@@ -15,10 +15,11 @@
 
 <body>
     <nav class="left-menu">
-        <div class="user-profile">
-        <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
+       <div class="user-profile">
+            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
         </div>
+
 
         <div class="search-bar">
             <form action="#" method="GET">
@@ -99,7 +100,7 @@
         $completedBookings = $data['completedBookings'] ?? [];
 
         foreach ($completedBookings as $feedback): ?>
-        <div class="review-content">
+        <div class="review-content" >
             <div class="feedback">
 
                 <div class="card">

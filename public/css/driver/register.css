@@ -15,7 +15,7 @@ body {
     max-width: 1400px;
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     text-align: center;
     margin-top: 100px;
     margin-bottom: 20px;
@@ -51,6 +51,7 @@ h1 {
 
 form {
     display: flex;
+    flex-wrap: wrap; /* Wrap columns */
     justify-content: space-between;
     margin-top: 20px;
 }
@@ -61,13 +62,21 @@ form {
     text-align: left;
 }
 
+.label-container {
+    width: 100%; /* Full width for labels */
+}
+
 label {
     font-weight: bold;
     display: block;
     margin-top: 10px;
 }
 
-input,
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="checkbox"],
 select,
 textarea {
     width: calc(100% - 12px);
@@ -79,12 +88,21 @@ textarea {
     font-family: 'Poppins', sans-serif;
 }
 
+
 select {
     height: 33px;
 }
 
 input[type="file"] {
     height: auto;
+}
+
+.button-container {
+    width: 100%; /* Full width for buttons */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
 }
 
 button {
@@ -95,7 +113,6 @@ button {
     border-radius: 5px;
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
-    margin-top: 20px;
 }
 
 button:hover {
@@ -105,49 +122,21 @@ button:hover {
 .invalid-feedback {
     color: red;
 }
-
 .checkbox-container {
-    /* display: flex; */
-    align-items: left;
-    justify-content:left; /* Center horizontally */
-    margin-top: 20px;
+    display:flex; 
+    align-items: center; 
+    /* margin: 10px; */
+  }
+  
+  .checkbox {
+    display: flex;
+    align-items: center;
+    margin-top: 10px; /* Adjust as needed */
 }
 
-.checkbox-label {
-    display:flow-root;
-    align-items: left;
-    /* justify-content:left; */
+.terms-link {
+    margin-left: 5px; /* Adjust the margin as needed */
 }
 
-#terms {
-    /* margin-right: 5px;  */
-}
+  
 
-.checkbox-label a.terms-link {
-    margin-left: 5px;
-}
-
-.submit-container {
-    text-align: center; /* Center the button */
-    margin-top: 20px;
-}
-.dashboard-content .baseButtons #cancelBut{
-    border:2px solid #FFDB8B;
-    margin-right: 20px;
-}
-.dashboard-content .baseButtons #saveBut{
-    background-color: #FFDB8B;
-}
-
-.dashboard-content .baseButtons{
-    margin-left: auto;
-}
-
-.dashboard-content .baseButtons button{
-    padding: 10px 30px;
-    border-radius: 10px;
-    border: none;
-    background-color: #ffffff;
-    font-weight: bold;
-    cursor: pointer;
-}
