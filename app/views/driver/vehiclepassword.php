@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/settingssub.css">    <title><?php echo SITENAME ?></title>
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/driver/settingssub.css">   
+     <title><?php echo SITENAME ?></title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -11,9 +12,9 @@
 </head>
 <body>
     <nav class="left-menu">
-        <div class="user-profile">
-            <img src="<?php echo URLROOT; ?>/images/hotel/wikum.jpg" alt="User Profile Photo">
-            <span class="user-name">Wikum Preethika</span>
+    <div class="user-profile">
+    <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
+            <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
         </div>
         
         <div class="search-bar">
@@ -46,7 +47,7 @@
             <span class="logo-text">TravelEase</span>
         </div>
         <div class="dashboard-content">
-            <div><h1>Settings</h1> </div>
+            <div><h1>Change Password</h1> </div>
              
             <div id="base">
                 <h3 style="padding-left:20px;">Password</h3>

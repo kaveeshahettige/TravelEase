@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT ?>/css/driver/vehicleAdd.css">
 
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <title><?php echo SITENAME ?></title>
     <link rel="icon" type="image/x-icon" href="../Images/TravelEase.png">
@@ -18,7 +17,7 @@
 <body>
     <nav class="left-menu">
         <div class="user-profile">
-            <img src="<?php echo URLROOT; ?>/images/driver/wikum.jpg" alt="User Profile Photo">
+        <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'] . ' ' . $_SESSION['user_lname'] ?></span>
         </div>
 
@@ -38,16 +37,16 @@
                     Bookings</a></li>
             <li><a href="<?php echo URLROOT; ?>driver/vehicle" class="active"><i class='bx bxs-car bx-sm'></i>
                     Vehicle Information </a></li>
-            <li><a href="<?php echo URLROOT; ?>driver/earings"><i
-                        class='bx bx-money-withdraw bx-sm'></i>Earnings and Payments</a></li>
-            <li><a href="<?php echo URLROOT; ?>driver/notification"><i
-                        class='bx bxs-bell bx-sm'></i>Notification</a></li>
+            <li><a href="<?php echo URLROOT; ?>driver/earings"><i class='bx bx-money-withdraw bx-sm'></i>Earnings and
+                    Payments</a></li>
+            <li><a href="<?php echo URLROOT; ?>driver/notification"><i class='bx bxs-bell bx-sm'></i>Notification</a>
+            </li>
             <li><a href="<?php echo URLROOT; ?>driver/reviews"><i class='bx bxs-star bx-sm bx-fw'></i>
                     Reviews</a></li>
             <li><a href="<?php echo URLROOT; ?>driver/settings"><i class='bx bxs-cog bx-sm'></i> Settings</a>
             </li>
-            <li><a href="<?php echo URLROOT; ?>pages/index" class="active"><i
-                        class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
+            <li><a href="<?php echo URLROOT; ?>pages/index" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>
+                    Logout</a></li>
         </ul>
     </nav>
     <main>
@@ -62,8 +61,8 @@
 
             <div id="base">
                 <div id="form">
-                    <form class="registration-form" action="<?php echo URLROOT ?>driver/vehiclereg"
-                        method="POST" enctype="multipart/form-data">
+                    <form class="registration-form" action="<?php echo URLROOT ?>driver/vehiclereg" method="POST"
+                        enctype="multipart/form-data">
                         <h2>Vehicle Details</h2>
 
                         <div class="form-group">
@@ -76,8 +75,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="make">Vehicle Brand:</label>
-                            <select id="make" name="brand" required onchange="populateModels()">
+                            <label for="brand">Vehicle Brand:</label>
+                            <select id="brand" name="brand" required onchange="populateModels()">
                                 <option value="">Select Brand</option>
                                 <option value="Acura">Acura</option>
                                 <option value="Alfa Romeo">Alfa Romeo</option>
@@ -123,10 +122,10 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="plate">Plate Number:<div class="error-message">Please enter a valid
+                            <label for="plate_number">Plate Number:<div class="error-message">Please enter a valid
                                     plate number (e.g., AAA 0001)</div>
                             </label>
-                            <input type="text" id="plate" name="plate_number" pattern="[A-Za-z]{2,3}\s\d{4}"
+                            <input type="text" id="plate_number" name="plate_number" pattern="[A-Za-z]{2,3}\s\d{4}"
                                 title="Please enter a valid plate number (e.g., AAA 0001)" required>
 
                         </div>
@@ -158,7 +157,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="seating-capacity">Seating Capacity: <div class="error-message">Please
+                            <label for="seating_capacity">Seating Capacity: <div class="error-message">Please
                                     enter a valid seating capacity.</div>
                             </label>
                             <input type="number" id="seating_capacity" name="seating_capacity" min="1" required>
@@ -167,214 +166,96 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="number-of-doors">Number of Doors:
+                            <label for="number_of_doors">Number of Doors:
                                 <div class="error-message">Please enter a valid number.</div>
                             </label>
 
-                            <input type="number" id="number_of_doors" name="number_of_doors" min="1" max="10"
-                                required>
+                            <input type="number" id="number_of_doors" name="number_of_doors" min="1" max="10" required>
 
                         </div>
 
 
 
 
-                        <label for="description">Description :</label>
-                        <textarea id="description" name="description" rows="4" required></textarea>
+
 
                         <h2>Extras</h2>
 
                         <div class="checkbox-group">
                             <div class="row">
-                                <label><input type="checkbox" name="ac"> AC</label>
+                                <label><input type="checkbox" name="ac_type"> AC</label>
                                 <label><input type="checkbox" name="airbag"> Airbag</label>
 
                                 <label><input type="checkbox" name="nav"> NAV</label>
                                 <label><input type="checkbox" name="tv"> TV</label>
 
                                 <label><input type="checkbox" name="usb"> USB</label>
-                                <!-- Add more checkboxes for the fifth row if needed -->
                             </div>
-                            <!-- Add more rows if needed -->
                         </div>
+
+                        <label for="description">Description :</label>
+                        <textarea id="description" name="description" rows="4" required></textarea>
 
                         <h2>Pricing</h2>
 
-                        <div class="form-group">
-                            <label for="pricing_option">Pricing Option:</label>
-                            <select id="pricing_option" name="pricing_option" onchange="showPricingFields()"
-                                required>
-                                <option value="">Select Pricing Option</option>
-                                <option value="with_driver">With Driver</option>
-                                <option value="without_driver">Without Driver</option>
-                                <option value="with_or_without_driver">With or Without Driver</option>
-                            </select>
-                        </div>
 
-                        <div id="driver_details" style="display: none;">
-                            <h3>Driver Details:</h3>
-                            <div class="form-group">
-                                <label for="driver_name">Driver's Name:</label>
-                                <input type="text" id="driver_name" name="driver_name">
-                            </div>
-                            <div class="form-group">
-                                <label for="driver_license_number">Driver's License Number*:</label>
-                                <input type="text" id="driver_license_number" name="driver_license_number"
-                                    required>
-                            </div>
-                        </div>
 
-                        <div id="with_driver_fields" style="display: none;">
+                        <div id="with_driver_fields" style="">
                             <h3>With Driver Pricing:</h3>
                             <div class="form-group">
-                                <label for="per_day_price_with_driver">Per Day Price (LKR)*:</label>
-                                <input type="number" id="per_day_price_with_driver"
-                                    name="per_day_price_with_driver" min="0" required>
+                                <label for="withDriverPerDayr">Per Day Price (LKR)*:</label>
+                                <input type="number" id="withDriverPerDay" name="withDriverPerDay" min="0" required>
                             </div>
-                            <div class="form-group">
-                                <label for="daily_mileage_limit_with_driver">Daily Mileage Limit (KM)*:</label>
-                                <input type="number" id="daily_mileage_limit_with_driver"
-                                    name="daily_mileage_limit_with_driver" min="0" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="extra_mileage_charge_with_driver">Extra Mileage Charge
-                                    (LKR):</label>
-                                <input type="number" id="extra_mileage_charge_with_driver"
-                                    name="extra_mileage_charge_with_driver" min="0">
-                            </div>
-                            <p>Note: Please put 0 (zero) for both Daily Mileage Limit and Extra Mileage Charge
-                                for unlimited limits.</p>
                         </div>
 
-                        <div id="without_driver_fields" style="display: none;">
+                        <div id="without_driver_fields" style="">
                             <h3>Without Driver Pricing:</h3>
                             <div class="form-group">
-                                <label for="per_day_price_without_driver">Per Day Price (LKR)*:</label>
-                                <input type="number" id="per_day_price_without_driver"
-                                    name="per_day_price_without_driver" min="0" required>
+                                <label for="priceperday">Per Day Price (LKR)*:</label>
+                                <input type="number" id="priceperday" name="priceperday" min="0" required>
                             </div>
-                            <div class="form-group">
-                                <label for="daily_mileage_limit_without_driver">Daily Mileage Limit
-                                    (KM)*:</label>
-                                <input type="number" id="daily_mileage_limit_without_driver"
-                                    name="daily_mileage_limit_without_driver" min="0" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="extra_mileage_charge_without_driver">Extra Mileage Charge
-                                    (LKR)*:</label>
-                                <input type="number" id="extra_mileage_charge_without_driver"
-                                    name="extra_mileage_charge_without_driver" min="0" required>
-                            </div>
-                            <p>Note: Please put 0 (zero) for both Daily Mileage Limit and Extra Mileage Charge
-                                for unlimited limits.</p>
                         </div>
-
-                        <script>
-                        function showPricingFields() {
-                            var pricingOption = document.getElementById("pricing_option").value;
-                            var driverDetails = document.getElementById("driver_details");
-                            var withDriverFields = document.getElementById("with_driver_fields");
-                            var withoutDriverFields = document.getElementById("without_driver_fields");
-
-                            if (pricingOption === "with_driver") {
-                                driverDetails.style.display = "block";
-                                withDriverFields.style.display = "block";
-                                withoutDriverFields.style.display = "none";
-                            } else if (pricingOption === "without_driver") {
-                                driverDetails.style.display = "none";
-                                withDriverFields.style.display = "none";
-                                withoutDriverFields.style.display = "block";
-                            } else if (pricingOption === "with_or_without_driver") {
-                                driverDetails.style.display = "block";
-                                withDriverFields.style.display = "block";
-                                withoutDriverFields.style.display = "block";
-                            } else {
-                                driverDetails.style.display = "none";
-                                withDriverFields.style.display = "none";
-                                withoutDriverFields.style.display = "none";
-                            }
-                        }
-                        </script>
-
-
-
-
-
-
 
                         <h2>Upload Photos</h2>
 
                         <div class="container">
                             <div class="uploadContainer">
                                 <div class="imagePreview" id="imagePreview1"></div>
-                                <label for="imageUpload1" class="uploadButton">Main Image</label>
-                                <input type="file" id="imageUpload1" class="imageUpload" accept="image/*">
+                                <label for="image" class="uploadButton">Main Image</label>
+                                <input type="file" id="image" name="image" class="imageUpload" accept="image/*">
                             </div>
                             <div class="uploadContainer">
                                 <div class="imagePreview" id="imagePreview2"></div>
-
-
-                                <label for="imageUpload2" class="uploadButton">Front Image</label>
-                                <input type="file" id="imageUpload2" class="imageUpload" accept="image/*">
-
+                                <label for="vehi_img2" class="uploadButton">Front Image</label>
+                                <input type="file" id="vehi_img2" name="vehi_img2" class="imageUpload" accept="image/*">
                             </div>
                             <div class="uploadContainer">
-                                <div class="imagePreview" id="imagePreview3">
-                                </div>
-                                <label for="imageUpload3" class="uploadButton">Rear Image</label>
-                                <input type="file" id="imageUpload3" class="imageUpload" accept="image/*">
+                                <div class="imagePreview" id="imagePreview3"></div>
+                                <label for="vehi_img3" class="uploadButton">Rear Image</label>
+                                <input type="file" id="vehi_img3" name="vehi_img3" class="imageUpload" accept="image/*">
                             </div>
                             <div class="uploadContainer">
                                 <div class="imagePreview" id="imagePreview4"></div>
-                                <label for="imageUpload4" class="uploadButton">Side Image</label>
-                                <input type="file" id="imageUpload4" class="imageUpload" accept="image/*">
-                            </div>
-
-
-
-
-                            <div class="uploadContainer">
-                                <div class="imagePreview" id="imagePreview1"></div>
-                                <label for="imageUpload5" class="uploadButton">Insurance </label>
-                                <input type="file" id="imageUpload5" class="imageUpload" accept="image/*">
+                                <label for="vehi_img4" class="uploadButton">Side Image</label>
+                                <input type="file" id="vehi_img4" name="vehi_img4" class="imageUpload" accept="image/*">
                             </div>
                             <div class="uploadContainer">
-                                <div class="imagePreview" id="imagePreview2"></div>
-                                <label for="imageUpload6" class="uploadButton">Registration </label>
-                                <input type="file" id="imageUpload6" class="imageUpload" accept="image/*">
+                                <div class="imagePreview" id="imagePreview5"></div>
+                                <label for="insurance" class="uploadButton">Insurance</label>
+                                <input type="file" id="insurance" name="insurance" class="imageUpload" accept="image/*">
                             </div>
                             <div class="uploadContainer">
-                                <div class="imagePreview" id="imagePreview3"></div>
-                                <label for="imageUpload7" class="uploadButton">Registration card </label>
-                                <input type="file" id="imageUpload7" class="imageUpload" accept="image/*">
+                                <div class="imagePreview" id="imagePreview6"></div>
+                                <label for="registration" class="uploadButton">Registration</label>
+                                <input type="file" id="registration" name="registration" class="imageUpload"
+                                    accept="image/*">
                             </div>
                             <div class="uploadContainer">
-                                <div class="imagePreview" id="imagePreview3"></div>
-                                <label for="imageUpload8" class="uploadButton">Driving licence </label>
-                                <input type="file" id="imageUpload7" class="imageUpload" accept="image/*">
+                                <div class="imagePreview" id="imagePreview7"></div>
+                                <label for="revenue" class="uploadButton">Revenue</label>
+                                <input type="file" id="revenue" name="revenue" class="imageUpload" accept="image/*">
                             </div>
-
                         </div>
-
-
-
-                        <script>
-                        document.querySelectorAll('.imageUpload').forEach(function(input) {
-                            input.addEventListener('change', function(event) {
-                                var file = event.target.files[0];
-                                var reader = new FileReader();
-                                var preview = event.target.parentElement.querySelector(
-                                    '.imagePreview');
-
-                                reader.onload = function(e) {
-                                    preview.style.backgroundImage = 'url(' + e.target
-                                        .result + ')';
-                                };
-
-                                reader.readAsDataURL(file);
-                            });
-                        });
-                        </script>
 
 
                         <p>If the vehicle owner name on the vehicle documents is different from mine, then I
@@ -391,8 +272,23 @@
         </div>
     </main>
     <script>
+    document.querySelectorAll('.imageUpload').forEach(function(input) {
+        input.addEventListener('change', function(event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            var preview = event.target.parentElement.querySelector('.imagePreview');
+
+            reader.onload = function(e) {
+                preview.style.backgroundImage = 'url(' + e.target.result + ')';
+            };
+
+            reader.readAsDataURL(file);
+        });
+    });
+
+
     function populateModels() {
-        var brandSelect = document.getElementById("make");
+        var brandSelect = document.getElementById("brand"); // Corrected id
         var modelSelect = document.getElementById("model");
         var selectedBrand = brandSelect.value;
         // Clear existing options
@@ -410,6 +306,7 @@
             modelSelect.appendChild(option);
         });
     }
+
 
     function getModelOptions(brand) {
         // Here you can provide model options for each brand available in Sri Lanka
@@ -547,8 +444,6 @@
             event.preventDefault(); // Prevent form submission if validation fails
         }
     });
-
-   
     </script>
 
 </body>

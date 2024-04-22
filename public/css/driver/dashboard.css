@@ -16,6 +16,13 @@ body, ul {
     padding: 5px;
     box-shadow: 0px 1px 3px rgba(127, 127, 127, 0.2);
 }
+.dashboard-sub-content {
+    padding-left: 250px;
+    margin-right: auto;
+    padding-top: 5px;
+    text-align: center;
+    font-family: "Poppins", sans;
+}
 
 
 .search-bar input[type="text"] {
@@ -276,13 +283,25 @@ a img.menu-icon {
     box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     border-left: 10px solid #FFEFCC;
-    border: 1px solid #333;
-    padding: 20px;
-    margin: 20px;
-    /* width: 300px; */
-    background-color: #f0f0f0;
 }
 
+.view-button {
+    background-color: #F9B314;
+    color: #ffffff;
+    border: none;
+    padding: 8px; /* Adjust the padding for the button */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; /* Adjust the font size for the button */
+}
+
+.view-button i {
+    font-size: 18px; /* Set the desired font size for the icon */
+}
+
+.view-button:hover {
+    background-color: #FFDB8B;
+}
 
 /* Center align the hotel details within the basic info */
 .basic-info-content {

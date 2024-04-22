@@ -7,6 +7,77 @@ body{
     background-color: #FBF9F3;
 }
 
+.container {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    grid-template-rows: repeat(1, 250px);
+    justify-content:center ;
+    align-items: center;
+    gap: 0.7rem;
+    /* flex-wrap: wrap; */
+}
+
+
+
+.uploadContainer {
+    max-width: 300px;
+
+
+    width: 100%;
+    height: 100%;
+      display: flex;
+flex-direction: column !important;
+    /* margin: 20px; */;
+
+  }
+
+  .imagePreview {
+
+    max-width: 100%;
+    height: 100%;
+    max-width: 100%;
+    /* border: 1px solid #000000; */
+    border-radius: 2%;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+   
+        object-fit: contain;
+        /* box-shadow: 0 0 10px rgba(0, 0, 0, 1); */
+      
+      
+  }
+  .imagePreview img{
+    min-width: 300px;
+    box-shadow: 0 0px 10px rgba(0, 0, 0, 1);
+
+
+    /* max-height: fit-content; */
+    /* border:2px solid red; */
+
+
+  }
+
+  
+  .uploadButton {
+    display: block;
+    padding: 10px 20px 10px 20px;
+    background-color: #FFDB8B;
+    color: #000000;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    align-items: center;
+    
+  }
+  
+  .imageUpload {
+    display: none;
+    /* max-width: 300px; */
+
+    
+  }
+
 .upload-container {
     text-align: center;
     background-color: #fff;
@@ -530,6 +601,7 @@ a.active, a:active {
 
 .dashboard-content #base{
     background-color: #FFFFFF;
+    border-radius: 10px ;
    
     padding-top: 0px;
 }

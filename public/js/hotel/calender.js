@@ -309,4 +309,3 @@ function deleteRoomStatus(room_id, startDate) {
 }
 
 
-

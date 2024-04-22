@@ -15,10 +15,11 @@
 
 <body>
     <nav class="left-menu">
-        <div class="user-profile">
-            <img src="<?php echo URLROOT; ?>/images/driver/wikum.jpg" alt="User Profile Photo">
+       <div class="user-profile">
+            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
         </div>
+
 
         <div class="search-bar">
             <form action="#" method="GET">
@@ -95,45 +96,56 @@
         </div>
 
 
+        <?php
+        $completedBookings = $data['completedBookings'] ?? [];
 
-        <div class="review-content">
-            <!-- Assuming $data['reviews'] is an array of reviews -->
-            <?php
-    if (!empty($data['reviews'])) {
-        foreach ($data['reviews'] as $review) :
-    ?>
-            <div class="review-box">
-                <div class="review-sub-content">
-                    <div class="review-image">
-                        <img src="<?php echo URLROOT; ?>/images/driver/wikum.jpg" alt="Guest Photo">
+        foreach ($completedBookings as $feedback): ?>
+        <div class="review-content" >
+            <div class="feedback">
+
+                <div class="card">
+                    <div class="feedback-details">
+                    <img src="<?php echo URLROOT; ?>/images1/<?php echo $feedback->traveler_details->profile_picture; ?>" alt="Publisher Picture" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; display: inline-block; vertical-align: middle;">
+                    <!-- <img src="<?php echo URLROOT; ?>/images1/<?php echo $notifications->profile_picture ?>" alt="Sender Image" class="sender-image"> -->
+
+
+
+                        <span style="margin-bottom: 5px; display: inline-block; vertical-align: middle;">Publisher:
+                            <?php echo $feedback->traveler_details->fname . " " . ($feedback->traveler_details->lname ? $feedback->traveler_details->lname : ""); ?></span>
+                        <span style="margin-bottom: 5px; display:block;">&nbsp;
+                            &nbsp;&nbsp;&nbsp;<?php echo $feedback->feedbacks_details[0]->time; ?></span>
+
+                        <span style="margin-bottom: 5px; display:block;">
+                            <p style="margin-left: 15px;">Booking ID:
+                                <?php echo $feedback->feedbacks_details[0]->booking_id; ?></p>
+                        </span>
                     </div>
-                    <!-- <h2><?php echo $review->user_name; ?></h2> -->
 
+                    <div class="feedback-details">
+
+                    </div>
                     <div class="rating">
-                        <?php
-                    $rating = $review->rating;
-                    for ($i = 1; $i <= 5; $i++) {
-                        echo ($i <= $rating) ? '<span class="star">&#9733;</span>' : '<span class="star">&#9734;</span>';
-                    }
-                    ?>
+                        <!-- Display rating stars -->
+                        <?php for ($i = 0; $i < $feedback->feedbacks_details[0]->rating; $i++): ?>
+                        <span class="star">&#9733;</span>
+                        <?php endfor; ?>
                     </div>
-                    <p>Trip ID: <?php echo $review->trip_id; ?></p>
-                    <p>Date: <?php echo $review->end_date; ?></p>
-                    <p class="review-text"><?php echo $review->comments; ?></p>
-
+                    <div class="comment">
+                        <!-- Display feedback comment -->
+                        <p><?php echo $feedback->feedbacks_details[0]->feedback; ?></p>
+                    </div>
 
                 </div>
+
             </div>
-            <?php
-        endforeach;
-    } else {
-        echo '<p>No reviews available.</p>';
-    }
-    ?>
-        </div>
-
 
         </div>
+        <?php endforeach; ?>
+
+
+
+
+
 
 
 
