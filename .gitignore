@@ -3,3 +3,7 @@
 /app/libraries/stripe/
 /app/libraries/dompdf/
 /app/libraries/phpma/
+/public/documents/
+/public/images1/
+/public/invoice/
+/public/uploads/
