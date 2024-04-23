@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
 //     <?php endforeach; ?>
 //     document.getElementById('totalAmount').innerText = total.toFixed(2) + " LKR";
 // }
-
+var servicePrices=[];
 function handleCheckboxClick(checkboxId, vehicleId, days) {
   // Determine the driver type based on the checkbox ID
   const driverType = checkboxId === 'withDriver' ? 'withDriver' : 'withoutDriver';

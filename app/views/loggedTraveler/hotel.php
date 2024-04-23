@@ -11,9 +11,17 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="<?php echo URLROOT?>/js/loggedTraveler/script.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-y4jl5lAxu7c0J0pQv4KzoUW0ojrYwMq2/wn7E5tlUCVgQFm/hhtIkV6uUavvB8sW" crossorigin="anonymous">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&libraries=places"></script>
 
     <style>
-
+        /* Style for the suggestions dropdown */
+        .pac-container {
+            background-color: #FFF;
+            z-index: 1000;
+            position: fixed;
+            display: inline-block;
+            float: left;
+        }
     </style>
 </head>
 <body>
@@ -153,7 +161,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const locationInput = document.getElementById("location-input");
+            const locationInput = document.getElementById("locationInput");
             const options = {
                 types: ['(cities)'],
                 componentRestrictions: { country: 'LK' } // Restrict to Sri Lanka (LK)

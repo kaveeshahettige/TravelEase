@@ -101,6 +101,7 @@ $data = [
 $ratings = [];
 
 // Iterate through each hotel
+if($hotels!=null){
 foreach ($hotels as $hotel) {
     // Fetch ratings for the current hotel
     $hotelRatings = $this->userModel->getRatings($hotel->user_id);
@@ -113,6 +114,7 @@ foreach ($hotels as $hotel) {
 foreach ($hotels as &$hotel) {
     // Add ratings to the hotel data
     $hotel->ratings = isset($ratings[$hotel->hotel_id]) ? $ratings[$hotel->hotel_id] : null;
+}
 }
 
       $data=[
@@ -131,6 +133,7 @@ public function transport(){
 $ratings = [];
 
 // Iterate through each hotel
+if($agencies!=null){
 foreach ($agencies as $agency) {
     // Fetch ratings for the current hotel
     $agencyRatings = $this->userModel->getRatings($agency->user_id);
@@ -144,6 +147,7 @@ foreach ($agencies as $agency) {
     // Add ratings to the hotel data
     $agency->ratings = isset($ratings[$agency->agency_id]) ? $ratings[$agency->agency_id] : null;
 }
+}
 
 
       $data=[
@@ -155,13 +159,36 @@ foreach ($agencies as $agency) {
     public function package(){
       $id = $_SESSION['user_id'];
     $user = $this->userModel->findUserDetail($id);
-    $packages=$this->userModel->getRandomPackages();
+    $guides=$this->userModel->getRandomPackages();
+
+    $gratings = [];
+
+if (is_array($guides)) {
+// Iterate through each hotel
+foreach ($guides as $guide) {
+    // Fetch ratings for the current hotel
+    $guideRatings = $this->userModel->getRatingsOfGuides($guide->user_id);
+    
+    // Store ratings in the ratings array with hotel id as key
+    $gratings[$guide->user_id] = $guideRatings;
+}
+}
+
+if (is_array($guides)) {
+// Iterate through each hotel again to add ratings to the vehcle data
+foreach ($guides as &$guide) {
+    // Add ratings to the vehicle data
+    $guide->gratings = isset($gratings[$guide->user_id]) ? $gratings[$guide->user_id] : null;
+}
+}
+
       $data=[
         'profile_picture' => $user ? $user->profile_picture : null,
-        'packages'=>$packages,  
+        'packages'=>$guides,  
       ];
       $this->view('loggedTraveler/package',$data);
      }
+
     public function searchAll(){
       $data=[];
       $this->view('loggedTraveler/searchAll',$data);
@@ -493,25 +520,27 @@ foreach ($agencies as $agency) {
   
           // Add the transaction data to the database based on the type
           if ($type == 3) {
-              $this->userModel->addBooking($transactionData);
-              $lastBooking = $this->userModel->getLastBooking();
-              $this->userModel->addPaymentDetails($transactionData, $lastBooking->booking_id);
-              $this->userModel->addUnavailability($transactionData);
+              $this->userModel->addBooking($transactionData);//main booking table
+              $lastBooking = $this->userModel->getLastBooking(); 
+              $this->userModel->addPaymentDetails($transactionData, $lastBooking->booking_id); //payment table
+              $this->userModel->addUnavailability($transactionData);// room_availbilty table
           }elseif ($type == 4) {
               // Retrieve driver and price from transaction data
               $driver = $transactionData['driver'];
               $price = $transactionData['price'];
   
               // Add to booking table
-              $this->userModel->addBooking($transactionData);
+              $this->userModel->addBooking($transactionData);//main booking table
               $lastBooking = $this->userModel->getLastBooking();
               $this->userModel->addVehicleBooking($lastBooking->booking_id,$transactionData, $driver); // Booking to vehicle booking table
-              $this->userModel->addPaymentDetailsVehicles($transactionData, $lastBooking->booking_id, $price);
+              $this->userModel->addPaymentDetailsVehicles($transactionData, $lastBooking->booking_id, $price);//payment table
+              $this->userModel->addUnavailabilityVehicles($transactionData);//vehicle_availbilty table
           }elseif ($type == 5) {
               $this->userModel->addBooking($transactionData);//ok
               $lastBooking = $this->userModel->getLastBooking();///ok
               $this->userModel->addPaymentDetails($transactionData, $lastBooking->booking_id);//ok
               $this->userModel->addToGuideBookings($transactionData, $lastBooking->booking_id);//ok
+              $this->userModel->addUnavailabilityGuides($transactionData);//in to guide_availability table
           }
   
           // Optionally, you can pass data to the view if needed
@@ -539,6 +568,7 @@ foreach ($agencies as $agency) {
 
     // Construct transaction data
     $transactionData = [
+        'serviceid'=>$serviceid,
         'user' => $user,
         'furtherBookingDetails' => $furtherBookingDetails,
         'checkinDate' => $checkinDate,
@@ -737,6 +767,27 @@ public function searchHotels()
         $user = $this->userModel->findUserDetail($_SESSION['user_id']);
         $hotels = $this->userModel->findHotels($location);
 
+        // Initialize an empty array to store ratings for each hotel
+        $ratings = [];
+
+// Iterate through each hotel
+if($hotels!=null){
+foreach ($hotels as $hotel) {
+    // Fetch ratings for the current hotel
+    $hotelRatings = $this->userModel->getRatings($hotel->user_id);
+    
+    // Store ratings in the ratings array with hotel id as key
+    $ratings[$hotel->hotel_id] = $hotelRatings;
+}
+
+// Iterate through each hotel again to add ratings to the hotel data
+foreach ($hotels as &$hotel) {
+    // Add ratings to the hotel data
+    $hotel->ratings = isset($ratings[$hotel->hotel_id]) ? $ratings[$hotel->hotel_id] : null;
+}
+}
+
+
         // Pass the search results to the view and load it
         $data = [
             'hotels' => $hotels,
@@ -765,6 +816,26 @@ public function searchVehicles()
         $checkoutDate = $_POST['dropoffdate'];
         $user = $this->userModel->findUserDetail($_SESSION['user_id']);
         $vehicles = $this->userModel->findVehiclesByLocation($location, $checkinDate, $checkoutDate);
+        //vehicle raings
+        $vratings=[];
+        if($vehicles!=null){
+        foreach ($vehicles as $vehicle) {
+            // Fetch ratings for the current vehicle
+            $vehicleRatings = $this->userModel->getRatingsOfVehicles($vehicle->vehicle_id);
+            
+            // Store ratings in the ratings array with vehicle id as key
+            $vratings[$vehicle->vehicle_id] = $vehicleRatings;
+        }
+      
+      // Iterate through each vehicle again to add ratings to the vehicle data
+      if (is_array($vehicles)) {
+        // Iterate through each hotel again to add ratings to the vehcle data
+        foreach ($vehicles as &$vehicle) {
+            // Add ratings to the vehicle data
+            $vehicle->vratings = isset($vratings[$vehicle->vehicle_id]) ? $vratings[$vehicle->vehicle_id] : null;
+        }
+        }
+      }
 
         // Pass the search results to the view and load it
         $data = [
@@ -803,12 +874,34 @@ public function searchGuides()
         // Perform the search operation
         $location = $_POST['location'];
         $user = $this->userModel->findUserDetail($_SESSION['user_id']);
-        $packages = $this->userModel->findGuidesByLocation($location);
+        $guides = $this->userModel->findGuidesByLocation($location);
+
+        $gratings = [];
+
+        if (is_array($guides)) {
+        // Iterate through each hotel
+        foreach ($guides as $guide) {
+            // Fetch ratings for the current hotel
+            $guideRatings = $this->userModel->getRatingsOfGuides($guide->user_id);
+            
+            // Store ratings in the ratings array with hotel id as key
+            $gratings[$guide->user_id] = $guideRatings;
+        }
+        }
+        
+        if (is_array($guides)) {
+        // Iterate through each hotel again to add ratings to the vehcle data
+        foreach ($guides as &$guide) {
+            // Add ratings to the vehicle data
+            $guide->gratings = isset($gratings[$guide->user_id]) ? $gratings[$guide->user_id] : null;
+        }
+        }
 
         // Pass the search results to the view and load it
         $data=[
         'profile_picture' => $user ? $user->profile_picture : null,
-        'packages'=>$packages,  
+        'packages'=>$guides,  
+        'location'=>$location,
       ];
       $this->view('loggedTraveler/package',$data);
         exit; // Ensure that script execution stops after loading the view
@@ -888,13 +981,10 @@ public function fetchGuideAvaialbility()
 
     // Check guide availability based on the provided dates and times
     // You need to implement your logic here to check guide availability
-    $isAvailable1 = $this->userModel->checkGuideAvailabilityForBookings($guideID, $startDate, $endDate);
-    $isAvailable2 = $this->userModel->checkGuideAvailabilityForCartBookings($guideID, $startDate, $endDate);
-  if($isAvailable1 && $isAvailable2){
-    $isAvailable=true;
-  }else{
-    $isAvailable=false;
-  }
+    // $isAvailable1 = $this->userModel->checkGuideAvailabilityForBookings($guideID, $startDate, $endDate);
+    // $isAvailable2 = $this->userModel->checkGuideAvailabilityForCartBookings($guideID, $startDate, $endDate);
+    $isAvailable = $this->userModel->checkGuideAvailability($guideID, $startDate, $endDate);
+  
     // Prepare the response data
     $response = [
         'isAvailable' => $isAvailable,
@@ -1002,7 +1092,8 @@ public function plantrip(){
     $user = $this->userModel->findUserDetail($_SESSION['user_id']);
     $hotels = $this->userModel->findAvailableHotelRooms($location, $checkinDate, $checkoutDate);
     $vehicles = $this->userModel->findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate);
-    $guides=$this->userModel->findGuidesByLocation($location);
+   // $guides=$this->userModel->findGuidesByLocation($location);
+    $guides=$this->userModel->findAvailableGuidesByLocation($location,$checkinDate,$checkoutDate);
     //$packages = $this->userModel->findPackages($location);
 
 
@@ -1181,7 +1272,7 @@ foreach ($vehicles as $vehicle) {
       $hotels = $this->userModel->findAvailableHotelRooms($location, $checkinDate, $checkoutDate);
       $vehicles = $this->userModel->findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate);
       //$packages = $this->userModel->findPackages($location);
-      $guides=$this->userModel->findGuidesByLocation($location);
+      $guides=$this->userModel->findAvailableGuidesByLocation($location,$checkinDate,$checkoutDate);
 
 
       $vehiclePrices = []; // Array to hold prices for each vehicle
@@ -1237,6 +1328,35 @@ foreach ($vehicles as &$vehicle) {
 //echo "No vehicles available.";
 }
 
+////
+// Check if $vehicles is iterable (array or object)
+if (is_iterable($guides)) {
+  // Initialize an empty array to store vehicle ratings
+  $gratings = [];
+
+if (is_array($guides)) {
+// Iterate through each hotel
+foreach ($guides as $guide) {
+    // Fetch ratings for the current hotel
+    $guideRatings = $this->userModel->getRatingsOfGuides($guide->user_id);
+    
+    // Store ratings in the ratings array with hotel id as key
+    $gratings[$guide->user_id] = $guideRatings;
+}
+}
+
+if (is_array($guides)) {
+// Iterate through each hotel again to add ratings to the vehcle data
+foreach ($guides as &$guide) {
+    // Add ratings to the vehicle data
+    $guide->gratings = isset($gratings[$guide->user_id]) ? $gratings[$guide->user_id] : null;
+}
+}
+  } else {
+  // Handle the case where $vehicles is not iterable
+  // For example, display a message indicating no vehicles are available
+  //echo "No vehicles available.";
+  }
 
 /////////////
 
@@ -1493,9 +1613,11 @@ public function cartpaymentSuccessful() {
               $this->userModel->addroomUnavailabilityfromCart($bookingDetail, $transactionData);
           } elseif ($type == 4) {
               $this->userModel->addVehicleBookingfromCart($lastcartBooking->booking_id,$bookingDetail,$transactionData,$driver);
+              $this->userModel->addUnavailabilityVehiclesfromCart($transactionData,$bookingDetail);//vehicleAvailbilty
              
           }elseif($type==5){
             $this->userModel->addGuideBookingfromCart($lastcartBooking->booking_id,$transactionData);
+            $this->userModel->addUnavailabilityGuidesfromCart($transactionData,$bookingDetail);//guideAvilbilty
           }
       }
       

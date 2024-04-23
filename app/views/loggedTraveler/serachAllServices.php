@@ -166,7 +166,7 @@
                 <div>
                     <p style="font-size: 30px; margin: 0px; font-weight: bold;"><?php echo ($hotelroom ? $hotelroom->fname . ' ' . $hotelroom->lname : ' '); ?></p>
                     <p><?php echo $hotelroom->roomType ?>&nbsp;Room</p>
-                    <p><?php echo $hotelroom->add ?></p>
+                    <p><?php echo $hotelroom->addr ?></p>
                     <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
        // Extract the rating value from the ratings object
@@ -275,7 +275,7 @@
                 <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
        // Extract the rating value from the ratings object
-       $rating = isset($guide->ratings->rating) ? $guide->ratings->rating : 0;
+       $rating = isset($guide->gratings->rating) ? $guide->gratings->rating : 0;
                     
        // Round the rating value
        $filled_stars = $rating;

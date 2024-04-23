@@ -9,8 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>/js/loggedTraveler/script.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&libraries=places"></script>
     <style>
-
+        /* Style for the suggestions dropdown */
+        .pac-container {
+            background-color: #FFF;
+            z-index: 1000;
+            position: fixed;
+            display: inline-block;
+            float: left;
+        }
     </style>
 </head>
 <body>
@@ -38,7 +46,7 @@
         <form action="<?php echo URLROOT ?>loggedTraveler/searchVehicles" method="POST">
         <div class="main1searchbar">
         <div class="search">
-    <div class="search1"><input type="text" placeholder="Location: " name="location"></div>
+    <div class="search1"><input type="text" placeholder="Location: " name="location" id="location-input"></div>
     <div class="search2">Pick-up Date:<input type="date" placeholder="Pick-up Date" name="pickupdate"></div>
     <div class="search3">Time:<input type="time" placeholder="Pick-up Time" name="pickuptime"></div>
     <div class="search4">Drop-off Date:<input type="date" placeholder="Drop-off Date" name="dropoffdate"></div>
@@ -53,7 +61,10 @@
     </section>
     <!-- <?php echo var_dump($data) ?> -->
     <?php 
-$agency_chunks = array_chunk($data['agencies'], 3);
+    if(isset($data['agencies'])){
+        $agency_chunks = array_chunk($data['agencies'], 3);
+    }
+
 ?>
     <section class="main2">
         <div class="main2buttons">
@@ -138,6 +149,32 @@ $agency_chunks = array_chunk($data['agencies'], 3);
         </div>
         </div>
     </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const locationInput = document.getElementById("location-input");
+            const options = {
+                types: ['(cities)'],
+                componentRestrictions: { country: 'LK' } // Restrict to Sri Lanka (LK)
+            };
+            const autocomplete = new google.maps.places.Autocomplete(locationInput, options);
+
+            // Listen for place selection
+            autocomplete.addListener("place_changed", function() {
+                const place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    console.error("Place selection failed:", place);
+                    return;
+                }
+                // Extract city name without country
+                const city = place.address_components.find(component => {
+                    return component.types.includes("locality");
+                });
+                if (city) {
+                    locationInput.value = city.long_name;
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>

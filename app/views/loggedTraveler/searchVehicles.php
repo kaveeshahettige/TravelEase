@@ -9,8 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>/js/loggedTraveler/script.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&libraries=places"></script>
     <style>
-
+        /* Style for the suggestions dropdown */
+        .pac-container {
+            background-color: #FFF;
+            z-index: 1000;
+            position: fixed;
+            display: inline-block;
+            float: left;
+        }
     </style>
 </head>
 <body>
@@ -38,7 +46,7 @@
         <form action="<?php echo URLROOT ?>loggedTraveler/searchVehicles" method="POST">
         <div class="main1searchbar">
         <div class="search">
-    <div class="search1"><input type="text" placeholder="Location: <?php echo $data['location']; ?>" name="location" value="<?php echo $data['location']; ?>"></div>
+    <div class="search1"><input type="text" id="location-input" placeholder="Location: <?php echo $data['location']; ?>" name="location" value="<?php echo $data['location']; ?>"></div>
     <div class="search2">Pick-up Date:<br><?php echo $data['checkinDate']; ?><input type="date" placeholder="Pick-up Date:" name="pickupdate" value="<?php echo $data['checkinDate']; ?>"></div>
     <div class="search3">Time:<br><?php echo $data['checkinTime']; ?><input id="pickupTime" type="time" placeholder="Pick-up Time:" name="pickuptime" value="<?php echo $data['checkinTime']; ?>"></div>
     <div class="search4">Drop-off Date:<br><?php echo $data['checkoutDate']; ?><input type="date" placeholder="Drop-off Date" name="dropoffdate" value="<?php echo $data['checkoutDate']; ?>"></div>
@@ -71,6 +79,26 @@ $agency_chunks = array_chunk($data['vehicles'], 3);
                     <div>
                         <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $vehicles->brand . ' ' .ucfirst( $vehicles->model)?></p>
                         <p><?php echo $vehicles->city; ?></p>
+                        <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+       // Extract the rating value from the ratings object
+       $rating = isset($vehicles->vratings->rating) ? $vehicles->vratings->rating : 0;
+                    
+       // Round the rating value
+       $filled_stars = $rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
                     </div>
                     <div><button onclick="bookingV(4, <?php echo $vehicles->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>','<?php echo $data['checkinTime']; ?>')">View</button></div>
                     <!-- <div> <button onclick="Tripdetails(<?= $vehicles->user_id?>)">View</button></div> -->
@@ -119,6 +147,40 @@ $agency_chunks = array_chunk($data['vehicles'], 3);
         </div>
         </div>
     </section>
+    <script>
+        // JavaScript code to scroll to section with ID "S1"
+        window.onload = function() {
+                // Scroll to the section with ID "S1"
+                document.getElementById('location-input').scrollIntoView();
+            
+        };
+    </script>
+     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const locationInput = document.getElementById("location-input");
+            const options = {
+                types: ['(cities)'],
+                componentRestrictions: { country: 'LK' } // Restrict to Sri Lanka (LK)
+            };
+            const autocomplete = new google.maps.places.Autocomplete(locationInput, options);
+
+            // Listen for place selection
+            autocomplete.addListener("place_changed", function() {
+                const place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    console.error("Place selection failed:", place);
+                    return;
+                }
+                // Extract city name without country
+                const city = place.address_components.find(component => {
+                    return component.types.includes("locality");
+                });
+                if (city) {
+                    locationInput.value = city.long_name;
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
