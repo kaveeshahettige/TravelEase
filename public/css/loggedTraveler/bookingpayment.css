@@ -17,6 +17,7 @@ body {
 
 .payment-box,
 .booking-box {
+    
     background-color: #fff;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
@@ -37,6 +38,7 @@ body {
     padding: 25px;
     margin-bottom: 10px;
     transition: transform 0.3s ease-in-out;
+    
 }
 
 
@@ -320,6 +322,241 @@ input[type="number"] {
 }
 
 
+/* ///////new csss
+/
+dsff
+scs
+scds///// */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.payment-container {
+    display: flex;
+    width: 90%;
+    
+    justify-content: space-between; /* Distribute space between payment-box and booking-box */
+    margin-top: 50px; /* Adjusted margin for better spacing */
+}
+
+.payment-box,
+.booking-box {
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    padding: 25px;
+    transition: transform 0.3s ease-in-out;
+    flex: 0 0 48%; /* Adjust the width of payment-box and booking-box as needed */
+    box-sizing: border-box; /* Include padding in width calculation */
+
+}
+
+.booking-box {
+    flex: 1;
+    margin: 0 20px; /* Adjusted margin for better spacing */
+    
+}
+
+.booking-box h2 {
+    margin-top: 0; /* Remove default margin */
+    text-align: center;
+}
+
+.hotel-details {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 20px;
+    align-items: center;
+}
+
+.hotel-details img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.maincontainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 20px;
+}
+
+.maincontainer h1 {
+    margin-top: 0;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+}
+
+.image-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.reservation-details {
+    /* border-bottom: 1px solid #ddd; */
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.reservation-details p {
+    margin: 5px 0;
+}
+
+.guest-info p {
+    margin: 5px 0;
+}
+
+.buttons {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.payment-button,
+.cancel-button {
+    padding: 10px 20px;
+    background-color: #55a630;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.payment-button:hover,
+.cancel-button:hover {
+    background-color: #3f7d20;
+}
+
+.t-price {
+    font-size: 18px;
+    color: #333;
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    text-align: right;
+}
+
+.t-price strong {
+    color: #007bff; /* Color for the price value */
+}
+
+/* Style for checkbox container */
+.driver-selection {
+    margin-bottom: 20px;
+}
+
+/* Style for checkbox labels */
+.driver-selection strong {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+/* Style for checkboxes */
+.driver-selection input[type="checkbox"] {
+    display: none; /* Hide the default checkbox */
+}
+
+/* Style for custom checkboxes */
+.driver-selection input[type="checkbox"] + label {
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    padding-left: 25px; /* Adjust according to your design */
+    margin-right: 20px;
+    vertical-align: middle;
+}
+
+/* Style for checkbox tick */
+.driver-selection input[type="checkbox"] + label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid #333; /* Border color */
+    background-color: #fff; /* Background color */
+    border-radius: 3px;
+}
+
+/* Style for checked state */
+.driver-selection input[type="checkbox"]:checked + label:before {
+    background-color: #55a630; /* Change color when checked */
+    border-color: #55a630; /* Change border color when checked */
+}
+
+/* Style for checkbox tick icon */
+.driver-selection input[type="checkbox"] + label:after {
+    content: '\2714'; /* Unicode character for checkmark */
+    font-size: 12px;
+    position: absolute;
+    top: 50%;
+    left: 4px;
+    transform: translateY(-50%);
+    color: #fff; /* Checkmark color */
+    visibility: hidden;
+}
+
+/* Style for checked state of tick icon */
+.driver-selection input[type="checkbox"]:checked + label:after {
+    visibility: visible;
+}
+
+/* Style for price section */
+.t-price {
+    font-size: 18px;
+    color: #333;
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    text-align: right;
+}
+
+.t-price strong {
+    color: #007bff; /* Color for the price value */
+}
+
+.remove-button {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.remove-button:hover {
+    background-color: #c0392b;
+}
+
+.remove-button i {
+    font-size: 18px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+/* Adjusted CSS for image size */
+.image-container img {
+    width: 400px; /* Set the width to your desired size */
+    height: 350px; /* Set the height to your desired size */
+    object-fit: contain; /* Maintain aspect ratio and fit the entire image */
+    border-radius: 5px;
+}
 
 
 

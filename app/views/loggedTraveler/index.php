@@ -11,6 +11,7 @@
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-NwdoN0yM5JcJJ4jX1KvJXrQhQ+6RMo3hV3brvytgePvVzSlc3PjMFbpL5T+VUAq7" crossorigin="anonymous">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&libraries=places"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.2/css/boxicons.min.css">
 
 
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADD6_nBEr9ZJd44sKcqr0dj-JRvbt5ogo&libraries=places"></script> -->
@@ -39,7 +40,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
             <div class="rightcontent">
-            <li><a href="<?php echo URLROOT ?>travelerDashboard/cart/<?php echo $_SESSION['user_id'] ?>"><img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" alt="Cart"></a></li>
+            <li><a href="<?php echo URLROOT ?>travelerDashboard/cart/<?php echo $_SESSION['user_id'] ?>"><i class='bx bxs-cart bx-lg bx-tada bx-rotate-90' ></i></a></li>
             <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
             <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
             </div>
@@ -49,17 +50,19 @@
         <div class="main1img">
             <img src="<?php echo URLROOT?>/images/1.jpg" alt="">
             <div class="onimagetext">
-                <p id="txt1">Embrace the Wonders of Sri Lanka with Travelease</p>
-                <p id="txt2">Discover, Indulge, and Create Memories. Your Adventure Awaits.</p>
-            </div>
+    <p id="txt1">Embrace the Wonders of Sri Lanka with Travelease</p>
+    <p id="txt2">Discover, Indulge, and Create Memories. Your Adventure Awaits.</p>
+    <button class="cta-button" id="plantrip" onclick="planNewTrip()">Plan New Trip</button>
+</div>
+
         </div>
         <div class="main1searchbar" >
-        <form action="<?php echo URLROOT ?>loggedTraveler/searchAllServices" method="POST">
+        <form id="bookingForm" action="<?php echo URLROOT ?>loggedTraveler/searchAllServices" method="POST">
             <div class="search">         
                 <div class="search1"><input type="text" placeholder="Location: " name="location" id="location-input">
             </div>
-                <div class="search2">Check in Date:<input type="date" placeholder="Check in Date" name="checkinDate"></div>
-                <div class="search3">Check out Date:<input type="date" placeholder="Check out Date" name="checkoutDate"></div>
+                <div class="search2">Check in Date:<input type="date" placeholder="Check in Date" name="checkinDate" id="checkinDate" min="<?php echo date('Y-m-d'); ?>"></div>
+                <div class="search3">Check out Date:<input type="date" placeholder="Check out Date" name="checkoutDate" id="checkoutDate" min="<?php echo date('Y-m-d'); ?>"></div>
                 <div class="search4"><button type="submit" id="searchbtn">  Search</button></div>
             </div>
             </form>
@@ -205,6 +208,10 @@
                 </div>
             </div>
         </div>
+        <div id="notification" class="notification"></div> 
+        
+        <div id="checkingBigger" class="notification">Check-out date must be after check-in date</div> 
+        
         <div class="footer">
             
                 <div class="contact-info">
@@ -229,6 +236,7 @@
             <div class="copyright">
                 &copy; 2023 Your Company Name. All rights reserved.
             </div>
+
             
         </div>
         <!-- modal -->
@@ -294,6 +302,111 @@ window.onclick = function(event) {
             });
         });
     </script>
+
+    <!-- ///checkin checkoutdate validation// -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get the form and input elements
+        const bookingForm = document.getElementById("bookingForm");
+        const checkinDateInput = document.getElementById("checkinDate");
+        const checkoutDateInput = document.getElementById("checkoutDate");
+
+        // Add event listener for form submission
+        bookingForm.addEventListener("submit", function(event) {
+            // Prevent form submission if validation fails
+            if (!validateDates()) {
+                event.preventDefault();
+            }
+        });
+
+        // Function to validate dates
+        function validateDates() {
+            const checkinDate = new Date(checkinDateInput.value);
+            const checkoutDate = new Date(checkoutDateInput.value);
+            const today = new Date();
+
+            //Check if check-in date is after check-out date
+            if (checkinDate > checkoutDate) {
+                
+                document.getElementById("checkingBigger").style.display = "block";
+                return false;
+            }
+
+            // Check if check-in date is in the past
+            if (checkinDate < today) {
+                alert("Check-in date cannot be in the past.");
+                return false;
+            }
+
+            // Check if check-out date is in the past
+            if (checkoutDate < today) {
+                alert("Check-out date cannot be in the past.");
+                return false;
+            }
+
+            // All validations passed
+            return true;
+        }
+        checkinDateInput.addEventListener("change", function() {
+            checkoutDateInput.min = checkinDateInput.value;
+        });
+    });
+</script>
+
+<script>
+    document.getElementById("bookingForm").addEventListener("submit", function(event) {
+        var locationInput = document.getElementById("location-input").value.trim();
+        var checkinDate = document.getElementById("checkinDate").value;
+        var checkoutDate = document.getElementById("checkoutDate").value;
+
+        if (locationInput === "") {
+            // Location input is empty, show notification
+            var notification = document.getElementById("notification");
+            notification.innerText = "Please enter a location!";
+            notification.style.display = "block";
+
+            // Hide notification after 3 seconds
+            setTimeout(function() {
+                notification.style.display = "none";
+                notification.innerText = "";
+            }, 3000);
+
+            // Prevent form submission
+            event.preventDefault();
+        }
+        if (checkinDate === "") {
+            // Location input is empty, show notification
+            var notification = document.getElementById("notification");
+            notification.innerText = "Please enter a Checkin Date!";
+            notification.style.display = "block";
+
+            // Hide notification after 3 seconds
+            setTimeout(function() {
+                notification.style.display = "none";
+                notification.innerText = "";
+            }, 3000);
+
+            // Prevent form submission
+            event.preventDefault();
+        }
+        if (checkoutDate === "") {
+            // Location input is empty, show notification
+            var notification = document.getElementById("notification");
+            notification.innerText = "Please enter a Checkout Date!";
+            notification.style.display = "block";
+
+            // Hide notification after 3 seconds
+            setTimeout(function() {
+                notification.style.display = "none";
+                notification.innerText = "";
+            }, 3000);
+
+            // Prevent form submission
+            event.preventDefault();
+        }
+
+    });
+</script>
 
     </section>
   

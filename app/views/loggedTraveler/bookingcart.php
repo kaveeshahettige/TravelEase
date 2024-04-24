@@ -312,7 +312,7 @@ endforeach;
 
     </div>
     
-    <?php echo var_dump($servicePrices)?>
+    <!-- <?php echo var_dump($servicePrices)?> -->
     
 </body>
 </html>

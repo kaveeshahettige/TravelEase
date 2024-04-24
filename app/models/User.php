@@ -455,7 +455,7 @@ public function updatePicture($data){
         INNER JOIN users ON bookings.serviceProvider_id = users.id
         WHERE bookings.user_id = :id
         AND bookings.bookingCondition != "cancelled"
-        AND bookings.enddate > CURDATE()
+        AND bookings.startDate > CURDATE()
 
         UNION ALL
 
@@ -464,7 +464,7 @@ public function updatePicture($data){
         INNER JOIN users ON cartbookings.serviceProvider_id = users.id
         WHERE cartbookings.user_id = :id
         AND cartbookings.bookingCondition != "cancelled"
-        AND cartbookings.enddate > CURDATE();
+        AND cartbookings.startDate > CURDATE();
         
         ');
         $this->db->bind(':id',$id);
@@ -575,7 +575,7 @@ public function updatePicture($data){
     // getRandomServiceProviders
     public function getRandomServiceProviders(){
                                         //4,5 should be removed and approval should be added
-        $this->db->query('SELECT * FROM users WHERE type NOT IN (0,1,2,4,5) /*AND approval = 1*/ ORDER BY RAND() LIMIT 6');
+        $this->db->query('SELECT * FROM users WHERE type NOT IN (0,1,2,4,5) AND approval = 1 AND profile_status=1 ORDER BY RAND() LIMIT 6');
     
     
         $data=$this->db->resultSet();
@@ -755,7 +755,7 @@ public function updatePicture($data){
     
 //findRooms
 public function findRooms($id){
-    $this->db->query('SELECT * FROM hotel_rooms WHERE hotel_id = :id');
+    $this->db->query('SELECT * FROM hotel_rooms WHERE hotel_id = :id AND roomCondition="activated"');
     $this->db->bind(':id', $id);
     $rooms = $this->db->resultSet();
     if($this->db->rowcount()>0){
@@ -926,7 +926,7 @@ foreach ($transactionData['furtherBookingDetails'] as $bookingDetail) {
         $this->db->bind(':user_id', $transactionData['user']->id);
         $this->db->bind(':serviceProvider_id', $bookingDetail->user_id);
         $this->db->bind(':startDate', $transactionData['checkinDate']);
-        $this->db->bind(':endDate', $transactionData['checkinDate']);
+        $this->db->bind(':endDate', $transactionData['checkoutDate']);
         $this->db->bind(':package_id', $bookingDetail->user_id);
     }
     
@@ -1184,18 +1184,18 @@ public function findAvailableRooms($checkinDate, $checkoutDate,$hotelid){
     FROM hotel_rooms
     WHERE room_id NOT IN (
         SELECT room_id
-        FROM bookings
+        FROM room_availability
         WHERE startDate <= :checkoutDate
-        AND endDate >= :checkinDate
+        AND (endDate >= :checkinDate OR endDate IS NULL)
     )
-    AND hotel_id = :hotelid;
-    
-    
+    AND hotel_id = :hotelid
+    AND roomCondition=:condition  
 ');
 
     $this->db->bind(':checkinDate', $checkinDate);
     $this->db->bind(':checkoutDate', $checkoutDate);
     $this->db->bind(':hotelid', $hotelid);
+    $this->db->bind(':condition', 'activated');
     $rooms = $this->db->resultSet();
     if($this->db->rowcount()>0){
         return $rooms;
@@ -1339,10 +1339,11 @@ public function findLocations($location) {
 //have to rewrite
 public function findHotels($location) {
 
-    $this->db->query('SELECT * FROM hotel
+    $this->db->query('SELECT *
+    FROM hotel
     JOIN users ON hotel.user_id = users.id
-    WHERE hotel.city LIKE :location;
-    ');
+    WHERE (hotel.city LIKE :location OR hotel.addr LIKE :location)
+    AND users.approval = 1 AND users.profile_status=1');
     $this->db->bind(':location', '%' . $location . '%');
     $result = $this->db->resultSet();
     if ($this->db->rowCount() > 0) {
@@ -1371,7 +1372,7 @@ public function getRandomHotels(){
 $this->db->query('SELECT h.*,u.* 
 FROM users u
 JOIN hotel h ON u.id = h.user_id
-WHERE u.type NOT IN (0, 1, 2, 4, 5) /*AND u.approval = 1*/
+WHERE u.type NOT IN (0, 1, 2, 4, 5) AND u.approval = 1 AND u.profile_status=1
 ORDER BY RAND() 
 LIMIT 6;
 ');   
@@ -1550,7 +1551,7 @@ public function getRandomAgencies(){
     $this->db->query('SELECT t.*,u.* 
 FROM users u
 JOIN travelagency t ON u.id = t.user_id
-WHERE u.type NOT IN (0, 1, 2, 3, 5) /*AND u.approval = 1*/
+WHERE u.type NOT IN (0, 1, 2, 3, 5) AND u.approval = 1 AND u.profile_status=1
 ORDER BY RAND() 
 LIMIT 6;
 ');   
@@ -1596,15 +1597,18 @@ public function findAvailableVehicles($pickupDate, $dropoffDate, $agencyId) {
     $this->db->query('SELECT * FROM vehicles
     WHERE vehicle_id NOT IN (
         SELECT vehicle_id
-        FROM vehicle_bookings
-        WHERE start_date <= :dropoffDate
-        AND end_date >= :pickupDate
+        FROM vehicle_availability
+        WHERE startDate <= :dropoffDate
+        AND (endDate >= :pickupDate OR endDate IS NULL)
     )
-    AND agency_id = :agencyId;
+    AND agency_id = :agencyId
+    AND vehicleCondition=:condition;
+    
     ');
     $this->db->bind(':pickupDate', $pickupDate);
     $this->db->bind(':dropoffDate', $dropoffDate);
     $this->db->bind(':agencyId', $agencyId);
+    $this->db->bind(':condition', 'activated');
     $result = $this->db->resultSet();
     if ($this->db->rowCount() > 0) {
         return $result;
@@ -1684,6 +1688,60 @@ public function addUnavailability($transactionData){
     }
 }
 
+//addUnavailabilityVehicles
+public function addUnavailabilityVehicles($transactionData){
+    $this->db->query('INSERT INTO vehicle_availability(vehicle_id, startDate, endDate) VALUES (:vehicle_id, :startDate, :endDate)');
+    $this->db->bind(':vehicle_id', $transactionData['furtherBookingDetails']->vehicle_id);
+    $this->db->bind(':startDate', $transactionData['checkinDate']);
+    $this->db->bind(':endDate', $transactionData['checkoutDate']);
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+//addUnavailabilityVehiclesfromCart
+public function addUnavailabilityVehiclesfromCart($transactionData,$bookingDetail){
+    $this->db->query('INSERT INTO vehicle_availability(vehicle_id, startDate, endDate) VALUES (:vehicle_id, :startDate, :endDate)');
+    $this->db->bind(':vehicle_id',$bookingDetail->vehicle_id);
+    $this->db->bind(':startDate', $transactionData['checkinDate']);
+    $this->db->bind(':endDate', $transactionData['checkoutDate']);
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+//addUnavailabilityGuides
+public function addUnavailabilityGuides($transactionData){
+    $this->db->query('INSERT INTO guide_availability(user_id, startDate, endDate) VALUES (:user_id, :startDate, :endDate)');
+    $this->db->bind(':user_id', $transactionData['serviceid']);
+    $this->db->bind(':startDate', $transactionData['checkinDate']);
+    $this->db->bind(':endDate', $transactionData['checkoutDate']);
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+
+//
+public function addUnavailabilityGuidesfromCart($transactionData,$bookingDetail){
+    $this->db->query('INSERT INTO guide_availability(user_id, startDate, endDate) VALUES (:user_id, :startDate, :endDate)');
+    $this->db->bind(':user_id', $bookingDetail->user_id);
+    $this->db->bind(':startDate', $transactionData['checkinDate']);
+    $this->db->bind(':endDate', $transactionData['checkoutDate']);
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+
 //findVehicles($location, $checkinDate, $checkoutDate)
 public function findVehiclesByLocation($location, $checkinDate, $checkoutDate) {
     $this->db->query('
@@ -1694,15 +1752,19 @@ public function findVehiclesByLocation($location, $checkinDate, $checkoutDate) {
     WHERE (travelagency.city LIKE :location OR travelagency.city = \'All Island\')
     AND vehicle_id NOT IN (
         SELECT vehicle_id
-        FROM vehicle_bookings
-        WHERE start_date <= :checkoutDate
-        AND end_date >= :checkinDate
-    );
+        FROM vehicle_availability
+        WHERE startDate <= :checkoutDate
+        AND (endDate >= :checkinDate OR endDate IS NULL)
+    )
+    AND vehicles.vehicleCondition = :vehicleCondition
+    AND users.profile_status = 1 AND users.approval = 1;
+
 ');
 
     $this->db->bind(':location', '%' . $location . '%');
     $this->db->bind(':checkinDate', $checkinDate);
     $this->db->bind(':checkoutDate', $checkoutDate);
+    $this->db->bind(':vehicleCondition', 'activated');
     $result = $this->db->resultSet();
     if ($this->db->rowCount() > 0) {
         return $result;
@@ -1811,12 +1873,13 @@ public function monthlyPayment($id){
 //countPayment($id)
 public function countPayment($id){
     $this->db->query('SELECT COUNT(*) AS count FROM (
-        SELECT booking_id FROM payments WHERE booking_id IN (SELECT booking_id FROM bookings WHERE user_id = :id)
+        SELECT booking_id FROM payments WHERE booking_id IN (SELECT booking_id FROM bookings WHERE user_id = :id AND bookingCondition!=:condition)
         UNION ALL
-        SELECT booking_id FROM cartpayments WHERE booking_id IN (SELECT booking_id FROM cartbookings WHERE user_id = :id)
+        SELECT booking_id FROM cartpayments WHERE booking_id IN (SELECT booking_id FROM cartbookings WHERE user_id = :id AND bookingCondition!=:condition)
     ) AS combined_payments;
     ');
     $this->db->bind(':id', $id);
+    $this->db->bind(':condition', 'cancelled');
     $row = $this->db->single();
      if($this->db->rowcount()>0){
         return $row->count;
@@ -1834,7 +1897,7 @@ public function countPaymentMonthly($id){
         WHERE booking_id IN (
             SELECT booking_id 
             FROM bookings 
-            WHERE user_id = :id 
+            WHERE user_id = :id AND bookingCondition!=:condition
         )
         AND MONTH(payment_date) = MONTH(CURDATE()) 
         AND YEAR(payment_date) = YEAR(CURDATE())
@@ -1846,7 +1909,7 @@ public function countPaymentMonthly($id){
         WHERE booking_id IN (
             SELECT booking_id 
             FROM cartbookings 
-            WHERE user_id = :id 
+            WHERE user_id = :id AND bookingCondition!=:condition
         )
         AND MONTH(payment_date) = MONTH(CURDATE()) 
         AND YEAR(payment_date) = YEAR(CURDATE())
@@ -1854,6 +1917,7 @@ public function countPaymentMonthly($id){
     
     ');
     $this->db->bind(':id', $id);
+    $this->db->bind(':condition', 'cancelled');
     $row = $this->db->single();
      if($this->db->rowcount()>0){
         return $row->count;
@@ -1871,7 +1935,7 @@ public function amountPaymentMonthly($id){
         WHERE booking_id IN (
             SELECT booking_id 
             FROM bookings 
-            WHERE user_id = :id 
+            WHERE user_id = :id AND bookingCondition!=:condition
         )
         AND MONTH(payment_date) = MONTH(CURDATE()) 
         AND YEAR(payment_date) = YEAR(CURDATE())
@@ -1883,7 +1947,7 @@ public function amountPaymentMonthly($id){
         WHERE booking_id IN (
             SELECT booking_id 
             FROM cartbookings 
-            WHERE user_id = :id 
+            WHERE user_id = :id  AND bookingCondition!=:condition
         )
         AND MONTH(payment_date) = MONTH(CURDATE()) 
         AND YEAR(payment_date) = YEAR(CURDATE())
@@ -1891,6 +1955,7 @@ public function amountPaymentMonthly($id){
     
     ');
     $this->db->bind(':id', $id);
+    $this->db->bind(':condition', 'cancelled');
     $row = $this->db->single();
      if($this->db->rowcount()>0){
         return $row->total;
@@ -1915,7 +1980,9 @@ JOIN
 JOIN 
     users ON bookings.serviceProvider_id = users.id
 WHERE 
-    bookings.user_id = :id
+    bookings.user_id = :id AND bookings.bookingCondition!=:condition
+    AND MONTH(payments.payment_date) = MONTH(CURDATE()) 
+    AND YEAR(payments.payment_date) = YEAR(CURDATE())
 
 UNION ALL
 
@@ -1931,11 +1998,14 @@ JOIN
 JOIN 
     users ON cartbookings.serviceProvider_id = users.id
 WHERE 
-    cartbookings.user_id = :id;
+    cartbookings.user_id = :id AND cartbookings.bookingCondition!=:condition
+    AND MONTH(cartpayments.payment_date) = MONTH(CURDATE()) 
+    AND YEAR(cartpayments.payment_date) = YEAR(CURDATE());
 
 ');
 
     $this->db->bind(':id', $id);
+    $this->db->bind(':condition', 'cancelled');
     $payments = $this->db->resultSet();
      if($this->db->rowcount()>0){
         return $payments;
@@ -1950,7 +2020,7 @@ public function getRandomPackages(){
     $this->db->query('SELECT p.*,u.* 
     FROM users u
     JOIN guides p ON u.id = p.user_id
-    WHERE u.type NOT IN (0, 1, 2, 3, 4) /*AND u.approval = 1*/
+    WHERE u.type NOT IN (0, 1, 2, 3, 4) AND u.approval = 1 AND u.profile_status=1
     ORDER BY RAND() 
     LIMIT 6;
     ');   
@@ -2023,14 +2093,15 @@ public function findAvailableHotelRooms($location, $checkinDate, $checkoutDate) 
     FROM hotel_rooms
     JOIN hotel ON hotel_rooms.hotel_id = hotel.hotel_id
     JOIN users ON hotel.user_id = users.id
-    WHERE (hotel.city LIKE :location)
+    WHERE (hotel.city LIKE :location OR hotel.addr LIKE :location)
     AND room_id NOT IN (
         SELECT room_id
         FROM room_availability
         WHERE startDate <= :checkoutDate
-        AND endDate >= :checkinDate
-    )';
-    
+        AND (endDate >= :checkinDate OR endDate IS  NULL)
+    )
+    AND hotel_rooms.roomCondition = :roomCondition
+    AND users.profile_status = 1';
     // Prepare and execute the SQL query
     $this->db->query($query);
     
@@ -2038,6 +2109,7 @@ public function findAvailableHotelRooms($location, $checkinDate, $checkoutDate) 
     $this->db->bind(':location', '%' . $location . '%'); // Use LIKE for partial match
     $this->db->bind(':checkinDate', $checkinDate);
     $this->db->bind(':checkoutDate', $checkoutDate);
+    $this->db->bind(':roomCondition', 'activated'); 
     
     // Execute the query and fetch the results
     $result = $this->db->resultSet();
@@ -2053,23 +2125,27 @@ public function findAvailableHotelRooms($location, $checkinDate, $checkoutDate) 
 
 //findAvailableVehicles($location, $checkinDate, $checkoutDate)
 public function findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate) {
+
     $this->db->query('
     SELECT * 
     FROM vehicles
     JOIN travelagency ON vehicles.agency_id = travelagency.agency_id
     JOIN users ON travelagency.user_id = users.id
-    WHERE (travelagency.city LIKE :location)
+    WHERE (travelagency.city LIKE :location OR travelagency.city = \'All Island\')
     AND vehicle_id NOT IN (
         SELECT vehicle_id
-        FROM vehicle_bookings
-        WHERE start_date <= :checkoutDate
-        AND end_date >= :checkinDate
-    );
+        FROM vehicle_availability
+        WHERE startDate <= :checkoutDate
+        AND (endDate >= :checkinDate OR endDate IS NULL)
+    )
+    AND vehicles.vehicleCondition = :vehicleCondition
+    AND users.profile_status = 1;
 ');
     
         $this->db->bind(':location', '%' . $location . '%');
         $this->db->bind(':checkinDate', $checkinDate);
         $this->db->bind(':checkoutDate', $checkoutDate);
+        $this->db->bind(':vehicleCondition', 'activated');
         $result = $this->db->resultSet();
         if ($this->db->rowCount() > 0) {
             return $result;
@@ -2077,6 +2153,53 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
             return false;
         }
     }
+
+    //findAvailableGuidesByLocation($location, $checkinDate, $checkoutDate)
+    public function findAvailableGuidesByLocation($location, $checkinDate, $checkoutDate) {
+
+        $this->db->query('
+        SELECT * 
+        FROM guides
+        JOIN users ON guides.user_id = users.id
+        WHERE (guides.city LIKE :location OR guides.sites LIKE :location)
+        AND user_id NOT IN (
+            SELECT user_id
+            FROM guide_availability
+            WHERE startDate <= :checkoutDate
+            AND (endDate >= :checkinDate OR endDate IS NULL)
+        )
+        AND users.profile_status = 1;
+    ');
+        
+            $this->db->bind(':location', '%' . $location . '%');
+            $this->db->bind(':checkinDate', $checkinDate);
+            $this->db->bind(':checkoutDate', $checkoutDate);
+            $this->db->bind(':vehicleCondition', 'activated');
+            $result = $this->db->resultSet();
+            if ($this->db->rowCount() > 0) {
+                return $result;
+            } else {
+                return false;
+            }
+        }
+    //findGuidesByLocation($location)
+    public function findGuidesByLocation($location) {
+        $this->db->query('SELECT * FROM guides
+        JOIN users ON guides.user_id = users.id
+        WHERE (guides.city LIKE :location OR guides.sites LIKE :location)
+        AND users.profile_status = 1;
+        ');
+        $this->db->bind(':location', '%' . $location . '%');
+        $result = $this->db->resultSet();
+        if ($this->db->rowCount() > 0) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
+    
+
+    
 
     //findVehiclePriceForDates($vehicle->vehicle_id)
     public function findVehiclePrices($vehicleId) {
@@ -2096,14 +2219,16 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
         FROM (
             SELECT booking_id, endDate
             FROM bookings
-            WHERE user_id = :id AND endDate < CURDATE()
+            WHERE user_id = :id AND endDate < CURDATE() AND bookingCondition != :bookingCondition
             UNION ALL
             SELECT booking_id, endDate
             FROM cartbookings
-            WHERE user_id = :id AND endDate < CURDATE()
+            WHERE user_id = :id AND endDate < CURDATE() AND bookingCondition != :bookingCondition
         ) AS combined_bookings;
         ');
         $this->db->bind(':id', $id);
+        $this->db->bind(':bookingCondition', 'cancelled');
+
         $row = $this->db->single();
          if($this->db->rowcount()>0){
             return $row->count;
@@ -2135,6 +2260,7 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
     WHERE 
         bookings.user_id = :id
         AND bookings.endDate < CURDATE()
+        AND bookings.bookingCondition != :bookingCondition
     
     UNION ALL
     
@@ -2157,12 +2283,14 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
     WHERE 
         cartbookings.user_id = :id
         AND cartbookings.endDate < CURDATE()
+        AND cartbookings.bookingCondition != :bookingCondition
         
     ORDER BY 
         endDate DESC; -- Order by endDate in descending order
     
         ');
         $this->db->bind(':id', $id);
+        $this->db->bind(':bookingCondition', 'cancelled');
         $result = $this->db->resultSet();
         if ($this->db->rowCount() > 0) {
             return $result;
@@ -2365,11 +2493,10 @@ return $success; // Return success status after the loop
     //makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 
     public function makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail){
         if($bookingDetails->type==4){
-            $this->db->query('DELETE FROM vehicle_bookings WHERE vehicle_id = :vehicle_id AND start_date = :start_date AND end_date = :end_date OR booking_id = :booking_id');
+            $this->db->query('DELETE FROM vehicle_availability WHERE vehicle_id = :vehicle_id AND startDate = :startDate AND endDate = :endDate');
             $this->db->bind(':vehicle_id', $bookingFurtherDetail->vehicle_id);
-            $this->db->bind(':start_date', $bookingDetails->startDate);
-            $this->db->bind(':end_date', $bookingDetails->endDate);
-            $this->db->bind(':booking_id', $booking_id);
+            $this->db->bind(':startDate', $bookingDetails->startDate);
+            $this->db->bind(':endDate', $bookingDetails->endDate);
             if($this->db->execute()){
                 return true;
             }else{
@@ -2387,9 +2514,19 @@ return $success; // Return success status after the loop
                 return false;
             }
 
-        }
+        }else if($bookingDetails->type==5){
+            $this->db->query('DELETE FROM guide_availability WHERE user_id = :user_id AND startDate = :startDate AND endDate = :endDate');
+            $this->db->bind(':user_id', $bookingFurtherDetail->user_id);
+            $this->db->bind(':startDate', $bookingDetails->startDate);
+            $this->db->bind(':endDate', $bookingDetails->endDate);
+            if($this->db->execute()){
+                return true;
+            }else{
+                return false;
+            }
         
     }
+}
 
 
     //markAsRead($notification_id);
@@ -2406,52 +2543,81 @@ return $success; // Return success status after the loop
 
 
     //checkGuideAvailability
-    public function checkGuideAvailabilityForBookings($guide_id, $startDate, $endDate){
-        $this->db->query('
-            SELECT * FROM guide_bookings 
-            LEFT JOIN bookings ON guide_bookings.booking_id = bookings.booking_id
-            WHERE bookings.serviceProvider_id = :guide_id 
-            AND bookings.startDate <= :endDate 
-            AND bookings.endDate >= :startDate
-        ');
+    // public function checkGuideAvailabilityForBookings($guide_id, $startDate, $endDate){
+    //     $this->db->query('
+    //         SELECT * FROM guide_bookings 
+    //         LEFT JOIN bookings ON guide_bookings.booking_id = bookings.booking_id
+    //         WHERE bookings.serviceProvider_id = :guide_id 
+    //         AND bookings.startDate <= :endDate 
+    //         AND bookings.endDate >= :startDate
+    //     ');
     
-        $this->db->bind(':guide_id', $guide_id);
-        $this->db->bind(':startDate', $startDate);
-        $this->db->bind(':endDate', $endDate);
+    //     $this->db->bind(':guide_id', $guide_id);
+    //     $this->db->bind(':startDate', $startDate);
+    //     $this->db->bind(':endDate', $endDate);
     
-        $bookings = $this->db->resultSet();
+    //     $bookings = $this->db->resultSet();
     
-        // Check if any bookings were found
-        if(empty($bookings)){
-            return true;
-        } else {
-            return false;
-        }
-    }
+    //     // Check if any bookings were found
+    //     if(empty($bookings)){
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
-    public function checkGuideAvailabilityForCartBookings($guide_id, $startDate, $endDate){
-        $this->db->query('
-            SELECT * FROM guide_bookings 
-            LEFT JOIN cartbookings ON guide_bookings.booking_id = cartbookings.booking_id
-            WHERE cartbookings.serviceProvider_id = :guide_id 
-            AND cartbookings.startDate <= :endDate 
-            AND cartbookings.endDate >= :startDate
-        ');
+    // public function checkGuideAvailabilityForCartBookings($guide_id, $startDate, $endDate){
+    //     $this->db->query('
+    //         SELECT * FROM guide_bookings 
+    //         LEFT JOIN cartbookings ON guide_bookings.booking_id = cartbookings.booking_id
+    //         WHERE cartbookings.serviceProvider_id = :guide_id 
+    //         AND cartbookings.startDate <= :endDate 
+    //         AND cartbookings.endDate >= :startDate
+    //     ');
     
+    //     $this->db->bind(':guide_id', $guide_id);
+    //     $this->db->bind(':startDate', $startDate);
+    //     $this->db->bind(':endDate', $endDate);
+    
+    //     $cartBookings = $this->db->resultSet();
+    
+    //     // Check if any cart bookings were found
+    //     if(empty($cartBookings)){
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
+    //
+    // SELECT *
+    // FROM hotel_rooms
+    // WHERE room_id NOT IN (
+    //     SELECT room_id
+    //     FROM room_availability
+    //     WHERE startDate <= :checkoutDate
+    //     AND endDate >= :checkinDate
+    // )
+    // AND hotel_id = :hotelid;
+
+    //checkGuideAvailability($guide_id, $startDate, $endDate)
+    public function checkGuideAvailability($guide_id, $startDate, $endDate) {
+        $this->db->query('SELECT * FROM guide_availability WHERE user_id = :guide_id 
+                          AND startDate <= :endDate AND (endDate >= :startDate OR endDate IS NULL)');
+            
         $this->db->bind(':guide_id', $guide_id);
         $this->db->bind(':startDate', $startDate);
         $this->db->bind(':endDate', $endDate);
+        
+        $result = $this->db->resultSet();
     
-        $cartBookings = $this->db->resultSet();
-    
-        // Check if any cart bookings were found
-        if(empty($cartBookings)){
-            return true;
+        // Check if any overlapping bookings found
+        if (!empty($result)) {
+            return false; // Guide is not available
         } else {
-            return false;
+            return true; // Guide is available
         }
     }
-    
+       
     //addToGuideBookings(($transactionData)
     public function addToGuideBookings($transactionData,$lastbooking_id){
         $this->db->query('INSERT INTO guide_bookings (booking_id, meetTime) VALUES (:booking_id, :meetTime)');
@@ -2478,20 +2644,7 @@ return $success; // Return success status after the loop
         }
     }
 
-    //findGuidesByLocation($location);
-    public function findGuidesByLocation($location) {
-        $this->db->query('SELECT * FROM guides
-        JOIN users ON guides.user_id = users.id
-        WHERE (guides.city LIKE :location OR guides.province LIKE :location OR guides.sites LIKE :location );
-        ');
-        $this->db->bind(':location', '%' . $location . '%');
-        $result = $this->db->resultSet();
-        if ($this->db->rowCount() > 0) {
-            return $result;
-        } else {
-            return false;
-        }
-    }
+    
 
     //findServiceProviderInCart($cart->cartbooking_id)
     public function findServiceProviderInCart($cartid,$cartbooking_id){
@@ -2538,7 +2691,7 @@ return $success; // Return success status after the loop
     //checkAvailbility($cartDetail->type, $serviceId,$cartDetail->startDate,$cartDetail->endDate)
     public function checkAvailbility($type, $serviceId,$startDate,$endDate){
         if($type==3){
-            $this->db->query('SELECT * FROM room_availability WHERE room_id = :serviceId AND startDate <= :endDate AND endDate >= :startDate');
+            $this->db->query('SELECT * FROM room_availability WHERE room_id = :serviceId AND startDate <= :endDate AND (endDate >= :startDate OR endDate IS NULL)');
             $this->db->bind(':serviceId', $serviceId);
             $this->db->bind(':startDate', $startDate);
             $this->db->bind(':endDate', $endDate);
@@ -2549,7 +2702,7 @@ return $success; // Return success status after the loop
                 return true;
             }
         }else if($type==4){
-            $this->db->query('SELECT * FROM vehicle_bookings WHERE vehicle_id = :serviceId AND start_date <= :endDate AND end_date >= :startDate');
+            $this->db->query('SELECT * FROM vehicle_availability WHERE vehicle_id = :serviceId AND startDate <= :endDate AND (endDate >= :startDate OR endDate IS NULL)');
             $this->db->bind(':serviceId', $serviceId);
             $this->db->bind(':startDate', $startDate);
             $this->db->bind(':endDate', $endDate);
@@ -2560,14 +2713,7 @@ return $success; // Return success status after the loop
                 return true;
             }
         }else if($type==5){
-        $this->db->query('SELECT * FROM bookings 
-        WHERE package_id = :serviceId AND startDate <= :endDate AND endDate >= :startDate
-        
-        UNION
-        SELECT * FROM cartbookings 
-        WHERE package_id = :serviceId AND startDate <= :endDate AND endDate >= :startDate
-        ');
-
+        $this->db->query('SELECT * FROM guide_availability WHERE user_id = :serviceId AND startDate <= :endDate AND (endDate >= :startDate OR endDate IS NULL)');
         
         $this->db->bind(':serviceId', $serviceId);
         $this->db->bind(':startDate', $startDate);

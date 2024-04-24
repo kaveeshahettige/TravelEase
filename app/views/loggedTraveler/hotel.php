@@ -11,9 +11,18 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="<?php echo URLROOT?>/js/loggedTraveler/script.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-y4jl5lAxu7c0J0pQv4KzoUW0ojrYwMq2/wn7E5tlUCVgQFm/hhtIkV6uUavvB8sW" crossorigin="anonymous">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&libraries=places"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.2/css/boxicons.min.css">
 
     <style>
-
+        /* Style for the suggestions dropdown */
+        .pac-container {
+            background-color: #FFF;
+            z-index: 1000;
+            position: fixed;
+            display: inline-block;
+            float: left;
+        }
     </style>
 </head>
 <body>
@@ -30,6 +39,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
             <div class="rightcontent">
+            <li><a href="<?php echo URLROOT ?>travelerDashboard/cart/<?php echo $_SESSION['user_id'] ?>"><i class='bx bxs-cart bx-lg bx-tada bx-rotate-90' ></i></a></li>
             <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
                 <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
                 </div>
@@ -40,7 +50,7 @@
             <img src="<?php echo URLROOT?>/images/7.1.jpg" alt="">
         </div>
         <div class="main1searchbar">
-    <form action="<?php echo URLROOT ?>loggedTraveler/searchHotels" method="POST">
+    <form id="locationInputForm" action="<?php echo URLROOT ?>loggedTraveler/searchHotels" method="POST">
         <div class="search">
         <div class="search1">
     <input type="text" name="location" id="locationInput" placeholder=" <?php echo isset($data['location']) ? $data['location'] : 'Location:'; ?>">
@@ -150,10 +160,11 @@
         </div>
         </div>
     </section>
+    <div id="notification" class="notification"></div> 
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const locationInput = document.getElementById("location-input");
+            const locationInput = document.getElementById("locationInput");
             const options = {
                 types: ['(cities)'],
                 componentRestrictions: { country: 'LK' } // Restrict to Sri Lanka (LK)
@@ -177,6 +188,27 @@
             });
         });
     </script>
+    <script>
+    document.getElementById("locationInputForm").addEventListener("submit", function(event) {
+        var locationInput = document.getElementById("locationInput").value.trim();
+
+        if (locationInput === "") {
+            // Location input is empty, show notification
+            var notification = document.getElementById("notification");
+            notification.innerText = "Please enter a location!";
+            notification.style.display = "block";
+
+            // Hide notification after 3 seconds
+            setTimeout(function() {
+                notification.style.display = "none";
+                notification.innerText = "";
+            }, 3000);
+
+            // Prevent form submission
+            event.preventDefault();
+        }
+    });
+</script>
 
 
 </body>

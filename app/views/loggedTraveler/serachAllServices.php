@@ -154,9 +154,22 @@
         <?php endif; ?>
     </div>
 </section>
+            <!-- <?php echo $data['checkinDate']?> -->
+            <!-- <?php echo $data['checkoutDate']?> -->
+            <!-- //differnce between date -->
+            <?php
+            $date1 = strtotime($data['checkinDate']);
+            $date2 = strtotime($data['checkoutDate']);
+            $diff = abs($date2 - $date1);
+            $years = floor($diff / (365*60*60*24));
+            $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+            $days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24) / (60*60*24));
+            // echo $days;
+            ?>
 
     <section class="main2" id="B2">
         <h1 class="ResultTopics">Top Places to Stay</h1>
+        <?php if($days != 0): ?>
         <?php if (!empty($data['hotelrooms']) && is_array($data['hotelrooms'])): ?>
             <div class="main2images" id="div1">
     <?php foreach ($data['hotelrooms'] as $hotelroom): ?>
@@ -166,7 +179,7 @@
                 <div>
                     <p style="font-size: 30px; margin: 0px; font-weight: bold;"><?php echo ($hotelroom ? $hotelroom->fname . ' ' . $hotelroom->lname : ' '); ?></p>
                     <p><?php echo $hotelroom->roomType ?>&nbsp;Room</p>
-                    <p><?php echo $hotelroom->add ?></p>
+                    <p><?php echo $hotelroom->addr ?></p>
                     <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
        // Extract the rating value from the ratings object
@@ -197,6 +210,10 @@
     <p>No hotels available Right Now</p>
 <?php else: ?>
     <p>Error retrieving hotel data.</p>
+<?php endif; ?>
+<?php endif; ?>
+<?php if ($days == 0): ?>
+    <span class="no-hotels-message">Hotels are not available when check-in and check-out dates are the same.</span>
 <?php endif; ?>
 </section>
 
@@ -275,7 +292,7 @@
                 <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
        // Extract the rating value from the ratings object
-       $rating = isset($guide->ratings->rating) ? $guide->ratings->rating : 0;
+       $rating = isset($guide->gratings->rating) ? $guide->gratings->rating : 0;
                     
        // Round the rating value
        $filled_stars = $rating;
