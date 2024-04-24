@@ -4,13 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/driver/calender.css">
-    <link rel="stylesheet" href="<?php echo URLROOT ?>/css/hotel/calender.css">
+    <!-- <link rel="stylesheet" href="<?php echo URLROOT ?>/css/hotel/calender.css"> -->
     <link rel="stylesheet" href="<?php echo URLROOT ?>/css/hotel/calenders.css">
     <title><?php echo SITENAME ?></title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/driver/x-icon" href="<?php echo URLROOT; ?>/images/driver/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        /* Popup styles */
+        .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-width: 300px;
+    display: none;
+}
+
+.popup-content {
+    text-align: center;
+}
+
+.popup p {
+    margin-bottom: 10px;
+    color: #fff; /* text color for better visibility on dark background */
+}
+
+.popup button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.popup button:hover {
+    background-color: #0056b3;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: #fff; /* close button color */
+}
+
+    </style>
+
 </head>
 
 
@@ -46,9 +93,6 @@
         </div> -->
     </nav>
 
-    <?php
-$userData= $data['basicInfo']['userData'];
-?>
     <main>
         <div class="logo-container">
             <img src="<?php echo URLROOT; ?>/images/hotel/TravelEase.png" alt="TravelEase Logo">
@@ -59,30 +103,6 @@ $userData= $data['basicInfo']['userData'];
             <h1>Availability</h1>
         </div>
 
-        <!-- <div class="dashboard-sub-content">
-            <div class="top-boxes">
-                
-
-
-                <!-- Total Bookings Box -->
-                <!-- <div class="box">
-                    <h2>Total Rooms Allocated</h2>
-                    <p>10</p>
-                </div> -->
-
-                <!-- Ongoing Bookings Box -->
-                <!-- <div class="box">
-                    <h2>Booked Rooms</h2>
-                    <p>5</p>
-                </div> -->
-
-                <!-- Customers Box -->
-                <!-- <div class="box">
-                    <h2>Available Rooms</h2>
-                    <p>5</p>
-                </div>
-            </div>
-        </div> --> 
 
         <div class="dashboard-sub-content">
 
@@ -102,12 +122,33 @@ $userData= $data['basicInfo']['userData'];
                         <div class="calendar-buttons">
                             <div class="calendar-buttons">
                           
-                            <form id="availabilityForm" action="<?= URLROOT?>/driver/availablevehicles" method="get" onsubmit="return handleFormSubmit(event)">
+                            <form id="availabilityForm" action="<?= URLROOT ?>/driver/availablevehicles" method="get" onsubmit="return handleFormSubmit(event)">
     <input type="hidden" name="action" value="check_availability">
     <input name="date" type="hidden" id="selectedDate" value="<?php echo htmlspecialchars($data["selectedDate"]); ?>">
-    <button type="submit" id="checkAvailabilityBtn" disabled>Check Availability</button>
+    <button type="submit" id="checkAvailabilityBtn">Check Availability</button>
     <p id="dateError" style="color: red; display: none;">Please select a date.</p>
+
+    <?php
+    $userData = $data['basicInfo']['userData'];
+    var_dump($data['vehicleCount']);
+    ?>
+
+    <!-- Popup content -->
+    <div id="popup" class="popup" style="display: none;">
+    <div class="popup-content">
+        <span class="close-btn" onclick="closePopup()">&times;</span>
+        <p>No vehicles available. Please add a vehicle to change availability.</p>
+    </div>
+</div>
+
 </form>
+
+
+
+
+
+
+
 
 
 
@@ -124,5 +165,26 @@ $userData= $data['basicInfo']['userData'];
 
 
     </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var checkAvailabilityBtn = document.getElementById('checkAvailabilityBtn');
+        var popup = document.getElementById('popup');
+
+        checkAvailabilityBtn.addEventListener('click', function(event) {
+            var vehicleCount = <?php echo $data['vehicleCount']; ?>;
+            if (vehicleCount <= 0) {
+                event.preventDefault(); // Prevent form submission
+                popup.style.display = 'block'; // Show the popup
+            }
+        });
+    });
+
+    function closePopup() {
+    var popup = document.getElementById('popup');
+    popup.style.display = 'none';
+}
+</script>
+
 </body>
 </html>

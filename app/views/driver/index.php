@@ -73,7 +73,7 @@
                     <?php else : ?>
                     <h2>Welcome,</h2>
 
-                    <h1><?php echo $data['agencyDetails']->agency_name;  ?></h1>
+                    <h1><?php echo $data['userDetails']->fname;  ?></h1>
                     <!-- Show other content or message -->
                     <?php endif; ?>
                 </div>
@@ -131,11 +131,11 @@
 
 
 
-                            <h2>Agency Details</h2>
+                           
                             <div class="hotel-details">
                                 <?php if (!empty($data['agencyDetails'])) : ?>
-                                <h6>Agency Name </h6>
-                                <p><?php echo $data['agencyDetails']->agency_name; ?></p>
+                                <h6>Manager Name </h6>
+                                <p><?php echo $data['agencyDetails']->manager_name; ?></p>
                                 <h6>Registration Number</h6>
                                 <p> <?php echo $data['agencyDetails']->reg_number; ?></p>
                                 <h6>Address </h6>
@@ -204,15 +204,15 @@ if (!empty($data) && isset($data['pendingBookings'])) {
                                 <!-- PHP code here -->
                                 <?php
             $pendingBookings = $data['pendingBookings'] ?? [];
-            $paymentAmounts = $data['paymentAmounts'] ?? [];
+
 
             $count = 0; // Initialize a counter variable
 
-            foreach (array_map(null, $pendingBookings, $paymentAmounts) as [$booking, $payment]) {
+            foreach ($pendingBookings as $booking) {
                 $count++; // Increment the counter for each iteration
             ?>
                                 <tr>
-                                    <td><?php echo $booking->traveler_details->fname . ' ' . $booking->traveler_details->lname; ?>
+                                    <td><?php echo $booking->fname . ' ' . $booking->lname; ?>
                                     <td><?php echo $booking->startDate; ?></td>
                                     <td><?php echo $booking->plate_number; ?></td>
                                     <td>

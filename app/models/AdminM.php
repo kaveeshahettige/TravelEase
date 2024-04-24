@@ -240,16 +240,18 @@ class AdminM{
     }
     //findAgencyDetail
     public function findAgencyDetail(){
-        $this->db->query("SELECT * from users where type='4' and approval='1'");
-        $data=$this->db->resultSet();
-
-        //check row
-        if($this->db->rowCount()>0){
-            return $data;
-        }else{
-            return null;
-        }
-    }
+      $this->db->query("SELECT u.*, ta.* FROM users u JOIN travelagency ta ON u.id = ta.user_id WHERE u.type = '4' AND u.approval = '1'");
+      $data = $this->db->resultSet();
+  
+      // Check row count
+      if($this->db->rowCount() > 0){
+          return $data;
+      } else {
+          return null;
+      }
+  }
+  
+  
 
     //findPackageDetail
     public function findPackageDetail(){
@@ -267,17 +269,61 @@ class AdminM{
     
    
 //findRequestDetail
-public function findRequestDetail(){
-    $this->db->query("SELECT * FROM users WHERE approval = '0' AND type NOT IN ('0', '1','2')");
-    $data=$this->db->resultSet();
+public function findHotelRequests(){
+  $this->db->query("
+      SELECT users.*, hotel.* 
+      FROM users 
+      LEFT JOIN hotel ON users.id = hotel.user_id 
+      WHERE users.approval = '0' AND users.type = '3'
+  ");
+  $data=$this->db->resultSet();
 
-    //check row
-    if($this->db->rowCount()>0){
-        return $data;
-    }else{
-        return null;
-    }
+  //check row
+  if($this->db->rowCount()>0){
+      return $data;
+  }else{
+      return null;
+  }
 }
+
+
+public function findAgencyRequests(){
+  $this->db->query("
+      SELECT users.*, travelagency.* 
+      FROM users 
+      LEFT JOIN travelagency ON users.id = travelagency.user_id 
+      WHERE users.approval = '0' AND users.type = '4'
+  ");
+  $data=$this->db->resultSet();
+
+  //check row
+  if($this->db->rowCount()>0){
+      return $data;
+  }else{
+      return null;
+  }
+}
+
+
+public function findGuideRequests(){
+  $this->db->query("
+      SELECT users.*, guides.* 
+      FROM users 
+      LEFT JOIN guides ON users.id = guides.user_id 
+      WHERE users.approval = '0' AND users.type = '5'
+  ");
+  $data=$this->db->resultSet();
+
+  //check row
+  if($this->db->rowCount()>0){
+      return $data;
+  }else{
+      return null;
+  }
+}
+
+
+
 
 public function deleteTraveler($id){
     $this->db->query('DELETE FROM users WHERE id = :id');

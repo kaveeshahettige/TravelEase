@@ -1,3 +1,7 @@
+<?php
+$timezone = date_default_timezone_get();
+echo "Current PHP timezone: " . $timezone;
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -69,19 +73,19 @@
                 <!-- Total Bookings Box -->
                 <div class="box">
                     <h2>Total Reviews</h2>
-                    <p>100</p>
+                    <p></p>
                 </div>
 
                 <!-- Ongoing Bookings Box -->
                 <div class="box">
                     <h2>Total Bookings</h2>
-                    <p>100</p>
+                    <p></p>
                 </div>
 
                 <!-- Customers Box -->
                 <div class="box">
                     <h2>Total Customers</h2>
-                    <p>50</p>
+                    <p></p>
                 </div>
             </div>
         </div>
@@ -97,50 +101,44 @@
 
 
         <?php
-        $completedBookings = $data['completedBookings'] ?? [];
+$feedbackDetails = $data['feedbackDetails'] ?? [];
 
-        foreach ($completedBookings as $feedback): ?>
-        <div class="review-content" >
-            <div class="feedback">
-
-                <div class="card">
-                    <div class="feedback-details">
-                    <img src="<?php echo URLROOT; ?>/images1/<?php echo $feedback->traveler_details->profile_picture; ?>" alt="Publisher Picture" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; display: inline-block; vertical-align: middle;">
-                    <!-- <img src="<?php echo URLROOT; ?>/images1/<?php echo $notifications->profile_picture ?>" alt="Sender Image" class="sender-image"> -->
-
-
-
-                        <span style="margin-bottom: 5px; display: inline-block; vertical-align: middle;">Publisher:
-                            <?php echo $feedback->traveler_details->fname . " " . ($feedback->traveler_details->lname ? $feedback->traveler_details->lname : ""); ?></span>
-                        <span style="margin-bottom: 5px; display:block;">&nbsp;
-                            &nbsp;&nbsp;&nbsp;<?php echo $feedback->feedbacks_details[0]->time; ?></span>
-
-                        <span style="margin-bottom: 5px; display:block;">
-                            <p style="margin-left: 15px;">Booking ID:
-                                <?php echo $feedback->feedbacks_details[0]->booking_id; ?></p>
-                        </span>
-                    </div>
-
-                    <div class="feedback-details">
-
-                    </div>
-                    <div class="rating">
-                        <!-- Display rating stars -->
-                        <?php for ($i = 0; $i < $feedback->feedbacks_details[0]->rating; $i++): ?>
-                        <span class="star">&#9733;</span>
-                        <?php endfor; ?>
-                    </div>
-                    <div class="comment">
-                        <!-- Display feedback comment -->
-                        <p><?php echo $feedback->feedbacks_details[0]->feedback; ?></p>
-                    </div>
-
+foreach ($feedbackDetails as $feedback): ?>
+    <div class="review-content">
+        <div class="feedback">
+            <div class="card">
+                <div class="feedback-details">
+                    <!-- Profile picture -->
+                    <img src="<?php echo URLROOT; ?>/images1/<?php echo $feedback->profile_picture; ?>" alt="Publisher Picture" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; display: inline-block; vertical-align: middle;">
+                    <!-- Publisher name -->
+                    <span style="margin-bottom: 5px; display: inline-block; vertical-align: middle;">Publisher:
+                        <?php echo $feedback->fname . " " . $feedback->lname; ?>
+                    </span>
+                    <!-- Time -->
+                    <span style="margin-bottom: 5px; display:block;">&nbsp;&nbsp;&nbsp;
+                        <?php echo $feedback->time; ?>
+                    </span>
+                    <!-- Booking ID -->
+                    <span style="margin-bottom: 5px; display:block;">
+                        <p style="margin-left: 15px;">Booking ID: <?php echo $feedback->booking_id; ?></p>
+                    </span>
                 </div>
-
+                <div class="feedback-details"></div>
+                <div class="rating">
+                    <!-- Rating stars -->
+                    <?php for ($i = 0; $i < $feedback->rating; $i++): ?>
+                        <span class="star">&#9733;</span>
+                    <?php endfor; ?>
+                </div>
+                <div class="comment">
+                    <!-- Feedback comment -->
+                    <p><?php echo $feedback->feedback; ?></p>
+                </div>
             </div>
-
         </div>
-        <?php endforeach; ?>
+    </div>
+<?php endforeach; ?>
+
 
 
 

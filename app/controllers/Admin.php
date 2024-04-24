@@ -37,17 +37,22 @@ class Admin extends Controller{
         
         public function request(){
           $admindetail=$this->userModel->getadmindata();
-          $requests=$this->userModel->findRequestDetail();
+          $hotelRequests=$this->userModel->findHotelRequests();
+          $guideRequests=$this->userModel->findGuideRequests();
+          $agencyRequests=$this->userModel->findAgencyRequests();
           $nore=$this->userModel->noOfRequests();
-          
+          // var_dump($hotelRequests);
           $data = [
-            'fname'=>$admindetail->fname,
-            'requests'=>$requests,
-            'nore'=>$nore,
-            // 'document'=>$document,
+              'fname'=>$admindetail->fname,
+              'hotelRequests'=>$hotelRequests,
+              'guideRequests'=>$guideRequests,
+              'agencyRequests'=>$agencyRequests,
+              'nore'=>$nore,
+              // 'document'=>$document,
           ];
-            $this->view('admin/request',$data);
-        }
+          $this->view('admin/request',$data);
+      }
+      
       
 
         public function hotel(){
@@ -95,6 +100,8 @@ class Admin extends Controller{
           $admindetail=$this->userModel->getadmindata();
           $no=$this->userModel->noOfAgencies();
           $agency=$this->userModel->findAgencyDetail();
+
+          // var_dump($agency);
           $data = [
             'no'=>$no,
             'agency'=>$agency,

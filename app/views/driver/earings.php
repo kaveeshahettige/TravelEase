@@ -67,91 +67,48 @@
 
 
 
-<div class="table-content">
-    <h2>Earnings Summary</h2>
-    <table class="booking-table">
-        <thead>
-            <tr>
-                <th>Time Period</th>
-                <th>Earnings</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $weeklyEarnings = 0;
-            $monthlyEarnings = 0;
-            if (!empty($data['payments'])) {
-                var_dump($data['totalEarnings']);
-                foreach ($data['payments'] as $payment) {
-                    // Assuming your date format is Y-m-d
-                    $paymentDate = new DateTime($payment->end_date);
-
-                    // Check if the payment date falls within the current week
-                    $currentWeek = (new DateTime())->format("W");
-                    if ($paymentDate->format("W") == $currentWeek) {
-                        $weeklyEarnings += $payment->earnings;
-                    }
-
-                    // Check if the payment date falls within the current month
-                    $currentMonth = (new DateTime())->format("m");
-                    if ($paymentDate->format("m") == $currentMonth) {
-                        $monthlyEarnings += $payment->earnings;
-                    }
-                }
-            }
-            ?>
-            <tr>
-                <td>Weekly</td>
-                <td>Rs. <?php echo number_format($weeklyEarnings, 2); ?></td>
-                <td><button class="view-button">View</button></td>
-            </tr>
-            <tr>
-                <td>Monthly</td>
-                <td>Rs. <?php echo number_format($monthlyEarnings, 2); ?></td>
-                <td><button class="view-button">View</button></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-
 
 <div class="table-content">
-    <h2>Payment History</h2>
-    <table class="booking-table">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Trip ID</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if (!empty($data['payments'])) {
-                $counter = 1;
-                foreach ($data['payments'] as $payment) :
-            ?>
+            <h2>Revenue Details</h2>
+            <?php if (empty($data["finalPayment"]) || !is_array($data["finalPayment"])): ?>
+                <p>No revenue details available.</p>
+            <?php else: ?>
+                <table class="booking-table">
+                    <thead>
                     <tr>
-                        <td><?php echo $counter; ?></td>
-                        <td><?php echo $payment->end_date; ?></td>
-                        <td>Rs. <?php echo number_format($payment->earnings, 2); ?></td>
-                        <td><?php echo $payment->trip_id; ?></td>
-                        <td><button class="view-button">View</button></td>
+                        <th>No</th>
+                        <th>Payment Date</th>
+                        <th>Total Amount</th>
+                        <th>TravelEase Revenue</th>
+                        <th>Payment Amount</th>
+                        <th>Invoice</th>
                     </tr>
-            <?php
-                    $counter++;
-                endforeach;
-            } else {
-                echo '<tr><td colspan="5">No payment history available.</td></tr>';
-            }
-            ?>
-        </tbody>
-    </table>
-</div>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($data["finalPayment"] as $key => $payment): ?>
+                        <tr>
+                            <td><?php echo $key + 1; ?></td>
+                            <td><?php echo $payment->paidDate; ?></td>
+                            <td><?php echo number_format($payment->paidAmount / 0.9, 2) . ' LKR'; ?></td>
+                            <td><?php echo number_format(($payment->paidAmount / 0.9) * 0.1, 2) . ' LKR'; ?></td>
+                            <td><?php echo strval($payment->paidAmount) . ' LKR'; ?></td>
+                            <td>
+                                <a href="../public/invoice/<?php echo $payment->invoice; ?>" target="_blank" class="view-button" title="View Document">
+                                    <i class="bx bx-show"></i>
+                                </a>
+                                <a href="../public/invoice/<?php echo $payment->invoice; ?>" download="<?php echo $payment->invoice; ?>" class="download-button" title="Download Document">
+                                    <i class="bx bx-download"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <div class="more-content">
+                    <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
+                </div>
+            <?php endif; ?>
+        </div>
 
 <div class="more-content">
     <button class="next-page-btn">More Payments <i class='bx bx-chevron-right'></i></button>

@@ -56,8 +56,8 @@
 
                         <div>
                             <div class="form-group">
-                                <label for="agency_name">Agency Name</label>
-                                <input type="text" id="agency_name" name="agency_name" required>
+                                <label for="manager_name">Manager Name</label>
+                                <input type="text" id="manager_name" name="manager_name" required>
                             </div>
                             <div class="form-group">
                                 <label for="reg_number">Registration Number</label>

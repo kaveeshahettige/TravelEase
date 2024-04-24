@@ -179,20 +179,9 @@
 
 
 
-                        <h2>Extras</h2>
+                        
 
-                        <div class="checkbox-group">
-                            <div class="row">
-                                <label><input type="checkbox" name="ac_type"> AC</label>
-                                <label><input type="checkbox" name="airbag"> Airbag</label>
-
-                                <label><input type="checkbox" name="nav"> NAV</label>
-                                <label><input type="checkbox" name="tv"> TV</label>
-
-                                <label><input type="checkbox" name="usb"> USB</label>
-                            </div>
-                        </div>
-
+                       
                         <label for="description">Description :</label>
                         <textarea id="description" name="description" rows="4" required></textarea>
 
@@ -200,21 +189,33 @@
 
 
 
-                        <div id="with_driver_fields" style="">
-                            <h3>With Driver Pricing:</h3>
-                            <div class="form-group">
-                                <label for="withDriverPerDayr">Per Day Price (LKR)*:</label>
-                                <input type="number" id="withDriverPerDay" name="withDriverPerDay" min="0" required>
-                            </div>
-                        </div>
+                        <h3>Without Driver Pricing:</h3>
 
-                        <div id="without_driver_fields" style="">
-                            <h3>Without Driver Pricing:</h3>
                             <div class="form-group">
                                 <label for="priceperday">Per Day Price (LKR)*:</label>
                                 <input type="number" id="priceperday" name="priceperday" min="0" required>
                             </div>
-                        </div>
+                            
+                            <h3>With Driver Pricing:</h3>
+
+                            <p class="description">Leave this field blank if no driver is provided.</p>
+
+                            <div class="form-group">
+                                <label for="withDriverPerDayr">Per Day Price (LKR)*:</label>
+                                <input type="number" id="withDriverPerDay" name="withDriverPerDay" min="0" >
+                            </div>
+                        
+                        
+                       
+                        
+                            <h3>Daily Kilometer Limit:</h3>
+                            <p class="description">Leave this field blank for unlimited kilometers.</p>
+
+                            <div class="form-group">
+                                <label for="dailyKmLimit">Kilometer Limit (LKR)*:</label>
+                                <input type="number" id="dailyKmLimit" name="dailyKmLimit" min="0" >
+                            </div>
+                        
 
                         <h2>Upload Photos</h2>
 
@@ -256,6 +257,19 @@
                                 <input type="file" id="revenue" name="revenue" class="imageUpload" accept="image/*">
                             </div>
                         </div>
+                        <h2>Extras</h2>
+                        <div class="checkbox-group">
+                            <div class="row">
+                                <label><input type="checkbox" name="ac_type"> AC</label>
+                                <label><input type="checkbox" name="airbag"> Airbag</label>
+
+                                <label><input type="checkbox" name="nav"> NAV</label>
+                                <label><input type="checkbox" name="tv"> TV</label>
+
+                                <label><input type="checkbox" name="usb"> USB</label>
+                            </div>
+                        </div>
+
 
 
                         <p>If the vehicle owner name on the vehicle documents is different from mine, then I

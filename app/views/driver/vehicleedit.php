@@ -124,14 +124,6 @@
 
 
                         <h2>Pricing</h2>
-                        <div id="with_driver_fields">
-                            <h3>With Driver Pricing:</h3>
-                            <div class="form-group">
-                                <label for="withDriverPerDayr">Per Day Price (LKR)*:</label>
-                                <input type="number" id="withDriverPerDay" name="withDriverPerDay" min="0"
-                                    value="<?php echo $data['withDriverPerDay']; ?>">
-                            </div>
-                        </div>
 
                         <div id="without_driver_fields">
                             <h3>Without Driver Pricing:</h3>
@@ -142,7 +134,30 @@
                             </div>
                         </div>
 
+                        <div id="with_driver_fields">
+                            <h3>With Driver Pricing:</h3>
 
+                            <div class="form-group">
+                                <label for="withDriverPerDayr">Per Day Price (LKR)*:</label>
+                                <input type="number" id="withDriverPerDay" name="withDriverPerDay" min="0"
+                                    value="<?php echo $data['withDriverPerDay']; ?>">
+                            </div>
+                        </div>
+                        <p class="description">Leave this field blank if no driver is provided.</p>
+
+                        <div id="dailyKmLimit_fields">
+                            
+                        <h3>Daily Kilometer Limit:</h3>
+
+                            <div class="form-group">
+                                <label for="dailyKmLimit">Kilometer Limit (LKR)*:</label>
+                                <input type="number" id="dailyKmLimit" name="dailyKmLimit" min="0"
+                                value="<?php echo $data['dailyKmLimit']; ?>"> 
+                            </div>
+
+                            </div>
+
+                            <p class="">Leave this field blank for unlimited kilometers.</p>
 
 
 

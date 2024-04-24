@@ -17,9 +17,11 @@
 
 </head>
 
-<?php
-        // var_dump($data['completedBookings']);
-        ?>
+
+ <?php
+                // var_dump($data['completedBookings']);
+
+// var_dump($data['vehicle'])?> 
 
 
 <body>
@@ -83,19 +85,19 @@
                 <!-- Total Bookings Box -->
                 <div class="box">
                     <h2>Total Bookings</h2>
-                    <p>120</p>
+                    <p></p>
                 </div>
 
                 <!-- Ongoing Bookings Box -->
                 <div class="box">
                     <h2>Ongoing Bookings</h2>
-                    <p>35</p>
+                    <p></p>
                 </div>
 
                 <!-- Customers Box -->
                 <div class="box">
                     <h2>Total Customers</h2>
-                    <p>10</p>
+                    <p></p>
                 </div>
             </div>
         </div>
@@ -109,16 +111,6 @@
             </div>
         </div>
 
-        <?php
-// Add this before the foreach loop
-// var_dump($data);
-// var_dump($data['plateNumber']);
-
-//  var_dump($data['paymentAmounts']);
-
-
-
-?>
         <div class="table-content">
             <h2>Pending Booking Details</h2>
             <?php
@@ -136,8 +128,6 @@
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Time</th>
-                        <th>Pickup Location</th>
-                        <th>End Location</th>
                         <th>Vehicle Plate Number</th>
                         <th>Amount</th>
                         <th>With Driver</th>
@@ -147,31 +137,26 @@
                 <tbody>
                     <?php
                 $pendingBookings = $data['pendingBookings'] ?? [];
-                $paymentAmounts = $data['paymentAmounts'] ?? [];
-
+                
                 $count = 0; // Initialize a counter variable
 
-                foreach (array_map(null, $pendingBookings, $paymentAmounts) as [$booking, $payment]) {
+                foreach ($pendingBookings as $booking) {
                     $count++; // Increment the counter for each iteration
                 ?>
                     <tr>
                         <td><?php echo $count; ?></td> <!-- Display the count -->
                         <td><?php echo $booking->booking_id; ?></td>
                         <!-- <td><?php echo $booking->temporyid; ?></td> -->
-                        <td><?php echo $booking->traveler_details->fname . ' ' . $booking->traveler_details->lname; ?>
+                        <td><?php echo $booking->fname . ' ' . $booking->lname; ?>
                         </td>
-                        <td><?php echo $booking->traveler_details->number; ?></td>
+                        <td><?php echo $booking->number; ?></td>
                         <td><?php echo $booking->startDate; ?></td>
                         <td><?php echo $booking->endDate; ?></td>
                         <td><?php echo $booking->start_time; ?></td>
-                        <td><?php echo $booking->Pickup_Location; ?></td>
-                        <td><?php echo $booking->End_Location; ?></td>
                         <td><?php echo $booking->plate_number; ?></td>
-                        <td><?php echo $payment[0]; ?></td>
+                        <td><?php echo $booking->payment_amount; ?></td>
                         <td><?php echo $booking->withDriver ? 'Yes' : 'No'; ?></td>
-                        <td><button class="cancel-button"
-                                <?php if ($booking->bookingCondition === 'cancelled') echo 'disabled'; ?>
-                                onclick="showCancelPopup(<?php echo $booking->agency_id; ?>, <?php echo $booking->user_id; ?>, '<?php echo $booking->booking_id;?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->endDate; ?>', <?php echo $booking->temporyid; ?>')">
+                        <td><button class="cancel-button">
                                 <i class='bx bx-x'></i>
                             </button></td>
 
@@ -183,6 +168,8 @@
             </table>
             <?php } ?>
         </div>
+        
+
 
         <div class="dashboard-content">
             <h1>Trip History</h1>
@@ -194,7 +181,7 @@
                 <!-- Total Request Box -->
                 <div class="box">
                     <h2>Total Trips</h2>
-                    <p>200</p>
+                    <p></p>
                 </div>
 
 
@@ -210,63 +197,66 @@
             </div>
         </div>
         <div class="table-content">
-    <h2>Completed Booking Details</h2>
-    <table class="booking-table">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Trip ID</th>
-                <th>Trip Charges</th>
-                <th>Rating</th>
-                <th>Comments</th>
-                <th>More Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
+            <h2>Completed Booking Details</h2>
+            <table class="booking-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Trip ID</th>
+                        <th>Trip Charges</th>
+                        <!-- <th>Rating</th> -->
+                        <!-- <th>Comments</th> -->
+                        <th>More Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+
+                    
             // Check if $data exists and has the expected structure
-            if (!empty($data) && isset($data['completedBookings']) && isset($data['CpaymentAmounts'])) {
+            if (!empty($data) && isset($data['completedBookings']) ) {
                 $completedBookings = $data['completedBookings'];
-                $CpaymentAmounts = $data['CpaymentAmounts'];
+                // var_dump($data['completedBookings']);
                 $count = 0; // Initialize a counter variable
 
-                foreach (array_map(null, $completedBookings, $CpaymentAmounts) as $pair) {
-                    list($booking, $payment) = $pair;
+                foreach ($completedBookings as $Cbooking) {
+                    
                     $count++; // Increment the counter for each iteration
             ?>
-            <tr>
-                <td><?php echo $count; ?></td>
-                <td><?php echo $booking->booking_id; ?></td>
-                <td><?php echo $payment[0]; ?></td>
-                <td><?php echo isset($booking->feedbacks_details[0]->rating) ? $booking->feedbacks_details[0]->rating : 'N/A'; ?></td>
-                <td><?php echo isset($booking->feedbacks_details[0]->feedback) ? $booking->feedbacks_details[0]->feedback : 'No feedback'; ?></td>
-                <td>
-                    <!-- Add onclick event to trigger showDetails function -->
-                    <button class="view-button" onclick="showDetails(<?php echo $count; ?>,
-    '<?php echo $booking->booking_id; ?>',
-    '<?php echo $booking->traveler_details->fname . ' ' . $booking->traveler_details->lname; ?>',
-    '<?php echo $booking->traveler_details->number; ?>',
-    '<?php echo $booking->startDate; ?>',
-    '<?php echo $booking->endDate; ?>',
-    '<?php echo $booking->start_time; ?>',
-    '<?php echo $booking->plate_number; ?>',
-    '<?php echo $booking->Pickup_Location; ?>',
-    '<?php echo $booking->End_Location; ?>',
-    '<?php echo $payment[0]; ?>',
-    '<?php echo isset($booking->feedbacks_details[0]->rating) ? $booking->feedbacks_details[0]->rating : 'N/A'; ?>',
-    '<?php echo isset($booking->feedbacks_details[0]->feedback) ? $booking->feedbacks_details[0]->feedback : 'No feedback'; ?>')">More</button>
-</td>
-            </tr>
-            <?php
+                    <tr>
+                        <td><?php echo $count; ?></td>
+                        <td><?php echo $Cbooking->booking_id; ?></td>
+                        <td><?php echo $Cbooking->payment_amount; ?></td>
+                        <!-- <td><?php echo isset($Cbooking->feedbacks_details[0]->rating) ? $booking->feedbacks_details[0]->rating : 'N/A'; ?> -->
+                        <!-- </td> -->
+                        <!-- <td><?php echo isset($Cbooking->feedbacks_details[0]->feedback) ? $booking->feedbacks_details[0]->feedback : 'No feedback'; ?> -->
+                        <!-- </td> -->
+                        <td>
+                            <!-- Add onclick event to trigger showDetails function -->
+                            <button class="view-button"
+                                onclick="showDetails(<?php echo $count; ?>,
+    '<?php echo $Cbooking->booking_id; ?>',
+    '<?php echo $Cbooking->fname . ' ' . $booking->lname; ?>',
+    '<?php echo $Cbooking->number; ?>',
+    '<?php echo $Cbooking->startDate; ?>',
+    '<?php echo $Cbooking->endDate; ?>',
+    '<?php echo $Cbooking->start_time; ?>',
+    '<?php echo $Cbooking->plate_number; ?>',
+    '<?php echo $Cbooking->payment_amount; ?>',
+
+    '<?php echo isset($Cbooking->feedbacks_details[0]->feedback) ? $booking->feedbacks_details[0]->feedback : 'No feedback'; ?>')">More</button>
+                        </td>
+                    </tr>
+                    <?php
                 }
             } else {
                 // Handle case where data is missing or not in expected format
                 echo '<tr><td colspan="6">No data available</td></tr>';
             }
             ?>
-        </tbody>
-    </table>
-</div>
+                </tbody>
+            </table>
+        </div>
 
 
 
@@ -276,13 +266,14 @@
     </main>
 
     <script>
-    function showDetails(rowNumber, bookingId,travelerName,travelerNumber, startDate, endDate,start_time, plate_number,pickupLocation,endLocation,payment, rating, feedback) {
-    var popupContainer = document.createElement('div');
-    popupContainer.classList.add('popup-container');
+    function showDetails(rowNumber, bookingId, travelerName, travelerNumber, startDate, endDate, start_time,
+        plate_number, payment, rating, feedback) {
+        var popupContainer = document.createElement('div');
+        popupContainer.classList.add('popup-container');
 
-    var popupContent = document.createElement('div');
-    popupContent.classList.add('popup-content');
-    popupContent.innerHTML = `
+        var popupContent = document.createElement('div');
+        popupContent.classList.add('popup-content');
+        popupContent.innerHTML = `
   
 
 <div class="popup-content">
@@ -308,24 +299,11 @@
     <div class="booking-detail">
         <strong>Vehicle Number:</strong> ${plate_number}
     </div>
-    <div class="booking-detail">
-        <strong>Pickup Location:</strong> ${pickupLocation}
-    </div>
-    <div class="booking-detail">
-        <strong>End Location:</strong> ${endLocation}
-    </div>
-    <div class="booking-detail">
-        <strong>Rating:</strong>
-        <div class="rating-stars">
-            ${generateRatingStars(rating)}
-        </div>
-    </div>
+   
     <div class="booking-detail">
         <strong>Amount:</strong> ${payment}
     </div>
-    <div class="booking-detail">
-        <strong>Feedback:</strong> ${feedback}
-    </div>
+   
 </div>
 
 
@@ -335,31 +313,30 @@
 
 `;
 
-function generateRatingStars(rating) {
-        let stars = '';
-        for (let i = 1; i <= 5; i++) {
-            if (i <= rating) {
-                stars += '<span class="rating-stars"></span>';
-            } else {
-                stars += '<span class="rating-stars empty"></span>';
+        function generateRatingStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<span class="rating-stars"></span>';
+                } else {
+                    stars += '<span class="rating-stars empty"></span>';
+                }
             }
+            return stars;
         }
-        return stars;
+
+
+        popupContainer.appendChild(popupContent);
+        document.body.appendChild(popupContainer);
+
+        // Close the popup when clicked outside the content
+        popupContainer.addEventListener('click', function(event) {
+            if (event.target === popupContainer) {
+                document.body.removeChild(popupContainer);
+            }
+        });
     }
-
-
-    popupContainer.appendChild(popupContent);
-    document.body.appendChild(popupContainer);
-
-    // Close the popup when clicked outside the content
-    popupContainer.addEventListener('click', function (event) {
-        if (event.target === popupContainer) {
-            document.body.removeChild(popupContainer);
-        }
-    });
-}
-
-</script>
+    </script>
 </body>
 
 

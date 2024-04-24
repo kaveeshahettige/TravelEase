@@ -190,7 +190,7 @@ class Travel{
     
 
     public function vehicleDetails($agency_id) {
-        $this->db->query('SELECT * FROM vehicles WHERE agency_id = :agency_id AND status = "1"');
+        $this->db->query('SELECT * FROM vehicles WHERE agency_id = :agency_id');
         $this->db->bind(':agency_id', $agency_id);
         $data = $this->db->resultSet();
         $data = json_decode(json_encode($data), true);
@@ -216,7 +216,8 @@ class Travel{
             airbag = :airbag,
             tv = :tv,
             usb = :usb,
-            ac_type = :ac_type
+            ac_type = :ac_type,
+            dailyKmLimit = :dailyKmLimit
             WHERE vehicle_id = :vehicle_id";
         
         $this->db->query($query);
@@ -234,6 +235,7 @@ class Travel{
         $this->db->bind(':tv', $data['tv']);
         $this->db->bind(':usb', $data['usb']);
         $this->db->bind(':ac_type', $data['ac_type']);
+        $this->db->bind(':dailyKmLimit', $data['dailyKmLimit']);
         
         // Execute the query
         if ($this->db->execute()) {
@@ -246,7 +248,7 @@ class Travel{
     
     
     public function vehicles($vehicle_id) {
-        $this->db->query('SELECT * FROM vehicles WHERE vehicle_id = :vehicle_id AND status = "1"');
+        $this->db->query('SELECT * FROM vehicles WHERE vehicle_id = :vehicle_id');
         $this->db->bind(':vehicle_id', $vehicle_id);
         $data = $this->db->single(); // Assuming you only fetch one vehicle
         return $data;
@@ -317,149 +319,187 @@ class Travel{
             }
         }
 
- 
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ // Assuming you have a Model class with a method to execute queries
+
+//  public function getPendingBookings($userId) {
+//     $sql = "SELECT * FROM bookings WHERE serviceProvider_id = :userId AND bookingCondition = 'pending' AND room_id IS NULL
+//             UNION ALL
+//             SELECT * FROM cartbookings WHERE serviceProvider_id = :userId AND bookingCondition = 'pending' AND room_id IS NULL";
+
+//     $this->db->query($sql);
+//     $this->db->bind(':userId', $userId);
+//     $this->db->execute();
+    
+//     return $this->db->resultSet(); // Fetch as a result set
+// }
+
+
+public function getVehicleDetailsForBooking($bookingId) {
+    $sql = "SELECT v.plate_number
+            FROM vehicles v
+            JOIN vehicle_bookings vb ON v.vehicle_id = vb.vehicle_id
+            WHERE vb.booking_id = :bookingId";
+
+    $this->db->query($sql);
+    $this->db->bind(':bookingId', $bookingId);
+    $this->db->execute();
+    
+    return $this->db->single(); // Fetch as an associative array
+}
+
+public function getPaymentDetailsForBooking($bookingId) {
+    $sql = "SELECT amount, payment_date
+            FROM payments
+            WHERE booking_id = :bookingId
+            UNION
+            SELECT amount, payment_date
+            FROM cartpayments
+            WHERE booking_id = :bookingId";
+
+    $this->db->query($sql);
+    $this->db->bind(':bookingId', $bookingId);
+    $this->db->execute();
+    
+    return $this->db->resultSet(); // Fetch as a result set
+}
+
 
 
 
         
     
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        public function getAgencyId($user_id) {
-            $this->db->query('SELECT agency_id FROM travelagency WHERE user_id = :user_id');
-            $this->db->bind(':user_id', $user_id);
-            $row = $this->db->single();
+        // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // public function getAgencyId($user_id) {
+        //     $this->db->query('SELECT agency_id FROM travelagency WHERE user_id = :user_id');
+        //     $this->db->bind(':user_id', $user_id);
+        //     $row = $this->db->single();
             
-            if ($row) {
-                return $row->agency_id;
-            } else {
-                return null;
-            }
-        }
-        public function getPendingBookings($agencyId) {
-            $sql = "(SELECT 
-                       b.temporyid, b.booking_id, b.user_id, b.startDate, b.endDate, b.vehicle_id, b.bookingCondition, b.bookingDate, ta.agency_id
-                    FROM 
-                        bookings b
-                    JOIN 
-                        travelagency ta ON b.serviceProvider_id = ta.agency_id
-                    WHERE 
-                        ta.agency_id = :agency_id
-                    AND 
-                        b.bookingCondition = 'pending'
-                    AND  
-                        b.vehicle_id != 0)
-                    UNION
-                    (SELECT 
-                    cb.temporyid, cb.booking_id AS booking_id, cb.user_id, cb.startDate, cb.endDate, cb.vehicle_id, cb.bookingCondition, cb.bookingDate, ta.agency_id
-                    FROM 
-                        cartbookings cb
-                    JOIN 
-                        travelagency ta ON cb.serviceProvider_id = ta.agency_id
-                    WHERE 
-                        ta.agency_id = :agency_id
-                    AND 
-                        cb.bookingCondition = 'pending'
-                    AND  
-                        cb.vehicle_id != 0)";
+        //     if ($row) {
+        //         return $row->agency_id;
+        //     } else {
+        //         return null;
+        //     }
+        // }
+        // public function getPendingBookings($userId) {
+        //     $sql = "(SELECT 
+        //                b.temporyid, b.booking_id, b.user_id, b.startDate, b.endDate, b.vehicle_id, b.bookingCondition, b.bookingDate, ta.agency_id
+        //             FROM 
+        //                 bookings b
+        //             JOIN 
+        //             travelagency ta ON b.serviceProvider_id = ta.user_id
+        //             WHERE 
+        //                 ta.user_id = :user_id
+        //             AND 
+        //                 b.bookingCondition = 'pending'
+        //             AND  
+        //                 b.vehicle_id != 0)
+        //             UNION
+        //             (SELECT 
+        //             cb.temporyid, cb.booking_id AS booking_id, cb.user_id, cb.startDate, cb.endDate, cb.vehicle_id, cb.bookingCondition, cb.bookingDate, ta.agency_id
+        //             FROM 
+        //                 cartbookings cb
+        //             JOIN 
+        //                 travelagency ta ON cb.serviceProvider_id = ta.user_id
+        //             WHERE 
+        //                 ta.user_id = :user_id
+        //             AND 
+        //                 cb.bookingCondition = 'pending'
+        //             AND  
+        //                 cb.vehicle_id != 0)";
                         
-            $this->db->query($sql);
-            $this->db->bind(':agency_id', $agencyId);
-            $this->db->execute();
+        //     $this->db->query($sql);
+        //     $this->db->bind(':user_id', $userId);
+        //     $this->db->execute();
             
-            return $this->db->resultSet();
-        }
+        //     return $this->db->resultSet();
+        // }
 
-        public function getCompletedBookings($agencyId) {
-            $sql = "(SELECT 
-                        b.booking_id, b.user_id, b.startDate, b.endDate, b.vehicle_id, b.bookingCondition, b.bookingDate, ta.agency_id
-                    FROM 
-                        bookings b
-                    JOIN 
-                        travelagency ta ON b.serviceProvider_id = ta.agency_id
-                    WHERE 
-                        ta.agency_id = :agency_id
-                    AND 
-                        b.bookingCondition = 'complete'
-                    AND  
-                        b.vehicle_id != 0)
-                    UNION
-                    (SELECT 
-                        cb.temporyid AS booking_id, cb.user_id, cb.startDate, cb.endDate, cb.vehicle_id, cb.bookingCondition, cb.bookingDate, ta.agency_id
-                    FROM 
-                        cartbookings cb
-                    JOIN 
-                        travelagency ta ON cb.serviceProvider_id = ta.agency_id
-                    WHERE 
-                        ta.agency_id = :agency_id
-                    AND 
-                        cb.bookingCondition = 'complete'
-                    AND  
-                        cb.vehicle_id != 0)";
+        // public function getCompletedBookings($agencyId) {
+        //     $sql = "(SELECT 
+        //                 b.booking_id, b.user_id, b.startDate, b.endDate, b.vehicle_id, b.bookingCondition, b.bookingDate, ta.agency_id
+        //             FROM 
+        //                 bookings b
+        //             JOIN 
+        //                 travelagency ta ON b.serviceProvider_id = ta.agency_id
+        //             WHERE 
+        //                 ta.agency_id = :agency_id
+        //             AND 
+        //                 b.bookingCondition = 'complete'
+        //             AND  
+        //                 b.vehicle_id != 0)
+        //             UNION
+        //             (SELECT 
+        //                 cb.temporyid AS booking_id, cb.user_id, cb.startDate, cb.endDate, cb.vehicle_id, cb.bookingCondition, cb.bookingDate, ta.agency_id
+        //             FROM 
+        //                 cartbookings cb
+        //             JOIN 
+        //                 travelagency ta ON cb.serviceProvider_id = ta.agency_id
+        //             WHERE 
+        //                 ta.agency_id = :agency_id
+        //             AND 
+        //                 cb.bookingCondition = 'complete'
+        //             AND  
+        //                 cb.vehicle_id != 0)";
                         
-            $this->db->query($sql);
-            $this->db->bind(':agency_id', $agencyId);
-            $this->db->execute();
+        //     $this->db->query($sql);
+        //     $this->db->bind(':agency_id', $agencyId);
+        //     $this->db->execute();
             
-            return $this->db->resultSet();
-        }
+        //     return $this->db->resultSet();
+        // }
 
 
       
      
         
-        public function getPlateNumberForVehicle($vehicleId) {
-            $sql = "SELECT plate_number FROM vehicles WHERE vehicle_id = :vehicle_id";
-            $this->db->query($sql);
-            $this->db->bind(':vehicle_id', $vehicleId);
-            $this->db->execute();
+        // public function getPlateNumberForVehicle($vehicleId) {
+        //     $sql = "SELECT plate_number FROM vehicles WHERE vehicle_id = :vehicle_id";
+        //     $this->db->query($sql);
+        //     $this->db->bind(':vehicle_id', $vehicleId);
+        //     $this->db->execute();
         
-            return $this->db->single(); // Fetch as an associative array
-        }
-        public function getTravelerDetails($userId) {
-            $sql = "SELECT * FROM users WHERE id = :user_id";
-            $this->db->query($sql);
-            $this->db->bind(':user_id', $userId);
-            $this->db->execute();
+        //     return $this->db->single(); // Fetch as an associative array
+        // }
+        // public function getTravelerDetails($userId) {
+        //     $sql = "SELECT * FROM users WHERE id = :user_id";
+        //     $this->db->query($sql);
+        //     $this->db->bind(':user_id', $userId);
+        //     $this->db->execute();
         
-            return $this->db->single(); // Fetch as an associative array
-        }
+        //     return $this->db->single(); // Fetch as an associative array
+        // }
         
-        public function getVehicleBookingDetails($bookingId) {
-            $sql = "SELECT start_time, withDriver, Pickup_Location, End_Location FROM vehicle_bookings WHERE booking_id = :booking_id";
-            $this->db->query($sql);
-            $this->db->bind(':booking_id', $bookingId);
-            $this->db->execute();
+        // public function getVehicleBookingDetails($bookingId) {
+        //     $sql = "SELECT start_time, withDriver, Pickup_Location, End_Location FROM vehicle_bookings WHERE booking_id = :booking_id";
+        //     $this->db->query($sql);
+        //     $this->db->bind(':booking_id', $bookingId);
+        //     $this->db->execute();
         
-            return $this->db->single(); // Fetch as an associative array
-        }
-        public function getPaymentAmountForBooking($bookingId) {
-            $sql = "SELECT amount FROM payments WHERE booking_id = :booking_id 
-                    UNION ALL 
-                    SELECT amount FROM cartpayments WHERE booking_id = :booking_id";
-            $this->db->query($sql);
-            $this->db->bind(':booking_id', $bookingId);
-            $this->db->execute();
+        //     return $this->db->single(); // Fetch as an associative array
+        // }
+        // public function getPaymentAmountForBooking($bookingId) {
+        //     $sql = "SELECT amount FROM payments WHERE booking_id = :booking_id 
+        //             UNION ALL 
+        //             SELECT amount FROM cartpayments WHERE booking_id = :booking_id";
+        //     $this->db->query($sql);
+        //     $this->db->bind(':booking_id', $bookingId);
+        //     $this->db->execute();
         
-            // Fetch all rows as an associative array
-            $rows = $this->db->resultSet();
+        //     // Fetch all rows as an associative array
+        //     $rows = $this->db->resultSet();
         
-            $paymentAmounts = [];
-            foreach ($rows as $row) {
-                $paymentAmounts[] = $row->amount;
-            }
+        //     $paymentAmounts = [];
+        //     foreach ($rows as $row) {
+        //         $paymentAmounts[] = $row->amount;
+        //     }
         
-            return $paymentAmounts;
-        }
+        //     return $paymentAmounts;
+        // }
         
 
-        public function getFeedbacks($bookingId){
-            $sql = "SELECT * FROM feedbacksnratings WHERE booking_id = :booking_id";
-            $this->db->query($sql);
-            $this->db->bind(':booking_id', $bookingId);
-            $this->db->execute();
-                    
-            return $this->db->resultSet(); // Fetch all rows
-        }
+     
         public function updateBookingCondition($bookingId, $tempId) {
             if ($tempId == 0) {
                 $sql = "UPDATE bookings SET bookingCondition = 'cancelled' WHERE booking_id = :bookingId";
@@ -491,7 +531,15 @@ class Travel{
         
      ///////////////////////////////////////////////////////////////////////////////////////////////  
 
-    
+     public function getNotificationCount($userId){
+        $sql = "SELECT COUNT(*) AS count FROM notifications WHERE receiver_id = :user_id";
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $userId);
+        $this->db->execute();
+        
+        $row = $this->db->single();
+        return $row->count;
+    }
         
         public function getNotifications($userId){
             $sql = "SELECT n.*,u.* FROM notifications n 
@@ -506,15 +554,36 @@ class Travel{
         }
 
         //getNotificationCount
-        public function getNotificationCount($userId){
-            $sql = "SELECT COUNT(*) AS count FROM notifications WHERE receiver_id = :user_id";
+       
+
+        public function getCompletedBookingFeedback($userId) {
+            $sql = "SELECT u.fname, u.lname, u.profile_picture, fr.user_id, fr.feedback, fr.rating, fr.time ,fr.booking_id
+            FROM feedbacksnratings fr
+            JOIN users u ON fr.user_id = u.id
+            WHERE fr.booking_id IN (
+                SELECT booking_id FROM bookings WHERE serviceProvider_id = :user_id AND bookingCondition = 'completed'
+                UNION
+                SELECT booking_id FROM cartbookings WHERE serviceProvider_id = :user_id AND bookingCondition = 'completed'
+            )
+            AND fr.fservice_id = :user_id";
+        
+            // Debugging
+        
+        
+            // Prepare and execute the query
             $this->db->query($sql);
             $this->db->bind(':user_id', $userId);
             $this->db->execute();
-            
-            $row = $this->db->single();
-            return $row->count;
+        
+            // Debugging
+            return $this->db->resultSet();
         }
+        
+        
+        
+        
+        
+        
         
         
         
@@ -582,7 +651,7 @@ class Travel{
         }
          
         public function getVehicleCount($agencyId){
-            $this->db->query('SELECT COUNT(*) AS count FROM vehicles WHERE agency_id = :agency_id AND status=1');
+            $this->db->query('SELECT COUNT(*) AS count FROM vehicles WHERE agency_id = :agency_id');
             $this->db->bind(':agency_id', $agencyId);
             $row = $this->db->single();
             return $row->count;
@@ -674,25 +743,27 @@ class Travel{
             // Execute the query
             return $this->db->execute();
         }
-        
         public function updateAgencyDetails($data) {
-            $query = "UPDATE travelagency SET agency_name = :agency_name, reg_number = :reg_number, address = :address, city = :city, description = :description, website = :website, facebook = :facebook, twitter = :twitter, instagram = :instagram WHERE agency_id = :agency_id";
-            $this->db->query($query);
+    $query = "UPDATE travelagency SET reg_number = :reg_number, address = :address, city = :city, description = :description, website = :website, facebook = :facebook, twitter = :twitter, instagram = :instagram, manager_name = :manager_name, account_number = :account_number WHERE agency_id = :agency_id";
+    $this->db->query($query);
+    
+    $this->db->bind(':agency_id', $data['agency_id']);
+    $this->db->bind(':reg_number', $data['reg_number']);
+    $this->db->bind(':address', $data['address']);
+    $this->db->bind(':city', $data['city']);
+    $this->db->bind(':description', $data['description']);
+    $this->db->bind(':website', $data['website']);
+    $this->db->bind(':facebook', $data['facebook']);
+    $this->db->bind(':twitter', $data['twitter']);
+    $this->db->bind(':instagram', $data['instagram']);
+    $this->db->bind(':manager_name', $data['manager_name']);
+    $this->db->bind(':account_number', $data['account_number']);
+    
+    // Execute the query
+    return $this->db->execute();
+}
+
         
-            $this->db->bind(':agency_id', $data['agency_id']);
-            $this->db->bind(':agency_name', $data['agency_name']);
-            $this->db->bind(':reg_number', $data['reg_number']);
-            $this->db->bind(':address', $data['address']);
-            $this->db->bind(':city', $data['city']);
-            $this->db->bind(':description', $data['description']);
-            $this->db->bind(':website', $data['website']);
-            $this->db->bind(':facebook', $data['facebook']);
-            $this->db->bind(':twitter', $data['twitter']);
-            $this->db->bind(':instagram', $data['instagram']);
-        
-            // Execute the query
-            return $this->db->execute();
-        }
 
         // TravelsModel.php
 
@@ -731,7 +802,7 @@ public function updatePassword($user_id, $new_password){
         
      
 public function saveVehicle($data) {
-    $query = "INSERT INTO vehicles (agency_id, brand, model, plate_number, fuel_type, year, priceperday, seating_capacity, ac_type, description, vehicle_type, number_of_doors, nav, airbag, tv, usb, withDriverPerDay, image, vehi_img2, vehi_img3, vehi_img4, insurance, registration, revenue, status) VALUES (:agency_id, :brand, :model, :plate_number, :fuel_type, :year, :priceperday, :seating_capacity, :ac_type, :description, :vehicle_type, :number_of_doors, :nav, :airbag, :tv, :usb, :withDriverPerDay, :image, :vehi_img2, :vehi_img3, :vehi_img4, :insurance, :registration, :revenue, 1)";
+    $query = "INSERT INTO vehicles (agency_id, brand, model, plate_number, fuel_type, year, priceperday, seating_capacity, ac_type, description, vehicle_type, number_of_doors, nav, airbag, tv, usb, withDriverPerDay, image, vehi_img2, vehi_img3, vehi_img4, insurance, registration, revenue,dailyKmLimit) VALUES (:agency_id, :brand, :model, :plate_number, :fuel_type, :year, :priceperday, :seating_capacity, :ac_type, :description, :vehicle_type, :number_of_doors, :nav, :airbag, :tv, :usb, :withDriverPerDay, :image, :vehi_img2, :vehi_img3, :vehi_img4, :insurance, :registration, :revenue,:dailyKmLimit)";
 
     $this->db->query($query);
     $this->db->bind(':agency_id', $data['agency_id']);
@@ -758,6 +829,7 @@ public function saveVehicle($data) {
     $this->db->bind(':insurance', $data['insurance']);
     $this->db->bind(':registration', $data['registration']);
     $this->db->bind(':revenue', $data['revenue']);
+    $this->db->bind(':dailyKmLimit', $data['dailyKmLimit']);
 
     // Execute the query
     return $this->db->execute();
@@ -765,10 +837,9 @@ public function saveVehicle($data) {
 
 
 public function addAgency($data) {
-    $query = "INSERT INTO travelagency (agency_name, reg_number, address, city, description, website, facebook, twitter, instagram, card_holder_name, account_number, user_id) VALUES (:agency_name, :reg_number, :address, :city, :description, :website, :facebook, :twitter, :instagram, :card_holder_name, :account_number, :user_id)";
+    $query = "INSERT INTO travelagency (reg_number, address, city, description, website, facebook, twitter, instagram, card_holder_name, account_number, manager_name, user_id) VALUES (:reg_number, :address, :city, :description, :website, :facebook, :twitter, :instagram, :card_holder_name, :account_number, :manager_name, :user_id)";
     
     $this->db->query($query);
-    $this->db->bind(':agency_name', $data['agency_name']);
     $this->db->bind(':reg_number', $data['reg_number']);
     $this->db->bind(':address', $data['address']);
     $this->db->bind(':city', $data['city']);
@@ -779,11 +850,13 @@ public function addAgency($data) {
     $this->db->bind(':instagram', $data['instagram']);
     $this->db->bind(':card_holder_name', $data['card_holder_name']);
     $this->db->bind(':account_number', $data['account_number']);
+    $this->db->bind(':manager_name', $data['manager_name']);
     $this->db->bind(':user_id', $data['user_id']);
 
     // Execute the query
     return $this->db->execute();
 }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // cancel bookings
 
@@ -842,8 +915,444 @@ public function insertNotification($booking_id, $sender_id, $receiver_id, $notif
        
     
         
+        /*bookings new*/
+
+        // public function getPendingBookings($userId){
+        //     $query = "SELECT * 
+        //     FROM bookings AS b
+        //     JOIN cartbookings AS cb ON b.serviceProvider_id = cb.serviceProvider_id
+        //     WHERE b.serviceProvider_id = :userId
+        //     AND b.room_id IS NULL
+        //     AND cb.room_id IS NULL
+        //     AND b.bookingCondition = 'pending'
+        //     AND cb.bookingCondition = 'pending';
+            
+        //     ";
+        //     $this->db->query($query);
+        //     $this->db->bind(':userId', $userId); 
+            
+        //     // Corrected placeholder name
+        //     $this->db->execute();
+        //     return $this->db->resultSet();
+        // }
+        //  public function getPendingBookings($userId){
+        //     $query = "SELECT * from bookings WHERE serviceProvider_id = :userId AND bookingCondition = 'pending' AND room_id IS NULL";
+        //     $this->db->query($query);
+        //     $this->db->bind(':userId', $userId); 
+            
+        //     $this->db->execute();
+        //     return $this->db->resultSet();
+        //  }
+
+         public function getCartPendingBookings($userId){
+            $query = "SELECT * from cartbookings WHERE serviceProvider_id = :userId AND bookingCondition = 'pending' AND room_id IS NULL";
+            $this->db->query($query);
+            $this->db->bind(':userId', $userId); 
+            
+            $this->db->execute();
+            return $this->db->resultSet();
+         }
+         
+         public function getAllPendingBookings($userId){
+            $query = "
+    SELECT 
+        u.fname,
+        u.lname,
+        u.number,
+        b.*, 
+        'bookings' AS source_table
+    FROM bookings AS b
+    JOIN users AS u ON u.id = b.user_id
+    WHERE b.serviceProvider_id = :userId 
+    AND b.bookingCondition = 'pending'
+    
+    UNION ALL
+    
+    SELECT 
+        u.fname,
+        u.lname,
+        u.number,
+        cb.*, 
+        'cartbookings' AS source_table
+    FROM cartbookings AS cb
+    JOIN users AS u ON u.id = cb.user_id
+    WHERE cb.serviceProvider_id = :userId 
+    AND cb.bookingCondition = 'pending'
+";
+
         
         
+            $this->db->query($query);
+            $this->db->bind(':userId', $userId); 
+            
+            $this->db->execute();
+            return $this->db->resultSet();
+         }
+
+        
+        //  public function getVehicleBookingDetails($bookingId) {
+        //     // Assuming $this->db is your database connection
+        //     $query = "
+        //         SELECT 
+        //             vehicle_bookings.vehicle_id, 
+        //             vehicle_bookings.start_time, 
+        //             vehicle_bookings.withDriver, 
+        //             vehicles.plate_number
+        //         FROM vehicle_bookings 
+        //         JOIN vehicles ON vehicles.vehicle_id = vehicle_bookings.vehicle_id
+        //         WHERE vehicle_bookings.booking_id = :bookingId
+        //     ";
+        //     $this->db->query($query);
+        //     $this->db->bind(':bookingId', $bookingId); 
+        //     $this->db->execute();
+        //     return $this->db->resultSet();
+        // }
+        
+        
+ 
+        
+        public function getPaymentDetails($temporyId, $bookingId) {
+            // Query to fetch payment amount from payments table
+            $queryPayments = "SELECT amount FROM payments WHERE tempory_id = :temporyId AND booking_id = :bookingId";
+        
+            // Query to fetch payment amount from carpaments table
+            $queryCarPayments = "SELECT amount FROM cartpayments WHERE tempory_id = :temporyId AND booking_id = :bookingId";
+        
+            // Bind parameters and execute queries
+            $this->db->query($queryPayments);
+            $this->db->bind(':temporyId', $temporyId);
+            $this->db->bind(':bookingId', $bookingId);
+            $paymentsResult = $this->db->single();
+        
+            $this->db->query($queryCarPayments);
+            $this->db->bind(':temporyId', $temporyId);
+            $this->db->bind(':bookingId', $bookingId);
+            $carPaymentsResult = $this->db->single();
+        
+            // Compare payments and return the result
+            $paymentDetails = [
+                'payments' => $paymentsResult ? $paymentsResult->amount : null,
+                'carpayments' => $carPaymentsResult ? $carPaymentsResult->amount : null,
+            ];
+        
+            return $paymentDetails;
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+        //  public function getPendingBookings($userId){
+        //     $query = "
+        //         SELECT * FROM (
+        //             SELECT 
+        //                 booking_id, user_id, serviceProvider_id, startDate, endDate, room_id, 
+        //                 vehicle_id, package_id, bookingCondition, bookingDate
+        //             FROM bookings
+        //             WHERE serviceProvider_id = :userId
+        //             AND bookingCondition = 'pending'
+        //             AND room_id IS NULL
+        //             UNION ALL
+        //             SELECT 
+        //                 booking_id, user_id, serviceProvider_id, startDate, endDate, room_id, 
+        //                 vehicle_id, package_id, bookingCondition, bookingDate
+        //             FROM cartbookings
+        //             WHERE serviceProvider_id = :userId
+        //             AND bookingCondition = 'pending'
+        //             AND room_id IS NULL
+        //         ) AS combined_bookings
+        //     ";
+        //     $this->db->query($query);
+        //     $this->db->bind(':userId', $userId); 
+            
+        //     $this->db->execute();
+        //     return $this->db->resultSet();
+        // }
+        
+       
+
+  public function getFinalPayment($user_id){
+        $this->db->query('SELECT * FROM final_payment
+                             WHERE serviceProvider_id = :user_id ');
+
+        $this->db->bind(':user_id', $user_id);
+        $finalPayment = $this->db->resultSet();
+
+        // Check row
+        if ($this->db->rowCount() > 0) {
+            return $finalPayment;
+        } else {
+            return [];
+        }
+    }
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///last////
+        
+        public function getAgencyId($user_id) {
+            $this->db->query('SELECT agency_id FROM travelagency WHERE user_id = :user_id');
+            $this->db->bind(':user_id', $user_id);
+            $row = $this->db->single();
+            
+            if ($row) {
+                return $row->agency_id;
+            } else {
+                return null;
+            }
+        }
+        public function getPendingBookings($userId) {
+            $sql = "(SELECT 
+            b.temporyid AS tempory_id,
+            b.booking_id,
+            b.user_id,
+            u.fname,
+            u.lname,
+            u.number,
+            b.startDate,
+            b.endDate,
+            b.vehicle_id,
+            vb.start_time,
+            vb.withDriver,
+            v.plate_number,
+            CASE
+                WHEN p.tempory_id = 0 THEN p.amount
+                ELSE cp.amount
+            END AS payment_amount
+        FROM 
+            bookings b
+        JOIN 
+            users u ON b.user_id = u.id
+        JOIN 
+            vehicle_bookings vb ON b.booking_id = vb.booking_id
+        JOIN 
+            vehicles v ON b.vehicle_id = v.vehicle_id
+        LEFT JOIN 
+            payments p ON b.booking_id = p.booking_id
+        LEFT JOIN 
+            cartpayments cp ON b.temporyid = cp.tempory_id AND b.booking_id = cp.booking_id
+        WHERE 
+            b.serviceProvider_id = :user_id
+        AND 
+            b.startDate > CURDATE()  AND bookingCondition != 'cancelled'
+        AND 
+            b.vehicle_id != 0)
+        UNION
+        (SELECT 
+            cb.temporyid AS tempory_id,
+            cb.booking_id,
+            cb.user_id,
+            u.fname,
+            u.lname,
+            u.number,
+            cb.startDate,
+            cb.endDate,
+            cb.vehicle_id,
+            vb.start_time,
+            vb.withDriver,
+            v.plate_number,
+            CASE
+                WHEN p.tempory_id = 0 THEN p.amount
+                ELSE cp.amount
+            END AS payment_amount
+        FROM 
+            cartbookings cb
+        JOIN 
+            users u ON cb.user_id = u.id
+        JOIN 
+            vehicle_bookings vb ON cb.booking_id = vb.booking_id
+        JOIN 
+            vehicles v ON cb.vehicle_id = v.vehicle_id
+        LEFT JOIN 
+            payments p ON cb.booking_id = p.booking_id
+        LEFT JOIN 
+            cartpayments cp ON cb.temporyid = cp.tempory_id AND cb.booking_id = cp.booking_id
+        WHERE 
+            cb.serviceProvider_id = :user_id
+        AND 
+            cb.startDate > CURDATE()  AND bookingCondition != 'cancelled'
+        AND 
+            cb.vehicle_id != 0)";
+        
+                        
+            $this->db->query($sql);
+            $this->db->bind(':user_id', $userId);
+            $this->db->execute();
+            
+            return $this->db->resultSet();
+        }
+
+        public function getCompleteBookings($userId) {
+            $sql = "(SELECT 
+            b.temporyid AS tempory_id,
+            b.booking_id,
+            b.user_id,
+            u.fname,
+            u.lname,
+            u.number,
+            b.startDate,
+            b.endDate,
+            b.vehicle_id,
+            vb.start_time,
+            vb.withDriver,
+            v.plate_number,
+            CASE
+                WHEN p.tempory_id = 0 THEN p.amount
+                ELSE cp.amount
+            END AS payment_amount
+        FROM 
+            bookings b
+        JOIN 
+            users u ON b.user_id = u.id
+        JOIN 
+            vehicle_bookings vb ON b.booking_id = vb.booking_id
+        JOIN 
+            vehicles v ON b.vehicle_id = v.vehicle_id
+        LEFT JOIN 
+            payments p ON b.booking_id = p.booking_id
+        LEFT JOIN 
+            cartpayments cp ON b.temporyid = cp.tempory_id AND b.booking_id = cp.booking_id
+        WHERE 
+            b.serviceProvider_id = :user_id
+        AND 
+            b.endDate < CURDATE()  AND bookingCondition != 'cancelled'
+        AND 
+            b.vehicle_id != 0)
+        UNION
+        (SELECT 
+            cb.temporyid AS tempory_id,
+            cb.booking_id,
+            cb.user_id,
+            u.fname,
+            u.lname,
+            u.number,
+            cb.startDate,
+            cb.endDate,
+            cb.vehicle_id,
+            vb.start_time,
+            vb.withDriver,
+            v.plate_number,
+            CASE
+                WHEN p.tempory_id = 0 THEN p.amount
+                ELSE cp.amount
+            END AS payment_amount
+        FROM 
+            cartbookings cb
+        JOIN 
+            users u ON cb.user_id = u.id
+        JOIN 
+            vehicle_bookings vb ON cb.booking_id = vb.booking_id
+        JOIN 
+            vehicles v ON cb.vehicle_id = v.vehicle_id
+        LEFT JOIN 
+            payments p ON cb.booking_id = p.booking_id
+        LEFT JOIN 
+            cartpayments cp ON cb.temporyid = cp.tempory_id AND cb.booking_id = cp.booking_id
+        WHERE 
+            cb.serviceProvider_id = :user_id
+        AND 
+            cb.endDate < CURDATE()  AND bookingCondition != 'cancelled'
+        AND 
+            cb.vehicle_id != 0)";
+        
+                        
+            $this->db->query($sql);
+            $this->db->bind(':user_id', $userId);
+            $this->db->execute();
+            
+            return $this->db->resultSet();
+        }
+
+        // public function getCompletedBookings($agencyId) {
+        //     $sql = "(SELECT 
+        //                 b.booking_id, b.user_id, b.startDate, b.endDate, b.vehicle_id, b.bookingCondition, b.bookingDate, ta.agency_id
+        //             FROM 
+        //                 bookings b
+        //             JOIN 
+        //                 travelagency ta ON b.serviceProvider_id = ta.agency_id
+        //             WHERE 
+        //                 ta.agency_id = :agency_id
+        //             AND 
+        //                 b.bookingCondition = 'complete'
+        //             AND  
+        //                 b.vehicle_id != 0)
+        //             UNION
+        //             (SELECT 
+        //                 cb.temporyid AS booking_id, cb.user_id, cb.startDate, cb.endDate, cb.vehicle_id, cb.bookingCondition, cb.bookingDate, ta.agency_id
+        //             FROM 
+        //                 cartbookings cb
+        //             JOIN 
+        //                 travelagency ta ON cb.serviceProvider_id = ta.agency_id
+        //             WHERE 
+        //                 ta.agency_id = :agency_id
+        //             AND 
+        //                 cb.bookingCondition = 'complete'
+        //             AND  
+        //                 cb.vehicle_id != 0)";
+                        
+        //     $this->db->query($sql);
+        //     $this->db->bind(':agency_id', $agencyId);
+        //     $this->db->execute();
+            
+        //     return $this->db->resultSet();
+        // }
+
+
+      
+     
+        
+        public function getPlateNumberForVehicle($vehicleId) {
+            $sql = "SELECT plate_number FROM vehicles WHERE vehicle_id = :vehicle_id";
+            $this->db->query($sql);
+            $this->db->bind(':vehicle_id', $vehicleId);
+            $this->db->execute();
+        
+            return $this->db->single(); // Fetch as an associative array
+        }
+        public function getTravelerDetails($userId) {
+            $sql = "SELECT * FROM users WHERE id = :user_id";
+            $this->db->query($sql);
+            $this->db->bind(':user_id', $userId);
+            $this->db->execute();
+        
+            return $this->db->single(); // Fetch as an associative array
+        }
+        
+        // public function getVehicleBookingDetails($bookingId) {
+        //     $sql = "SELECT start_time, withDriver, Pickup_Location, End_Location FROM vehicle_bookings WHERE booking_id = :booking_id";
+        //     $this->db->query($sql);
+        //     $this->db->bind(':booking_id', $bookingId);
+        //     $this->db->execute();
+        
+        //     return $this->db->single(); // Fetch as an associative array
+        // }
+        public function getPaymentAmountForBooking($bookingId) {
+            $sql = "SELECT amount FROM payments WHERE booking_id = :booking_id 
+                    UNION ALL 
+                    SELECT amount FROM cartpayments WHERE booking_id = :booking_id";
+            $this->db->query($sql);
+            $this->db->bind(':booking_id', $bookingId);
+            $this->db->execute();
+        
+            // Fetch all rows as an associative array
+            $rows = $this->db->resultSet();
+        
+            $paymentAmounts = [];
+            foreach ($rows as $row) {
+                $paymentAmounts[] = $row->amount;
+            }
+        
+            return $paymentAmounts;
+        }
+        
+
+       
         
         
         

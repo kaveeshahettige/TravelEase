@@ -15,8 +15,9 @@
 
 <body>
     <nav class="left-menu">
-       <div class="user-profile">
-            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
+        <div class="user-profile">
+            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>"
+                alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
         </div>
 
@@ -47,132 +48,162 @@
                     Logout</a></li>
         </ul>
 
-        
+
     </nav>
 
     <main>
 
-    <main>
-    <div class="logo-container">
-        <img src="../Images/TravelEase.png" alt="TravelEase Logo">
-        <span class="logo-text">TravelEase</span>
-    </div>
-    <div class="dashboard-content">
-        <div><h1>Settings</h1> </div>
-
-
-        <div id="base">
-            <h3 style="padding-left:20px;">Basic Info</h3>
-            <div id="form">
-                <form class="registration-form" method="POST" action="<?php echo URLROOT; ?>/driver/edituser/<?php echo $_SESSION['user_id']; ?>">
-                <div>
-                    
-
-                        <div class="form-group">
-                            <label for="fname">First Name</label>
-                            <input type="text" id="fname" name="fname" placeholder="fname" value="<?php echo $data['userDetails']->fname; ?>" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="reg_number">Last Name</label>
-                            <input type="text" id="lname" name="lname" placeholder="lname" value="<?php echo$data['userDetails']->lname; ?>" required>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="text" id="email" name="email" placeholder="email@gmail.com" value="<?php echo $data['userDetails']->email; ?>" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="number">Phone Number</label>
-                            <input type="text" id="number" name="number" placeholder="0764532789" value="<?php echo $data['userDetails']->number; ?>" required>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="baseButtons">
-                            <button id="cancelBut">Cancel</button>
-                            <button id="saveBut" type="submit">Save</button>
-                        </div>
-                    </div>
-                </form>
+        <main>
+            <div class="logo-container">
+                <img src="../Images/TravelEase.png" alt="TravelEase Logo">
+                <span class="logo-text">TravelEase</span>
             </div>
-        </div>
-
-
-        <div id="baseAgency">
-
-            <h3 style="padding-left:20px;">Agency Details</h3>
-            <div id="formAgency">
-                <form class="registerForm" method="POST" action="<?php echo URLROOT; ?>/driver/editagency/<?php echo $_SESSION['user_id']; ?>">
-
+            <div class="dashboard-content">
                 <div>
-                        <div class="form-group">
-                            <label for="agency_name">Agency Name</label>
-                            <input type="text" id="agency_name" name="agency_name" placeholder="agency_name" value="<?php echo $data['agencyDetails']->agency_name; ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="reg_number">Registration Number</label>
-                            <input type="text" id="reg_number" name="reg_number" placeholder="reg_number" value="<?php echo $data['agencyDetails']->reg_number; ?>">
-                        </div>
-                    </div>
+                    <h1>Settings</h1>
+                </div>
 
-                    <div>
-                    <div class="form-group">
-                                <label for="address">Address</label>
-                                <input type="text" id="address" name="address" placeholder="address" value="<?php echo $data['agencyDetails']->address; ?>" required>
-                        </div>
-                        
-                            <div class="form-group">
-                                <label for="city">City</label>
-                                <input type="text" id="city" name="city" placeholder="city" value="<?php echo $data['agencyDetails']->city; ?>" required>
+
+                <div id="base">
+                    <h3 style="padding-left:20px;">Agency Details</h3>
+                    <div id="form">
+                        <form class="registration-form" method="POST"
+                            action="<?php echo URLROOT; ?>/driver/edituser/<?php echo $_SESSION['user_id']; ?>">
+                            <div>
+
+
+                                <div class="form-group">
+                                    <label for="fname">Agency Name</label>
+                                    <input type="text" id="fname" name="fname" placeholder="fname"
+                                        value="<?php echo $data['userDetails']->fname; ?>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">Address</label>
+                                    <input type="text" id="address" name="address" placeholder="address"
+                                        value="<?php echo $data['agencyDetails']->address; ?>" required>
+                                </div>
+                                
+
+
                             </div>
-                        
-                    </div>
+                            <div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="text" id="email" name="email" placeholder="email@gmail.com"
+                                        value="<?php echo $data['userDetails']->email; ?>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="number">Phone Number</label>
+                                    <input type="text" id="number" name="number" placeholder="0764532789"
+                                        value="<?php echo $data['userDetails']->number; ?>" required>
+                                </div>
 
-                    <div>
+
+                            </div>
+                            <div>
+                                <div class="baseButtons">
+                                    <button id="cancelBut">Cancel</button>
+                                    <button id="saveBut" type="submit">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div id="baseAgency">
+
+                    <h3 style="padding-left:20px;">Other Details</h3>
+                    <div id="formAgency">
+                        <form class="registerForm" method="POST"
+                            action="<?php echo URLROOT; ?>/driver/editagency/<?php echo $_SESSION['user_id']; ?>">
                        
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <input type="text" id="description" name="description" placeholder="description" value="<?php echo $data['agencyDetails']->description; ?>">
-                        </div>
-                    </div>
+                            <div>
+                                <div class="form-group">
+                                    <label for="manager_name">Manager Name</label>
+                                    <input type="text" id="manager_name" name="manager_name" placeholder="manager_name"
+                                        value="<?php echo $data['agencyDetails']->manager_name; ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" id="city" name="city" placeholder="city"
+                                        value="<?php echo $data['agencyDetails']->city; ?>" required>
+                                </div>
+                            </div>
 
-                   
+                            <div>
+                                
 
-                    <div>
-                        <div class="form-group">
-                            <label for="website">Website</label>
-                            <input type="url" id="website" name="website" placeholder="Agency Website" value="<?php echo $data['agencyDetails']->website; ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="facebook">Facebook</label>
-                            <input type="url" id="facebook" name="facebook" placeholder="Agency Facebook" value="<?php echo $data['agencyDetails']->facebook; ?>">
-                        </div>
-                    </div>
+                                <div class="form-group">
+                                    <label for="reg_number">Registration Number</label>
+                                    <input type="text" id="reg_number" name="reg_number" placeholder="reg_number"
+                                        value="<?php echo $data['agencyDetails']->reg_number; ?>">
+                                </div>
 
-                    <div>
-                        <div class="form-group">
-                            <label for="twitter">Twitter Handle</label>
-                            <input type="url" id="twitter" name="twitter" placeholder="Twitter Handle" value="<?php echo $data['agencyDetails']->twitter; ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="instagram">Instagram Handle</label>
-                            <input type="url" id="instagram" name="instagram" placeholder="Instagram Handle" value="<?php echo $data['agencyDetails']->instagram; ?>">
-                        </div>
-                    </div>
 
-                    <div>
-                        <div class="baseButtons">
-                            <button id="cancelBut">Cancel</button>
-                            <button id="saveBut" type="submit">Save</button>
-                        </div>
+
+                                
+
+
+
+                            </div>
+
+
+
+
+
+                            <div>
+                                <div class="form-group">
+                                    <label for="website">Website</label>
+                                    <input type="url" id="website" name="website" placeholder="Agency Website"
+                                        value="<?php echo $data['agencyDetails']->website; ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="facebook">Facebook</label>
+                                    <input type="url" id="facebook" name="facebook" placeholder="Agency Facebook"
+                                        value="<?php echo $data['agencyDetails']->facebook; ?>">
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="form-group">
+                                    <label for="twitter">Twitter Handle</label>
+                                    <input type="url" id="twitter" name="twitter" placeholder="Twitter Handle"
+                                        value="<?php echo $data['agencyDetails']->twitter; ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="instagram">Instagram Handle</label>
+                                    <input type="url" id="instagram" name="instagram" placeholder="Instagram Handle"
+                                        value="<?php echo $data['agencyDetails']->instagram; ?>">
+                                </div>
+                            </div>
+
+                            <div>
+                            <div>
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <input type="text" id="description" name="description" placeholder="description" value="<?php echo $data['agencyDetails']->description; ?>" rows="4">
+
+                                </div>
+                            </div>
+                            </div> 
+                            
+
+
+                            <div>
+                                <div class="baseButtons">
+                                    <button id="cancelBut">Cancel</button>
+                                    <button id="saveBut" type="submit">Save</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
+
             </div>
-        </div>
-
-    </div>
-</main>
+        </main>
 
     </main>
 </body>
+
 </html>

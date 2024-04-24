@@ -77,18 +77,19 @@
                                 </div>
 
                                 <div class="hotel-details">
-                                    <h3><?php echo $_SESSION['user_fname'] . " " . $_SESSION['user_lname'] ?></h3>
-                                    <h6>Contact Number</h6>
-                                    <p><?php echo $_SESSION['user_number'] ?></p>
-                                    <h6>Email</h6>
-                                    <p><?php echo $_SESSION['user_email'] ?></p>
 
-                                </div>
-                                <h2>Agency Details</h2>
-                                <div class="hotel-details">
+                                    
+                                    <h3><?php echo  $data['userDetails']->fname . " " .  $data['userDetails']->lname ?></h3>
+                                    <h6>Manager Name </h6>
+                                    <p><?php echo $data['agencyDetails']->manager_name; ?></p>
+                                    <h6>Contact Number</h6>
+                                    <p><?php echo $data['userDetails']->number?></p>
+                                    <h6>Email</h6>
+                                    <p><?php echo $data['userDetails']->email ?></p>
+
+                               
                                     <?php if (!empty($data['agencyDetails'])) : ?>
-                                    <h6>Agency Name </h6>
-                                    <p><?php echo $data['agencyDetails']->agency_name; ?></p>
+                                    
                                     <h6>Registration Number</h6>
                                     <p> <?php echo $data['agencyDetails']->reg_number; ?></p>
                                     <h6>Address </h6>
@@ -144,15 +145,7 @@
                             </div>
                         </div>
 
-                        <div class="rectangle">
-                            <!-- Rectangle 3: Profile Deletion -->
-                            <div class="basic-info-content">
-                                <h2>Profile Deletion</h2>
-                                <!-- Add profile deletion option here -->
-                                <a href="<?php echo URLROOT; ?>driver/vehicleedit">
-                                    <button class="delete-button">Delete</button></a>
-                            </div>
-                        </div>
+                        
 
                         <div class="rectangle">
                             <!-- Rectangle 2: Change Password -->
@@ -165,6 +158,16 @@
                             </div>
 
 
+                        </div>
+
+                        <div class="rectangle">
+                            <!-- Rectangle 3: Profile Deletion -->
+                            <div class="basic-info-content">
+                                <h2>Profile Deletion</h2>
+                                <!-- Add profile deletion option here -->
+                                <a href="<?php echo URLROOT; ?>driver/vehicleedit">
+                                    <button class="delete-button">Delete</button></a>
+                            </div>
                         </div>
 
 
