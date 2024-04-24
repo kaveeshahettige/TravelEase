@@ -16,9 +16,13 @@ class Packages extends Controller
 
     public function index()
     {
+
         $userData = $this->getUserInfo();
+
         $guideData = $this->updateGuideDetails($userData->id);
+
         $bookings = $this->getBookings();
+
 
         $data = [
             'userData' => $userData,
@@ -362,6 +366,8 @@ class Packages extends Controller
                 'user_id' => $user_id,
             ];
 
+
+
             // Call the model method to update guide details
             if ($this->packagesModel->updateGuideDetails($guideData)) {
                 // Details updated successfully
@@ -372,7 +378,7 @@ class Packages extends Controller
                 flash('error_message', 'Failed to update hotel details');
                 redirect('packages/packagesedit');
             }
-        } else {
+        }else {
             // Retrieve existing guide data based on user_id
             $guideData = $this->packagesModel->getGuideDetails($user_id);
 

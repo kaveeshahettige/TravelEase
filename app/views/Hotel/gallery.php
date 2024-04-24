@@ -59,24 +59,29 @@ include 'navigation.php';
 
         <div class="notifications-content">
             <?php
-                $notifications = $data["notifications"];
+            $notifications = $data["notifications"];
+            if (!empty($notifications)) {
                 foreach ($notifications as $key => $notification):
-                ?>
+                    ?>
+                    <div class="notification-item">
+                        <!-- Assuming you have an image path stored in $notification->sender_image -->
+                        <img src="<?php echo $notification->sender_profile_picture; ?>" alt="Sender Image" class="sender-image">
 
-                <div class="notification-item">
-                    <!-- Assuming you have an image path stored in $notification->sender_image -->
-                    <img src="<?php echo $notification->sender_profile_picture; ?>" alt="Sender Image" class="sender-image">
-
-                    <div class="notification-text-container">
-                        <span class="sender-name"><?php echo $notification->sender_name; ?></span>
-                        <span class="notification-date"><?php echo $notification->nDate; ?></span>
-                        <p class="notification-text"><?php echo $notification->notification; ?></p>
-                        <button onclick="markAsRead(<?php echo $notification->notification_id; ?>)" class="mark-as-read-btn">Mark as read</button>
+                        <div class="notification-text-container">
+                            <span class="sender-name"><?php echo $notification->sender_name; ?></span>
+                            <span class="notification-date"><?php echo $notification->nDate; ?></span>
+                            <p class="notification-text"><?php echo $notification->notification; ?></p>
+                            <button onclick="markAsRead(<?php echo $notification->notification_id; ?>)" class="mark-as-read-btn">Mark as read</button>
+                        </div>
                     </div>
-
-                </div>
-            <?php endforeach; ?>
+                <?php
+                endforeach;
+            } else {
+                echo "<h3>No new notifications to display.</h3>";
+            }
+            ?>
         </div>
+
 
         <script src= "<?php echo URLROOT?>/public/js/hotel/notifications.js"></script>
     </main>

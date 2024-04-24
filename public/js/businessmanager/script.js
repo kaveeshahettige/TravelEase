@@ -1,5 +1,5 @@
-function PaymentPopup(serviceProvider_id,total_amount) {
-    console.log(serviceProvider_id, total_amount);
+function PaymentPopup(serviceProvider_id,totalAmount) {
+    console.log(serviceProvider_id, totalAmount);
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
 
@@ -8,7 +8,7 @@ function PaymentPopup(serviceProvider_id,total_amount) {
     confirmDialog.innerHTML = `
         <div class="confirm-message">Are you sure you want to make this payment?</div>
         <div class="buttons">
-            <button class="btn btn-yes" onclick="makePayment('${serviceProvider_id}', '${total_amount}')">Yes</button>
+            <button class="btn btn-yes" onclick="makePayment('${serviceProvider_id}', '${totalAmount}')">Yes</button>
             <button class="btn btn-no" onclick="cancelCancel()">No</button>
         </div>
     `;
@@ -24,17 +24,17 @@ function cancelCancel() {
     document.body.removeChild(document.querySelector('.confirm-dialog'));
 }
 
-function makePayment(serviceProvider_id,total_amount) {
+function makePayment(serviceProvider_id,totalAmount) {
     console.log(serviceProvider_id);
     // Prepare the data to send
     var requestData = {
         serviceProvider_id: serviceProvider_id,
-        total_amount: total_amount,
+        totalAmount: totalAmount,
     };
 
     const form = new FormData();
     form.append('serviceProvider_id', serviceProvider_id);
-    form.append('total_amount', total_amount);
+    form.append('totalAmount', totalAmount);
 
     // Make an AJAX request
     fetch(
@@ -67,8 +67,8 @@ function makePayment(serviceProvider_id,total_amount) {
         // });
 }
 
-function InvoicePopup(serviceProvider_id,total_amount) {
-    console.log(serviceProvider_id, total_amount);
+function InvoicePopup(serviceProvider_id,totalAmount) {
+    console.log(serviceProvider_id, totalAmount);
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
 
@@ -77,7 +77,7 @@ function InvoicePopup(serviceProvider_id,total_amount) {
     confirmDialog.innerHTML = `
         <div class="confirm-message">Are you sure you want to make the Invoice?</div>
         <div class="buttons">
-            <button class="btn btn-yes" onclick="makeInvoice('${serviceProvider_id}', '${total_amount}')">Yes</button>
+            <button class="btn btn-yes" onclick="makeInvoice('${serviceProvider_id}', '${totalAmount}')">Yes</button>
             <button class="btn btn-no" onclick="cancelCancel()">No</button>
         </div>
     `;
@@ -87,17 +87,17 @@ function InvoicePopup(serviceProvider_id,total_amount) {
 
 }
 
-function makeInvoice(serviceProvider_id, total_amount) {
+function makeInvoice(serviceProvider_id, totalAmount) {
     console.log(serviceProvider_id);
     // Prepare the data to send
     var requestData = {
         serviceProvider_id: serviceProvider_id,
-        total_amount: total_amount,
+        total_amount: totalAmount,
     };
 
     const form = new FormData();
     form.append('serviceProvider_id', serviceProvider_id);
-    form.append('total_amount', total_amount);
+    form.append('totalAmount', totalAmount);
 
     // Make an AJAX request
     fetch(
@@ -126,3 +126,27 @@ function makeInvoice(serviceProvider_id, total_amount) {
             cancelCancel();
         });
 }
+
+function markAsRead(notification_id) {
+    var form = new FormData();
+    form.append('notification_id', notification_id);
+
+    fetch('http://localhost/TravelEase/hotel/markNotificationAsRead', {
+        method: 'POST',
+        body: form
+    })
+        .then(async function(response) {
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                console.log('Notification marked as read successfully');
+                window.location.reload();
+            } else {
+                console.error('Error marking notification as read:', response.status);
+            }
+        })
+        .catch(function(error) {
+            console.error('Error marking notification as read:', error);
+        });
+}
+

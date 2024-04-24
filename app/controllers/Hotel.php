@@ -75,11 +75,15 @@ class Hotel extends Controller
 
         // Get room data for the hotel
         $roomData = $this->hotelsModel->getHotelRooms($hotel_id);
+
         $unavailableRooms = $this->hotelsModel->getUnavailableRooms($startDate);
+
         $unavailableRoomsIds = [];
         foreach ($unavailableRooms as $room) {
             $unavailableRoomsIds[] = $room->room_id;
         }
+
+
 
         // Pass the room data and selected date to the view
         $data = [
@@ -98,6 +102,7 @@ class Hotel extends Controller
     {
 
         $bookingData = $this->getBookingsData();
+//        var_dump($bookingData[0]);
         $bookingsCount = $this->getBookingsCount();
         $guestCount = $this->getGuestCount();
         $reviewCount = $this->getReviewCount();
@@ -117,6 +122,57 @@ class Hotel extends Controller
             ];
         // Pass the data to the view
         $this->view('hotel/bookings',$data);
+    }
+
+    public function combookings()
+    {
+
+        $completedBookings = $this->getCompletedBookingsData();
+        $bookingsCount = $this->getBookingsCount();
+        $guestCount = $this->getGuestCount();
+        $reviewCount = $this->getReviewCount();
+
+        $user_id = $_SESSION['user_id'];
+        $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
+        $roomData = $this->hotelsModel->getHotelRooms($hotel_id);
+//        var_dump($guestCount);
+
+        $data=[
+            'completedBookings' => $completedBookings,
+            'basicInfo' => $this->basicInfo(),
+            'bookingsCount'=> $bookingsCount,
+            'guestCount' => $guestCount,
+            'reviewCount'=>$reviewCount,
+            'roomData' => $roomData,
+        ];
+        // Pass the data to the view
+        $this->view('hotel/combookings',$data);
+    }
+
+    public function rejbookings()
+    {
+
+        $cancelledbBokings = $this->getRejectedBookingsData();
+//        var_dump($cancelledbBokings);
+        $bookingsCount = $this->getBookingsCount();
+        $guestCount = $this->getGuestCount();
+        $reviewCount = $this->getReviewCount();
+
+        $user_id = $_SESSION['user_id'];
+        $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
+        $roomData = $this->hotelsModel->getHotelRooms($hotel_id);
+//        var_dump($guestCount);
+
+        $data=[
+            'cancelledbBokings' => $cancelledbBokings,
+            'basicInfo' => $this->basicInfo(),
+            'bookingsCount'=> $bookingsCount,
+            'guestCount' => $guestCount,
+            'reviewCount'=>$reviewCount,
+            'roomData' => $roomData,
+        ];
+        // Pass the data to the view
+        $this->view('hotel/rejbookings',$data);
     }
 
 
@@ -655,7 +711,7 @@ class Hotel extends Controller
                 'altPhoneNumber' => $_POST['altPhoneNumber'],
                 'managerInfo' => $_POST['managerInfo'],
                 'managerPhoneNumber' => $_POST['managerPhoneNumber'],
-                'address' => $_POST['address'],
+                'addr' => $_POST['addr'],
                 'street_address' => $_POST['street_address'],
                 'city' => $_POST['city'],
                 'state' => $_POST['state'],
@@ -829,6 +885,70 @@ class Hotel extends Controller
         // Check if any bookings are found
         if (!empty($bookingData)) {
             return $bookingData;
+        } else {
+            return [];
+        }
+    }
+
+    public function getRejectedBookingsData()
+    {
+        // Get the hotel_id for the currently logged-in user
+        $user_id = $_SESSION['user_id'];
+        $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
+
+        // Get bookings for the specific hotel
+        $bookingData1 = $this->hotelsModel->getCancelledBookings($hotel_id);
+
+
+        // Get cart bookings for the specific hotel
+        $cartBookingData = $this->hotelsModel->getCancelledCartBookings($hotel_id);
+
+
+
+        // Merge the booking data and cart booking data
+        $cancelledBookings = array_merge($bookingData1, $cartBookingData);
+
+        // Order the merged data by start date, closest to the current date
+        usort($cancelledBookings, function($a, $b) {
+            // Access the startDate property of the objects using -> notation
+            return abs(strtotime($a->startDate) - strtotime(date('Y-m-d'))) - abs(strtotime($b->startDate) - strtotime(date('Y-m-d')));
+        });
+
+        // Check if any bookings are found
+        if (!empty($cancelledBookings)) {
+            return $cancelledBookings;
+        } else {
+            return [];
+        }
+    }
+
+    public function getCompletedBookingsData()
+    {
+        // Get the hotel_id for the currently logged-in user
+        $user_id = $_SESSION['user_id'];
+        $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
+
+        // Get bookings for the specific hotel
+        $bookingData1 = $this->hotelsModel->getCompletedBookings($hotel_id);
+
+
+        // Get cart bookings for the specific hotel
+        $cartBookingData = $this->hotelsModel->getCompletedCartBookings($hotel_id);
+
+
+        // Merge the booking data and cart booking data
+        $completedBookings = array_merge($bookingData1, $cartBookingData);
+//        var_dump($completedBookings);
+
+        // Order the merged data by start date, closest to the current date
+        usort($completedBookings, function($a, $b) {
+            // Access the startDate property of the objects using -> notation
+            return abs(strtotime($a->startDate) - strtotime(date('Y-m-d'))) - abs(strtotime($b->startDate) - strtotime(date('Y-m-d')));
+        });
+
+        // Check if any bookings are found
+        if (!empty($completedBookings)) {
+            return $completedBookings;
         } else {
             return [];
         }
@@ -1047,10 +1167,23 @@ class Hotel extends Controller
         // Insert notification
         $notification_inserted = $this->hotelsModel->insertNotification($booking_id, $sender_id, $receiver_id, $notification_message);
 
-        //Update the refund table
-        $refund = $this->hotelsModel->updateRefund($temporyid,$booking_id,$sender_id,$receiver_id,$amount,);
 
-//        (tempory_id, booking_id, serviceProvider_id,user_id,refund_amount)
+        $notification_message2 = "$sender_name" . " has cancelled your booking with the booking details were for" . " $roomType" . " room from" . " $startDate" . " to" . " $endDate." . " Make Sure Refund will be processed within 7 days";
+
+        $businessmanagerID = 2;
+
+        $notification2_inserted = $this->hotelsModel->insertNotification($booking_id, $sender_id,$businessmanagerID , $notification_message2);
+
+        $currentDate = date('Y-m-d');
+        $cancelled_id = $_SESSION['user_id'];
+
+        //Update the refund table
+        $refund = $this->hotelsModel->updateRefund($temporyid,$booking_id,$sender_id,$receiver_id,$cancelled_id,$amount,$currentDate);
+
+
+        $availabilityUpdate = $this->hotelsModel->updateAvailability($room_id,$startDate,$endDate);
+
+//       (tempory_id, booking_id, serviceProvider_id,user_id,refund_amount)
 
         require_once __DIR__ . '/../libraries/sms/vendor/autoload.php';
 
@@ -1072,7 +1205,7 @@ class Hotel extends Controller
         }
 
         // Return JSON response based on the result
-        if ($updated && $notification_inserted && $refund && $message->getStatus() == 0) {
+        if ($updated && $notification_inserted && $notification2_inserted && $availabilityUpdate && $refund && $message->getStatus() == 0) {
             echo json_encode(['success' => true]);
         } else {
             echo json_encode(['success' => false]);

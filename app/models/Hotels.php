@@ -281,7 +281,7 @@ class Hotels
         alt_phone_number = :altPhoneNumber,
         manager_name = :managerInfo,
         manager_phone_number = :managerPhoneNumber,
-        address=:address,
+        addr=:addr,
         street_address = :street_address,
         city = :city,
         state_province = :state,
@@ -303,7 +303,7 @@ class Hotels
         $this->db->bind(':altPhoneNumber', $hotelData['altPhoneNumber']);
         $this->db->bind(':managerInfo', $hotelData['managerInfo']);
         $this->db->bind(':managerPhoneNumber', $hotelData['managerPhoneNumber']);
-        $this->db->bind(':address', $hotelData['address']);
+        $this->db->bind(':addr', $hotelData['addr']);
         $this->db->bind(':street_address', $hotelData['street_address']);
         $this->db->bind(':city', $hotelData['city']);
         $this->db->bind(':state', $hotelData['state']);
@@ -410,7 +410,10 @@ class Hotels
                       JOIN users u ON b.user_id = u.id
                       LEFT JOIN hotel_rooms hr ON b.room_id = hr.room_id
                       LEFT JOIN payments p ON b.booking_id = p.booking_id
-                      WHERE hr.hotel_id = :hotel_id AND b.bookingCondition ="pending"');
+                      WHERE hr.hotel_id = :hotel_id 
+                      AND b.bookingCondition != "cancelled"
+                      AND b.startDate > CURDATE()');
+
 
         $this->db->bind(':hotel_id', $hotel_id);
 
@@ -431,19 +434,21 @@ class Hotels
         return $this->db->resultSet();
     }
 
-//    public function getCancelledBookings($hotel_id)
-//    {
-//        $this->db->query('SELECT b.*, u.fname, u.profile_picture,u.number, hr.roomType, hr.registration_number, p.payment_id, p.amount
-//                      FROM bookings b
-//                      JOIN users u ON b.user_id = u.id
-//                      LEFT JOIN hotel_rooms hr ON b.room_id = hr.room_id
-//                      LEFT JOIN payments p ON b.booking_id = p.booking_id
-//                      WHERE hr.hotel_id = :hotel_id AND b.bookingCondition ="cancelled"');
-//
-//        $this->db->bind(':hotel_id', $hotel_id);
-//
-//        return $this->db->resultSet();
-//    }
+    public function getCompletedBookings($hotel_id)
+    {
+        $this->db->query('SELECT b.*, u.fname, u.profile_picture,u.number, hr.roomType, hr.registration_number, p.payment_id, p.amount
+                      FROM bookings b
+                      JOIN users u ON b.user_id = u.id
+                      LEFT JOIN hotel_rooms hr ON b.room_id = hr.room_id
+                      LEFT JOIN payments p ON b.booking_id = p.booking_id
+                      WHERE hr.hotel_id = :hotel_id 
+                      AND b.bookingCondition != "cancelled"
+                      AND b.endDate < CURDATE()');
+
+        $this->db->bind(':hotel_id', $hotel_id);
+
+        return $this->db->resultSet();
+    }
 
 
 
@@ -453,8 +458,10 @@ class Hotels
               FROM cartbookings cb
               JOIN users u ON cb.user_id = u.id
               LEFT JOIN hotel_rooms hr ON cb.room_id = hr.room_id
-              LEFT JOIN cartpayments cp ON cb.booking_id = cp.booking_id AND cb.temporyid  = cp.temporyid 
-              WHERE hr.hotel_id = :hotel_id AND cb.bookingCondition = "pending"');
+              LEFT JOIN cartpayments cp ON cb.booking_id = cp.booking_id AND cb.temporyid  = cp.tempory_id 
+              WHERE hr.hotel_id = :hotel_id                                  
+              AND cb.bookingCondition != "cancelled"
+              AND cb.startDate > CURDATE()');
 
         $this->db->bind(':hotel_id', $hotel_id);
 
@@ -467,7 +474,7 @@ class Hotels
               FROM cartbookings cb
               JOIN users u ON cb.user_id = u.id
               LEFT JOIN hotel_rooms hr ON cb.room_id = hr.room_id
-              LEFT JOIN cartpayments cp ON cb.booking_id = cp.booking_id AND cb.temporyid  = cp.temporyid 
+              LEFT JOIN cartpayments cp ON cb.booking_id = cp.booking_id AND cb.temporyid  = cp.tempory_id 
               WHERE hr.hotel_id = :hotel_id AND cb.bookingCondition = "cancelled"');
 
         $this->db->bind(':hotel_id', $hotel_id);
@@ -481,8 +488,10 @@ class Hotels
               FROM cartbookings cb
               JOIN users u ON cb.user_id = u.id
               LEFT JOIN hotel_rooms hr ON cb.room_id = hr.room_id
-              LEFT JOIN cartpayments cp ON cb.booking_id = cp.booking_id AND cb.temporyid  = cp.temporyid 
-              WHERE hr.hotel_id = :hotel_id AND cb.bookingCondition = "completed"');
+              LEFT JOIN cartpayments cp ON cb.booking_id = cp.booking_id AND cb.temporyid  = cp.tempory_id 
+              WHERE hr.hotel_id = :hotel_id 
+              AND cb.bookingCondition != "cancelled"
+              AND cb.endDate < CURDATE()');
 
         $this->db->bind(':hotel_id', $hotel_id);
 
@@ -496,12 +505,13 @@ class Hotels
     {
         // Prepare the SQL query
         $sql = 'SELECT r.*, u.fname AS user_fname, u.profile_picture AS user_profile_picture, 
-               h.fname AS hotel_name, h.profile_picture AS hotel_profile_picture
-            FROM `feedbacksnratings` r
-            JOIN `bookings` b ON r.booking_id = b.booking_id
-            JOIN `users` u ON r.user_id = u.id
-            JOIN `users` h ON r.fservice_id = h.id
-            LEFT JOIN `hotel` hr ON  r.fservice_id = hr.user_id
+            h.fname AS hotel_name, h.profile_picture AS hotel_profile_picture , hro.registration_number AS room_number
+            FROM feedbacksnratings r
+            JOIN bookings b ON r.booking_id = b.booking_id AND r.ftempory_id = b.temporyid
+            JOIN users u ON r.user_id = u.id
+            JOIN users h ON r.fservice_id = h.id
+            LEFT JOIN hotel hr ON  r.fservice_id = hr.user_id
+            LEFT JOIN hotel_rooms hro ON b.room_id = hro.room_id
             WHERE hr.hotel_id = :hotel_id';
 
         // Execute the query
@@ -511,6 +521,7 @@ class Hotels
         // Fetch and return the result set
         return $this->db->resultSet();
     }
+
 
 
     public function insertPdf($filename, $userId)
@@ -603,10 +614,12 @@ class Hotels
         }
     }
 
-
     public function getUnavailableRooms($startDate)
     {
-        $sql = "SELECT * FROM room_availability WHERE startDate = :startDate";
+        $sql = "SELECT * FROM room_availability
+                WHERE (startDate = :startDate OR endDate = :startDate) OR 
+                (startDate <= :startDate AND endDate >= :startDate) ";
+
         $this->db->query($sql);
         $this->db->bind(':startDate', $startDate);
 
@@ -754,10 +767,10 @@ class Hotels
         }
     }
 
-       public function updateRefund($temporyid,$booking_id,$sender_id,$receiver_id,$amount,){
+    public function updateRefund($temporyid,$booking_id,$sender_id,$receiver_id,$cancelled_id,$amount,$currentDate){
 
-        $sql = "INSERT INTO refunds (tempory_id, booking_id, serviceProvider_id,user_id,refund_amount) 
-                VALUES (:temporyid, :booking_id,:sender_id,:receiver_id,:amount)";
+        $sql = "INSERT INTO refunds (tempory_id, booking_id, serviceProvider_id,user_id,cancel_user_id,refund_amount,cancelled_date) 
+                VALUES (:temporyid, :booking_id,:sender_id,:receiver_id,:cancelled_id, :amount, :currentDate)";
 
         $this->db->query($sql);
 
@@ -765,12 +778,32 @@ class Hotels
         $this->db->bind(':booking_id', $booking_id);
         $this->db->bind(':sender_id', $sender_id);
         $this->db->bind(':receiver_id', $receiver_id);
+        $this->db->bind(':cancelled_id', $cancelled_id);
         $this->db->bind(':amount', $amount);
+        $this->db->bind(':currentDate', $currentDate);
 
         // Execute the query
            return $this->db->execute();
 
     }
+
+    public function updateAvailability($room_id, $startDate, $endDate){
+        // Prepare the SQL query
+        $sql = 'DELETE FROM room_availability 
+            WHERE room_id = :room_id 
+            AND startDate = :startDate 
+            AND endDate = :endDate';
+
+        // Execute the query
+        $this->db->query($sql);
+        $this->db->bind(':room_id', $room_id);
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+
+        // Execute the deletion
+        return $this->db->execute();
+    }
+
 
 
 

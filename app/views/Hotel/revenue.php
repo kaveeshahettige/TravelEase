@@ -71,26 +71,22 @@ include 'navigation.php';
 
         <div class="table-content">
             <h2>Revenue Details</h2>
-            <table class="booking-table">
-                <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Payment Date</th>
-                    <th>Total Amount</th>
-                    <th>TravelEase Revenue</th>
-                    <th>Payment Amount</th>
-                    <th>Invoice</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                $finalPayment = $data["finalPayment"];
-
-                // Check if $finalPayment is an array or object
-                if (is_array($finalPayment) || is_object($finalPayment)) {
-                    foreach ($finalPayment as $key => $payment):
-
-                        ?>
+            <?php if (empty($data["finalPayment"]) || !is_array($data["finalPayment"])): ?>
+                <p>No revenue details available.</p>
+            <?php else: ?>
+                <table class="booking-table">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Payment Date</th>
+                        <th>Total Amount</th>
+                        <th>TravelEase Revenue</th>
+                        <th>Payment Amount</th>
+                        <th>Invoice</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($data["finalPayment"] as $key => $payment): ?>
                         <tr>
                             <td><?php echo $key + 1; ?></td>
                             <td><?php echo $payment->paidDate; ?></td>
@@ -106,16 +102,16 @@ include 'navigation.php';
                                 </a>
                             </td>
                         </tr>
-                    <?php endforeach;
-                } else {
-                    // Handle the case when $finalPayment is not valid (e.g., no payment records found)
-                    echo "<tr><td colspan='4'>No payment records found.</td></tr>";
-                }
-                ?>
-
-                </tbody>
-            </table>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <div class="more-content">
+                    <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
+                </div>
+            <?php endif; ?>
         </div>
+
+
 
 
 

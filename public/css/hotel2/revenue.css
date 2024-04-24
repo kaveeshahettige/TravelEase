@@ -1,3 +1,25 @@
+.search-content {
+    padding-left: 275px;
+    margin-right: 50px;
+    padding-top: 25px;
+    font-family: "Poppins", sans;
+}
+
+
+.revenue-content {
+    padding-left: 275px;
+    margin-right: 50px;
+    padding-top: 25px;
+    font-family: "Poppins", sans;
+}
+
+.more-content {
+    padding-left: 275px;
+    margin-right: 60px;
+    padding-top: 25px;
+    font-family: "Poppins", sans;
+}
+
 /* Style for the booking table */
 .table-content {
     padding-left: 275px;
@@ -27,28 +49,14 @@
     background-color: #F9B314;
     color: #ffffff;
     border: none;
-    padding: 8px; /* Adjust the padding for the button */
+    padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 16px; /* Adjust the font size for the button */
-}
-
-.view-button i {
-    font-size: 18px; /* Set the desired font size for the icon */
+    font-size: 14px;
 }
 
 .view-button:hover {
     background-color: #FFDB8B;
-}
-
-td.approved {
-    color: #2ecc71;
-    font-weight: bold;
-}
-
-td.pending {
-    color: #e74c3c;
-    font-weight: bold;
 }
 
 
@@ -127,100 +135,47 @@ td.pending {
     font-family: "Poppins", sans;
 }
 
-td.approved {
-    color: #2ecc71;
-    font-weight: bold;
-}
-
-td.pending {
-    color: #e74c3c;
-    font-weight: bold;
-}
-
-/* Style the tab container */
-.tab {
-    display: flex;
-    /*justify-content: space-around;*/
-    margin-bottom: 20px;
-    gap: 10px;
-}
-
-/* Style the individual tabs */
-.tab button {
-    background-color: #f1f1f1;
-    border: none;
-    border-bottom: 2px solid transparent;
-    cursor: pointer;
-    padding: 10px 20px;
-    transition: border-bottom 0.3s ease;
-}
-
-/* Style the active tab */
-.tab button.active {
-    background-color: #F9B314;
-    Font-weight: bold;
-}
-
-/* Change background color of buttons on hover */
-.tab button:hover {
-    background-color: #ddd;
-}
-
-/* Cancel Booking Button Styles */
-.complete-button {
-    background-color: #03b213; /* Red background color */
-    color: #ffffff; /* White text color */
-    border: none; /* No border */
-    padding: 8px; /* Adjust the padding for the button */
-    border-radius: 4px; /* Rounded corners */
-    cursor: pointer; /* Show pointer cursor on hover */
-    font-size: 16px; /* Adjust the font size for the button */
-}
-
-.complete-button i {
-    font-size: 18px; /* Set the desired font size for the icon */
-}
-
-.complete-button:hover {
-    background-color: #03b213; /* Darker red color on hover */
-}
 
 
-/* Media Query for Responsive Design */
+
+/* Responsive Styles for Screens with a Maximum Width of 768px */
 @media screen and (max-width: 768px) {
+    .search-content,
+    .revenue-content,
+    .more-content,
     .table-content {
-        padding-left: 10px;
-        text-align: center;
+        padding-left: 20px;
+        margin-right: 20px;
+        padding-top: 25px;
     }
 
-    .booking-table {
-        font-size: 14px;
-    }
-
-    .booking-table th, .booking-table td {
-        padding: 8px;
-    }
-
-    /* Hide the table headers on mobile */
-    .booking-table th {
-        display: none;
-    }
-
-    /* Center-align the "View" button on mobile */
-    .view-button {
-        display: block;
-        margin: 10px auto;
-        text-align: center;
+    .booking-search {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .search-content {
-        padding-left: 10px;
-        text-align: center;
+        padding-left: 20px;
+        padding-top: 5px;
+    }
+
+    .booking-search input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
     }
 
     .more-content {
-        padding-left: 200px;
-        text-align: center;
+        padding-left: 20px;
+        padding-top: 25px;
     }
 
+    .next-page-btn {
+        margin-top: 10px;
+    }
+
+    .more-content {
+        padding-left: 20px;
+        padding-top: 25px;
+    }
 }
+

@@ -1,250 +1,8 @@
-body, ul {
-    margin: 0;
-    padding: 0;
-    font-family: "Poppins", sans-serif;
-}
-
-/* Left menu styles */
-.left-menu {
-    background-color: #FFDB8B;
-    color: #000;
-    width: 250px;
-    height: 100vh;
-    position: fixed;
-    overflow-y: auto;
-    font-family: "Poppins", sans;
-}
-
-/* User profile styles */
-.user-profile {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-}
-
-.user-profile img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 10px;
-}
-
-.user-name {
-    font-weight: bold;
-}
-
-.search-bar {
-    text-align: center;
-    margin-top: 30px;
-}
-
-.search-bar form {
-    display: inline-block;
-    background-color: #f1f1f1;
-    border-radius: 25px;
-    padding: 5px;
-    box-shadow: 0px 1px 3px rgba(127, 127, 127, 0.2);
-}
-
-.search-bar input[type="text"] {
-    width: 80%; /* Use 100% width for responsiveness */
-    width: 15vh;
-    padding: 5px;
-    border: none;
-    border-radius: 25px;
-    outline: none;
-    background-color: #f1f1f1;
-    font-family: "Poppins", sans;
-}
-
-.search-bar button[type="submit"] {
-    background-color: #F9B314;
-    color: #ffffff;
-    padding: 4px 8px;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    margin-left: 10px;
-}
-
-
-/* Main content styles */
-main {
-    padding: 20px;
-}
-
-/* Remove margin from the ul element */
-ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    margin-top: 20px;
-    font-family: "Poppins", sans;
-}
-
-li {
-    margin-bottom: 10px;
-}
-
-.nav-button {
-    text-decoration: none;
-    color: #000;
-    padding: 10px 20px;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    position: relative;
-    transition: background-color 0.3s;
-}
-
-.nav-button.active {
-    background-color: #F1F1F1;
-    font-weight: bold;
-    color: #F9B314;
-}
-
-.nav-button.active::before, .nav-button:active::before, .nav-button:hover::before {
-    content: "";
-    border-left: 4px solid #F9B314;
-    height: 100%;
-    position: absolute;
-    left: 0;
-}
-
-.nav-button i {
-    margin-right: 10px; /* Add spacing between icon and text */
-}
-
-
-/* Logo container styles */
-.logo-container {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    align-items: center;
-}
-
-/* Define styles for menu icons */
-
-
-.logout {
-    position: absolute;
-    padding: 0;
-    margin: 0;
-    bottom: 20px;   
-    width: 100%;
-}
-
-/* Logo styles */
-.logo-container img {
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-    margin-top: 0%;
-}
-
-.logo-text {
-    margin-left: 10px;
-    font-weight: bold;
-    font-size: 18px;
-    color: #000;
-    font-family: "Caveat", cursive;
-}
-
-.dashboard-content {
-    display: flex;
-    padding-left: 275px;
-    margin-right: 50px;
-    padding-top: 25px;
-    font-family: "Poppins", sans;
-}
-
-.dashboard-sub-content {
-    padding-left: 250px;
-    margin-right: auto;
-    padding-top: 5px;
-    font-family: "Poppins", sans;
-}
-
-/* Style for the container of top boxes */
-.top-boxes {
-    display: flex;
-    flex-wrap: wrap; /* Allow boxes to wrap to the next row on smaller screens */
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 5px;
-   
-}
-
-/* Style for each individual box */
-.box {
-    text-align: center;
-    border-radius: 5px;
-    border: 0.5px solid #e9e7e7;
-    flex: 1;
-    margin: 10px; /* Add spacing between boxes */
-    background-color: #ffffff;
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
-    width: 120px; /* Set the width to your desired size */
-    height: 120px; /* Set the height to your desired size */
-    box-sizing: border-box; /* Include padding and border in box width */
-    overflow: hidden; /* Hide overflow content */
-    border-left: 10px solid #FFEFCC;
-}
-
-/* Style for box heading */
-.box h2 {
-    font-size: 20px;
-    margin: 5;
-    font-weight: bold;
-    color: #605D5D;
-    text-align: left;
-    padding-left: 10px;
-}
-
-/* Style for box content */
-.box p {
-    font-size: 32px;
-    margin: 5px 0;
-    font-weight: bold;
-    color: #000000;
-    text-align: left;
-    padding-left: 10px;
-}
-
-
-
-/* Style for small image boxes */
-.img-box {
-    text-align: center;
-    border: 1px solid #e9e9e9;
-    border-radius: 5px;
-    flex: 0.5;
-    margin: 10px;
-    background-color: #f9f9f9;
-    width: 120px;
-    height: 120px;
-    box-sizing: border-box;
-    overflow: hidden;
-}
-
-/* Style for small image */
-.img-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-
-/* Style for the booking table */
+/* Booking Table Content Styles */
 .table-content {
     padding-left: 275px;
     margin-right: 20px;
-    padding-top: 5px;
+    padding-top: 2px;
     font-family: "Poppins", sans;
 }
 
@@ -272,48 +30,63 @@ li {
     background-color: #f2f2f2;
 }
 
-/* Style for the "View" button */
+/* View Button Styles */
 .view-button {
     background-color: #F9B314;
     color: #ffffff;
     border: none;
-    padding: 8px 12px;
+    padding: 8px; /* Adjust the padding for the button */
     border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 16px; /* Adjust the font size for the button */
+}
+
+.view-button i {
+    font-size: 18px; /* Set the desired font size for the icon */
 }
 
 .view-button:hover {
     background-color: #FFDB8B;
 }
 
-
-/* Style for the booking search container */
+/* Booking Search Container Styles */
 .booking-search {
     display: flex;
     align-items: center;
     margin-top: 20px;
+    /*border: 2px solid #ccc;*/
+    padding: 10px;
+    margin-right:80px;
 }
 
-/* Style for the search input */
+/* Search Input Styles */
 .search-content {
-    padding-left: 550px;
-    padding-top: 5px;
+    padding-left: 400px;
+    padding-top: 1px;
     font-family: "Poppins", sans;
 }
 
-.booking-search input[type="text"] {
+.booking-search input[type="text"],
+.booking-search input[type="date"] {
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 0.5px solid #ccc;
     border-radius: 5px;
     outline: none;
     font-size: 16px;
-    width: 500px;
+    width: 300px; /* Adjust width as needed */
+    margin-right: 10px; /* Add some spacing between input fields */
 }
 
-/* Style for the search button */
+.booking-search input[type="text"]:focus,
+.booking-search input[type="date"]:focus {
+    border-color: #FFDB8B; /* Change border color on focus */
+    /*box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); !* Add a slight shadow on focus *!*/
+}
+
+
+/* Search Button Styles */
 .booking-search button {
-    background-color:#F9B314;
+    background-color: #F9B314;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -323,26 +96,26 @@ li {
     transition: background-color 0.3s;
 }
 
-/* Style for the search button on hover */
+/* Search Button Hover Styles */
 .booking-search button:hover {
     background-color: #FFDB8B;
 }
 
-/* Style for the search icon */
+/* Search Icon Styles */
 .booking-search button i {
     font-size: 20px;
 }
 
-/* Style for the "Go to Next Page" icon */
+/* "Go to Next Page" Icon Styles */
 .next-page-btn {
-    background-color:#FFDB8B;
+    background-color: #FFDB8B;
     color: #000000;
     border: none;
     border-radius: 5px;
     padding: 5px 10px;
     cursor: pointer;
     margin-top: 20px;
-    font-weight:medium;
+    font-weight: medium;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -357,12 +130,55 @@ li {
     background-color: #F9B314;
 }
 
+/* More Content Styles */
 .more-content {
-    padding-left: 1340px;
+    padding-left: 1200px;
     padding-top: 5px;
     font-family: "Poppins", sans;
 }
 
+/* Popup Styles */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px; /* Increased border-radius for a more rounded appearance */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+    text-align: center; /* Center-align the content */
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* New Style for the profile picture */
+.profile-picture {
+    width: 50px; /* Set the desired size */
+    height: 50px;
+    border-radius: 50%; /* Make it a circle */
+    background-size: cover;
+    background-position: center;
+    margin: 0 auto 15px; /* Add margin for separation */
+}
 
 /* Cancel Booking Button Styles */
 .cancel-button {
@@ -409,85 +225,41 @@ li {
     background-color: #c0392b; /* Darker red color on hover */
 }
 
+/* Style the tab container */
+.tab {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+/* Style the individual tabs */
+.tab button {
+    background-color: #f1f1f1;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: border-bottom 0.3s ease;
+}
+
+/* Style the active tab */
+.tab button.active {
+    background-color: #F9B314;
+    Font-weight: bold;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
 /* Media Query for Responsive Design */
 @media screen and (max-width: 768px) {
-    .left-menu {
-        width: 100%;
-        height: auto;
-        position: static;
-        overflow-y: hidden;
-    }
-
-    main {
-        margin-left: 0;
-    }
-
-    .logo-container {
-        position: static;
-        text-align: center;
-    }
-    .search-bar button[type="submit"] {
-        padding: 10px 20px;
-    }
-    
-    .logout {
-        position: static;
-        text-align: center;
-        margin-top: 20px; /* Add spacing above the logout button */
-        width: 100%; 
-    }
-
-    .nav-button {
-        padding: 10px 15px; /* Adjust padding for smaller screens */
-    }
-
-    .dashboard-content{
-        position: static;
-        text-align: center;
-    }
-    .dashboard-content {
-        padding-left: 20px; /* Adjust padding for smaller screens */
-        text-align: center; /* Center-align the content */
-    }
-    
-    .dashboard-content h1 {
-        font-size: 24px; /* Reduce font size for smaller screens */
-    }
-
-    .dashboard-sub-content {
-        padding-left: 10px;
-        text-align: center;
-    }
-
     .table-content {
         padding-left: 10px;
         text-align: center;
     }
 
-    .top-boxes {
-        flex-direction: column; /* Stack boxes vertically on smaller screens */
-        align-items: flex-start; /* Align boxes to the left */
-    }
-
-    .box {
-        max-width: 100%; /* Each box takes full width on smaller screens */
-        margin-right: 0; /* No margin between boxes */
-    }
-
-    .img-box {
-        max-width: 100%;
-        margin: 2; /* Adjust the margin between img-box elements */
-    }
-
-    .box h2 {
-        font-size: 16px; /* Set the desired font size for heading */
-        padding-left: 5px; /* Adjust the padding as needed */
-    }
-
-    .box p {
-        font-size: 24px; /* Set the desired font size for paragraph */
-        padding-left: 5px; /* Adjust the padding as needed */
-    }
     .booking-table {
         font-size: 14px;
     }
@@ -518,387 +290,15 @@ li {
         text-align: center;
     }
 
+    .booking-search{
+        border: none;
+    }
+
+    .booking-search input[type="text"] {
+        width: 500px; /* Adjusted width for larger screens */
+    }
+
+    .booking-search input[type="date"] {
+        display: none; /* Hide the date input field */
+    }
 }
-
-.viewbooking{
-    background-color:#F9B314;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    margin-left: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-
-}
-
-/* Button style */
-/* Button style */
-.provide-feedback-button {
-    background-color: #7ec405f5; /* Blue background */
-    color: #fff; /* White text */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px 20px; /* Padding */
-    text-align: center; /* Center text */
-    text-decoration: none; /* No underline */
-    display: inline-block; /* Inline block display */
-   
-    cursor: pointer; /* Cursor on hover */
-    transition: background-color 0.3s; /* Smooth background color transition */
-}
-
-/* Button hover effect */
-.provide-feedback-button:hover {
-    background-color: #5d9201f5; /* Darker blue on hover */
-}
-
-/*  */
-.submitted-button {
-    background-color: #ccc; /* Light gray background */
-    color: #666; /* Dark gray text */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px 20px; /* Padding */
-    text-align: center; /* Center text */
-    text-decoration: none; /* No underline */
-    display: inline-block; /* Inline block display */
-    cursor: not-allowed; /* No cursor on hover */
-}
-
-/* Button hover effect (disabled state) */
-.submitted-button:hover {
-    background-color: #ccc; /* No hover effect for disabled state */
-}
-
-
-/*  */
-
-/* 
- */
- /* Modal styles */
- .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* Feedback form styling */
-.feedback-form {
-    margin-top: 20px;
-}
-
-.feedback-form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.feedback-form textarea {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    resize: vertical;
-}
-
-/* Rating input styling */
-.rating {
-    display: flex;
-    flex-direction: row-reverse; /* Change the direction to reverse */
-    justify-content: left;
-    margin-top: 10px;
-}
-
-.rating input[type="radio"] {
-    display: none;
-}
-
-.rating label {
-    cursor: pointer;
-    font-size: 30px;
-    margin: 0 5px;
-}
-
-.rating label:before {
-    content: "\2605"; /* Unicode character for star */
-    color: #ccc;
-}
-
-.rating input[type="radio"]:checked ~ label:before {
-    color: #ffc107; /* Yellow color for selected stars */
-}
-
-/* Submit button styling */
-.feedback-form button {
-    display: block;
-    width: 20%;
-    margin-left: 40%;
-    padding: 10px;
-    margin-top: 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.feedback-form button:hover {
-    background-color: #0056b3;
-}
-
-#successMessage{
-    color:red;
-}
-
-/* ////////////////
- */
- /* The Modal (background) */
-.modal1 {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-/* Modal Content/Box */
-.modal1-content {
-  background-color: #fefefe;
-  margin: 1% auto;
-  padding: 0px;
-  border: 1px solid #888;
-  width: 100%;
-  max-width: 1300px;
-  height: 80%;
-  border-radius: 10px;
-}
-
-/* Close Button */
-.close1 {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close1:hover,
-.close1:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-/* Hide the navbar when the modal is open */
-
-.unavailable-button,
-.cancel-button {
-    background-color: #f84a4a; /* Red background */
-    color: #fff; /* White text */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px 20px; /* Padding */
-    text-align: center; /* Center text */
-    text-decoration: none; /* No underline */
-    display: inline-block; /* Inline block display */
-    cursor: pointer; /* Cursor on hover */
-    transition: background-color 0.3s; /* Smooth background color transition */
-}
-
-.unavailable-button:disabled {
-    opacity: 0.6; /* Reduce opacity for disabled button */
-    cursor: not-allowed; /* Change cursor for disabled button */
-}
-/* Style for notification container */
-.notification-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Adjust as needed */
-    margin-left: 250px;
-    margin-top: 20px;
-    margin-bottom: 5px;
-}
-
-/* Style for individual notification */
-.notification {
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 25px 15px;
-}
-
-/* Style for notification header */
-.notification-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
-}
-
-/* Style for notification sender name */
-.notification-sender {
-    font-weight: bold;
-}
-
-/* Style for notification date */
-.notification-date {
-    font-style: italic;
-    color: #777;
-}
-
-/* Style for notification content */
-.notification-content {
-    /* Add styles for notification content here */
-}
-
-.notification-sender {
-    display: flex;
-    align-items: center;
-}
-
-.sender-image {
-    width: 50px; /* Adjust the size of the image as needed */
-    height: 50px;
-    border-radius: 50%; /* Ensure circular shape for the image */
-    margin-right: 10px; /* Add some spacing between the image and the name */
-}
-
-.sender-name {
-    font-weight: bold;
-}
-/*  */
-
-/* Modal Styles */
-.modal2 {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-  
-  /* Modal Content */
-  .modal2-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-  }
-  
-  /* Close Button */
-  .close2 {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .close2:hover,
-  .close2:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  
-  /* Confirm Button */
-  #confirmCancelBtn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  #confirmCancelBtn:hover {
-    background-color: #45a049;
-  }
-  #denyCancelBtn {
-    background-color: #ce091c;
-    color: white;
-    padding: 10px 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 20px;
-  }
-  #denyCancelBtn:hover {
-    background-color: #970615;
-  }
-
-
-  /* Style for the mark as read button */
-.mark-as-read-button {
-    text-align: right;
-}
-
-.mark-as-read-button button {
-    background-color: #ffc107;
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 15px;
-}
-
-.mark-as-read-button button:hover {
-    background-color: #e2ab05;
-}
-
-
-
-
-
-
-

@@ -51,7 +51,7 @@
     <h1>Invoice</h1>
 </div>
 <div class="invoice-details">
-    <p><strong>Invoice Number:</strong> INV-001</p>
+    <p><strong>Invoice Number:</strong>' . $invoice_number . '</p>
     <p><strong>Billed To:</strong> ' . $bookingDetails[0]->service_provider_name . '</p>
     <p><strong>Date:</strong> ' . $current_date . '</p>
 </div>
@@ -72,19 +72,19 @@
     $html .= '<tr>
         <td>' . $bookingDetail->traveler_name . '</td>
         <td>' . $bookingDetail->booking_type . '</td>
-        <td>' . $bookingDetail->booking_date . '</td>
-        <td>' . $bookingDetail->checkin_date . '</td>
-        <td>' . $bookingDetail->checkout_date . '</td>
+        <td>' . $bookingDetail->bookingDate . '</td>
+        <td>' . $bookingDetail->startDate . '</td>
+        <td>' . $bookingDetail->endDate . '</td>
         <td>' . $bookingDetail->service_detail . '</td>
-        <td>Rs' . $bookingDetail->amount . '</td>
+        <td>Rs' . $bookingDetail->payment_amount . '</td>
     </tr>';
     }
     $html .= '</tbody>
 </table>
 <div class="total-section">
-    <p><strong>Total Amount:</strong> Rs' . $total_amount . '</p>
-    <p><strong>Commission Fee (10%):</strong> Rs' . ($total_amount * 0.1) . '</p>
-    <p><strong>Final Payment:</strong> Rs' . ($total_amount * 0.9) . '</p>
+    <p><strong>Total Amount:</strong> Rs' . $totalAmount . '</p>
+    <p><strong>Commission Fee (10%):</strong> Rs' . ($totalAmount * 0.1) . '</p>
+    <p><strong>Final Payment:</strong> Rs' . ($totalAmount * 0.9) . '</p>
 </div>
 <div class="footer">
     <p>Thank you for your business!</p>

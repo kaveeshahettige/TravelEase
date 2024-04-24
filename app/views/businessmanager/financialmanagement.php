@@ -62,6 +62,9 @@ include 'navigation.php';
         
         <div class="table-content">
                 <h2>All Transactions</h2>
+            <?php if (empty($data["finalPayment"])): ?>
+                <p>No revenue details available.</p>
+            <?php else: ?>
             <table class="transaction-table">
                 <thead>
                 <tr>
@@ -76,41 +79,37 @@ include 'navigation.php';
                 </tr>
                 </thead>
                 <tbody>
-                <?php
-                $transactions = $data['transactionData'];
-                foreach ($transactions as $transaction):
-                    ?>
+                <?php if (!empty($finalTransactionData) && is_array($finalTransactionData)) : ?>
+                    <?php foreach ($finalTransactionData as $transaction) : ?>
+                        <tr>
+                            <td>
+                                <div class="service-provider-info">
+                                    <!-- Assuming there's a profile_picture property in the transaction object -->
+                                    <img src="<?php echo $transaction->profile_picture ?>" alt="Service Provider Photo">
+                                    <span><?php echo $transaction->serviceprovider_name; ?></span>
+                                </div>
+                            </td>
+                            <td><?php echo $transaction->service_type; ?></td>
+                            <td><?php echo number_format($data['totalAmount'], 2); ?> LKR</td>
+                            <td><?php echo number_format($data['totalAmount'] * 0.90, 2); ?> LKR</td>
+                            <td><?php echo date('Y-m-d'); ?></td>
+                            <td><?php echo $transaction->account_number; ?></td>
+                            <td>
+                                <a href="<?php echo URLROOT; ?>businessmanager/payment?serviceProvider_id=<?php echo $transaction->serviceProvider_id; ?>&totalAmount=<?php echo $data['totalAmount']; ?>" class="view-button">
+                                    Proceed Payment
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else : ?>
                     <tr>
-                        <td>
-                            <div class="service-provider-info">
-                                <!-- Assuming there's a profile_picture property in the transaction object -->
-                                <img src="<?php echo $transaction->profile_picture ?>" alt="Service Provider Photo">
-                                <span><?php echo $transaction->service_provider_name; ?></span>
-                            </div>
-                        </td>
-                        <td><?php echo $transaction->service_type; ?></td>
-                        <td><?php echo number_format($transaction->total_amount, 2); ?> LKR</td>
-                        <td><?php echo number_format($transaction->total_amount * 0.90, 2); ?> LKR</td>
-                        <td><?php echo date('Y-m-d'); ?></td>
-                        <td><?php echo $transaction->account_number; ?></td>
-<!--                        <td class="--><?php //echo strtolower($transaction->payment_status); ?><!--">-->
-<!--                            --><?php //echo ($transaction->payment_status == 'Paid') ? 'Paid' : 'Pending'; ?>
-<!--                        </td>-->
-                        <td>
-                            <a href="<?php echo URLROOT; ?>businessmanager/payment?serviceProvider_id=<?php echo $transaction->serviceProvider_id; ?>&total_amount=<?php echo $transaction->total_amount; ?>" class="view-button">
-                                View
-                            </a>
-
-
-                        </td>
-
+                        <td colspan="7">No transactions found.</td>
                     </tr>
+                <?php endif; ?>
 
-
-                <?php endforeach; ?>
                 </tbody>
             </table>
-
+            <?php endif; ?>
         </div>
 
     </main>

@@ -62,7 +62,7 @@ include 'navigation.php';
                             <h6>Email</h6>
                             <p><?=($userData->email)?></p>
                             <h6>Location</h6>
-                            <p><?=$hotelData->address ?> </p>
+                            <p><?=$hotelData->addr ?> </p>
                         </div>
                         <a href="<?php echo URLROOT; ?>hotel/hoteledit">
                             <button class="edit-button">Edit</button>
