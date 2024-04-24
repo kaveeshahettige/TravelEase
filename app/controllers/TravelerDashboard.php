@@ -57,6 +57,8 @@ class TravelerDashboard extends Controller{
       $noOfBooking=$this->userModel->countMyUpcomingBooking($id);
       $mybooking = $this->userModel->findMyUpcomingBooking($id);
 
+      // echo var_dump($mybooking);
+
     if ($mybooking) {
     // Check cancellation eligibility for each booking and store it in $mybooking
     foreach ($mybooking as $key => $booking) {
@@ -628,8 +630,9 @@ public function cancelBooking($temporyid,$booking_id){
         $message="Agency vehicle with ID ".$bookingFurtherDetail->vehicle_id."-".$bookingFurtherDetail->brand ." ".$bookingFurtherDetail->model." ".$bookingFurtherDetail->plate_number." ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
       }elseif($bookingDetails->type==3){
         $message="Hotel room with ID ".$bookingFurtherDetail->room_id."-".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
-
-      }
+    }elseif($bookingDetails->type==5){
+      $message="Guide service,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+    }
       
       
       //cancel from booking table
@@ -638,7 +641,7 @@ public function cancelBooking($temporyid,$booking_id){
       //refund user
       //$refund = $this->userModel->refundUser($booking_id);
 
-      //check type and provide availibility of vehicle_bookings,room_availability
+      //check type and provide availibility of vehicle_availbilty,room_availability,guide_availability
       $availibility=$this->userModel->makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 
       
       //send a sms to service provider
@@ -658,6 +661,8 @@ public function cancelBooking($temporyid,$booking_id){
       }elseif($bookingDetails->type==3){
         $message="Hotel room with ID ".$bookingFurtherDetail->room_id."-".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
 
+      }elseif($bookingDetails->type==5){
+        $message="Guide service,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
       }
       
       //cancel from cartbookings table

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">    
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/travelerDashboard/bookings.css">    
     <title>TravelEase</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -89,65 +89,43 @@
         </div>
         </div>
 
-        <div class="table-content">
-            <h2>Payments Details</h2>
-            <table class="booking-table">
-                <thead>
-                <tr>
-                    <th>No</th>
-                    <!-- <th>Payment ID</th> -->
-                    <!-- <th>Booking ID</th> -->
-                    <th>Booking</th>
+        <div class="card-container">
+    <?php
+    $count = 1;
+    if (!empty($data['payments']) && is_array($data['payments'])) {
+        foreach ($data['payments'] as $payment) {
+            echo '<div class="card" style="background-color: #fff8e9;">';
+            echo '<div class="card-header">';
+            echo '<h3>' . $count . '</h3>';
+            echo '</div>';
+            echo '<div class="card-body">';
+            // echo '<p><strong>Payment ID:</strong> ' . $payment->payment_id . '</p>';
+            // echo '<p><strong>Booking ID:</strong> ' . $payment->booking_id . '</p>';
+            echo '<p><strong>Booking:</strong> ' . $payment->fname . '</p>';
+            echo '<p><strong>Amount (LKR):</strong> ' . $payment->amount . '.00</p>'; // Assuming all payments for the same booking have the same amount
+            echo '<p><strong>Date of Payment:</strong> ' . $payment->payment_date . '</p>'; // Assuming all payments for the same booking have the same booking date
 
-                    <th>Amount (LKR)</th>
-                    <th>Date of Payment</th>
-                   
-                </tr>
-                </thead>
-                <tbody>
+            // Add additional card content or buttons as needed
 
-
-                <?php
-$count = 1;
-
-if (!empty($data['payments']) && is_array($data['payments'])) {
-    // Initialize an array to store payments grouped by booking_id
-    
-
-    // echo var_dump($data['payments']);
-
-    // Loop through the grouped payments
-    foreach ($data['payments'] as $payments) {
-        // Combine service provider names into a single string separated by commas
-        // $providerNames = array_map(function ($payment) {
-        //     return ucfirst($payment->fname) . ' ' . $payment->lname;
-        // }, $payments);
-        // $providerNamesString = implode(', ', $providerNames);
-
-        // Output the row for each booking_id
-        echo '<tr class="t-row">';
-        echo '<td>' . $count . '</td>';
-        // echo '<td>' . $bookingId . '</td>';
-        echo '<td>' . $payments->fname . '</td>';
-        echo '<td>' . $payments->amount . '.00 </td>'; // Assuming all payments for the same booking have the same amount
-        echo '<td>' . $payments->payment_date . '</td>'; // Assuming all payments for the same booking have the same booking date
-        echo '</tr>';
-        $count++;
+            echo '</div>'; // card-body
+            echo '</div>'; // card
+            $count++;
+        }
+    } else {
+        echo '<div class="card">';
+        echo '<div class="card-body">';
+        echo '<p>No payments available</p>';
+        echo '</div>'; // card-body
+        echo '</div>'; // card
     }
-}
- else {
-    echo '<tr><td colspan="4">No payments available</td></tr>';
-}
-?>
-
-                </tbody>
-            </table>
-        </div>
+    ?>
+</div>
 
 
-        <div class="more-content">
+
+        <!-- <div class="more-content">
             <button class="next-page-btn">More <i class='bx bx-chevron-right'></i></button>
-        </div>
+        </div> -->
 
     </main>
 

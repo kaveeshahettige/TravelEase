@@ -926,7 +926,7 @@ foreach ($transactionData['furtherBookingDetails'] as $bookingDetail) {
         $this->db->bind(':user_id', $transactionData['user']->id);
         $this->db->bind(':serviceProvider_id', $bookingDetail->user_id);
         $this->db->bind(':startDate', $transactionData['checkinDate']);
-        $this->db->bind(':endDate', $transactionData['checkinDate']);
+        $this->db->bind(':endDate', $transactionData['checkoutDate']);
         $this->db->bind(':package_id', $bookingDetail->user_id);
     }
     
@@ -1186,7 +1186,7 @@ public function findAvailableRooms($checkinDate, $checkoutDate,$hotelid){
         SELECT room_id
         FROM room_availability
         WHERE startDate <= :checkoutDate
-        AND endDate >= :checkinDate
+        AND (endDate >= :checkinDate OR endDate IS NULL)
     )
     AND hotel_id = :hotelid
     AND roomCondition=:condition  
@@ -1597,9 +1597,9 @@ public function findAvailableVehicles($pickupDate, $dropoffDate, $agencyId) {
     $this->db->query('SELECT * FROM vehicles
     WHERE vehicle_id NOT IN (
         SELECT vehicle_id
-        FROM vehicle_bookings
-        WHERE start_date <= :dropoffDate
-        AND end_date >= :pickupDate
+        FROM vehicle_availability
+        WHERE startDate <= :dropoffDate
+        AND (endDate >= :pickupDate OR endDate IS NULL)
     )
     AND agency_id = :agencyId
     AND vehicleCondition=:condition;
@@ -1754,10 +1754,10 @@ public function findVehiclesByLocation($location, $checkinDate, $checkoutDate) {
         SELECT vehicle_id
         FROM vehicle_availability
         WHERE startDate <= :checkoutDate
-        AND endDate >= :checkinDate
+        AND (endDate >= :checkinDate OR endDate IS NULL)
     )
     AND vehicles.vehicleCondition = :vehicleCondition
-    AND users.profile_status = 1;
+    AND users.profile_status = 1 AND users.approval = 1;
 
 ');
 
@@ -1873,12 +1873,13 @@ public function monthlyPayment($id){
 //countPayment($id)
 public function countPayment($id){
     $this->db->query('SELECT COUNT(*) AS count FROM (
-        SELECT booking_id FROM payments WHERE booking_id IN (SELECT booking_id FROM bookings WHERE user_id = :id)
+        SELECT booking_id FROM payments WHERE booking_id IN (SELECT booking_id FROM bookings WHERE user_id = :id AND bookingCondition!=:condition)
         UNION ALL
-        SELECT booking_id FROM cartpayments WHERE booking_id IN (SELECT booking_id FROM cartbookings WHERE user_id = :id)
+        SELECT booking_id FROM cartpayments WHERE booking_id IN (SELECT booking_id FROM cartbookings WHERE user_id = :id AND bookingCondition!=:condition)
     ) AS combined_payments;
     ');
     $this->db->bind(':id', $id);
+    $this->db->bind(':condition', 'cancelled');
     $row = $this->db->single();
      if($this->db->rowcount()>0){
         return $row->count;
@@ -1896,7 +1897,7 @@ public function countPaymentMonthly($id){
         WHERE booking_id IN (
             SELECT booking_id 
             FROM bookings 
-            WHERE user_id = :id 
+            WHERE user_id = :id AND bookingCondition!=:condition
         )
         AND MONTH(payment_date) = MONTH(CURDATE()) 
         AND YEAR(payment_date) = YEAR(CURDATE())
@@ -1908,7 +1909,7 @@ public function countPaymentMonthly($id){
         WHERE booking_id IN (
             SELECT booking_id 
             FROM cartbookings 
-            WHERE user_id = :id 
+            WHERE user_id = :id AND bookingCondition!=:condition
         )
         AND MONTH(payment_date) = MONTH(CURDATE()) 
         AND YEAR(payment_date) = YEAR(CURDATE())
@@ -1916,6 +1917,7 @@ public function countPaymentMonthly($id){
     
     ');
     $this->db->bind(':id', $id);
+    $this->db->bind(':condition', 'cancelled');
     $row = $this->db->single();
      if($this->db->rowcount()>0){
         return $row->count;
@@ -1933,7 +1935,7 @@ public function amountPaymentMonthly($id){
         WHERE booking_id IN (
             SELECT booking_id 
             FROM bookings 
-            WHERE user_id = :id 
+            WHERE user_id = :id AND bookingCondition!=:condition
         )
         AND MONTH(payment_date) = MONTH(CURDATE()) 
         AND YEAR(payment_date) = YEAR(CURDATE())
@@ -1945,7 +1947,7 @@ public function amountPaymentMonthly($id){
         WHERE booking_id IN (
             SELECT booking_id 
             FROM cartbookings 
-            WHERE user_id = :id 
+            WHERE user_id = :id  AND bookingCondition!=:condition
         )
         AND MONTH(payment_date) = MONTH(CURDATE()) 
         AND YEAR(payment_date) = YEAR(CURDATE())
@@ -1953,6 +1955,7 @@ public function amountPaymentMonthly($id){
     
     ');
     $this->db->bind(':id', $id);
+    $this->db->bind(':condition', 'cancelled');
     $row = $this->db->single();
      if($this->db->rowcount()>0){
         return $row->total;
@@ -1977,7 +1980,9 @@ JOIN
 JOIN 
     users ON bookings.serviceProvider_id = users.id
 WHERE 
-    bookings.user_id = :id
+    bookings.user_id = :id AND bookings.bookingCondition!=:condition
+    AND MONTH(payments.payment_date) = MONTH(CURDATE()) 
+    AND YEAR(payments.payment_date) = YEAR(CURDATE())
 
 UNION ALL
 
@@ -1993,11 +1998,14 @@ JOIN
 JOIN 
     users ON cartbookings.serviceProvider_id = users.id
 WHERE 
-    cartbookings.user_id = :id;
+    cartbookings.user_id = :id AND cartbookings.bookingCondition!=:condition
+    AND MONTH(cartpayments.payment_date) = MONTH(CURDATE()) 
+    AND YEAR(cartpayments.payment_date) = YEAR(CURDATE());
 
 ');
 
     $this->db->bind(':id', $id);
+    $this->db->bind(':condition', 'cancelled');
     $payments = $this->db->resultSet();
      if($this->db->rowcount()>0){
         return $payments;
@@ -2090,7 +2098,7 @@ public function findAvailableHotelRooms($location, $checkinDate, $checkoutDate) 
         SELECT room_id
         FROM room_availability
         WHERE startDate <= :checkoutDate
-        AND endDate >= :checkinDate
+        AND (endDate >= :checkinDate OR endDate IS  NULL)
     )
     AND hotel_rooms.roomCondition = :roomCondition
     AND users.profile_status = 1';
@@ -2128,7 +2136,7 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
         SELECT vehicle_id
         FROM vehicle_availability
         WHERE startDate <= :checkoutDate
-        AND endDate >= :checkinDate
+        AND (endDate >= :checkinDate OR endDate IS NULL)
     )
     AND vehicles.vehicleCondition = :vehicleCondition
     AND users.profile_status = 1;
@@ -2158,7 +2166,7 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
             SELECT user_id
             FROM guide_availability
             WHERE startDate <= :checkoutDate
-            AND endDate >= :checkinDate
+            AND (endDate >= :checkinDate OR endDate IS NULL)
         )
         AND users.profile_status = 1;
     ');
@@ -2211,14 +2219,16 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
         FROM (
             SELECT booking_id, endDate
             FROM bookings
-            WHERE user_id = :id AND endDate < CURDATE()
+            WHERE user_id = :id AND endDate < CURDATE() AND bookingCondition != :bookingCondition
             UNION ALL
             SELECT booking_id, endDate
             FROM cartbookings
-            WHERE user_id = :id AND endDate < CURDATE()
+            WHERE user_id = :id AND endDate < CURDATE() AND bookingCondition != :bookingCondition
         ) AS combined_bookings;
         ');
         $this->db->bind(':id', $id);
+        $this->db->bind(':bookingCondition', 'cancelled');
+
         $row = $this->db->single();
          if($this->db->rowcount()>0){
             return $row->count;
@@ -2250,6 +2260,7 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
     WHERE 
         bookings.user_id = :id
         AND bookings.endDate < CURDATE()
+        AND bookings.bookingCondition != :bookingCondition
     
     UNION ALL
     
@@ -2272,12 +2283,14 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
     WHERE 
         cartbookings.user_id = :id
         AND cartbookings.endDate < CURDATE()
+        AND cartbookings.bookingCondition != :bookingCondition
         
     ORDER BY 
         endDate DESC; -- Order by endDate in descending order
     
         ');
         $this->db->bind(':id', $id);
+        $this->db->bind(':bookingCondition', 'cancelled');
         $result = $this->db->resultSet();
         if ($this->db->rowCount() > 0) {
             return $result;
@@ -2480,11 +2493,10 @@ return $success; // Return success status after the loop
     //makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 
     public function makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail){
         if($bookingDetails->type==4){
-            $this->db->query('DELETE FROM vehicle_bookings WHERE vehicle_id = :vehicle_id AND start_date = :start_date AND end_date = :end_date OR booking_id = :booking_id');
+            $this->db->query('DELETE FROM vehicle_availability WHERE vehicle_id = :vehicle_id AND startDate = :startDate AND endDate = :endDate');
             $this->db->bind(':vehicle_id', $bookingFurtherDetail->vehicle_id);
-            $this->db->bind(':start_date', $bookingDetails->startDate);
-            $this->db->bind(':end_date', $bookingDetails->endDate);
-            $this->db->bind(':booking_id', $booking_id);
+            $this->db->bind(':startDate', $bookingDetails->startDate);
+            $this->db->bind(':endDate', $bookingDetails->endDate);
             if($this->db->execute()){
                 return true;
             }else{
@@ -2502,9 +2514,19 @@ return $success; // Return success status after the loop
                 return false;
             }
 
-        }
+        }else if($bookingDetails->type==5){
+            $this->db->query('DELETE FROM guide_availability WHERE user_id = :user_id AND startDate = :startDate AND endDate = :endDate');
+            $this->db->bind(':user_id', $bookingFurtherDetail->user_id);
+            $this->db->bind(':startDate', $bookingDetails->startDate);
+            $this->db->bind(':endDate', $bookingDetails->endDate);
+            if($this->db->execute()){
+                return true;
+            }else{
+                return false;
+            }
         
     }
+}
 
 
     //markAsRead($notification_id);
@@ -2580,7 +2602,7 @@ return $success; // Return success status after the loop
     //checkGuideAvailability($guide_id, $startDate, $endDate)
     public function checkGuideAvailability($guide_id, $startDate, $endDate) {
         $this->db->query('SELECT * FROM guide_availability WHERE user_id = :guide_id 
-                          AND startDate <= :endDate AND endDate >= :startDate');
+                          AND startDate <= :endDate AND (endDate >= :startDate OR endDate IS NULL)');
             
         $this->db->bind(':guide_id', $guide_id);
         $this->db->bind(':startDate', $startDate);
@@ -2669,7 +2691,7 @@ return $success; // Return success status after the loop
     //checkAvailbility($cartDetail->type, $serviceId,$cartDetail->startDate,$cartDetail->endDate)
     public function checkAvailbility($type, $serviceId,$startDate,$endDate){
         if($type==3){
-            $this->db->query('SELECT * FROM room_availability WHERE room_id = :serviceId AND startDate <= :endDate AND endDate >= :startDate');
+            $this->db->query('SELECT * FROM room_availability WHERE room_id = :serviceId AND startDate <= :endDate AND (endDate >= :startDate OR endDate IS NULL)');
             $this->db->bind(':serviceId', $serviceId);
             $this->db->bind(':startDate', $startDate);
             $this->db->bind(':endDate', $endDate);
@@ -2680,7 +2702,7 @@ return $success; // Return success status after the loop
                 return true;
             }
         }else if($type==4){
-            $this->db->query('SELECT * FROM vehicle_bookings WHERE vehicle_id = :serviceId AND start_date <= :endDate AND end_date >= :startDate');
+            $this->db->query('SELECT * FROM vehicle_availability WHERE vehicle_id = :serviceId AND startDate <= :endDate AND (endDate >= :startDate OR endDate IS NULL)');
             $this->db->bind(':serviceId', $serviceId);
             $this->db->bind(':startDate', $startDate);
             $this->db->bind(':endDate', $endDate);
@@ -2691,14 +2713,7 @@ return $success; // Return success status after the loop
                 return true;
             }
         }else if($type==5){
-        $this->db->query('SELECT * FROM bookings 
-        WHERE package_id = :serviceId AND startDate <= :endDate AND endDate >= :startDate
-        
-        UNION
-        SELECT * FROM cartbookings 
-        WHERE package_id = :serviceId AND startDate <= :endDate AND endDate >= :startDate
-        ');
-
+        $this->db->query('SELECT * FROM guide_availability WHERE user_id = :serviceId AND startDate <= :endDate AND (endDate >= :startDate OR endDate IS NULL)');
         
         $this->db->bind(':serviceId', $serviceId);
         $this->db->bind(':startDate', $startDate);

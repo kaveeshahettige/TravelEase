@@ -112,17 +112,66 @@
             <div class="search-section">
             <div class="date-picker">
                 <label for="checkin">Check-In:</label>
-                <input type="date" id="checkin" name="checkin" required>
+                <input type="date" id="checkin" name="checkin"  min="<?php echo date('Y-m-d'); ?>" required>
             </div>
             <div class="date-picker">
                 <label for="checkout">Check-Out:</label>
-                <input type="date" id="checkout" name="checkout" required>
+                <input type="date" id="checkout" name="checkout" min="<?php echo date('Y-m-d'); ?>" required>
             </div>
             <button class="search-button" id="search-button" data-hotel-id="<?php echo $data['bookingDetails']->hotel_id; ?>" onclick="searchRooms(event)">Search</button>
 
 
         </div>
+<!-- /////////////// -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const checkinInput = document.getElementById('checkin');
+        const checkoutInput = document.getElementById('checkout');
 
+        // Set minimum check-out date as 1 day after check-in date
+        checkinInput.addEventListener('change', function() {
+            const checkinDate = new Date(checkinInput.value);
+            const minCheckoutDate = new Date(checkinDate);
+            minCheckoutDate.setDate(minCheckoutDate.getDate() + 1);
+            const minCheckoutDateString = minCheckoutDate.toISOString().split('T')[0];
+            checkoutInput.min = minCheckoutDateString;
+            checkoutInput.value = minCheckoutDateString; // Automatically set checkout to minimum
+        });
+
+        // Initial setup for checkout min value based on checkin
+        const initialCheckinDate = new Date(checkinInput.value);
+        const initialMinCheckoutDate = new Date(initialCheckinDate);
+        initialMinCheckoutDate.setDate(initialMinCheckoutDate.getDate() + 1);
+        const initialMinCheckoutDateString = initialMinCheckoutDate.toISOString().split('T')[0];
+        checkoutInput.min = initialMinCheckoutDateString;
+
+        // Validate on form submission
+        document.getElementById('search-button').addEventListener('click', function(event) {
+            if (!validateDates()) {
+                event.preventDefault();
+            }
+        });
+
+        // Function to validate dates
+        function validateDates() {
+            const checkinDate = new Date(checkinInput.value);
+            const checkoutDate = new Date(checkoutInput.value);
+
+            // Check if check-in date is after check-out date
+            if (checkinDate >= checkoutDate) {
+                alert("Check-out date must be after check-in date.");
+                return false;
+            }
+
+            // All validations passed
+            return true;
+        }
+    });
+</script>
+
+
+
+<!-- /////////////// -->
 
 
 
@@ -136,10 +185,10 @@
                 <thead>
                     <tr>
                         <!-- <th>No</th> -->
-                        <th>Room ID</th>
+                        <!-- <th>Room ID</th> -->
                         <th>Room type</th>
                         <th>About</th>
-                        <th>price per day</th>
+                        <th>price per Night</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -152,7 +201,7 @@ if (!empty($data['rooms']) && is_array($data['rooms'])) {
     foreach ($data['rooms'] as $room) {
         echo '<tr class="t-row">';
         // echo '<td>' . $count . '</td>';
-        echo '<td>' . $room->room_id . '</td>';
+        // echo '<td>' . $room->room_id . '</td>';
         echo '<td>' . $room->roomType . '</td>';
         echo '<td>' . $room->description . '</td>';
         echo '<td>' . $room->price . '</td>';
@@ -236,7 +285,7 @@ if (!empty($data['rooms']) && is_array($data['rooms'])) {
             <div class="search-section">
             <div class="date-picker">
                 <label for="pickup">Pickup date:</label>
-                <input type="date" id="pickup" name="pickup" required>
+                <input type="date" id="pickup" name="pickup" min="<?php echo date('Y-m-d'); ?>" required>
             </div>
             <div class="date-picker">
                 <label for="ptime">Pickup Time:</label>
@@ -244,7 +293,7 @@ if (!empty($data['rooms']) && is_array($data['rooms'])) {
             </div>
             <div class="date-picker">
                 <label for="dropoff">Dropoff date:</label>
-                <input type="date" id="dropoff" name="dropoff" required>
+                <input type="date" id="dropoff" name="dropoff" min="<?php echo date('Y-m-d'); ?>" required>
             </div>
             <!-- <div class="date-picker">
                 <label for="dtime">Time:</label>
@@ -255,13 +304,49 @@ if (!empty($data['rooms']) && is_array($data['rooms'])) {
 
         </div>
         <div>
+            <!-- //////////// -->
+            <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const pickupInput = document.getElementById('pickup');
+        const dropoffInput = document.getElementById('dropoff');
+
+        // Validate on form submission
+        document.getElementById('search-button').addEventListener('click', function(event) {
+            if (!validateDates()) {
+                event.preventDefault();
+            }
+        });
+
+        // Function to validate dates
+        function validateDates() {
+            const pickupDate = new Date(pickupInput.value);
+            const dropoffDate = new Date(dropoffInput.value);
+
+            // Check if pickup date is after dropoff date
+            if (pickupDate > dropoffDate) {
+                alert("Dropoff date must be on or after pickup date.");
+                return false;
+            }
+
+            // All validations passed
+            return true;
+        }
+        pickupInput.addEventListener("change", function() {
+            dropoffInput.min = pickupInput.value;
+        });
+    });
+</script>
+
+
+
+            <!-- /////////// -->
     <?php if ($data['type']==4): ?>
     <h2 style="text-align: center;">Available vehicles</h2>
 
             <table class="booking-table">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <!-- <th>No</th> -->
                         <th>Brand</th>
                         <th>Model</th>
                         <th>Plate Number</th>
@@ -280,7 +365,7 @@ $count = 1;
 if (!empty($data['vehicles']) && is_array($data['vehicles'])) {
     foreach ($data['vehicles'] as $vehicle) {
         echo '<tr class="t-row">';
-         echo '<td>' . $count . '</td>';
+        //  echo '<td>' . $count . '</td>';
         echo '<td>' . $vehicle->brand . '</td>';
         echo '<td>' . $vehicle->model . '</td>';
         echo '<td>' . $vehicle->plate_number . '</td>';
@@ -381,7 +466,7 @@ if (!empty($data['vehicles']) && is_array($data['vehicles'])) {
             <div class="search-section">
             <div class="date-picker">
                 <label for="pickup">Start date:</label>
-                <input type="date" id="pickup" name="pickup" required>
+                <input type="date" id="pickup" name="pickup" min="<?php echo date('Y-m-d'); ?>" required>
             </div>
             <div class="date-picker">
                 <label for="ptime">Meet Time:</label>
@@ -389,7 +474,7 @@ if (!empty($data['vehicles']) && is_array($data['vehicles'])) {
             </div>
             <div class="date-picker">
                 <label for="dropoff">End date:</label>
-                <input type="date" id="dropoff" name="dropoff" required>
+                <input type="date" id="dropoff" name="dropoff" min="<?php echo date('Y-m-d'); ?>" required>
             </div>
             <!-- <div class="date-picker">
                 <label for="dtime">Time:</label>
@@ -405,6 +490,37 @@ if (!empty($data['vehicles']) && is_array($data['vehicles'])) {
     
    
             </div>
+            <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const pickupInput = document.getElementById('pickup');
+        const dropoffInput = document.getElementById('dropoff');
+
+        // Validate on form submission
+        document.getElementById('book-now-button').addEventListener('click', function(event) {
+            if (!validateDates()) {
+                event.preventDefault();
+            }
+        });
+
+        // Function to validate dates
+        function validateDates() {
+            const pickupDate = new Date(pickupInput.value);
+            const dropoffDate = new Date(dropoffInput.value);
+
+            // Check if pickup date is after dropoff date
+            if (pickupDate > dropoffDate) {
+                alert("Dropoff date must be on or after pickup date.");
+                return false;
+            }
+
+            // All validations passed
+            return true;
+        }
+        pickupInput.addEventListener("change", function() {
+            dropoffInput.min = pickupInput.value;
+        });
+    });
+</script>
         
     <?php endif; ?>
 

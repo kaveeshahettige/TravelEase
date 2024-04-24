@@ -54,12 +54,12 @@
             </div>
         </div>
         <div class="main1searchbar" >
-        <form action="<?php echo URLROOT ?>loggedTraveler/searchAllServices" method="POST">
+        <form id="bookingForm" action="<?php echo URLROOT ?>loggedTraveler/searchAllServices" method="POST">
             <div class="search">         
                 <div class="search1"><input type="text" placeholder="Location: " name="location" id="location-input">
             </div>
-                <div class="search2">Check in Date:<input type="date" placeholder="Check in Date" name="checkinDate"></div>
-                <div class="search3">Check out Date:<input type="date" placeholder="Check out Date" name="checkoutDate"></div>
+                <div class="search2">Check in Date:<input type="date" placeholder="Check in Date" name="checkinDate" id="checkinDate" min="<?php echo date('Y-m-d'); ?>"></div>
+                <div class="search3">Check out Date:<input type="date" placeholder="Check out Date" name="checkoutDate" id="checkoutDate" min="<?php echo date('Y-m-d'); ?>"></div>
                 <div class="search4"><button type="submit" id="searchbtn">  Search</button></div>
             </div>
             </form>
@@ -294,6 +294,56 @@ window.onclick = function(event) {
             });
         });
     </script>
+
+    <!-- ///checkin checkoutdate validation// -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get the form and input elements
+        const bookingForm = document.getElementById("bookingForm");
+        const checkinDateInput = document.getElementById("checkinDate");
+        const checkoutDateInput = document.getElementById("checkoutDate");
+
+        // Add event listener for form submission
+        bookingForm.addEventListener("submit", function(event) {
+            // Prevent form submission if validation fails
+            if (!validateDates()) {
+                event.preventDefault();
+            }
+        });
+
+        // Function to validate dates
+        function validateDates() {
+            const checkinDate = new Date(checkinDateInput.value);
+            const checkoutDate = new Date(checkoutDateInput.value);
+            const today = new Date();
+
+            // Check if check-in date is after check-out date
+            // if (checkinDate >= checkoutDate) {
+            //     alert("Check-out date must be after check-in date.");
+            //     return false;
+            // }
+
+            // Check if check-in date is in the past
+            if (checkinDate < today) {
+                alert("Check-in date cannot be in the past.");
+                return false;
+            }
+
+            // Check if check-out date is in the past
+            if (checkoutDate < today) {
+                alert("Check-out date cannot be in the past.");
+                return false;
+            }
+
+            // All validations passed
+            return true;
+        }
+        checkinDateInput.addEventListener("change", function() {
+            checkoutDateInput.min = checkinDateInput.value;
+        });
+    });
+</script>
+
 
     </section>
   

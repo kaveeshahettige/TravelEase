@@ -51,7 +51,7 @@
         </div>
         
         <div class="dashboard-content">
-            <h1>Cart bookings</h1>
+            <h1>Carts</h1>
         </div>
 
         <div class="dashboard-sub-content">
@@ -165,16 +165,16 @@
 <div id="dateModal">
     <div id="dateModal-content">
         <span class="close-date-modal" onclick="closeDateModal()">&times;</span>
-        <h2>Enter Check-in and Check-out Dates</h2>
+        <h2>Enter Check-in and Check-out Dates : </h2>
         <form id="dateForm">
             <!-- Hidden input for cartId -->
-            <input type="hidden" id="cartIdInput" name="cartIdInput">
+            <input type="hidden" id="cartIdInput" name="cartIdInput" >
 
             <label for="checkin">Check-in Date:</label>
-            <input type="date" id="checkin" name="checkin" required>
+            <input type="date" id="checkin" name="checkin" min="<?php echo date('Y-m-d'); ?>" required>
 
             <label for="checkout">Check-out Date:</label>
-            <input type="date" id="checkout" name="checkout" required>
+            <input type="date" id="checkout" name="checkout" min="<?php echo date('Y-m-d'); ?>" required>
 
             <button type="button" onclick="submitDates()">Submit</button>
         </form>
@@ -244,6 +244,59 @@ function submitDates() {
 }
 
     </script>
+
+
+   <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get the form and input elements
+        const bookingForm = document.getElementById("dateForm");
+        const checkinDateInput = document.getElementById("checkin");
+        const checkoutDateInput = document.getElementById("checkout");
+
+        // Add event listener for form submission
+        bookingForm.addEventListener("submit", function(event) {
+            // Prevent form submission if validation fails
+            if (!validateDates()) {
+                event.preventDefault();
+            }
+        });
+
+        // Function to validate dates
+        function validateDates() {
+            const checkinDate = new Date(checkinDateInput.value);
+            const checkoutDate = new Date(checkoutDateInput.value);
+            const today = new Date();
+
+            // Check if check-in date is after check-out date
+            if (checkinDate >= checkoutDate) {
+                alert("Check-out date must be after check-in date.");
+                return false;
+            }
+
+            // Check if check-in date is in the past
+            if (checkinDate < today) {
+                alert("Check-in date cannot be in the past.");
+                return false;
+            }
+
+            // Check if check-out date is in the past
+            if (checkoutDate < today) {
+                alert("Check-out date cannot be in the past.");
+                return false;
+            }
+
+            // All validations passed
+            return true;
+        }
+
+        // Update min date for checkout when checkin changes
+        checkinDateInput.addEventListener("change", function() {
+            checkoutDateInput.min = checkinDateInput.value; // Update min date for checkout
+        });
+    });
+</script>
+
+
 
 </body>
 

@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">    
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/travelerDashboard/bookings.css">    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="<?php echo URLROOT?>js/travelerDashboard/script.js"></script>
 </head>
@@ -91,80 +91,49 @@
         </div>
         </div>
 <!-- <?php echo var_dump($data['previousTrips'])?> -->
-        <div class="table-content">
-            <h2>Trip Details</h2>
-            <table class="booking-table">
-                <thead>
-                <tr>
-                    <th>No</th>
-                    <!-- <th>booking ID</th> -->
-                    <th>Service Provider</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <!-- <th>Tempory ID</th>
-                    <th>Service Provider ID</th> -->
-                    <th>Booking</th>
-                    <th></th>
-                    <th></th>
+<div class="card-container">
+    <?php
+    if (!empty($data['previousTrips']) && is_array($data['previousTrips'])) {
+        foreach ($data['previousTrips'] as $booking) {
+            echo '<div class="card">';
+            echo '<div class="card-header">';
+            echo '<h3 style="margin-left:20px;">' . $booking->fname . ' ' . $booking->lname . '</h3>';
+            echo '</div>';
+            echo '<div class="card-body">';
+            echo '<p><strong>Service Provider:</strong> ' . $booking->fname . ' ' . $booking->lname . '</p>';
+            echo '<p><strong>Start Date:</strong> ' . $booking->startDate . '</p>';
+            echo '<p><strong>End Date:</strong> ' . $booking->endDate . '</p>';
 
-                   
-                </tr>
-                </thead>
-                <tbody>
+            if ($booking->room_id !== null) {
+                echo '<p><strong>Booking:</strong> ' . $booking->hotel_description . '</p>';
+            } elseif ($booking->vehicle_id !== null) {
+                echo '<p><strong>Booking:</strong> ' . $booking->vehicle_description . '</p>';
+            } elseif ($booking->package_id !== null) {
+                echo '<p><strong>Booking:</strong> ' . $booking->guide_description . '</p>';
+            }
 
+            // Check if feedback has been provided for this booking
+            $feedbackProvided = $this->userModel->checkFeedbackProvided($booking->booking_id, $booking->temporyid);
 
-                <?php
-$count = 1;
+            // Display the "Feedback" button only if feedback hasn't been provided
+            if (!$feedbackProvided) {
+                echo '<button class="provide-feedback-button" onclick="openFeedbackPopup(' . $booking->temporyid . ',' . $booking->serviceProvider_id . ',\'' . $booking->booking_id . '\', \'' . $booking->fname . ' ' . $booking->lname . '\')"><i class="bx bx-plus"></i> Feedback</button>';
+            } else {
+                echo '<button class="submitted-button" disabled><i class="bx bx-check"></i> Submitted</button>';
+            }
 
-if (!empty($data['previousTrips']) && is_array($data['previousTrips'])) {
-    foreach ($data['previousTrips'] as $booking) {
-        echo '<tr class="t-row">';
-        echo '<td>' . $count . '</td>';
-        //  echo '<td>' . $booking->booking_id . '</td>';
-         echo '<td>' . $booking->fname . ' ' . $booking->lname . '</td>';
-        echo '<td>' . $booking->startDate . '</td>';
-        echo '<td>' . $booking->endDate . '</td>';
-        // echo '<td>' . $booking->temporyid . '</td>';
-        // echo '<td>' . $booking->serviceProvider_id . '</td>';
-
-        if ($booking->room_id !== null) {
-            // Display the description from hotel_rooms if room_id is not null
-            echo '<td>' . $booking->hotel_description . '</td>'; // Assuming you alias it as hotel_description
-        } elseif ($booking->vehicle_id !== null) {
-            // Display the description from vehicles if vehicle_id is not null
-            echo '<td>' . $booking->vehicle_description . '</td>'; // Assuming you alias it as vehicle_description
-        } elseif ($booking->package_id !== null) {
-            // Display the description from packages if package_id is not null
-            echo '<td>' . $booking->guide_description . '</td>'; // Assuming you alias it as package_description
+            // View button
+            echo '<button class="viewbooking" onclick="openPopup(\'' . $booking->temporyid . '\',' . $booking->serviceProvider_id . ', \'' . $booking->booking_id . '\')">View</button>';
+            
+            echo '</div>'; // card-body
+            echo '</div>'; // card
         }
-
-        
-        // echo '<td><button class="viewbooking" onclick="openPopup(' . $booking->serviceProvider_id . ', ' . $booking->booking_id . ')">View</button></td>';
-        echo '<td><button class="viewbooking" onclick="openPopup(\'' . $booking->temporyid .'\',' . $booking->serviceProvider_id . ', \'' . $booking->booking_id . '\')">View</button></td>';
-       // Check if feedback has been provided for this booking
-       $feedbackProvided = $this->userModel->checkFeedbackProvided($booking->booking_id,$booking->temporyid);
-
-       // Display the "Feedback" button only if feedback hasn't been provided
-       if (!$feedbackProvided) {
-        echo '<td><button class="provide-feedback-button" onclick="openFeedbackPopup(' . $booking->temporyid . ',' . $booking->serviceProvider_id . ',\'' . $booking->booking_id . '\', \'' . $booking->fname . ' ' . $booking->lname . '\')"><i class="bx bx-plus"></i> Feedback</button></td>';
     } else {
-        echo '<td><button class="submitted-button" disabled><i class="bx bx-check"></i>Submitted</button></td>';
+        echo '<p>No data available</p>';
     }
-    
+    ?>
+</div>
 
-       echo '</tr>';
-       $count++;
-        
-    }
-    
-} else {
-    echo '<tr><td colspan="4">No data available</td></tr>';
-}
-?>
-
-                </tbody>
-            </table>
-        </div>
 
         <!-- pop up -->
         <div id="feedbackModal" class="modal">
@@ -191,9 +160,9 @@ if (!empty($data['previousTrips']) && is_array($data['previousTrips'])) {
 
         <!-- /// -->
 
-        <div class="more-content">
+        <!-- <div class="more-content">
             <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
-        </div>
+        </div> -->
 
     </main>
 

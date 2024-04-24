@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">    
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/travelerDashboard/bookings.css">    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="<?php echo URLROOT?>js/travelerDashboard/script.js"></script>
 </head>
@@ -68,89 +68,60 @@
                 <p><?php  echo $data['noOfBooking']?></p>
             </div>
         
-            <!-- Ongoing Bookings Box
-            <div class="box">
-                <h2>Ongoing Bookings</h2>
-                <p>35</p>
-            </div>
-        
-            <!-- Customers Box -->
-            <!--<div class="box">
-                <h2>Total Customers</h2>
-                <p>10</p>
-            </div> -->
         </div>
         </div>
 
         <div class="search-content">
         <div class="booking-search">
-            <input type="text" id="booking-search" placeholder="Search for Boookings">
+            <input type="text" id="booking-search" placeholder="Search for Bookings">
             <button onclick="filterBookings()">
                 <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
             </button>
         </div>
         </div>
 
-        <div class="table-content">
-            <h2>Booking Details</h2>
-            <table class="booking-table">
-                <thead>
-                <tr>
-                    <th>No</th>
-                    <!-- <th>Booking ID</th> -->
-                    <th>Booking</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Booking Date</th>
-                    <th></th>
-                    <th></th>
+        <div class="row card-container">
+    <?php
+    if (!empty($data['mybooking']) && is_array($data['mybooking'])) {
+        foreach ($data['mybooking'] as $booking) {
+            echo '<div class="qwer">';
+            echo '<div class="card">';
+            echo '<div class="card-body">';
+            if ($booking->temporyid != 0) {
+                echo '<i class="bx bx-cart bx-sm"></i>';
+            }else{
+                echo '<i class="bx bx-book bx-sm"></i>';
+            }
+            echo '<h5 class="card-title">' . $booking->fname . ' ' . $booking->lname . '</h5>';
+            echo '<p class="card-text"><strong>Start Date:</strong> ' . $booking->startDate . '</p>';
+            echo '<p class="card-text"><strong>End Date:</strong> ' . $booking->endDate . '</p>';
+            echo '<p class="card-text"><strong>Booking Date:</strong> ' . date('Y-m-d', strtotime($booking->bookingDate)) . '</p>';
+            if ($booking->cancellation_eligibility === 'Unavailable') {
+                echo '<span class="badge badge-danger">Not Available</span>';
+            } else {
+                echo '<button class="btn btn-danger" onclick="cancelBooking(\'' . $booking->temporyid . '\', \'' . $booking->booking_id . '\')">Cancel Booking</button>';
+            }
 
-                   
-                </tr>
-                </thead>
-                <tbody>
-
-<!-- <?php echo var_dump($data['mybooking'])?> -->
-                <?php
-$count = 1;
-
-if (!empty($data['mybooking']) && is_array($data['mybooking'])) {
-    foreach ($data['mybooking'] as $booking ) {
-        echo '<tr class="t-row">';
-        echo '<td>' . $count . '</td>';
-        // echo '<td>' . $booking->booking_id . '</td>';
-        echo '<td>' .$booking->fname.' '.$booking->lname.'</td>';
-        echo '<td>' . $booking->startDate . '</td>';
-        echo '<td>' . $booking->endDate . '</td>';
-      
-        echo '<td>' . date('Y-m-d', strtotime($booking->bookingDate)) . '</td>';
-        echo '<td><button class="viewbooking" onclick="openPopup(\'' . $booking->temporyid .'\',' . $booking->serviceProvider_id . ', \'' . $booking->booking_id . '\')">View</button></td>';
-
-        
-if ($booking->cancellation_eligibility === 'Unavailable') {
-    echo '<td><button class="unavailable-button" disabled><i class="bx bx-x-circle"></i>&nbsp Not Available &nbsp </button></td>';
-} else {
-    echo '<td><button class="cancel-button" onclick="cancelBooking(\'' . $booking->temporyid . '\', \'' . $booking->booking_id . '\')"><i class="bx bx-x-circle"></i> Cancel Booking</button></td>';
-
-}
-
-
-        echo '</tr>';
-        $count++;
+            echo '</div>';
+            echo '<div class="card-footer">';
+            echo '<button class="primary" onclick="openPopup(\'' . $booking->temporyid . '\',' . $booking->serviceProvider_id . ', \'' . $booking->booking_id . '\')">View</button>';
+            echo '</div>'; // Close card-footer
+            echo '</div>';
+            echo '</div>';
+        }
+    } else {
+        echo '<div class="col">';
+        echo '<div class="alert alert-info" role="alert">No data available</div>';
+        echo '</div>';
     }
-} else {
-    echo '<tr><td colspan="4">No data available</td></tr>';
-}
-?>
-
-                </tbody>
-            </table>
-        </div>
+    ?>
+</div>
 
 
-        <div class="more-content">
+
+        <!-- <div class="more-content">
             <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
-        </div>
+        </div> -->
 
     </main>
 

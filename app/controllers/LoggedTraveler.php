@@ -718,7 +718,7 @@ public function fetchAvailableRooms()
     if (!empty($rooms) && is_array($rooms)) {
         foreach ($rooms as $room) {
             $html .= '<tr class="t-row">';
-            $html .= '<td>' . $room->room_id . '</td>';
+            // $html .= '<td>' . $room->room_id . '</td>';
             $html .= '<td>' . $room->roomType . '</td>';
             $html .= '<td>' . $room->description . '</td>';
             $html .= '<td>' . $room->price . '</td>';
@@ -942,7 +942,7 @@ public function fetchAvailableVehicles()
         // Iterate over each vehicle and construct HTML
         foreach ($vehicles as $vehicle) {
             $html .= '<tr class="t-row">';
-            $html .= '<td>' . $count . '</td>';
+            // $html .= '<td>' . $count . '</td>';
             $html .= '<td>' . $vehicle->brand . '</td>';
             $html .= '<td>' . $vehicle->model . '</td>';
             $html .= '<td>' . $vehicle->plate_number . '</td>';
