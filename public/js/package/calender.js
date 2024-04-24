@@ -195,6 +195,30 @@ function handleFormSubmit() {
 }
 
 
+function updateRoomPopup(room_id, startDate) {
+    // Create overlay div
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+
+    const confirmDialog = document.createElement('div');
+    confirmDialog.className = 'confirm-dialog';
+    confirmDialog.innerHTML = `
+        <div class="confirm-message">Are you sure you want to unavailable this date?</div>
+        <div class="buttons">
+            <button class="btn btn-yes" onclick="updateRoomStatus('${room_id}','${startDate}')">Yes</button>
+            <button class="btn btn-no" onclick="cancelCancel()">No</button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(confirmDialog);
+}
+
+function cancelCancel() {
+    // Hide the popup
+    document.body.removeChild(document.querySelector('.overlay'));
+    document.body.removeChild(document.querySelector('.confirm-dialog'));
+}
 
 function updateStatus(user_id, startDate) {
     // Prepare the data to send

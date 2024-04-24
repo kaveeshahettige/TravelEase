@@ -98,7 +98,7 @@ include 'navigation.php';
                     <div>
                         <div class="form-group">
                             <label for="add">Address</label>
-                            <input type="text" id="address" name="address" placeholder="Enter Street and Town" value="<?php echo $hotelData->address; ?>" required>
+                            <input type="text" id="addr" name="addr" placeholder="Enter Street and Town" value="<?php echo $hotelData->addr; ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="street_address">Street Address</label>

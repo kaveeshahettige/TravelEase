@@ -16,9 +16,13 @@ class Packages extends Controller
 
     public function index()
     {
+
         $userData = $this->getUserInfo();
+
         $guideData = $this->updateGuideDetails($userData->id);
+
         $bookings = $this->getBookings();
+
 
         $data = [
             'userData' => $userData,
@@ -90,9 +94,13 @@ class Packages extends Controller
     public function revenue()
     {
         $userData = $this->getUserInfo();
+        $finalPayment = $this->getFinalPayment();
+
+        $user_id = $_SESSION['user_id'];
 
         $data = [
             'userData' => $userData,
+            'finalPayment' => $finalPayment
         ];
 
         $this->view('packages/revenue',$data);
@@ -210,7 +218,7 @@ class Packages extends Controller
     {
         // Check if a file was uploaded
         if ($_FILES['profile-picture']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = '../public/uploads/profile-pictures/';
+            $uploadDir = '../public/images/';
             $uploadFile = $uploadDir . basename($_FILES['profile-picture']['name']);
 
             // Move the uploaded file to the desired directory
@@ -362,6 +370,8 @@ class Packages extends Controller
                 'user_id' => $user_id,
             ];
 
+
+
             // Call the model method to update guide details
             if ($this->packagesModel->updateGuideDetails($guideData)) {
                 // Details updated successfully
@@ -372,7 +382,7 @@ class Packages extends Controller
                 flash('error_message', 'Failed to update hotel details');
                 redirect('packages/packagesedit');
             }
-        } else {
+        }else {
             // Retrieve existing guide data based on user_id
             $guideData = $this->packagesModel->getGuideDetails($user_id);
 
@@ -473,6 +483,15 @@ class Packages extends Controller
         } else {
             echo json_encode(['success' => false]);
         }
+    }
+
+    public function getFinalPayment(){
+
+        $user_id = $_SESSION['user_id'];
+
+        $finalPayment = $this->packagesModel->getFinalPayment($user_id);
+
+        return $finalPayment;
     }
 
 

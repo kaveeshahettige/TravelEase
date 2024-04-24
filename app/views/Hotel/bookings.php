@@ -66,6 +66,14 @@ $userData= $data['basicInfo']['userData'];
         </div>
         </div>
 
+        <div class="table-content">
+            <div class="tab">
+                <a href="<?php echo URLROOT?>/hotel/bookings"><button class="tablinks active">Ongoing Bookings</button></a>
+                <a href="<?php echo URLROOT?>/hotel/combookings"><button class="tablinks">Completed Bookings</button></a>
+                <a href="<?php echo URLROOT?>/hotel/rejbookings"><button class="tablinks">Cancelled Bookings</button></a>
+            </div>
+        </div>
+
         <div class="search-content">
             <div class="booking-search">
                 <input type="text" id="booking-search" placeholder="Enter Name or Room Type">
@@ -118,9 +126,11 @@ $userData= $data['basicInfo']['userData'];
 
 
 
-
         <div class="table-content">
-            <h2>Booking Details</h2>
+            <h2>Ongoing Booking Details</h2>
+            <?php if (empty($data["bookingData"])): ?>
+                <p>No pending bookings.</p>
+            <?php else: ?>
             <table class="booking-table">
                 <thead>
                 <tr>
@@ -138,7 +148,6 @@ $userData= $data['basicInfo']['userData'];
 
                 <?php
                 $bookingData = $data["bookingData"];
-//                var_dump($bookingData[6]);
                 foreach ($bookingData as $key => $booking):
 
                  ?>
@@ -155,23 +164,41 @@ $userData= $data['basicInfo']['userData'];
                                 <i class='bx bx-show'></i>
                             </button>
 
-                            <button class="cancel-button" <?php if ($booking->bookingCondition === 'cancelled') echo 'disabled'; ?> onclick="showCancelPopup(<?php echo $booking->room_id; ?>, <?php echo $booking->user_id; ?>, '<?php echo $booking->booking_id; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->endDate; ?>', <?php echo $booking->temporyid; ?>, '<?php echo $booking->roomType; ?>',<?php echo $booking->amount; ?>)">
+                            <?php
+                            // Calculate the difference in days between today and the start date of the booking
+                            $diffStart = strtotime($booking->startDate) - strtotime(date('Y-m-d'));
+                            $daysStart = round($diffStart / 86400); // Convert seconds to days
+
+                            // Calculate the difference in days between the booking date and today
+                            $diffBooking = strtotime(date('Y-m-d')) - strtotime($booking->bookingDate);
+                            $daysBooking = round($diffBooking / 86400); // Convert seconds to days
+
+                            // Check both conditions
+                            if ($daysStart > 3 && $daysBooking < 7) {
+                                // Enable the cancel button
+                                $disableCancel = '';
+                            } else {
+                                // Disable the cancel button
+                                $disableCancel = 'disabled';
+                            }
+                            ?>
+
+                            <button class="cancel-button" <?php echo $disableCancel; ?> onclick="showCancelPopup(<?php echo $booking->room_id; ?>, <?php echo $booking->user_id; ?>, '<?php echo $booking->booking_id; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->endDate; ?>', <?php echo $booking->temporyid; ?>, '<?php echo $booking->roomType; ?>', <?php echo $booking->amount; ?>)">
                                 <i class='bx bx-x'></i>
                             </button>
 
                         </td>
                     </tr>
                 <?php endforeach; ?>
-
-
                 </tbody>
             </table>
+                <div class="more-content">
+                    <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
+                </div>
+            <?php endif; ?>
         </div>
 
 
-        <div class="more-content">
-            <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
-        </div>
 
     </main>
 

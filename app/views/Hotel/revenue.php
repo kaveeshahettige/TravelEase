@@ -31,33 +31,32 @@ include 'navigation.php';
         </div>
 
         <div class="dashboard-sub-content">
-        <div class="top-boxes">
-            <!-- Small Image Boxes -->
-            <div class="img-box">
-                <img src="<?php echo URLROOT; ?>/images/hotel/dashboard.jpg" alt="hotel Image">
-            </div>
-           
+            <div class="top-boxes">
+                <!-- Small Image Boxes -->
+                <div class="img-box">
+                    <img src="<?php echo URLROOT; ?>/images/hotel/dashboard.jpg" alt="hotel Image">
+                </div>
 
-            <!-- Total Bookings Box -->
-            <div class="box">
-                <h2>Total Revenue</h2>
-                <p>45,000 LKR</p>
+                <?php $totalRevenue = $data["totalRevenue"]; ?>
+                <div class="box">
+                    <h2>Total Revenue</h2>
+                    <p><?php echo $totalRevenue ?> LKR</p>
+                </div>
+
+                <!-- Total Bookings Box -->
+                <?php $bookingsCount = $data["bookingsCount"]; ?>
+                <div class="box">
+                    <h2>Total Bookings</h2>
+                    <p><?php echo $bookingsCount ?></p>
+                </div>
+
+                <?php
+                $guestCount = $data["guestCount"]; ?>
+                <div class="box">
+                    <h2>Total Customers</h2>
+                    <p><?php echo $guestCount?></p>
+                </div>
             </div>
-        
-            <!-- Ongoing Bookings Box -->
-            <div class="box">
-                <h2>Revenue Recieved</h2>
-                <p>30,000 LKR</p>
-            </div>
-        
-            <!-- Customers Box -->
-            <div class="box">
-                <h2>To Recieve</h2>
-                <p>12,000 LKR</p>
-            </div>
-        </div>
-    
-            
         </div>
 
         <div class="search-content">
@@ -71,26 +70,22 @@ include 'navigation.php';
 
         <div class="table-content">
             <h2>Revenue Details</h2>
-            <table class="booking-table">
-                <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Payment Date</th>
-                    <th>Total Amount</th>
-                    <th>TravelEase Revenue</th>
-                    <th>Payment Amount</th>
-                    <th>Invoice</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                $finalPayment = $data["finalPayment"];
-
-                // Check if $finalPayment is an array or object
-                if (is_array($finalPayment) || is_object($finalPayment)) {
-                    foreach ($finalPayment as $key => $payment):
-
-                        ?>
+            <?php if (empty($data["finalPayment"]) || !is_array($data["finalPayment"])): ?>
+                <p>No revenue details available.</p>
+            <?php else: ?>
+                <table class="booking-table">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Payment Date</th>
+                        <th>Total Amount</th>
+                        <th>TravelEase Revenue</th>
+                        <th>Payment Amount</th>
+                        <th>Invoice</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($data["finalPayment"] as $key => $payment): ?>
                         <tr>
                             <td><?php echo $key + 1; ?></td>
                             <td><?php echo $payment->paidDate; ?></td>
@@ -106,21 +101,13 @@ include 'navigation.php';
                                 </a>
                             </td>
                         </tr>
-                    <?php endforeach;
-                } else {
-                    // Handle the case when $finalPayment is not valid (e.g., no payment records found)
-                    echo "<tr><td colspan='4'>No payment records found.</td></tr>";
-                }
-                ?>
-
-                </tbody>
-            </table>
-        </div>
-
-
-
-        <div class="more-content">
-            <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <div class="more-content">
+                    <button class="next-page-btn">More Details <i class='bx bx-chevron-right'></i></button>
+                </div>
+            <?php endif; ?>
         </div>
 
     </main>

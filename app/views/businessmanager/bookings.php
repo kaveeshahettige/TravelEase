@@ -32,26 +32,40 @@ include 'navigation.php';
             <div class="img-box">
                 <img src="<?php echo URLROOT?>/images/dashboard.jpg" alt="hotel Image">
             </div>
-           
 
-            <!-- Total Bookings Box -->
+
+            <?php
+            $bookingsCount = $data["bookingsCount"]; ?>
             <div class="box">
                 <h2>Total Bookings</h2>
-                <p>120</p>
+                <p><?php echo $bookingsCount ?></p>
             </div>
-        
+
+
             <!-- Ongoing Bookings Box -->
+            <?php
+            $OngoingCount = $data["OngoingCount"]; ?>
             <div class="box">
                 <h2>Ongoing Bookings</h2>
-                <p>35</p>
+                <p><?php echo $OngoingCount ?></p>
             </div>
         
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"]; ?>
             <div class="box">
                 <h2>Total Customers</h2>
-                <p>10</p>
+                <p><?php echo $guestCount ?></p>
             </div>
         </div>
+        </div>
+
+        <div class="table-content">
+            <div class="tab">
+                <a href="<?php echo URLROOT?>/businessmanager/bookings"><button class="tablinks active">Ongoing Bookings</button></a>
+                <a href="<?php echo URLROOT?>/businessmanager/completedBookings"><button class="tablinks">Completed Bookings</button></a>
+                <a href="<?php echo URLROOT?>/businessmanager/rejectedBookings"><button class="tablinks">Cancelled Bookings</button></a>
+            </div>
         </div>
 
         <div class="search-content">
@@ -62,19 +76,22 @@ include 'navigation.php';
             </button>
         </div>
         </div>
-       
+
         <div class="table-content">
-        <h2>All Bookings</h2>
+            <h2>Ongoing Bookings</h2>
             <table class="booking-table">
                 <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Guest Name</th>
-                        <th>Service Type</th>
-                        <th>Service Name</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
+                <tr>
+                    <th>No</th>
+                    <th>Guest Name</th>
+                    <th>Service Type</th>
+                    <th>Service Provider</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Service Details</th>
+                    <th>Payment Amount</th>
+                    <th>Action</th>
+                </tr>
                 </thead>
                 <tbody>
                 <?php
@@ -84,53 +101,25 @@ include 'navigation.php';
 
                     <tr>
                         <td><?php echo $key + 1; ?></td>
-                        <td><?php echo $booking->guest_name; ?></td>
-                        <td><?php
-                            switch ($booking->provider_type) {
-                                case 0:
-                                    echo "Admin";
-                                    break;
-                                case 1:
-                                    echo "Traveler";
-                                    break;
-                                case 2:
-                                    echo "Business Manager";
-                                    break;
-                                case 3:
-                                    echo "Hotel";
-                                    break;
-                                case 4:
-                                    echo "Transport Provider";
-                                    break;
-                                case 5:
-                                    echo "Guide";
-                                    break;
-                                default:
-                                    echo "Unknown";
-                                    break;
-                            }
-                            ?></td>
-                        <td><?php echo $booking->provider_name; ?></td>
-                        <td><?php echo $booking->payment_status ?></td>
+                        <td><?php echo $booking->traveler_name; ?></td>
+                        <td><?php echo $booking->service_type; ?></td>
+                        <td><?php echo $booking->serviceprovider_name; ?></td>
+                        <td><?php echo $booking->startDate; ?></td>
+                        <td><?php echo $booking->endDate; ?></td>
+                        <td><?php echo $booking->service_detail?></td>
+                        <td><?php echo $booking->payment_amount; ?></td>
                         <td>
-                            <button class="view-button" onclick="openPopup(); updatePopupDetails(
-                                    '<?php echo $booking->user_profile_picture; ?>',
-                                    '<?php echo $booking->guest_name; ?>',
-                                    '<?php echo $booking->provider_type; ?>',
-                                    '<?php echo $booking->provider_name; ?>',
-                                    '<?php echo $booking->payment_status; ?>'
-                                    )">
+                            <button class="view-button" onclick="openPopup(<?php echo $key; ?>)">
                                 <i class='bx bx-show'></i>
                             </button>
-                        </td>
                     </tr>
 
-
                 <?php endforeach; ?>
-
                 </tbody>
             </table>
         </div>
+
+
 
         <div class="more-content">
             <button class="next-page-btn">See More <i class='bx bx-chevron-right'></i></button>

@@ -70,6 +70,10 @@ $userData= $data['basicInfo']['userData'];
             </div>
         </div>
 
+        <div class="dashboard-content">
+            <h2>Update the Room Availability using the Calendar</h2>
+        </div>
+
         <div class="dashboard-sub-content">
 
             <div class="calendar-container">

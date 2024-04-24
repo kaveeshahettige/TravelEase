@@ -1,0 +1,276 @@
+/* Booking Table Content Styles */
+.table-content {
+    padding-left: 275px;
+    margin-right: 20px;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
+}
+
+.table2-content {
+    padding-left: 15px;
+    margin-right: 20px;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
+}
+
+/* Booking Table Styles */
+.booking-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.booking-table th, .booking-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.booking-table th {
+    background-color: #f2f2f2;
+}
+
+/* View Button Styles */
+.view-button {
+    background-color: #F9B314;
+    color: #ffffff;
+    border: none;
+    padding: 8px; /* Adjust the padding for the button */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; /* Adjust the font size for the button */
+}
+
+.view-button i {
+    font-size: 18px; /* Set the desired font size for the icon */
+}
+
+.view-button:hover {
+    background-color: #FFDB8B;
+}
+
+/* Booking Search Container Styles */
+.booking-search {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    /*border: 2px solid #ccc;*/
+    padding: 10px;
+    margin-right:80px;
+}
+
+/* Search Input Styles */
+.search-content {
+    padding-left: 300px;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
+}
+
+.booking-search input[type="text"],
+.booking-search input[type="date"] {
+    padding: 10px;
+    border: 0.5px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    width: 300px; /* Adjust width as needed */
+    margin-right: 10px; /* Add some spacing between input fields */
+}
+
+.booking-search input[type="text"]:focus,
+.booking-search input[type="date"]:focus {
+    border-color: #FFDB8B; /* Change border color on focus */
+    /*box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); !* Add a slight shadow on focus *!*/
+}
+
+
+/* Search Button Styles */
+.booking-search button {
+    background-color: #F9B314;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Search Button Hover Styles */
+.booking-search button:hover {
+    background-color: #FFDB8B;
+}
+
+/* Search Icon Styles */
+.booking-search button i {
+    font-size: 20px;
+}
+
+/* "Go to Next Page" Icon Styles */
+.next-page-btn {
+    background-color: #FFDB8B;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-weight: medium;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.next-page-btn i {
+    font-size: 18px;
+    margin-left: 5px;
+}
+
+.next-page-btn:hover {
+    background-color: #F9B314;
+}
+
+/* More Content Styles */
+.more-content {
+    padding-left: 1340px;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
+}
+
+/* Popup Styles */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px; /* Increased border-radius for a more rounded appearance */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+    text-align: center; /* Center-align the content */
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* New Style for the profile picture */
+.profile-picture {
+    width: 50px; /* Set the desired size */
+    height: 50px;
+    border-radius: 50%; /* Make it a circle */
+    background-size: cover;
+    background-position: center;
+    margin: 0 auto 15px; /* Add margin for separation */
+}
+
+/* Cancel Booking Button Styles */
+.cancel-button {
+    background-color: #e74c3c; /* Red background color */
+    color: #ffffff; /* White text color */
+    border: none; /* No border */
+    padding: 8px; /* Adjust the padding for the button */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Show pointer cursor on hover */
+    font-size: 16px; /* Adjust the font size for the button */
+}
+
+.cancel-button i {
+    font-size: 18px; /* Set the desired font size for the icon */
+}
+
+.cancel-button:hover {
+    background-color: #c0392b; /* Darker red color on hover */
+}
+
+.cancel-button[disabled] {
+    background-color: #ccc; /* Change background color */
+    color: #999; /* Change text color */
+    cursor: not-allowed; /* Change cursor to indicate it's not clickable */
+    opacity: 0.6; /* Reduce opacity to visually indicate it's disabled */
+}
+
+.download-button {
+    background-color: #e74c3c; /* Red background color */
+    color: #ffffff; /* White text color */
+    border: none; /* No border */
+    padding: 8px; /* Adjust the padding for the button */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Show pointer cursor on hover */
+    font-size: 16px; /* Adjust the font size for the button */
+    margin-left: 3px;
+}
+
+.download-button i {
+    font-size: 18px; /* Set the desired font size for the icon */
+}
+
+.download-button:hover {
+    background-color: #c0392b; /* Darker red color on hover */
+}
+
+/* Media Query for Responsive Design */
+@media screen and (max-width: 768px) {
+    .table-content {
+        padding-left: 10px;
+        text-align: center;
+    }
+
+    .booking-table {
+        font-size: 14px;
+    }
+
+    .booking-table th, .booking-table td {
+        padding: 8px;
+    }
+
+    /* Hide the table headers on mobile */
+    .booking-table th {
+        display: none;
+    }
+
+    /* Center-align the "View" button on mobile */
+    .view-button {
+        display: block;
+        margin: 10px auto;
+        text-align: center;
+    }
+
+    .search-content {
+        padding-left: 10px;
+        text-align: center;
+    }
+
+    .more-content {
+        padding-left: 200px;
+        text-align: center;
+    }
+
+    .booking-search{
+        border: none;
+    }
+
+    .booking-search input[type="text"] {
+        width: 500px; /* Adjusted width for larger screens */
+    }
+
+    .booking-search input[type="date"] {
+        display: none; /* Hide the date input field */
+    }
+}

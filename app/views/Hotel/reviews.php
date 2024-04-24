@@ -103,20 +103,26 @@ include 'navigation.php';
         <div class="review-content">
             <?php
             $reviews = $data["reviews"];
-            foreach ($reviews as $review): ?>
-                <div class="review-box">
-                    <div class="review-image">
-                        <img src="<?php echo $review->user_profile_picture ? URLROOT . '/images/' . $review->user_profile_picture : URLROOT . '/images/hotel/wikum.jpg'; ?>" alt="User Photo">
+            if (empty($reviews)): ?>
+                <p>No reviews available.</p>
+            <?php else:
+                foreach ($reviews as $review): ?>
+                    <div class="review-box">
+                        <div class="review-image">
+                            <img src="<?php echo $review->user_profile_picture ? URLROOT . '/images/' . $review->user_profile_picture : URLROOT . '/images/hotel/wikum.jpg'; ?>" alt="User Photo">
+                        </div>
+                        <div class="review-sub-content">
+                            <h2><?= $review->user_fname; ?></h2>
+                            <p class="review-text"><?= $review->feedback; ?></p>
+                            <p>Review for : <?=$review->room_number?> Room</p>
+                            <p>Rating: <?= getStarRating($review->rating); ?></p>
+                            <p>Date: <?= $review->time; ?></p>
+                        </div>
                     </div>
-                    <div class="review-sub-content">
-                        <h2><?= $review->user_fname; ?></h2>
-                        <p class="review-text"><?= $review->feedback; ?></p>
-                        <p>Rating: <?= getStarRating($review->rating); ?></p>
-                        <p>Date: <?= $review->time; ?></p>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach;
+            endif; ?>
         </div>
+
 
         <?php
         function getStarRating($rating) {

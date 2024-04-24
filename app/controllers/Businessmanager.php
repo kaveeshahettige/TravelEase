@@ -1,78 +1,141 @@
 <?php
 
-class Businessmanager extends Controller{
+class Businessmanager extends Controller
+{
 
     private $postModel;
+
     public function __construct()
     {
         // $this->userModel = $this->model('Travel');
-        if(!isLoggedIn()){
+        if (!isLoggedIn()) {
             redirect('users/login');
-          }
+        }
         $this->BusinessmanagersModel = $this->model('Businessmanagers');
     }
 
-    public function index(){
+    public function index()
+    {
 
         $profilePicture = $this->getProfilePicture();
-        $bookingCount = $this->getBookingCount();
+        $bookingsCount = $this->getBookingsCount();
+        $bookingData = $this->getBookings();
+        $refundData = $this->getRefunds();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
 
         $data = [
             'profilePicture' => $profilePicture,
-            'bookingCount' => $bookingCount
+            'bookingsCount' => $bookingsCount,
+            'bookingData' => $bookingData,
+            'refundData'=>$refundData,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
         ];
 
         $this->view('businessmanager/index', $data);
     }
 
-    public function addpackage(){
 
-        $profilePicture = $this->getProfilePicture();
-
-        $data = [
-            'profilePicture' => $profilePicture
-        ];
-
-        $this->view('businessmanager/addpackage', $data);
-    }
-
-    public function bookings(){
+    public function bookings()
+    {
 
         $bookingData = $this->getBookings();
         $profilePicture = $this->getProfilePicture();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
 
         $data = [
-                'profilePicture' => $profilePicture,
-                'bookingData' => $bookingData
+            'profilePicture' => $profilePicture,
+            'bookingData' => $bookingData,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
         ];
 //              var_dump($data);
-            $this->view('businessmanager/bookings', $data);
+        $this->view('businessmanager/bookings', $data);
 
     }
 
-    public function notifications(){
-
+    public function rejectedBookings()
+    {
         $profilePicture = $this->getProfilePicture();
+        $bookingData = $this->getRejectedBookings();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
 
         $data = [
-            'profilePicture' => $profilePicture
+            'profilePicture' => $profilePicture,
+            'bookingData' => $bookingData,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
+        ];
+
+        $this->view('businessmanager/rejectedBookings', $data);
+    }
+
+    public function completedBookings()
+    {
+        $profilePicture = $this->getProfilePicture();
+        $bookingData = $this->getCompletedBookings();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
+
+        $data = [
+            'profilePicture' => $profilePicture,
+            'bookingData' => $bookingData,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
+        ];
+
+        $this->view('businessmanager/completedBookings', $data);
+    }
+
+    public function notifications()
+    {
+
+        $profilePicture = $this->getProfilePicture();
+        $notifications = $this->getNotifications();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
+//        var_dump($notifications);
+
+        $data = [
+            'profilePicture' => $profilePicture,
+            'notifications'=> $notifications,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
         ];
 
         $this->view('businessmanager/notifications', $data);
     }
 
-    public function businessmanageredit(){
+
+    public function businessmanageredit()
+    {
 
         $profilePicture = $this->getProfilePicture();
+        $userData = $this->updateSettings($_SESSION['user_id']);
+
 
         $data = [
-            'profilePicture' => $profilePicture
+            'profilePicture' => $profilePicture,
+            'userData' => $userData
         ];
 
         $this->view('businessmanager/businessmanageredit', $data);
     }
 
-    public function businessmanagerpassword(){
+
+    public function businessmanagerpassword()
+    {
 
         $profilePicture = $this->getProfilePicture();
 
@@ -83,107 +146,190 @@ class Businessmanager extends Controller{
         $this->view('businessmanager/businessmanagerpassword', $data);
     }
 
-    public function financialmanagement(){
+    public function financialmanagement()
+    {
 
         $profilePicture = $this->getProfilePicture();
-        $transactionData = $this->bookingTransactions();
+//        $transactionData = $this->bookingTransactions();
+        $finalTransactionData = $this->getFinancialDetails();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
+//        var_dump($finalTransactionData);
+
+
+        $totalAmount = 0;
+        foreach ($finalTransactionData[0] as $transaction) {
+            $totalAmount += $transaction->payment_amount;
+        }
 
         $data = [
             'profilePicture' => $profilePicture,
-            'transactionData' => $transactionData
+//            'transactionData' => $transactionData,
+            'finalTransactionData' => $finalTransactionData,
+            'totalAmount' => $totalAmount,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
         ];
 //              var_dump($data);
         $this->view('businessmanager/financialmanagement', $data);
     }
 
-    public function packageedit(){
-
-        $profilePicture = $this->getProfilePicture();
-
-        $data = [
-            'profilePicture' => $profilePicture
-        ];
-
-        $this->view('businessmanager/packageedit', $data);
-    }
-
-    public function refund(){
-
-        $packageData = $this->getPackages();
-        $profilePicture = $this->getProfilePicture();
-
-        $data = [
-            'profilePicture' => $profilePicture,
-            'packageData' => $packageData
-        ];
-//              var_dump($data);
-        $this->view('businessmanager/refund', $data);
-
-    }
-
-    public function reports(){
-
-    $profilePicture = $this->getProfilePicture();
-
-    $data = [
-        'profilePicture' => $profilePicture
-    ];
-
-        $this->view('businessmanager/reports', $data);
-    }
-
-    public function settings(){
-
-        $profilePicture = $this->getProfilePicture();
-
-        $data = [
-            'profilePicture' => $profilePicture
-        ];
-
-        $this->view('businessmanager/settings', $data);
-    }
-
-    public function navigation(){
-
-        $profilePicture = $this->getProfilePicture();
-
-        $data = [
-            'profilePicture' => $profilePicture
-        ];
-
-        $this->view('businessmanager/navigation',$data);
-    }
-
-    public function payment(){
+    public function payment()
+    {
 
         $profilePicture = $this->getProfilePicture();
 
         // Retrieve the serviceProvider_id from the URL parameter
         $serviceProvider_id = isset($_GET['serviceProvider_id']) ? $_GET['serviceProvider_id'] : null;
-        $total_amount = isset($_GET['total_amount']) ? $_GET['total_amount'] : null;
+        $totalAmount = isset($_GET['totalAmount']) ? $_GET['totalAmount'] : null;
 
-        $transactionData = $this->bookingTransactions();
 
-        $bookingDetails = $this->BusinessmanagersModel-> getBookingDetails($serviceProvider_id);
+        $bookingDetail = $this->BusinessmanagersModel->getBookingDetails($serviceProvider_id);
+        $cartBookingDetails = $this->BusinessmanagersModel->getCartBookingDetails($serviceProvider_id);
+
+        $bookingDetails = array_merge($bookingDetail, $cartBookingDetails);
 
         // Prepare data to be passed to the view
         $data = [
             'profilePicture' => $profilePicture,
             'bookingDetails' => $bookingDetails,
-            'total_amount' => $total_amount,
+            'totalAmount' => $totalAmount,
             'serviceProvider_id' => $serviceProvider_id,
-            'transactionData' => $transactionData
         ];
 
         // Load the view and pass data to it
         $this->view('businessmanager/payment', $data);
     }
 
+
+    public function refund()
+    {
+        $profilePicture = $this->getProfilePicture();
+        $refundData = $this->getRefunds();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
+
+
+        $data = [
+            'profilePicture' => $profilePicture,
+            'refundData' => $refundData,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
+        ];
+//              var_dump($data);
+        $this->view('businessmanager/refund', $data);
+
+    }
+
+    public function CompletedRefunds()
+    {
+        $profilePicture = $this->getProfilePicture();
+        $completeRefundData = $this->getCompletedRefunds();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
+
+
+        $data = [
+            'profilePicture' => $profilePicture,
+            'completeRefundData' => $completeRefundData,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
+        ];
+//              var_dump($data);
+        $this->view('businessmanager/CompletedRefunds', $data);
+    }
+
+
+    public function settings()
+    {
+
+        $profilePicture = $this->getProfilePicture();
+
+
+        $data = [
+            'profilePicture' => $profilePicture
+
+        ];
+
+        $this->view('businessmanager/settings', $data);
+    }
+
+
+    public function navigation()
+    {
+
+        $profilePicture = $this->getProfilePicture();
+
+        $data = [
+            'profilePicture' => $profilePicture,
+        ];
+
+        $this->view('businessmanager/navigation', $data);
+    }
+
+    public function updateSettings($user_id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Process form submission
+            // Sanitize input
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+            // Get form data
+            $userData = [
+                'name' => $_POST['business-manager-name'],
+                'last_name' => $_POST['business-manager-lname'],
+                'email' => $_POST['email'],
+                'phone_number' => $_POST['phone-number'],
+                'user_id' => $user_id,
+                'name_err' => '',
+                'last_name_err' => '',
+                'email_err' => '',
+                'phone_number_err' => '',
+            ];
+
+            // Check for any validation errors
+            if (empty($userData['name_err']) && empty($userData['last_name_err']) &&
+                empty($userData['email_err']) && empty($userData['phone_number_err'])) {
+                // Call the model method to update user settings
+                if ($this->BusinessmanagersModel->updateSettings($userData)) {
+                    // User settings updated successfully
+                    flash('success_message', 'User settings updated successfully');
+                    redirect('businessmanager/businessmanageredit');
+                } else {
+                    // Something went wrong with the update
+                    flash('error_message', 'Failed to update user settings');
+                    redirect('businessmanager/businessmanageredit');
+                }
+            }
+        } else {
+            // Retrieve existing user data based on user_id
+            $userData = $this->BusinessmanagersModel->basicInfo($user_id);
+
+            // Check if user data exists
+            if ($userData) {
+                // Load the view with user data for editing
+                return $userData;
+            } else {
+                // User data not found for the given user ID
+                flash('error_message', 'User data not found for the given user ID');
+                redirect('businessmanager/businessmanageredit');
+            }
+        }
+    }
+
+
+
     public function changeProfilePicture()
     {
         // Check if a file was uploaded
         if ($_FILES['profile-picture']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = '../public/uploads/profile-pictures/';
+            $uploadDir = '../public/images/';
             $uploadFile = $uploadDir . basename($_FILES['profile-picture']['name']);
 
             // Move the uploaded file to the desired directory
@@ -230,58 +376,48 @@ class Businessmanager extends Controller{
         return $bookingData;
     }
 
-    public function getPackages()
+    public function getRejectedBookings()
     {
-        $packageData = $this->BusinessmanagersModel->getPackages();
+        $rejectedBooking = $this->BusinessmanagersModel->getRejectedBookings();
 
-        if ($packageData) {
-            return $packageData;
+        $rejectedCartBookings = $this->BusinessmanagersModel->getRejectedCartBookings();
+
+        $rejectedBookings = array_merge($rejectedBooking, $rejectedCartBookings);
+
+        if ($rejectedBookings) {
+            return $rejectedBookings;
         } else {
             return [];
         }
     }
 
-    public function bookingTransactions()
+
+    public function getCompletedBookings()
     {
-        $transactionData = $this->BusinessmanagersModel->getCombinedTransactions();
+        $completedBooking = $this->BusinessmanagersModel->getCompletedBookings();
 
-//        var_dump($transactionData[1]);
+        $completedCartBookings = $this->BusinessmanagersModel->getCompletedCartBookings();
 
-        if ($transactionData) {
-            return $transactionData;
+        $completedBookings = array_merge($completedBooking, $completedCartBookings);
+
+        if ($completedBookings) {
+            return $completedBookings;
         } else {
             return [];
         }
     }
 
-//    public function bookingTransactions(){
-//        $bookingTransactionData = $this->BusinessmanagersModel->getTransactions();
-//
-//        var_dump($bookingTransactionData);
-//
-//        if ($bookingTransactionData) {
-//            return $bookingTransactionData;
-//        } else {
-//            return [];
-//        }
-//    }
 
-//    public function bookingTransactions(){
-//        $bookingTransactionData = $this->BusinessmanagersModel->getCartTransactions();
-//
-//        var_dump($bookingTransactionData);
-//
-//        if ($bookingTransactionData) {
-//            return $bookingTransactionData;
-//        } else {
-//            return [];
-//        }
-//    }
 
-    public function makePayment(){
+
+
+
+
+    public function makePayment()
+    {
 
         // Check if required parameters are set
-        if(!isset($_POST['serviceProvider_id']) || !isset($_POST['total_amount'])) {
+        if (!isset($_POST['serviceProvider_id']) || !isset($_POST['totalAmount'])) {
             // Handle the error, maybe return an error response
             echo json_encode(['error' => 'Missing required parameters']);
             exit();
@@ -289,10 +425,10 @@ class Businessmanager extends Controller{
 
         // Sanitize input data to prevent injection attacks
         $serviceProvider_id = htmlspecialchars($_POST['serviceProvider_id']);
-        $total_amount = floatval($_POST['total_amount']);
+        $totalAmount = floatval($_POST['totalAmount']);
 
         // Calculate 90% of the total amount
-        $final_amount = $total_amount * 0.9;
+        $final_amount = $totalAmount * 0.9;
 
         // Load Stripe library
         require_once __DIR__ . '/../libraries/stripe/vendor/autoload.php';
@@ -306,7 +442,7 @@ class Businessmanager extends Controller{
         // Create a Stripe checkout session
         $checkout_session = \Stripe\Checkout\Session::create([
             "mode" => "payment",
-            "success_url" => "http://localhost/Travelease/businessmanager/success?serviceProvider_id=$serviceProvider_id&final_amount=$final_amount&total_amount=$total_amount",
+            "success_url" => "http://localhost/Travelease/businessmanager/success?serviceProvider_id=$serviceProvider_id&final_amount=$final_amount&totalAmount=$totalAmount",
             "cancel_url" => "http://localhost/Travelease/businessmanager/cancel",
             "line_items" => [
                 [
@@ -331,15 +467,16 @@ class Businessmanager extends Controller{
         echo json_encode(['url' => $checkout_session->url]);
     }
 
-    public function success(){
+    public function success()
+    {
 
-       $serviceProvider_id = $_GET['serviceProvider_id'];
-       $paidAmount = $_GET['final_amount'];
-         $total_amount = $_GET['total_amount'];
+        $serviceProvider_id = $_GET['serviceProvider_id'];
+        $paidAmount = $_GET['final_amount'];
+        $totalAmount = $_GET['totalAmount'];
         $paidDate = date('Y-m-d');
 //        $paidAmount = $total_amount * 0.9;
 
-        $invoiceData = $this->makePaymentInvoice($serviceProvider_id, $total_amount);
+        $invoiceData = $this->makePaymentInvoice($serviceProvider_id, $totalAmount);
 
         $Invoicepdf = $invoiceData['Invoicepdf'];
         $file_path = $invoiceData['file_path'];
@@ -347,31 +484,42 @@ class Businessmanager extends Controller{
         $bookingStatus = $this->BusinessmanagersModel->updateBookingCondition($serviceProvider_id);
         $CartBookingStatus = $this->BusinessmanagersModel->updateCartBookingCondition($serviceProvider_id);
 
+        $sender_id = $_SESSION['user_id'];
+        $date = date('Y-m-d');
+        $notification = "Your Payment till" . " $date" . " has been Paid";
+
+        $notificationInserted = $this->BusinessmanagersModel->InsertNotification($sender_id,$serviceProvider_id,$notification, $date);
+
         // Insert final payment with $file_path
         $successPayment = $this->BusinessmanagersModel->insertFinalPayment($serviceProvider_id, $paidDate, $paidAmount, $file_path);
-
 
 
         // Redirect to the financialmanagement page
         redirect('businessmanager/financialmanagement');
     }
 
-    public function cancel(){
+    public function cancel()
+    {
         echo "Payment Cancelled";
     }
 
-    public function makeInvoice() {
+    public function makeInvoice()
+    {
         // Retrieve data from the request
         $serviceProvider_id = $_POST['serviceProvider_id'];
-        $total_amount = $_POST['total_amount'];
+        $totalAmount = $_POST['totalAmount'];
 
         // Fetch booking details based on the serviceProvider_id
-        $bookingDetails = $this->BusinessmanagersModel->getBookingDetails($serviceProvider_id);
+        $bookingDetail = $this->BusinessmanagersModel->getBookingDetails($serviceProvider_id);
+        $cartBookingDetails = $this->BusinessmanagersModel->getCartBookingDetails($serviceProvider_id);
+
+        $bookingDetails = array_merge($bookingDetail, $cartBookingDetails);
 
         $invoice_number = 'IV-' . uniqid();
 
         // Current date
         $current_date = date('Y-m-d');
+
 
         require_once __DIR__ . '/../libraries/dompdf/vendor/autoload.php';
 
@@ -379,101 +527,100 @@ class Businessmanager extends Controller{
         $dompdf = new Dompdf\Dompdf();
 
         // HTML content for the invoice with booking details
-        $html = '
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Invoice</title>
-        <style>
-            body {
-                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-                background-color: #ffffff;
-            }
-            .header {
-                text-align: center;
-            }
-            .logo {
-                max-width: 120px;
-            }
-            h1 {
-                font-size: 32px;
-                color: #333;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 20px;
-                font-size: 12px;
-            }
-            th, td {
-                border: 1px solid #dddddd;
-                text-align: left;
-                padding: 12px;
-            }
-            th {
-                font-weight: bold;
-            }
-            .total-section {
-                margin-top: 30px;
-                padding-top: 10px;
-                border-top: 2px solid #ddd;
-            }
-            .footer {
-                margin-top: 50px;
-                text-align: center;
-                font-size: 14px;
-            }
-        </style>
-    </head>
-    <body>
-            <div class="header">
-                <img src="http://localhost/TravelEase/public/images/TravelEase.png" alt="TravelEase Logo" class="logo">
-                <h1>Invoice</h1>
-            </div>
-            <div class="invoice-details">
-                <p><strong>Invoice Number:</strong>' . $invoice_number. '</p>
-                <p><strong>Billed To:</strong> ' . $bookingDetails[0]->service_provider_name . '</p>
-                <p><strong>Date:</strong> ' . $current_date . '</p>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Traveler Name</th>
-                        <th>Booking Type</th>
-                        <th>Booking Date</th>
-                        <th>Check-in Date</th>
-                        <th>Check-out Date</th>
-                        <th>Service Detail</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>';
+        $html = '<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+        }
+        .header {
+            text-align: center;
+        }
+        .logo {
+            max-width: 120px;
+        }
+        h1 {
+            font-size: 32px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 12px;
+        }
+        th {
+            font-weight: bold;
+        }
+        .total-section {
+            margin-top: 30px;
+            padding-top: 10px;
+            border-top: 2px solid #ddd;
+        }
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <img src="http://localhost/TravelEase/public/images/TravelEase.png" alt="TravelEase Logo" class="logo">
+    <h1>Invoice</h1>
+</div>
+<div class="invoice-details">
+    <p><strong>Invoice Number:</strong>' . $invoice_number . '</p>
+    <p><strong>Billed To:</strong> ' . $bookingDetails[0]->serviceprovider_name . '</p>
+    <p><strong>Date:</strong> ' . $current_date . '</p>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>Traveler Name</th>
+        <th>Booking Type</th>
+        <th>Booking Date</th>
+        <th>Check-in Date</th>
+        <th>Check-out Date</th>
+        <th>Service Detail</th>
+        <th>Amount</th>
+    </tr>
+    </thead>
+    <tbody>';
         foreach ($bookingDetails as $bookingDetail) {
             $html .= '<tr>
-                <td>' . $bookingDetail->traveler_name . '</td>
-                <td>' . $bookingDetail->booking_type . '</td>
-                <td>' . $bookingDetail->booking_date . '</td>
-                <td>' . $bookingDetail->checkin_date . '</td>
-                <td>' . $bookingDetail->checkout_date . '</td>
-                <td>' . $bookingDetail->service_detail . '</td>
-                <td>Rs' . $bookingDetail->amount . '</td>
-            </tr>';
+         <td>' . $bookingDetail->traveler_name . '</td>
+        <td>' . $bookingDetail->booking_type . '</td>
+        <td>' . $bookingDetail->bookingDate . '</td>
+        <td>' . $bookingDetail->startDate . '</td>
+        <td>' . $bookingDetail->endDate . '</td>
+        <td>' . $bookingDetail->service_detail . '</td>
+        <td>Rs' . $bookingDetail->payment_amount . '</td>
+    </tr>';
         }
         $html .= '</tbody>
-            </table>
-            <div class="total-section">
-                <p><strong>Total Amount:</strong> Rs' . $total_amount . '</p>
-                <p><strong>Commission Fee (10%):</strong> Rs' . ($total_amount * 0.1) . '</p>
-                <p><strong>Final Payment:</strong> Rs' . ($total_amount * 0.9) . '</p>
-            </div>
-            <div class="footer">
-                <p>Thank you for your business!</p>
-                <p>For any inquiries regarding this invoice, please contact TravelEase at 0701184956 or traveease@gmail.com.</p>
-            </div>
-    </body>
-    </html>';
+</table>
+<div class="total-section">
+    <p><strong>Total Amount:</strong> Rs' . $totalAmount . '</p>
+    <p><strong>Commission Fee (10%):</strong> Rs' . ($totalAmount * 0.1) . '</p>
+    <p><strong>Final Payment:</strong> Rs' . ($totalAmount * 0.9) . '</p>
+</div>
+<div class="footer">
+    <p>Thank you for your business!</p>
+    <p>For any inquiries regarding this invoice, please contact TravelEase at 0701184956 or traveease@gmail.com.</p>
+</div>
+</body>
+</html>    ';
 
         // Load HTML content into Dompdf
         $dompdf->loadHtml($html);
@@ -500,30 +647,27 @@ class Businessmanager extends Controller{
 
         $file_path = $filename;
         $invoice_date = date('Y-m-d');
-        $final_amount = $total_amount * 0.9;
+        $final_amount = $totalAmount * 0.9;
 
         // Assuming you have a method to insert data into your database
-        $Invoicepdf = $this->BusinessmanagersModel->insertInvoice($serviceProvider_id, $total_amount,$final_amount, $invoice_date, $file_path);
+        $Invoicepdf = $this->BusinessmanagersModel->insertInvoice($serviceProvider_id, $totalAmount, $final_amount, $invoice_date, $file_path);
 
         // Open the PDF invoice in a new browser window
         header('Content-Type: application/pdf');
         header('Content-Disposition: inline; filename="invoice.pdf"');
         header('Content-Length: ' . strlen($pdfContent));
         echo $pdfContent;
-
-//        // Return the PDF content as response
-//        header('Content-Type: application/pdf');
-//        header('Content-Disposition: inline; filename="invoice.pdf"');
-//        header('Content-Length: ' . strlen($pdfContent));
-//        echo $pdfContent;
     }
 
-    public function makePaymentInvoice($serviceProvider_id, $total_amount) {
-
+    public function makePaymentInvoice($serviceProvider_id, $totalAmount)
+    {
 
 
         // Fetch booking details based on the serviceProvider_id
-        $bookingDetails = $this->BusinessmanagersModel->getBookingDetails($serviceProvider_id);
+        $bookingDetail = $this->BusinessmanagersModel->getBookingDetails($serviceProvider_id);
+        $cartBookingDetails = $this->BusinessmanagersModel->getCartBookingDetails($serviceProvider_id);
+
+        $bookingDetails = array_merge($bookingDetail, $cartBookingDetails);
 
         $invoice_number = 'IV-' . uniqid();
 
@@ -590,8 +734,8 @@ class Businessmanager extends Controller{
                 <h1>Invoice</h1>
             </div>
             <div class="invoice-details">
-                <p><strong>Invoice Number:</strong>' . $invoice_number. '</p>
-                <p><strong>Billed To:</strong> ' . $bookingDetails[0]->service_provider_name . '</p>
+                <p><strong>Invoice Number:</strong>' . $invoice_number . '</p>
+                <p><strong>Billed To:</strong> ' . $bookingDetails[0]->serviceprovider_name . '</p>
                 <p><strong>Date:</strong> ' . $current_date . '</p>
             </div>
             <table>
@@ -611,19 +755,19 @@ class Businessmanager extends Controller{
             $html .= '<tr>
                 <td>' . $bookingDetail->traveler_name . '</td>
                 <td>' . $bookingDetail->booking_type . '</td>
-                <td>' . $bookingDetail->booking_date . '</td>
-                <td>' . $bookingDetail->checkin_date . '</td>
-                <td>' . $bookingDetail->checkout_date . '</td>
+                <td>' . $bookingDetail->bookingDate . '</td>
+                <td>' . $bookingDetail->startDate . '</td>
+                <td>' . $bookingDetail->endDate . '</td>
                 <td>' . $bookingDetail->service_detail . '</td>
-                <td>Rs' . $bookingDetail->amount . '</td>
+                <td>Rs' . $bookingDetail->payment_amount . '</td>
             </tr>';
         }
         $html .= '</tbody>
             </table>
             <div class="total-section">
-                <p><strong>Total Amount:</strong> Rs' . $total_amount . '</p>
-                <p><strong>Commission Fee (10%):</strong> Rs' . ($total_amount * 0.1) . '</p>
-                <p><strong>Final Payment:</strong> Rs' . ($total_amount * 0.9) . '</p>
+                <p><strong>Total Amount:</strong> Rs' . $totalAmount . '</p>
+                <p><strong>Commission Fee (10%):</strong> Rs' . ($totalAmount * 0.1) . '</p>
+                <p><strong>Final Payment:</strong> Rs' . ($totalAmount * 0.9) . '</p>
             </div>
             <div class="footer">
                 <p>Thank you for your business!</p>
@@ -657,10 +801,10 @@ class Businessmanager extends Controller{
 
         $file_path = $filename;
         $invoice_date = date('Y-m-d');
-        $final_amount = $total_amount * 0.9;
+        $final_amount = $totalAmount * 0.9;
 
         // Assuming you have a method to insert data into your database
-        $Invoicepdf = $this->BusinessmanagersModel->insertInvoice($serviceProvider_id, $total_amount,$final_amount, $invoice_date, $file_path);
+        $Invoicepdf = $this->BusinessmanagersModel->insertInvoice($serviceProvider_id, $totalAmount, $final_amount, $invoice_date, $file_path);
 
         return [
             'Invoicepdf' => $Invoicepdf,
@@ -669,20 +813,12 @@ class Businessmanager extends Controller{
     }
 
 
-    public function getBookingCount(){
-        $bookingCount = $this->BusinessmanagersModel->getBookingCount();
-//        var_dump($bookingCount);
 
-        if ($bookingCount) {
-            return $bookingCount;
-        } else {
-            return [];
-        }
-    }
 
-    public function getCartBookingCount(){
+    public function getCartBookingCount()
+    {
         $cartBookingCount = $this->BusinessmanagersModel->getCartBookingCount();
-        var_dump($cartBookingCount);
+//        var_dump($cartBookingCount);
 
         if ($cartBookingCount) {
             return $cartBookingCount;
@@ -691,24 +827,159 @@ class Businessmanager extends Controller{
         }
     }
 
+    public function getFinancialDetails()
+    {
+        $bookingFinancialDetails = $this->BusinessmanagersModel->getBookingFinancialDetails();
+        $cartBookingFinancialDetails = $this->BusinessmanagersModel->getCartBookingFinancialDetails();
+
+        $financialDetails = [];
+
+        // Merge booking financial details by serviceProvider_id
+        foreach ($bookingFinancialDetails as $booking) {
+            $serviceProviderId = $booking->serviceProvider_id;
+            if (!isset($financialDetails[$serviceProviderId])) {
+                $financialDetails[$serviceProviderId] = [];
+            }
+            $financialDetails[$serviceProviderId][] = $booking;
+        }
+
+        // Merge cart booking financial details by serviceProvider_id
+        foreach ($cartBookingFinancialDetails as $cartBooking) {
+            $serviceProviderId = $cartBooking->serviceProvider_id;
+            if (!isset($financialDetails[$serviceProviderId])) {
+                $financialDetails[$serviceProviderId] = [];
+            }
+            $financialDetails[$serviceProviderId][] = $cartBooking;
+        }
+
+        // Convert the associative array to indexed array
+        $financialDetails = array_values($financialDetails);
+//        echo "<pre>";
+//        print_r($financialDetails);
+
+        if ($financialDetails) {
+            return $financialDetails;
+        } else {
+            return [];
+        }
+    }
 
 
+    public function getRefunds(){
+
+            $refundData = $this->BusinessmanagersModel->getRefunds();
+
+//            var_dump($refundData);
+
+            if ($refundData) {
+                return $refundData;
+            } else {
+                return [];
+            }
+   }
+
+   public function getCompletedRefunds(){
+
+        $refundData = $this->BusinessmanagersModel->getCompletedRefunds();
+
+        if ($refundData) {
+            return $refundData;
+        } else {
+            return [];
+        }
+
+   }
+
+   public function getNotifications(){
+
+        $reciever_id = $_SESSION['user_id'];
+
+        $notifications = $this->BusinessmanagersModel->getNotifications($reciever_id);
+
+        if ($notifications) {
+            return $notifications;
+        }else{
+            return[];
+        }
+   }
+
+    public function markNotificationAsRead() {
+
+        $notification_id = $_POST['notification_id'];
+
+        $updated = $this->BusinessmanagersModel->markAsRead($notification_id);
+
+        if ($updated) {
+            echo json_encode(['success' => 'Notification marked as read successfully']);
+        } else {
+            echo json_encode(['error' => 'Failed to mark notification as read']);
+        }
+    }
+
+    public function confirmRefund(){
+
+        $booking_id = $_POST['booking_id'];
+        $refund_id = $_POST['refund_id'];
+        $refund_date = date('Y-m-d');
+
+        $refundUpdated = $this->BusinessmanagersModel->confirmRefund($refund_id,$booking_id,$refund_date);
+
+        if ($refundUpdated) {
+            echo json_encode(['success' => 'Refund is successfully completed']);
+        } else {
+            echo json_encode(['error' => 'Failed to make refund completed']);
+        }
+
+    }
 
 
+    public function getBookingsCount(){
 
 
+        $bookingCount = $this->BusinessmanagersModel->getBookingsCount();
+//        var_dump($bookingCount);
+        $cartCount = $this->BusinessmanagersModel->getCartCount();
+//        var_dump($cartCount);
+
+        $bookingsCount = $bookingCount + $cartCount;
+
+        return $bookingsCount;
+
+    }
+
+    public function getOngoingCount(){
 
 
+        $OnbookingCount = $this->BusinessmanagersModel->getOngoingBookingsCount();
+//        var_dump($bookingCount);
+        $OncartCount = $this->BusinessmanagersModel->getOngoingCartCount();
+//        var_dump($cartCount);
+
+        $OngoingCount = $OnbookingCount + $OncartCount;
+
+        return  $OngoingCount;
+
+    }
+
+    public function getGuestCount(){
+
+        $guest= $this->BusinessmanagersModel->getGuestCount();
+
+        $cartguestCount = $this->BusinessmanagersModel->getcartGuestCount();
 
 
+        $guestCount = $guest + $cartguestCount;
 
+        return  $guestCount;
+    }
 
-
-
-
-
-
-
+//    public function basicInfo(){
+//
+//        $user_id = $_SESSION['user_id'];
+//
+//        $basicInfo = $this->BusinessmanagersModel->basicInfo($user_id);
+//
+//    }
 
 
 

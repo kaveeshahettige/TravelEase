@@ -27,10 +27,14 @@
     background-color: #F9B314;
     color: #ffffff;
     border: none;
-    padding: 8px 12px;
+    padding: 8px; /* Adjust the padding for the button */
     border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 16px; /* Adjust the font size for the button */
+}
+
+.view-button i {
+    font-size: 18px; /* Set the desired font size for the icon */
 }
 
 .view-button:hover {
@@ -133,6 +137,53 @@ td.pending {
     font-weight: bold;
 }
 
+/* Style the tab container */
+.tab {
+    display: flex;
+    /*justify-content: space-around;*/
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+/* Style the individual tabs */
+.tab button {
+    background-color: #f1f1f1;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: border-bottom 0.3s ease;
+}
+
+/* Style the active tab */
+.tab button.active {
+    background-color: #F9B314;
+    Font-weight: bold;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Cancel Booking Button Styles */
+.complete-button {
+    background-color: #03b213; /* Red background color */
+    color: #ffffff; /* White text color */
+    border: none; /* No border */
+    padding: 8px; /* Adjust the padding for the button */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Show pointer cursor on hover */
+    font-size: 16px; /* Adjust the font size for the button */
+}
+
+.complete-button i {
+    font-size: 18px; /* Set the desired font size for the icon */
+}
+
+.complete-button:hover {
+    background-color: #03b213; /* Darker red color on hover */
+}
 
 
 /* Media Query for Responsive Design */

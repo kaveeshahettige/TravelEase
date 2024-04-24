@@ -1,0 +1,126 @@
+/* Notifications Content Styles */
+.notifications-content {
+    padding-left: 275px;
+    margin-right: 40px;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
+}
+
+/* Notification Item Styles */
+.notification-item {
+    display: flex;
+    align-items: center;
+    border: none;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fff; /* White background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease; /* Smooth scale transition */
+}
+
+/* On hover, add a slight scale effect */
+.notification-item:hover {
+    transform: scale(1.05); /* Scale up on hover */
+}
+
+/* Sender Image Styles */
+.sender-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 20px;
+    object-fit: cover;
+}
+
+/* Notification Text Container Styles */
+.notification-text-container {
+    flex: 1;
+}
+
+/* Sender Name Styles */
+.sender-name {
+    font-weight: bold;
+    margin-right: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Notification Text Styles */
+.notification-text {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Notification Date Styles */
+.notification-date {
+    font-size: 14px;
+    color: #888;
+    margin-left: 850px;
+}
+
+/* Mark as Read Button Styles */
+.mark-as-read-btn {
+    background-color: #F9B314;
+    color: #ffffff;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 950px;
+    transition: background-color 0.3s ease;
+}
+
+/* Adjust icon margin */
+.mark-as-read-btn i {
+    margin-left: 5px;
+}
+
+/* On hover, darken the button background color */
+.mark-as-read-btn:hover {
+    background-color: #FFC100;
+}
+
+/* Responsive Styles for Screens with a Maximum Width of 768px */
+@media screen and (max-width: 768px) {
+    .notifications-content {
+        padding-left: 20px;
+        margin-right: 20px;
+        padding-top: 10px;
+    }
+
+    .notification-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .sender-image {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .notification-text-container {
+        width: 100%;
+    }
+
+    .sender-name {
+        margin-right: 0;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .notification-date {
+        margin-top: 10px;
+        margin-left: auto; /* Move date to the right */
+    }
+
+    .mark-as-read-btn {
+        margin-top: 10px;
+        margin-left: auto; /* Align button to the right */
+        padding: 8px 12px;
+    }
+}

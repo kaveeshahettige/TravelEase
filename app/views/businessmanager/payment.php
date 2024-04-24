@@ -28,12 +28,14 @@ include 'navigation.php';
 
     <div class="dashboard-sub-content">
 
-        <?php
-        $bookingDetails = $data['bookingDetails'];
-        foreach ($bookingDetails as $bookingDetail)
-        ?>
-        <h3 style="margin-left: 15px">Transactions of Service Provider: <?php echo $bookingDetail->service_provider_name; ?></h3>
 
+
+        <div class = "table-content2">
+            <?php
+            $bookingDetails = $data['bookingDetails'];
+            foreach ($bookingDetails as $bookingDetail)
+            ?>
+            <h3>Transactions of Service Provider: <?php echo $bookingDetail->serviceprovider_name; ?></h3>
 
         <table class="transaction-table">
             <thead>
@@ -50,27 +52,28 @@ include 'navigation.php';
                 <tbody>
                 <?php
                 $bookingDetails = $data['bookingDetails'];
+//                var_dump($bookingDetails[0]);
                 foreach ($bookingDetails as $bookingDetail):
                 ?>
                     <tr>
                         <td><?php echo $bookingDetail->traveler_name; ?></td>
                         <td><?php echo $bookingDetail->booking_type; ?></td>
-                        <td><?php echo $bookingDetail->booking_date; ?></td>
-                        <td><?php echo $bookingDetail->checkin_date; ?></td>
-                        <td><?php echo $bookingDetail->checkout_date; ?></td>
+                        <td><?php echo $bookingDetail->bookingDate; ?></td>
+                        <td><?php echo $bookingDetail->startDate; ?></td>
+                        <td><?php echo $bookingDetail->endDate; ?></td>
                         <td><?php echo $bookingDetail->service_detail; ?></td>
-                        <td><?php echo $bookingDetail->amount; ?></td>
+                        <td><?php echo $bookingDetail->payment_amount; ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
             </table>
 
         <div class="final-transaction">
-            <h3 class="transaction-heading">Final Transaction Detail of Service Provider: <?php echo $bookingDetail->service_provider_name; ?></h3>
+            <h3 class="transaction-heading">Final Transaction Detail of Service Provider: <?php echo $bookingDetail->serviceprovider_name; ?></h3>
             <div class="transaction-details">
                 <div class="total-amount">
                     <h4>Total Revenue from Bookings</h4>
-                    <p class="amount"><?php echo number_format($data['total_amount'], 2); ?></p>
+                    <p class="amount"><?php echo number_format($data['totalAmount'], 2); ?></p>
                 </div>
                 <div class="commission">
                     <h4>Commission Percentage</h4>
@@ -79,11 +82,12 @@ include 'navigation.php';
                 <div class="final-payment">
                     <h4>Final Payment</h4>
                     <?php
-                    $finalPayment = $data['total_amount'] * 0.9; // Calculate the final payment (90% of total revenue)
+                    $finalPayment = $data['totalAmount'] * 0.9; // Calculate the final payment (90% of total revenue)
                     ?>
                     <p style="font-weight: bold=">Final Payment: <?php echo number_format($finalPayment, 2); ?></p>
                 </div>
             </div>
+        </div>
         </div>
 
         <div class="action-buttons">
@@ -92,11 +96,11 @@ include 'navigation.php';
 <!--                <i class=''></i> -->
 <!--            </a>-->
 
-            <button class="download-button" onclick="InvoicePopup(<?php echo $data['serviceProvider_id']; ?>, <?php echo floatval(str_replace(',', '', $data['total_amount'])); ?>)">
+            <button class="download-button" onclick="InvoicePopup(<?php echo $data['serviceProvider_id']; ?>, <?php echo floatval(str_replace(',', '', $data['totalAmount'])); ?>)">
                 <i class='bx bx-download'></i> Download Invoice
             </button>
 
-            <button class="payment-button" onclick="PaymentPopup(<?php echo $data['serviceProvider_id']; ?>, <?php echo floatval(str_replace(',', '', $data['total_amount'])); ?>)">
+            <button class="payment-button" onclick="PaymentPopup(<?php echo $data['serviceProvider_id']; ?>, <?php echo floatval(str_replace(',', '', $data['totalAmount'])); ?>)">
                 <i class='bx bx-credit-card'></i> Make Payment
             </button>
 
@@ -104,6 +108,7 @@ include 'navigation.php';
 
 
         <script src= "<?php echo URLROOT?>/public/js/businessmanager/script.js"></script>
+    </div>
 </main>
 </body>
 </html>

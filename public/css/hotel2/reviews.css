@@ -1,0 +1,223 @@
+/* Review Box Container Styles */
+.review-content {
+    padding-left: 270px;
+    margin-right: 15px;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
+}
+
+/* Review Box Styles */
+.review-box {
+    display: flex;
+    background-color: #f8f9fa; /* Light gray background */
+    border: 1px solid #ced4da; /* Light gray border */
+    border-left: 10px solid #F9B314; /* Yellow left border */
+    margin: 10px;
+    border-radius: 10px; /* Increased border radius for rounded corners */
+    overflow: hidden;
+}
+
+/* Review Image Styles */
+.review-image {
+    flex: 0 0 120px; /* Fixed width for the image */
+    overflow: hidden;
+    display: flex;
+    justify-content: center; /* Align image horizontally to center */
+    align-items: center; /* Align image vertically to center */
+}
+
+.review-image img {
+    width: 60%; /* Set the width to 100% */
+    height: 50%; /* Auto height to maintain aspect ratio */
+    border-radius: 50%; /* Make it a circle */
+    object-fit: cover;
+}
+
+
+/* Review Content Styles */
+.review-sub-content {
+    flex: 1; /* Fill remaining space */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.review-sub-content h2 {
+    font-size: 18px;
+    margin: 0;
+    color: #605D5D;
+    font-weight: bold;
+}
+
+.review-sub-content p {
+    margin: 5px 0;
+    color: #000000;
+    font-size: 14px;
+}
+
+.review-text {
+    max-height: 100px; /* Adjust the height as needed */
+    overflow: hidden;
+}
+
+
+/* "Read More" Button Styles */
+.read-more-btn {
+    background-color: #F9B314;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.read-more-btn:hover {
+    background-color: #FFDB8B;
+}
+
+/* Review Search Container Styles */
+.review-search {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Search Input Styles */
+.search-content {
+    padding-left: 550px;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
+}
+
+.review-search input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    width: 500px;
+}
+
+/* Search Button Styles */
+.review-search button {
+    background-color: #FFDB8B;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Search Button Hover Styles */
+.review-search button:hover {
+    background-color: #F9B314;
+}
+
+/* Search Icon Styles */
+.review-search button i {
+    font-size: 20px;
+}
+
+/* "Go to Next Page" Button Styles */
+.next-page-btn {
+    background-color: #FFDB8B;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: medium;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.next-page-btn i {
+    font-size: 18px;
+    margin-left: 5px;
+}
+
+.next-page-btn:hover {
+    background-color: #F9B314;
+}
+
+/* More Content Styles */
+.more-content {
+    padding-left: 1340px;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 60%;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* CSS for star icons */
+.bx.bxs-star {
+    color: #ffc107;
+    font-size: 15px;
+    margin-right: 3px;
+}
+
+
+/* Media Query for Responsive Design */
+@media screen and (max-width: 768px) {
+    .review-content {
+        padding-left: 25px;
+        text-align: center;
+    }
+
+    .review-box {
+        flex-direction: column; /* Stack content vertically on smaller screens */
+    }
+
+    .review-sub-content {
+        padding: 10px;
+    }
+
+    .review-image {
+        flex: 1;
+    }
+
+    .search-content {
+        padding-left: 30px;
+        text-align: center;
+    }
+
+    .more-content {
+        padding-left: 200px;
+        text-align: center;
+    }
+}
