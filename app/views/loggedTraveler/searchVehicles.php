@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>TravelEase</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
-    <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/styletr.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/styleve.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>/js/loggedTraveler/script.js"></script>

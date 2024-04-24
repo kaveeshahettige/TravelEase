@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>/js/loggedTraveler/script.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.2/css/boxicons.min.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&libraries=places"></script>
     <style>
         /* Style for the suggestions dropdown */
@@ -34,6 +35,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport" id="selected">Transport Providers</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
             <div class="rightcontent">
+            <li><a href="<?php echo URLROOT ?>travelerDashboard/cart/<?php echo $_SESSION['user_id'] ?>"><i class='bx bxs-cart bx-lg bx-tada bx-rotate-90' ></i></a></li>
             <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
                 <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
                 </div>
@@ -43,13 +45,13 @@
         <div class="main1img">
             <img src="<?php echo URLROOT?>/images/tr.jpg" alt="">
         </div>
-        <form action="<?php echo URLROOT ?>loggedTraveler/searchVehicles" method="POST">
+        <form id="bookingForm" action="<?php echo URLROOT ?>loggedTraveler/searchVehicles" method="POST">
         <div class="main1searchbar">
         <div class="search">
     <div class="search1"><input type="text" placeholder="Location: " name="location" id="location-input"></div>
-    <div class="search2">Pick-up Date:<input type="date" placeholder="Pick-up Date" name="pickupdate"></div>
+    <div class="search2">Pick-up Date:<input type="date" placeholder="Pick-up Date" id="checkinDate" name="pickupdate" min="<?php echo date('Y-m-d'); ?>"></div>
     <div class="search3">Time:<input type="time" placeholder="Pick-up Time" name="pickuptime"></div>
-    <div class="search4">Drop-off Date:<input type="date" placeholder="Drop-off Date" name="dropoffdate"></div>
+    <div class="search4">Drop-off Date:<input type="date" placeholder="Drop-off Date" id="checkoutDate" name="dropoffdate" min="<?php echo date('Y-m-d'); ?>"></div>
     <div class="search6"><button id="searchbtn">Search</button></div>
     <!-- <div class="search6"><button id="searchbtn" onclick="clickSearchTransport()">Search</button></div> -->
 </div>
@@ -175,6 +177,55 @@
             });
         });
     </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get the form and input elements
+        const bookingForm = document.getElementById("bookingForm");
+        const checkinDateInput = document.getElementById("checkinDate");
+        const checkoutDateInput = document.getElementById("checkoutDate");
+
+        // Add event listener for form submission
+        bookingForm.addEventListener("submit", function(event) {
+            // Prevent form submission if validation fails
+            if (!validateDates()) {
+                event.preventDefault();
+            }
+        });
+
+        // Function to validate dates
+        function validateDates() {
+            const checkinDate = new Date(checkinDateInput.value);
+            const checkoutDate = new Date(checkoutDateInput.value);
+            const today = new Date();
+
+            //Check if check-in date is after check-out date
+            if (checkinDate > checkoutDate) {
+                
+                document.getElementById("checkingBigger").style.display = "block";
+                return false;
+            }
+
+            // Check if check-in date is in the past
+            if (checkinDate < today) {
+                alert("Check-in date cannot be in the past.");
+                return false;
+            }
+
+            // Check if check-out date is in the past
+            if (checkoutDate < today) {
+                alert("Check-out date cannot be in the past.");
+                return false;
+            }
+
+            // All validations passed
+            return true;
+        }
+        checkinDateInput.addEventListener("change", function() {
+            checkoutDateInput.min = checkinDateInput.value;
+        });
+    });
+</script>
 
 </body>
 </html>

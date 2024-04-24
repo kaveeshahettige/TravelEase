@@ -455,7 +455,7 @@ public function updatePicture($data){
         INNER JOIN users ON bookings.serviceProvider_id = users.id
         WHERE bookings.user_id = :id
         AND bookings.bookingCondition != "cancelled"
-        AND bookings.enddate > CURDATE()
+        AND bookings.startDate > CURDATE()
 
         UNION ALL
 
@@ -464,7 +464,7 @@ public function updatePicture($data){
         INNER JOIN users ON cartbookings.serviceProvider_id = users.id
         WHERE cartbookings.user_id = :id
         AND cartbookings.bookingCondition != "cancelled"
-        AND cartbookings.enddate > CURDATE();
+        AND cartbookings.startDate > CURDATE();
         
         ');
         $this->db->bind(':id',$id);

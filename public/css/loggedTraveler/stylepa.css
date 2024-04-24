@@ -100,7 +100,7 @@ body{
     display: grid;
     grid-template-columns: 85% 15%;;
     width: 60%;
-    margin-left: 15%;
+    margin-left: 20%;
     margin-top: 40px;
     background-color: #FDFFFF;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
@@ -206,13 +206,14 @@ input[type="text"] {
     grid-template-rows: 65% 10%;
     margin: 2%;
     margin-top: 0px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
     
 }
 .main2images .main2img1content:hover{
     
     display: grid;
     grid-template-rows: 65% 10%;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 }
 .main2images .main2img2content{
     display: grid;
@@ -262,7 +263,7 @@ input[type="text"] {
     grid-template-columns:60% 40%;
 }
 .main2images button{
-    padding: 10px 20px 10px 20px;
+    padding: 10px 25px 10px 25px;
     margin: 20px;
     margin-left: 50px;
     border-radius: 20px;
@@ -270,15 +271,21 @@ input[type="text"] {
     color: #F9B314;
     background-color: #FDFFFF;
     cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+
 }
 .main2images button:hover{
-    padding: 10px 20px 10px 20px;
+    padding: 10px 25px 10px 25px;
     margin: 20px;
     margin-left: 50px;
     border-radius: 20px;
     background-color: #F9B314;
     color: #FDFFFF;
     cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+
 }
 /*------------*/
 /*------------main3-------------------------*/
@@ -287,6 +294,12 @@ input[type="text"] {
     grid-template-rows: 80% 20%;
     margin-bottom: 0px;
     height: 100vh;
+}
+.main4 {
+    display: grid;
+    grid-template-rows: 70% 30%;
+    /* margin-bottom: 0px; */ /* This line can be removed */
+    height: 100vh; /* Changed to auto to adjust based on content */
 }
 .main4 .main4img img{
     width: 100%;
@@ -300,6 +313,7 @@ input[type="text"] {
     position: relative;
     display: inline-block;
 }
+
 .shade{
         position: absolute;
         top: 0;
@@ -394,12 +408,7 @@ input[type="text"] {
     height: auto; /* Changed to auto to adjust based on content */
 }
 
-.main4 {
-    display: grid;
-    grid-template-rows: 80% 20%;
-    /* margin-bottom: 0px; */ /* This line can be removed */
-    height: auto; /* Changed to auto to adjust based on content */
-}
+
 
 
 

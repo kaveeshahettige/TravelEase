@@ -143,6 +143,11 @@ input[type="text"] {
     font-size: 20px;
     padding-left: 5px;
 }
+.search4{
+    color: #605D5D;
+    font-size: 20px;
+    padding-left: 5px;
+}
 .search3{
     color: #605D5D;
     font-size: 20px;
@@ -206,10 +211,11 @@ input[type="text"] {
 
 .main2images .main2img1content{
     display: grid;
-    height: 80%;
+    height: 75%;
     grid-template-rows: 65% 10%;
     margin: 2%;
     margin-top: 0px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
     
 }
 .main2images .main2img1content:hover{
@@ -266,7 +272,7 @@ input[type="text"] {
     grid-template-columns:60% 40%;
 }
 .main2images button{
-    padding: 10px 20px 10px 20px;
+    padding: 10px 25px 10px 25px;
     margin: 20px;
     margin-left: 50px;
     border-radius: 20px;
@@ -274,15 +280,19 @@ input[type="text"] {
     color: #F9B314;
     background-color: #FDFFFF;
     cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
 }
 .main2images button:hover{
-    padding: 10px 20px 10px 20px;
+    padding: 10px 25px 10px 25px;
     margin: 20px;
     margin-left: 50px;
     border-radius: 20px;
     background-color: #F9B314;
     color: #FDFFFF;
     cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
 }
 /*------------*/
 /*------------main3-------------------------*/
@@ -291,6 +301,12 @@ input[type="text"] {
     grid-template-rows: 80% 20%;
     margin-bottom: 0px;
     height: 100vh;
+}
+.main4 {
+    display: grid;
+    grid-template-rows: 70% 30%;
+    /* margin-bottom: 0px; */ /* This line can be removed */
+    height: 100vh; /* Changed to auto to adjust based on content */
 }
 .main4 .main4img img{
     width: 100%;
@@ -399,17 +415,12 @@ border: none;
     height: auto; /* Changed to auto to adjust based on content */
 }
 
-.main4 {
-    display: grid;
-    grid-template-rows: 80% 20%;
-    /* margin-bottom: 0px; */ /* This line can be removed */
-    height: auto; /* Changed to auto to adjust based on content */
-}
+
 
 .main2images .main2img1content:hover{
     display: grid;
     grid-template-rows: 65% 10%;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 }
 
 /* ///////// */
