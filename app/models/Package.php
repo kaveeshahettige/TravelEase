@@ -340,6 +340,21 @@ class Package{
         return $this->db->execute();
     }
 
+    public function getFinalPayment($user_id){
+        $this->db->query('SELECT * FROM final_payment
+                             WHERE serviceProvider_id = :user_id ');
+
+        $this->db->bind(':user_id', $user_id);
+        $finalPayment = $this->db->resultSet();
+
+        // Check row
+        if ($this->db->rowCount() > 0) {
+            return $finalPayment;
+        } else {
+            return [];
+        }
+    }
+
 
 
 }

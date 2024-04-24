@@ -53,6 +53,7 @@ include 'navigation.php';
                             <img id="profile-picture" src="<?= isset($userData->profile_picture) ? '../public/images/' . $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="User Profile Photo">
                             <div class="edit-icon">&#9998;</div>
                         </div>
+
                         <div class="hotel-details">
                             <h3><?=($userData->fname)?></h3>
                             <h6>Hotel Type</h6>
@@ -106,7 +107,9 @@ include 'navigation.php';
                 </div>
 
                 <!-- Assuming this is your 'hotel/settings' view file -->
-
+                <?php
+//                var_dump($data['verificationStatus']);
+                ?>
                 <div class="rectangle">
                     <div class="basic-info-content">
                         <h2>Insert Service Validations</h2>

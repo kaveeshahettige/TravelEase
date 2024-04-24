@@ -46,10 +46,10 @@ include 'navigation.php';
                 <p><?php echo $bookingsCount ?></p>
             </div>
 
-            <!-- Ongoing Bookings Box -->
+            <?php $totalRevenue = $data["totalRevenue"]; ?>
             <div class="box">
                 <h2>Total Revenue</h2>
-                <p>65,000 LKR</p>
+                <p><?php echo $totalRevenue ?> LKR</p>
             </div>
 
             <?php

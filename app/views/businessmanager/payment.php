@@ -28,12 +28,14 @@ include 'navigation.php';
 
     <div class="dashboard-sub-content">
 
-        <?php
-        $bookingDetails = $data['bookingDetails'];
-        foreach ($bookingDetails as $bookingDetail)
-        ?>
-        <h3 style="margin-left: 15px">Transactions of Service Provider: <?php echo $bookingDetail->serviceprovider_name; ?></h3>
 
+
+        <div class = "table-content2">
+            <?php
+            $bookingDetails = $data['bookingDetails'];
+            foreach ($bookingDetails as $bookingDetail)
+            ?>
+            <h3>Transactions of Service Provider: <?php echo $bookingDetail->serviceprovider_name; ?></h3>
 
         <table class="transaction-table">
             <thead>
@@ -50,7 +52,7 @@ include 'navigation.php';
                 <tbody>
                 <?php
                 $bookingDetails = $data['bookingDetails'];
-                var_dump($bookingDetails[0]);
+//                var_dump($bookingDetails[0]);
                 foreach ($bookingDetails as $bookingDetail):
                 ?>
                     <tr>
@@ -86,6 +88,7 @@ include 'navigation.php';
                 </div>
             </div>
         </div>
+        </div>
 
         <div class="action-buttons">
 
@@ -105,6 +108,7 @@ include 'navigation.php';
 
 
         <script src= "<?php echo URLROOT?>/public/js/businessmanager/script.js"></script>
+    </div>
 </main>
 </body>
 </html>

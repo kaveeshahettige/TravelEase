@@ -23,6 +23,7 @@ class Hotel extends Controller
         $bookingData = $this->getBookingsData();
         $bookingsCount = $this->getBookingsCount();
         $guestCount = $this->getGuestCount();
+        $totalRevenue = $this->getTotalRevenue();
 
         $data = [
             'bookingsCount' => $bookingsCount,
@@ -30,6 +31,7 @@ class Hotel extends Controller
             'basicInfo' => $this->basicInfo(),
             'roomCount' => $this->roomCount(),
             'bookingData' => $bookingData,
+            'totalRevenue' => $totalRevenue
         ];
 
         $this->view('hotel/index',$data);
@@ -179,9 +181,16 @@ class Hotel extends Controller
     public function gallery()
     {
         $notifications = $this->getnotifications();
+        $bookingsCount = $this->getBookingsCount();
+        $guestCount = $this->getGuestCount();
+        $totalRevenue = $this->getTotalRevenue();
+
         $data=[
             'notifications' => $notifications,
             'basicInfo' => $this->basicInfo(),
+            'guestCount' => $guestCount,
+            'bookingsCount' => $bookingsCount,
+            'totalRevenue' => $totalRevenue
         ];
         $this->view('hotel/gallery', $data);
     }
@@ -189,10 +198,16 @@ class Hotel extends Controller
     public function revenue()
     {
         $finalPayment = $this->getFinalPayment();
+        $totalRevenue = $this->getTotalRevenue();
+        $bookingsCount = $this->getBookingsCount();
+        $guestCount = $this->getGuestCount();
 
         $data=[
             'basicInfo' => $this->basicInfo(),
             'finalPayment' => $finalPayment,
+            'bookingsCount' => $bookingsCount,
+            'guestCount' => $guestCount,
+            'totalRevenue' => $totalRevenue
         ];
         $this->view('hotel/revenue', $data);
     }
@@ -1108,7 +1123,13 @@ class Hotel extends Controller
 
         $user_id = $_SESSION['user_id'];
         $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
-        $bookingsCount = $this->hotelsModel->getBookingsCount($hotel_id);
+
+        $bookingCount = $this->hotelsModel->getBookingsCount($user_id);
+//        var_dump($bookingCount);
+        $cartCount = $this->hotelsModel->getCartCount($user_id);
+//        var_dump($cartCount);
+
+        $bookingsCount = $bookingCount + $cartCount;
 
         return $bookingsCount;
     }
@@ -1117,7 +1138,11 @@ class Hotel extends Controller
 
         $user_id = $_SESSION['user_id'];
         $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
-        $guestCount = $this->hotelsModel->getGuestCount($hotel_id);
+
+        $guest = $this->hotelsModel->getGuestCount($user_id);
+        $cartguestCount = $this->hotelsModel->getCartGuestCount($user_id);
+
+        $guestCount = $guest + $cartguestCount;
 
         return $guestCount;
     }
@@ -1220,7 +1245,14 @@ class Hotel extends Controller
         return $finalPayment;
     }
 
+    public function getTotalRevenue(){
 
+        $user_id = $_SESSION['user_id'];
+
+        $totalRevenue = $this->hotelsModel->getTotalRevenue($user_id);
+
+        return $totalRevenue;
+    }
 
 }
 

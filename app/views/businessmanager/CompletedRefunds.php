@@ -34,24 +34,31 @@ include 'navigation.php';
             </div>
 
 
-            <!-- Total Bookings Box -->
+            <?php
+            $bookingsCount = $data["bookingsCount"]; ?>
             <div class="box">
                 <h2>Total Bookings</h2>
-                <p>120</p>
+                <p><?php echo $bookingsCount ?></p>
             </div>
 
+
             <!-- Ongoing Bookings Box -->
+            <?php
+            $OngoingCount = $data["OngoingCount"]; ?>
             <div class="box">
                 <h2>Ongoing Bookings</h2>
-                <p>35</p>
+                <p><?php echo $OngoingCount ?></p>
             </div>
 
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"]; ?>
             <div class="box">
                 <h2>Total Customers</h2>
-                <p>10</p>
+                <p><?php echo $guestCount ?></p>
             </div>
         </div>
+
     </div>
 
     <div class="table-content">
@@ -103,12 +110,6 @@ include 'navigation.php';
                         <button class="view-button">
                             <i class='bx bx-show'></i>
                         </button>
-                        <button class="cancel-button">
-                            <i class='bx bx-x'></i>
-                        </button>
-
-
-
                     </td>
                 </tr>
             <?php endforeach; ?>

@@ -35,6 +35,27 @@ class Businessmanagers
         return $result;
     }
 
+    public function updateSettings($userData)
+    {
+        // Update users table
+        $this->db->query('UPDATE users SET 
+        fname = :name, 
+        lname = :last_name,
+        email = :email, 
+        number = :phone_number       
+        WHERE id = :user_id');
+
+        // Bind values for users table
+        $this->db->bind(':user_id', $userData['user_id']);
+        $this->db->bind(':name', $userData['name']);
+        $this->db->bind(':last_name', $userData['last_name']);
+        $this->db->bind(':email', $userData['email']);
+        $this->db->bind(':phone_number', $userData['phone_number']);
+
+        // Execute users table update
+        $this->db->execute();
+    }
+
 
     public function getBookingsFromBookingsTable()
     {
@@ -62,7 +83,7 @@ class Businessmanagers
                         LEFT JOIN guides g ON b.package_id = g.guide_id
                         LEFT JOIN payments p ON b.booking_id = p.booking_id                   
                         WHERE b.bookingCondition != "cancelled"
-                        AND b.startDate > CURDATE()');
+                        AND b.endDate >= CURDATE()');
 
         $results = $this->db->resultSet();
 
@@ -165,7 +186,7 @@ class Businessmanagers
                         LEFT JOIN cartpayments cp ON cb.booking_id = cp.booking_id   
                         LEFT JOIN vehicle_bookings vb ON cb.booking_id = vb.booking_id
                         WHERE cb.bookingCondition != "cancelled"
-                        AND cb.startDate > CURDATE()');
+                        AND cb.endDate >= CURDATE()');
 
         $results = $this->db->resultSet();
 
@@ -246,10 +267,6 @@ class Businessmanagers
 
         return $results;
     }
-
-
-
-
 
     public function insertFinalPayment($serviceProvider_id, $paidDate, $paidAmount, $file_path)
     {
@@ -407,7 +424,6 @@ class Businessmanagers
     }
 
 
-
     public function getRefunds()
     {
         $sql = 'SELECT refunds.*, 
@@ -535,6 +551,7 @@ class Businessmanagers
         return $this->db->resultSet();
     }
 
+
     public function markAsRead($notification_id) {
         $sql = "UPDATE notifications SET markAsRead = 1 WHERE notification_id = :notification_id";
         $this->db->query($sql);
@@ -542,5 +559,98 @@ class Businessmanagers
 
         return $this->db->execute();
     }
+
+    public function confirmRefund($refund_id, $booking_id, $refund_date)
+    {
+        $sql = "UPDATE refunds SET refund_status = 1, refund_date = :refund_date 
+            WHERE refund_id = :refund_id AND booking_id = :booking_id";
+        $this->db->query($sql);
+        $this->db->bind(':refund_id', $refund_id);
+        $this->db->bind(':booking_id', $booking_id);
+        $this->db->bind(':refund_date', $refund_date);
+
+        return $this->db->execute();
+    }
+
+    public function InsertNotification($sender_id, $businessmanagerID, $notification_message)
+    {
+        // Prepare and execute the SQL query to insert notification
+        $sql = "INSERT INTO notifications (sender_id, receiver_id, notification) 
+            VALUES (:sender_id, :receiver_id, :notification)";
+        $this->db->query($sql);
+        $this->db->bind(':sender_id', $sender_id);
+        $this->db->bind(':receiver_id', $businessmanagerID); // Replace $receiver_id with $businessmanagerID
+        $this->db->bind(':notification', $notification_message);
+
+        // Execute the query
+        return $this->db->execute();
+    }
+
+    // Model method to get bookings count
+    public function getBookingsCount()
+    {
+        $this->db->query('SELECT COUNT(*) AS booking_count
+                      FROM bookings
+                      WHERE bookingCondition != "cancelled"');
+
+        return $this->db->single()->booking_count;
+    }
+
+// Model method to get cart bookings count
+    public function getCartCount()
+    {
+        $this->db->query('SELECT COUNT(*) AS cart_count
+                      FROM cartbookings
+                      WHERE bookingCondition != "cancelled"');
+
+        return $this->db->single()->cart_count;
+    }
+
+    public function getOngoingBookingsCount()
+    {
+        $this->db->query('SELECT COUNT(*) AS booking_count
+                      FROM bookings
+                      WHERE bookingCondition != "cancelled"  AND bookingCondition != "paid" AND startDate < CURDATE()');
+
+        return $this->db->single()->booking_count;
+    }
+
+
+    public function getOngoingCartCount()
+    {
+        $this->db->query('SELECT COUNT(*) AS cart_count
+                      FROM cartbookings
+                      WHERE bookingCondition != "cancelled" AND bookingCondition != "paid" AND startDate < CURDATE()');
+
+        return $this->db->single()->cart_count;
+    }
+
+    public function getGuestCount()
+    {
+        $this->db->query('SELECT COUNT(DISTINCT b.user_id) AS user_count
+                      FROM bookings b
+                      WHERE b.bookingCondition != "cancelled"');
+
+        return $this->db->single()->user_count;
+    }
+
+    public function getCartGuestCount()
+    {
+        $this->db->query('SELECT COUNT(DISTINCT cb.user_id) AS user_count
+                      FROM cartbookings cb
+                      WHERE cb.bookingCondition != "cancelled"');
+
+        return $this->db->single()->user_count;
+    }
+
+    public function basicInfo($user_id)
+    {
+        $this->db->query('SELECT * FROM users WHERE id = :user_id');
+        $this->db->bind(':user_id', $user_id);
+        return $this->db->single();
+    }
+
+
+
 
 }

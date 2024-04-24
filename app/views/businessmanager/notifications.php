@@ -30,26 +30,32 @@ include 'navigation.php';
         <div class="top-boxes">
             <!-- Small Image Boxes -->
             <div class="img-box">
-                <img src="<?php echo URLROOT; ?>/images/hotel/dashboard.jpg" alt="hotel Image">
+                <img src="<?php echo URLROOT?>/images/dashboard.jpg" alt="hotel Image">
             </div>
 
 
-            <!-- Total Bookings Box -->
+            <?php
+            $bookingsCount = $data["bookingsCount"]; ?>
             <div class="box">
                 <h2>Total Bookings</h2>
-                <p>120</p>
+                <p><?php echo $bookingsCount ?></p>
             </div>
 
+
             <!-- Ongoing Bookings Box -->
+            <?php
+            $OngoingCount = $data["OngoingCount"]; ?>
             <div class="box">
                 <h2>Ongoing Bookings</h2>
-                <p>35</p>
+                <p><?php echo $OngoingCount ?></p>
             </div>
 
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"]; ?>
             <div class="box">
                 <h2>Total Customers</h2>
-                <p>10</p>
+                <p><?php echo $guestCount ?></p>
             </div>
         </div>
     </div>

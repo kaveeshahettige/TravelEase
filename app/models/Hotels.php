@@ -391,7 +391,7 @@ class Hotels
 
     public function getRoomCount($hotel_id)
     {
-        $this->db->query('SELECT COUNT(*) as roomCount FROM hotel_rooms WHERE hotel_id = :hotel_id');
+        $this->db->query('SELECT COUNT(*) as roomCount FROM hotel_rooms WHERE hotel_id = :hotel_id AND roomCondition = "activated"');
         $this->db->bind(':hotel_id', $hotel_id);
 
         $result = $this->db->single();
@@ -412,7 +412,7 @@ class Hotels
                       LEFT JOIN payments p ON b.booking_id = p.booking_id
                       WHERE hr.hotel_id = :hotel_id 
                       AND b.bookingCondition != "cancelled"
-                      AND b.startDate > CURDATE()');
+                      AND b.endDate >= CURDATE()');
 
 
         $this->db->bind(':hotel_id', $hotel_id);
@@ -461,7 +461,7 @@ class Hotels
               LEFT JOIN cartpayments cp ON cb.booking_id = cp.booking_id AND cb.temporyid  = cp.tempory_id 
               WHERE hr.hotel_id = :hotel_id                                  
               AND cb.bookingCondition != "cancelled"
-              AND cb.startDate > CURDATE()');
+              AND cb.endDate >= CURDATE()');
 
         $this->db->bind(':hotel_id', $hotel_id);
 
@@ -633,27 +633,44 @@ class Hotels
         }
     }
 
-    public function getBookingsCount($hotel_id)
+    public function getBookingsCount($user_id)
     {
         $this->db->query('SELECT COUNT(b.booking_id) AS booking_count
                       FROM bookings b
-                      JOIN users u ON b.user_id = u.id
-                      LEFT JOIN hotel_rooms hr ON b.room_id = hr.room_id
-                      WHERE hr.hotel_id = :hotel_id');
+                      WHERE b.serviceProvider_id = :user_id AND bookingCondition != "cancelled"');
 
-        $this->db->bind(':hotel_id', $hotel_id);
+        $this->db->bind(':user_id', $user_id);
 
         return $this->db->single()->booking_count;
     }
 
-    public function getGuestCount($hotel_id){
+    public function getCartCount($user_id)
+    {
+        $this->db->query('SELECT COUNT(cb.booking_id) AS booking_count
+                      FROM cartbookings cb
+                      WHERE cb.serviceProvider_id = :user_id AND bookingCondition != "cancelled"');
+
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->single()->booking_count;
+    }
+
+    public function getGuestCount($user_id){
         $this->db->query('SELECT COUNT(DISTINCT b.user_id) AS user_count
                       FROM bookings b
-                      JOIN users u ON b.user_id = u.id
-                      LEFT JOIN hotel_rooms hr ON b.room_id = hr.room_id
-                      WHERE hr.hotel_id = :hotel_id');
+                      WHERE b.serviceProvider_id = :user_id AND bookingCondition != "cancelled" ');
 
-        $this->db->bind(':hotel_id', $hotel_id);
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->single()->user_count;
+    }
+
+    public function getCartGuestCount($user_id){
+        $this->db->query('SELECT COUNT(DISTINCT cb.user_id) AS user_count
+                      FROM cartbookings cb
+                      WHERE cb.serviceProvider_id = :user_id AND bookingCondition != "cancelled"');
+
+        $this->db->bind(':user_id', $user_id);
 
         return $this->db->single()->user_count;
     }
@@ -804,6 +821,25 @@ class Hotels
         return $this->db->execute();
     }
 
+    public function getTotalRevenue($user_id)
+    {
+        // Prepare the SQL query to get the total revenue
+        $sql = "SELECT SUM(paidAmount) AS total_revenue 
+            FROM final_payment
+            WHERE serviceProvider_id = :user_id";
+
+        // Execute the query
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $user_id);
+        $result = $this->db->single();
+
+        // Check if there are any rows returned
+        if ($result) {
+            return $result->total_revenue;
+        } else {
+            return 0; // Return 0 if no revenue found
+        }
+    }
 
 
 

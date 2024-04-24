@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/manager-packages.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <title>Business Manager Refunds</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -32,26 +33,33 @@ include 'navigation.php';
                 <div class="img-box">
                     <img src="<?php echo URLROOT?>/images/dashboard.jpg" alt="hotel Image">
                 </div>
-               
-    
-                <!-- Total Bookings Box -->
+
+
+                <?php
+                $bookingsCount = $data["bookingsCount"]; ?>
                 <div class="box">
                     <h2>Total Bookings</h2>
-                    <p>120</p>
+                    <p><?php echo $bookingsCount ?></p>
                 </div>
-            
+
+
                 <!-- Ongoing Bookings Box -->
+                <?php
+                $OngoingCount = $data["OngoingCount"]; ?>
                 <div class="box">
                     <h2>Ongoing Bookings</h2>
-                    <p>35</p>
+                    <p><?php echo $OngoingCount ?></p>
                 </div>
-            
+
                 <!-- Customers Box -->
+                <?php
+                $guestCount = $data["guestCount"]; ?>
                 <div class="box">
                     <h2>Total Customers</h2>
-                    <p>10</p>
+                    <p><?php echo $guestCount ?></p>
                 </div>
             </div>
+
         </div>
 
         <div class="table-content">
@@ -101,11 +109,9 @@ include 'navigation.php';
                             <button class="view-button">
                                 <i class='bx bx-show'></i>
                             </button>
-                            <button class="complete-button">
+                            <button class="complete-button" onclick="showConfirmPopup(<?php echo $refund->booking_id; ?>, <?php echo $refund->refund_id; ?>)">
                                 <i class='bx bx-check'></i>
                             </button>
-
-
 
                         </td>
                     </tr>
@@ -118,7 +124,7 @@ include 'navigation.php';
         <div class="more-content">
                 <button class="next-page-btn">See More <i class='bx bx-chevron-right'></i></button>
             </div>
-
+        <script src= "<?php echo URLROOT?>/public/js/businessmanager/script.js"></script>
     </main>
 </body>
 </html>

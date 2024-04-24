@@ -131,7 +131,7 @@ function markAsRead(notification_id) {
     var form = new FormData();
     form.append('notification_id', notification_id);
 
-    fetch('http://localhost/TravelEase/hotel/markNotificationAsRead', {
+    fetch('http://localhost/TravelEase/businessmanager/markNotificationAsRead', {
         method: 'POST',
         body: form
     })
@@ -150,3 +150,70 @@ function markAsRead(notification_id) {
         });
 }
 
+
+function showConfirmPopup(booking_id,refund_id) {
+    // Create overlay div
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+
+    const confirmDialog = document.createElement('div');
+    confirmDialog.className = 'confirm-dialog';
+    confirmDialog.innerHTML = `
+        <div class="confirm-message">Did you complete the Refund?</div>
+        <div class="buttons">
+            <button class="btn btn-yes" onclick="confirmRefund('${booking_id}','${refund_id}' )">Yes</button>
+            <button class="btn btn-no" onclick="cancelCancel()">No</button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(confirmDialog);
+}
+
+// Function to cancel the cancel action
+function cancelCancel() {
+    // Hide the popup
+    document.body.removeChild(document.querySelector('.overlay'));
+    document.body.removeChild(document.querySelector('.confirm-dialog'));
+}
+
+function confirmRefund(booking_id,refund_id) {
+    console.log(booking_id);
+    // Prepare the data to send
+    var requestData = {
+        booking_id: booking_id,
+        refund_id: refund_id,
+    };
+
+    const form = new FormData();
+    form.append('booking_id', booking_id);
+    form.append('refund_id',refund_id);
+
+
+    // Make an AJAX request
+    fetch(
+        'http://localhost/TravelEase/businessmanager/confirmRefund',
+        {
+            method: 'POST',
+            body: form
+        }
+    )
+        .then(async function(response) {
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                console.log('Refund is successfully completed');
+                // Optionally, perform additional actions here if needed
+            } else {
+                console.error('Error updating refund status:', response.status);
+            }
+        })
+        .catch(function(error) {
+            console.error('Error updating refund status:', error);
+        })
+        .finally(function() {
+            // Close the pop-up after the operation is completed
+            cancelCancel();
+            window.location.reload();
+        });
+}

@@ -94,9 +94,13 @@ class Packages extends Controller
     public function revenue()
     {
         $userData = $this->getUserInfo();
+        $finalPayment = $this->getFinalPayment();
+
+        $user_id = $_SESSION['user_id'];
 
         $data = [
             'userData' => $userData,
+            'finalPayment' => $finalPayment
         ];
 
         $this->view('packages/revenue',$data);
@@ -214,7 +218,7 @@ class Packages extends Controller
     {
         // Check if a file was uploaded
         if ($_FILES['profile-picture']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = '../public/uploads/profile-pictures/';
+            $uploadDir = '../public/images/';
             $uploadFile = $uploadDir . basename($_FILES['profile-picture']['name']);
 
             // Move the uploaded file to the desired directory
@@ -479,6 +483,15 @@ class Packages extends Controller
         } else {
             echo json_encode(['success' => false]);
         }
+    }
+
+    public function getFinalPayment(){
+
+        $user_id = $_SESSION['user_id'];
+
+        $finalPayment = $this->packagesModel->getFinalPayment($user_id);
+
+        return $finalPayment;
     }
 
 

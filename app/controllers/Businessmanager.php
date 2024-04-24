@@ -18,15 +18,19 @@ class Businessmanager extends Controller
     {
 
         $profilePicture = $this->getProfilePicture();
-        $bookingCount = $this->getBookingCount();
+        $bookingsCount = $this->getBookingsCount();
         $bookingData = $this->getBookings();
         $refundData = $this->getRefunds();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
 
         $data = [
             'profilePicture' => $profilePicture,
-            'bookingCount' => $bookingCount,
+            'bookingsCount' => $bookingsCount,
             'bookingData' => $bookingData,
-            'refundData'=>$refundData
+            'refundData'=>$refundData,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
         ];
 
         $this->view('businessmanager/index', $data);
@@ -38,10 +42,16 @@ class Businessmanager extends Controller
 
         $bookingData = $this->getBookings();
         $profilePicture = $this->getProfilePicture();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
 
         $data = [
             'profilePicture' => $profilePicture,
-            'bookingData' => $bookingData
+            'bookingData' => $bookingData,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
         ];
 //              var_dump($data);
         $this->view('businessmanager/bookings', $data);
@@ -52,10 +62,16 @@ class Businessmanager extends Controller
     {
         $profilePicture = $this->getProfilePicture();
         $bookingData = $this->getRejectedBookings();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
 
         $data = [
             'profilePicture' => $profilePicture,
-            'bookingData' => $bookingData
+            'bookingData' => $bookingData,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
         ];
 
         $this->view('businessmanager/rejectedBookings', $data);
@@ -65,10 +81,16 @@ class Businessmanager extends Controller
     {
         $profilePicture = $this->getProfilePicture();
         $bookingData = $this->getCompletedBookings();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
 
         $data = [
             'profilePicture' => $profilePicture,
-            'bookingData' => $bookingData
+            'bookingData' => $bookingData,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
         ];
 
         $this->view('businessmanager/completedBookings', $data);
@@ -79,11 +101,17 @@ class Businessmanager extends Controller
 
         $profilePicture = $this->getProfilePicture();
         $notifications = $this->getNotifications();
-        var_dump($notifications);
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
+//        var_dump($notifications);
 
         $data = [
             'profilePicture' => $profilePicture,
-            'notifications'=> $notifications
+            'notifications'=> $notifications,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
         ];
 
         $this->view('businessmanager/notifications', $data);
@@ -94,9 +122,12 @@ class Businessmanager extends Controller
     {
 
         $profilePicture = $this->getProfilePicture();
+        $userData = $this->updateSettings($_SESSION['user_id']);
+
 
         $data = [
-            'profilePicture' => $profilePicture
+            'profilePicture' => $profilePicture,
+            'userData' => $userData
         ];
 
         $this->view('businessmanager/businessmanageredit', $data);
@@ -121,6 +152,10 @@ class Businessmanager extends Controller
         $profilePicture = $this->getProfilePicture();
 //        $transactionData = $this->bookingTransactions();
         $finalTransactionData = $this->getFinancialDetails();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
+//        var_dump($finalTransactionData);
 
 
         $totalAmount = 0;
@@ -132,7 +167,10 @@ class Businessmanager extends Controller
             'profilePicture' => $profilePicture,
 //            'transactionData' => $transactionData,
             'finalTransactionData' => $finalTransactionData,
-            'totalAmount' => $totalAmount
+            'totalAmount' => $totalAmount,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
         ];
 //              var_dump($data);
         $this->view('businessmanager/financialmanagement', $data);
@@ -168,15 +206,19 @@ class Businessmanager extends Controller
 
     public function refund()
     {
-
-
         $profilePicture = $this->getProfilePicture();
         $refundData = $this->getRefunds();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
 
 
         $data = [
             'profilePicture' => $profilePicture,
-            'refundData' => $refundData
+            'refundData' => $refundData,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
         ];
 //              var_dump($data);
         $this->view('businessmanager/refund', $data);
@@ -187,11 +229,17 @@ class Businessmanager extends Controller
     {
         $profilePicture = $this->getProfilePicture();
         $completeRefundData = $this->getCompletedRefunds();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
 
 
         $data = [
             'profilePicture' => $profilePicture,
-            'completeRefundData' => $completeRefundData
+            'completeRefundData' => $completeRefundData,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
         ];
 //              var_dump($data);
         $this->view('businessmanager/CompletedRefunds', $data);
@@ -203,8 +251,10 @@ class Businessmanager extends Controller
 
         $profilePicture = $this->getProfilePicture();
 
+
         $data = [
             'profilePicture' => $profilePicture
+
         ];
 
         $this->view('businessmanager/settings', $data);
@@ -217,10 +267,60 @@ class Businessmanager extends Controller
         $profilePicture = $this->getProfilePicture();
 
         $data = [
-            'profilePicture' => $profilePicture
+            'profilePicture' => $profilePicture,
         ];
 
         $this->view('businessmanager/navigation', $data);
+    }
+
+    public function updateSettings($user_id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Process form submission
+            // Sanitize input
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+            // Get form data
+            $userData = [
+                'name' => $_POST['business-manager-name'],
+                'last_name' => $_POST['business-manager-lname'],
+                'email' => $_POST['email'],
+                'phone_number' => $_POST['phone-number'],
+                'user_id' => $user_id,
+                'name_err' => '',
+                'last_name_err' => '',
+                'email_err' => '',
+                'phone_number_err' => '',
+            ];
+
+            // Check for any validation errors
+            if (empty($userData['name_err']) && empty($userData['last_name_err']) &&
+                empty($userData['email_err']) && empty($userData['phone_number_err'])) {
+                // Call the model method to update user settings
+                if ($this->BusinessmanagersModel->updateSettings($userData)) {
+                    // User settings updated successfully
+                    flash('success_message', 'User settings updated successfully');
+                    redirect('businessmanager/businessmanageredit');
+                } else {
+                    // Something went wrong with the update
+                    flash('error_message', 'Failed to update user settings');
+                    redirect('businessmanager/businessmanageredit');
+                }
+            }
+        } else {
+            // Retrieve existing user data based on user_id
+            $userData = $this->BusinessmanagersModel->basicInfo($user_id);
+
+            // Check if user data exists
+            if ($userData) {
+                // Load the view with user data for editing
+                return $userData;
+            } else {
+                // User data not found for the given user ID
+                flash('error_message', 'User data not found for the given user ID');
+                redirect('businessmanager/businessmanageredit');
+            }
+        }
     }
 
 
@@ -229,7 +329,7 @@ class Businessmanager extends Controller
     {
         // Check if a file was uploaded
         if ($_FILES['profile-picture']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = '../public/uploads/profile-pictures/';
+            $uploadDir = '../public/images/';
             $uploadFile = $uploadDir . basename($_FILES['profile-picture']['name']);
 
             // Move the uploaded file to the desired directory
@@ -383,6 +483,12 @@ class Businessmanager extends Controller
 
         $bookingStatus = $this->BusinessmanagersModel->updateBookingCondition($serviceProvider_id);
         $CartBookingStatus = $this->BusinessmanagersModel->updateCartBookingCondition($serviceProvider_id);
+
+        $sender_id = $_SESSION['user_id'];
+        $date = date('Y-m-d');
+        $notification = "Your Payment till" . " $date" . " has been Paid";
+
+        $notificationInserted = $this->BusinessmanagersModel->InsertNotification($sender_id,$serviceProvider_id,$notification, $date);
 
         // Insert final payment with $file_path
         $successPayment = $this->BusinessmanagersModel->insertFinalPayment($serviceProvider_id, $paidDate, $paidAmount, $file_path);
@@ -707,22 +813,12 @@ class Businessmanager extends Controller
     }
 
 
-    public function getBookingCount()
-    {
-        $bookingCount = $this->BusinessmanagersModel->getBookingCount();
-//        var_dump($bookingCount);
 
-        if ($bookingCount) {
-            return $bookingCount;
-        } else {
-            return [];
-        }
-    }
 
     public function getCartBookingCount()
     {
         $cartBookingCount = $this->BusinessmanagersModel->getCartBookingCount();
-        var_dump($cartBookingCount);
+//        var_dump($cartBookingCount);
 
         if ($cartBookingCount) {
             return $cartBookingCount;
@@ -808,9 +904,10 @@ class Businessmanager extends Controller
    }
 
     public function markNotificationAsRead() {
+
         $notification_id = $_POST['notification_id'];
 
-        $updated = $this->hotelsModel->markAsRead($notification_id);
+        $updated = $this->BusinessmanagersModel->markAsRead($notification_id);
 
         if ($updated) {
             echo json_encode(['success' => 'Notification marked as read successfully']);
@@ -818,6 +915,71 @@ class Businessmanager extends Controller
             echo json_encode(['error' => 'Failed to mark notification as read']);
         }
     }
+
+    public function confirmRefund(){
+
+        $booking_id = $_POST['booking_id'];
+        $refund_id = $_POST['refund_id'];
+        $refund_date = date('Y-m-d');
+
+        $refundUpdated = $this->BusinessmanagersModel->confirmRefund($refund_id,$booking_id,$refund_date);
+
+        if ($refundUpdated) {
+            echo json_encode(['success' => 'Refund is successfully completed']);
+        } else {
+            echo json_encode(['error' => 'Failed to make refund completed']);
+        }
+
+    }
+
+
+    public function getBookingsCount(){
+
+
+        $bookingCount = $this->BusinessmanagersModel->getBookingsCount();
+//        var_dump($bookingCount);
+        $cartCount = $this->BusinessmanagersModel->getCartCount();
+//        var_dump($cartCount);
+
+        $bookingsCount = $bookingCount + $cartCount;
+
+        return $bookingsCount;
+
+    }
+
+    public function getOngoingCount(){
+
+
+        $OnbookingCount = $this->BusinessmanagersModel->getOngoingBookingsCount();
+//        var_dump($bookingCount);
+        $OncartCount = $this->BusinessmanagersModel->getOngoingCartCount();
+//        var_dump($cartCount);
+
+        $OngoingCount = $OnbookingCount + $OncartCount;
+
+        return  $OngoingCount;
+
+    }
+
+    public function getGuestCount(){
+
+        $guest= $this->BusinessmanagersModel->getGuestCount();
+
+        $cartguestCount = $this->BusinessmanagersModel->getcartGuestCount();
+
+
+        $guestCount = $guest + $cartguestCount;
+
+        return  $guestCount;
+    }
+
+//    public function basicInfo(){
+//
+//        $user_id = $_SESSION['user_id'];
+//
+//        $basicInfo = $this->BusinessmanagersModel->basicInfo($user_id);
+//
+//    }
 
 
 
