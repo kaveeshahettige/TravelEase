@@ -37,6 +37,7 @@
     $businessManagerMenu = [
         ['url' => 'businessmanager/index', 'icon' => 'bx bxs-dashboard bx-sm', 'text' => 'Overview'],
         ['url' => 'businessmanager/bookings', 'icon' => 'bx bxs-book bx-sm', 'text' => 'Bookings'],
+        ['url' => 'businessmanager/reports', 'icon' => 'bx bxs-report bx-sm', 'text' => 'Reports'],
         ['url' => 'businessmanager/refund', 'icon' => 'bx bx-arrow-back bx-sm', 'text' => 'Refunds'],
         ['url' => 'businessmanager/financialmanagement', 'icon' => 'bx bx-line-chart bx-sm', 'text' => 'Financial Management'],
         ['url' => 'businessmanager/notifications', 'icon' => 'bx bx-bell bx-sm bx-fw', 'text' => 'Notifications'],

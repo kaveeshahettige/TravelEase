@@ -58,6 +58,23 @@ class Businessmanager extends Controller
 
     }
 
+    public function reports(){
+
+        $profilePicture = $this->getProfilePicture();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
+
+        $data = [
+            'profilePicture' => $profilePicture,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount,
+        ];
+
+        $this->view('businessmanager/reports', $data);
+    }
+
     public function rejectedBookings()
     {
         $profilePicture = $this->getProfilePicture();
@@ -474,7 +491,8 @@ class Businessmanager extends Controller
         $paidAmount = $_GET['final_amount'];
         $totalAmount = $_GET['totalAmount'];
         $paidDate = date('Y-m-d');
-//        $paidAmount = $total_amount * 0.9;
+//       $paidAmount = $total_amount * 0.9;
+        $income = $totalAmount * 0.1;
 
         $invoiceData = $this->makePaymentInvoice($serviceProvider_id, $totalAmount);
 
@@ -491,7 +509,7 @@ class Businessmanager extends Controller
         $notificationInserted = $this->BusinessmanagersModel->InsertNotification($sender_id,$serviceProvider_id,$notification, $date);
 
         // Insert final payment with $file_path
-        $successPayment = $this->BusinessmanagersModel->insertFinalPayment($serviceProvider_id, $paidDate, $paidAmount, $file_path);
+        $successPayment = $this->BusinessmanagersModel->insertFinalPayment($serviceProvider_id, $paidDate, $paidAmount,$income, $file_path);
 
 
         // Redirect to the financialmanagement page
@@ -503,22 +521,22 @@ class Businessmanager extends Controller
         echo "Payment Cancelled";
     }
 
+
     public function makeInvoice()
     {
         // Retrieve data from the request
         $serviceProvider_id = $_POST['serviceProvider_id'];
         $totalAmount = $_POST['totalAmount'];
 
-        // Fetch booking details based on the serviceProvider_id
-        $bookingDetail = $this->BusinessmanagersModel->getBookingDetails($serviceProvider_id);
-        $cartBookingDetails = $this->BusinessmanagersModel->getCartBookingDetails($serviceProvider_id);
-
-        $bookingDetails = array_merge($bookingDetail, $cartBookingDetails);
-
         $invoice_number = 'IV-' . uniqid();
 
         // Current date
         $current_date = date('Y-m-d');
+
+        $bookingDetail = $this->BusinessmanagersModel->getBookingDetails($serviceProvider_id);
+        $cartBookingDetails = $this->BusinessmanagersModel->getCartBookingDetails($serviceProvider_id);
+
+        $bookingDetails = array_merge($bookingDetail, $cartBookingDetails);
 
 
         require_once __DIR__ . '/../libraries/dompdf/vendor/autoload.php';
@@ -526,101 +544,17 @@ class Businessmanager extends Controller
         // Create a new Dompdf instance
         $dompdf = new Dompdf\Dompdf();
 
+        $data = [
+            'totalAmount' => $totalAmount,
+            'invoice_number' => $invoice_number,
+            'current_date' => $current_date,
+            'bookingDetails' => $bookingDetails
+        ];
+
         // HTML content for the invoice with booking details
-        $html = '<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice</title>
-    <style>
-        body {
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #ffffff;
-        }
-        .header {
-            text-align: center;
-        }
-        .logo {
-            max-width: 120px;
-        }
-        h1 {
-            font-size: 32px;
-            color: #333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 12px;
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 12px;
-        }
-        th {
-            font-weight: bold;
-        }
-        .total-section {
-            margin-top: 30px;
-            padding-top: 10px;
-            border-top: 2px solid #ddd;
-        }
-        .footer {
-            margin-top: 50px;
-            text-align: center;
-            font-size: 14px;
-        }
-    </style>
-</head>
-<body>
-<div class="header">
-    <img src="http://localhost/TravelEase/public/images/TravelEase.png" alt="TravelEase Logo" class="logo">
-    <h1>Invoice</h1>
-</div>
-<div class="invoice-details">
-    <p><strong>Invoice Number:</strong>' . $invoice_number . '</p>
-    <p><strong>Billed To:</strong> ' . $bookingDetails[0]->serviceprovider_name . '</p>
-    <p><strong>Date:</strong> ' . $current_date . '</p>
-</div>
-<table>
-    <thead>
-    <tr>
-        <th>Traveler Name</th>
-        <th>Booking Type</th>
-        <th>Booking Date</th>
-        <th>Check-in Date</th>
-        <th>Check-out Date</th>
-        <th>Service Detail</th>
-        <th>Amount</th>
-    </tr>
-    </thead>
-    <tbody>';
-        foreach ($bookingDetails as $bookingDetail) {
-            $html .= '<tr>
-         <td>' . $bookingDetail->traveler_name . '</td>
-        <td>' . $bookingDetail->booking_type . '</td>
-        <td>' . $bookingDetail->bookingDate . '</td>
-        <td>' . $bookingDetail->startDate . '</td>
-        <td>' . $bookingDetail->endDate . '</td>
-        <td>' . $bookingDetail->service_detail . '</td>
-        <td>Rs' . $bookingDetail->payment_amount . '</td>
-    </tr>';
-        }
-        $html .= '</tbody>
-</table>
-<div class="total-section">
-    <p><strong>Total Amount:</strong> Rs' . $totalAmount . '</p>
-    <p><strong>Commission Fee (10%):</strong> Rs' . ($totalAmount * 0.1) . '</p>
-    <p><strong>Final Payment:</strong> Rs' . ($totalAmount * 0.9) . '</p>
-</div>
-<div class="footer">
-    <p>Thank you for your business!</p>
-    <p>For any inquiries regarding this invoice, please contact TravelEase at 0701184956 or traveease@gmail.com.</p>
-</div>
-</body>
-</html>    ';
+        ob_start();
+        $this->view('businessmanager/invoice',$data);
+        $html = ob_get_clean();
 
         // Load HTML content into Dompdf
         $dompdf->loadHtml($html);
@@ -661,7 +595,6 @@ class Businessmanager extends Controller
 
     public function makePaymentInvoice($serviceProvider_id, $totalAmount)
     {
-
 
         // Fetch booking details based on the serviceProvider_id
         $bookingDetail = $this->BusinessmanagersModel->getBookingDetails($serviceProvider_id);
@@ -951,9 +884,9 @@ class Businessmanager extends Controller
 
 
         $OnbookingCount = $this->BusinessmanagersModel->getOngoingBookingsCount();
-//        var_dump($bookingCount);
+//       var_dump($OnbookingCount);
         $OncartCount = $this->BusinessmanagersModel->getOngoingCartCount();
-//        var_dump($cartCount);
+//      var_dump($OncartCount);
 
         $OngoingCount = $OnbookingCount + $OncartCount;
 
@@ -980,6 +913,243 @@ class Businessmanager extends Controller
 //        $basicInfo = $this->BusinessmanagersModel->basicInfo($user_id);
 //
 //    }
+
+
+    public function generateReport()
+    {
+
+        $reportType = $_POST['reportType'];
+        $startDate = $_POST['startDate'];
+        $endDate = $_POST['endDate'];
+
+        if ($reportType == 'booking') {
+
+            $reportData1 = $this->BusinessmanagersModel->getBookingReportData($startDate, $endDate);
+            $reportData2 = $this->BusinessmanagersModel->getCartBookingReportData($startDate, $endDate);
+
+            $reportData = array_merge($reportData1, $reportData2);
+
+            $this->generateBookingReport($reportData, $startDate, $endDate);
+
+        } else if ($reportType == 'guest') {
+
+            $reportData1 = $this->BusinessmanagersModel->getGuestReportData($startDate, $endDate);
+            $reportData2 = $this->BusinessmanagersModel->getCartGuestReportData($startDate, $endDate);
+
+            $reportData = array_merge($reportData1, $reportData2);
+            $r = array();
+
+            //merge by User_ID
+            foreach ($reportData as $key => $row) {
+                if(!isset($r[$row->User_ID])){
+                    $r[$row->User_ID] = $row;
+                }else{
+                    $r[$row->User_ID]->booking_count += $row->booking_count;
+                }
+            }
+
+            $this->generateGuestReport($r, $startDate, $endDate);
+
+        } else {
+            echo 'Invalid report type';
+        }
+    }
+
+
+    public function generateBookingReport($reportData, $startDate, $endDate){
+
+        require_once __DIR__ . '/../libraries/dompdf/vendor/autoload.php';
+
+        // Create a new Dompdf instance
+        $dompdf = new Dompdf\Dompdf();
+
+        // HTML content for the report
+        $html = '<!DOCTYPE html>
+    <head>
+        <title>Booking Report</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Booking Report</h1>
+        <p><strong>Start Date:</strong> ' . $startDate . '</p>
+        <p><strong>End Date:</strong> ' . $endDate . '</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Service Name</th>
+                    <th>Service Type</th>
+                    <th>Service Price</th>
+                    <th>Revenue</th>
+                </tr>
+            </thead>
+            <tbody>';
+
+        $rowNumber = 1;
+
+        foreach ($reportData as $row) {
+            // Ensure that the values are not NULL before accessing them
+            $serviceName = isset($row->service_name) ? $row->service_name : '';
+            $serviceType = isset($row->service_type) ? $row->service_type : '';
+            $totalRevenue = isset($row->total_revenue) ? $row->total_revenue: 0;
+            $Revenue = isset($row->total_revenue) ? $row->total_revenue * 0.1 : 0;
+            // Output the row in the table
+            $html .= '<tr>
+            <td>' . $rowNumber . '</td>
+            <td>' . $serviceName . '</td>
+            <td>' . $serviceType . '</td>
+            <td>' . $totalRevenue . '</td>
+            <td>' . $Revenue . '</td>
+        </tr>';
+            $rowNumber++;
+        }
+
+        $html .= '</tbody>
+    </table>
+    </body>
+    </html>';
+
+        // Load HTML content into Dompdf
+        $dompdf->loadHtml($html);
+
+        // Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Get the PDF content
+        $pdfContent = $dompdf->output();
+
+        // Define the directory where PDF reports will be stored
+        $directory = '../public/report/';
+
+        // Generate a unique filename for the PDF report
+        $filename = 'booking_report_' . uniqid() . '.pdf';
+
+        // Save the PDF file to the directory
+        file_put_contents($directory . $filename, $pdfContent);
+
+        //view pdf
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: inline; filename="invoice.pdf"');
+        header('Content-Length: ' . strlen($pdfContent));
+        echo $pdfContent;
+    }
+
+    public function generateGuestReport($reportData, $startDate, $endDate){
+        echo "<pre>";
+        print_r($reportData);
+        exit();
+
+        require_once __DIR__ . '/../libraries/dompdf/vendor/autoload.php';
+
+        // Create a new Dompdf instance
+        $dompdf = new Dompdf\Dompdf();
+
+        // HTML content for the report
+        $html = '<!DOCTYPE html>
+<head>
+    <title>Guest Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Guest Report</h1>
+    <p><strong>Start Date:</strong> ' . $startDate . '</p>
+    <p><strong>End Date:</strong> ' . $endDate . '</p>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Guest Name</th>
+                <th>Booking Count</th>
+            </tr>
+        </thead>
+        <tbody>';
+
+        $rowNumber = 1;
+
+        foreach ($reportData as $row) {
+            // Ensure that the values are not NULL before accessing them
+            $guestName = isset($row->Guest_Name) ? $row->Guest_Name : '';
+            $bookingCount = isset($row->booking_count) ? $row->booking_count : 0;
+
+            // Output the row in the table
+            $html .= '<tr>
+        <td>' . $rowNumber . '</td>
+        <td>' . $guestName . '</td>
+        <td>' . $bookingCount . '</td>
+    </tr>';
+            $rowNumber++;
+        }
+
+        $html .= '</tbody>
+</table>
+</body>
+</html>';
+
+        // Load HTML content into Dompdf
+        $dompdf->loadHtml($html);
+
+        // Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Get the PDF content
+        $pdfContent = $dompdf->output();
+
+        // Define the directory where PDF reports will be stored
+        $directory = '../public/report/';
+
+        // Generate a unique filename for the PDF report
+        $filename = 'guest_report_' . uniqid() . '.pdf';
+
+        // Save the PDF file to the directory
+        file_put_contents($directory . $filename, $pdfContent);
+
+        // Provide a link for the user to download the PDF report
+        echo '<a href="' . $directory . $filename . '">Download Guest Report</a>';
+    }
+
+
+
+
+
+
 
 
 

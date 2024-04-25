@@ -268,15 +268,16 @@ class Businessmanagers
         return $results;
     }
 
-    public function insertFinalPayment($serviceProvider_id, $paidDate, $paidAmount, $file_path)
+    public function insertFinalPayment($serviceProvider_id, $paidDate, $paidAmount,$income, $file_path)
     {
-        $query = 'INSERT INTO final_payment (serviceProvider_id, paidDate, paidAmount, invoice) 
-              VALUES (:serviceProvider_id, :paidDate, :paidAmount, :file_path)';
+        $query = 'INSERT INTO final_payment (serviceProvider_id, paidDate, paidAmount,income,invoice) 
+              VALUES (:serviceProvider_id, :paidDate, :paidAmount,:income, :file_path)';
 
         $this->db->query($query);
         $this->db->bind(':serviceProvider_id', $serviceProvider_id);
         $this->db->bind(':paidDate', $paidDate);
         $this->db->bind(':paidAmount', $paidAmount);
+        $this->db->bind(':income', $income);
         $this->db->bind(':file_path', $file_path);
 
         $this->db->execute();
@@ -610,7 +611,7 @@ class Businessmanagers
     {
         $this->db->query('SELECT COUNT(*) AS booking_count
                       FROM bookings
-                      WHERE bookingCondition != "cancelled"  AND bookingCondition != "paid" AND startDate < CURDATE()');
+                      WHERE bookingCondition != "cancelled"  AND startDate > CURDATE()');
 
         return $this->db->single()->booking_count;
     }
@@ -620,7 +621,7 @@ class Businessmanagers
     {
         $this->db->query('SELECT COUNT(*) AS cart_count
                       FROM cartbookings
-                      WHERE bookingCondition != "cancelled" AND bookingCondition != "paid" AND startDate < CURDATE()');
+                      WHERE bookingCondition != "cancelled"  AND startDate > CURDATE()');
 
         return $this->db->single()->cart_count;
     }
@@ -650,7 +651,183 @@ class Businessmanagers
         return $this->db->single();
     }
 
+    public function getBookingReportData($startDate, $endDate){
+        $this->db->query('SELECT u.fname AS service_name, 
+                            CASE u.type 
+                                WHEN 3 THEN "Hotel" 
+                                WHEN 4 THEN "Transport Provider" 
+                                WHEN 5 THEN "Tour Guide" 
+                                ELSE "Unknown" 
+                            END AS service_type,
+                            p.amount AS total_revenue
+                      FROM bookings b
+                      JOIN payments p ON b.booking_id = p.booking_id
+                      JOIN users u ON b.serviceProvider_id = u.id
+                      WHERE b.bookingCondition != "cancelled" 
+                      AND b.endDate < CURDATE()
+                      AND b.startDate >= :startDate 
+                      AND b.endDate <= :endDate');
 
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+
+        return $this->db->resultSet();
+    }
+
+    public function getCartBookingReportData($startDate, $endDate){
+        $this->db->query('SELECT u.fname AS service_name, 
+                            CASE u.type 
+                                WHEN 3 THEN "Hotel" 
+                                WHEN 4 THEN "Transport Provider" 
+                                WHEN 5 THEN "Tour Guide" 
+                                ELSE "Unknown" 
+                            END AS service_type,
+                            cp.amount AS total_revenue
+                      FROM cartbookings cb
+                      JOIN cartpayments cp ON cb.booking_id = cp.booking_id
+                      JOIN users u ON cb.serviceProvider_id = u.id
+                      WHERE cb.bookingCondition != "cancelled" 
+                      AND cb.endDate < CURDATE()
+                      AND cb.startDate >= :startDate 
+                      AND cb.endDate <= :endDate ');
+
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+
+        return $this->db->resultSet();
+    }
+
+
+    public function getGuestReportData($startDate, $endDate){
+        $this->db->query('SELECT COUNT(*) AS booking_count, u.fname AS Guest_Name,u.id as User_ID
+              FROM bookings b
+              LEFT JOIN users u ON b.user_id = u.id
+              WHERE b.bookingCondition != "cancelled" 
+              AND b.endDate < CURDATE()
+              AND b.startDate >= :startDate 
+              AND b.endDate <= :endDate 
+              GROUP BY b.user_id
+              ORDER BY booking_count DESC');
+
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+
+        return $this->db->resultSet();
+    }
+
+    public function getCartGuestReportData($startDate, $endDate){
+        $this->db->query('SELECT COUNT(*) AS booking_count, u.fname AS Guest_Name,u.id as User_ID
+              FROM cartbookings cb
+              LEFT JOIN users u ON cb.user_id = u.id
+              WHERE cb.bookingCondition != "cancelled" 
+              AND cb.endDate < CURDATE()
+              AND cb.startDate >= :startDate 
+              AND cb.endDate <= :endDate 
+              GROUP BY cb.user_id
+              ORDER BY booking_count DESC');
+
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+
+        return $this->db->resultSet();
+    }
+
+
+    public function getBookingHotelReportData($startDate, $endDate){
+        $this->db->query('SELECT COUNT(*) AS hotel_count, u.fname AS hotel_name,,u.id as User_ID
+                      FROM bookings b
+                      LEFT JOIN users u ON b.serviceProvider_id = u.id
+                      WHERE b.bookingCondition != "cancelled" 
+                      AND b.endDate < CURDATE()
+                      AND b.bookingDate BETWEEN :startDate AND :endDate
+                      AND b.serviceProvider_id IN (SELECT id FROM users WHERE type = 3)
+                      ORDER BY COUNT(*) DESC');
+
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+
+        return $this->db->single();
+    }
+
+    public function getCartHotelReportData($startDate, $endDate){
+        $this->db->query('SELECT COUNT(*) AS hotel_count, u.fname AS hotel_name
+                      FROM cartbookings cb
+                      LEFT JOIN users u ON cb.serviceProvider_id = u.id
+                      WHERE cb.bookingCondition != "cancelled" 
+                      AND cb.endDate < CURDATE()
+                      AND cb.bookingDate BETWEEN :startDate AND :endDate
+                      AND cb.serviceProvider_id IN (SELECT id FROM users WHERE type = 3)
+                      ORDER BY COUNT(*) DESC');
+
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+
+        return $this->db->single();
+    }
+
+    public function getBookingTransportReportData($startDate, $endDate){
+        $this->db->query('SELECT COUNT(*) AS travel_agency_count, u.fname AS travel_agency_name
+                      FROM bookings b
+                      LEFT JOIN users u ON b.serviceProvider_id = u.id
+                      WHERE b.bookingCondition != "cancelled" 
+                      AND b.endDate < CURDATE()
+                      AND b.bookingDate BETWEEN :startDate AND :endDate
+                      AND b.serviceProvider_id IN (SELECT id FROM users WHERE type = 4)
+                      ORDER BY COUNT(*) DESC');
+
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+
+        return $this->db->single();
+    }
+
+    public function getCartTransportReportData($startDate, $endDate){
+        $this->db->query('SELECT COUNT(*) AS travel_agency_count, u.fname AS travel_agency_name
+                      FROM cartbookings cb
+                      LEFT JOIN users u ON cb.serviceProvider_id = u.id
+                      WHERE cb.bookingCondition != "cancelled" 
+                      AND cb.endDate < CURDATE()
+                      AND cb.bookingDate BETWEEN :startDate AND :endDate
+                      AND cb.serviceProvider_id IN (SELECT id FROM users WHERE type = 4)
+                      ORDER BY COUNT(*) DESC');
+
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+
+        return $this->db->single();
+    }
+
+    public function getBookingGuideReportData($startDate, $endDate){
+        $this->db->query('SELECT COUNT(*) AS guide_count, u.fname AS guide_name
+                      FROM bookings b
+                      LEFT JOIN users u ON b.serviceProvider_id = u.id
+                      WHERE b.bookingCondition != "cancelled" 
+                      AND b.endDate < CURDATE()
+                      AND b.bookingDate BETWEEN :startDate AND :endDate
+                      AND b.serviceProvider_id IN (SELECT id FROM users WHERE type = 5)
+                      ORDER BY COUNT(*) DESC');
+
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+
+        return $this->db->single();
+    }
+
+    public function getCartGuideReportData($startDate, $endDate){
+        $this->db->query('SELECT COUNT(*) AS guide_count, u.fname AS guide_name
+                      FROM cartbookings cb
+                      LEFT JOIN users u ON cb.serviceProvider_id = u.id
+                      WHERE cb.bookingCondition != "cancelled" 
+                      AND cb.endDate < CURDATE()
+                      AND cb.bookingDate BETWEEN :startDate AND :endDate
+                      AND cb.serviceProvider_id IN (SELECT id FROM users WHERE type = 5)
+                      ORDER BY COUNT(*) DESC');
+
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+
+        return $this->db->single();
+    }
 
 
 }

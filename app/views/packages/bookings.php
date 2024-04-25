@@ -89,6 +89,7 @@ include 'navigation.php';
 
             <?php
             $bookings = $data["bookings"];
+            var_dump($bookings);
             foreach ($bookings as $key => $booking): ?>
                 <tr>
                     <td><?php echo $key + 1; ?></td>

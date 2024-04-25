@@ -430,6 +430,14 @@ class Packages extends Controller
         // Insert notification
         $notification_inserted = $this->packagesModel->insertNotification($booking_id, $sender_id, $receiver_id, $notification_message);
 
+        $cancelled_id = $_SESSION['user_id'];
+
+
+        $refund = $this->packagesModel->updateRefund($temporyid,$booking_id,$sender_id,$receiver_id,$cancelled_id,$amount,$currentDate);
+
+
+        $availabilityUpdate = $this->packagesModel->updateAvailability($sender_id,$startDate,$endDate);
+
         require_once __DIR__ . '/../libraries/sms/vendor/autoload.php';
 
         $basic  = new \Vonage\Client\Credentials\Basic("992a5e27", "YiQN3gXeYkIkfbcJ");
