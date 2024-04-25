@@ -346,7 +346,7 @@ public function registerHotel($data){
     if($this->db->execute()){
         $user_id = $this->db->lastInsertId();
          var_dump($data);
-         $this->db->query('INSERT INTO hotel (user_id, hotel_type, `add`) VALUES (:id, :hoteltype, :address)');
+         $this->db->query('INSERT INTO hotel (user_id, hotel_type, `addr`) VALUES (:id, :hoteltype, :address)');
 
          $this->db->bind(':hoteltype', $data['hoteltype']);
         //  $this->db->bind(':description', $data['description']);
@@ -2601,15 +2601,17 @@ return $success; // Return success status after the loop
 
     //checkGuideAvailability($guide_id, $startDate, $endDate)
     public function checkGuideAvailability($guide_id, $startDate, $endDate) {
-        $this->db->query('SELECT * FROM guide_availability WHERE user_id = :guide_id 
-                          AND startDate <= :endDate AND (endDate >= :startDate OR endDate IS NULL)');
-            
+        $this->db->query('SELECT * FROM guide_availability 
+                          WHERE user_id = :guide_id 
+                          AND startDate <= :endDate 
+                          AND endDate >= :startDate');
+                
         $this->db->bind(':guide_id', $guide_id);
         $this->db->bind(':startDate', $startDate);
         $this->db->bind(':endDate', $endDate);
-        
+            
         $result = $this->db->resultSet();
-    
+        
         // Check if any overlapping bookings found
         if (!empty($result)) {
             return false; // Guide is not available
@@ -2617,6 +2619,7 @@ return $success; // Return success status after the loop
             return true; // Guide is available
         }
     }
+    
        
     //addToGuideBookings(($transactionData)
     public function addToGuideBookings($transactionData,$lastbooking_id){

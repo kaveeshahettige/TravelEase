@@ -207,6 +207,7 @@ input[type="text"] {
     margin: 2%;
     margin-top: 0px;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5%;
     
 }
 .main2images .main2img1content:hover{
@@ -242,9 +243,10 @@ input[type="text"] {
 
 }
 .main2images img{
-    width: 90%;
-    height:90%;
+    width: 100%;
+    height:100%;
     padding: 0px;
+    border-radius: 2%;
 }
 
 .main2images p{
@@ -420,5 +422,44 @@ input[type="text"] {
     grid-template-rows: 65% 10%;
     margin: 2%;
     margin-top: 0px;
+    border-radius: 5%;
 
 }
+
+
+.onimagetext {
+    width: 93%;
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #FDFFFF;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent black background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Shadow effect */
+    font-family: Arial, sans-serif; /* Font family */
+    font-size: 24px; /* Font size */
+    font-weight: bold; /* Bold font weight */
+}
+
+.onimagetext #txt1{
+    text-align: center;
+    font-size: 68px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 0px;
+}
+.onimagetext #txt2{
+    text-align: center;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-top: 0px;
+    
+}
+
+

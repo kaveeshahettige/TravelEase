@@ -32,7 +32,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/index">Home</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/hotel" >Hotels</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport" id="selected">Transport Providers</a></li>
-            <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
+            <li><a href="<?php echo URLROOT?>loggedTraveler/package">Guides</a></li>
             <div class="rightcontent">
             <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
                 <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
@@ -40,8 +40,15 @@
         </ul>
     </div>
     <section class="main1">
-        <div class="main1img">
+    <div class="main1img">
             <img src="<?php echo URLROOT?>/images/tr.jpg" alt="">
+            
+            <div class="image-overlay"></div>
+            <div class="onimagetext">
+    <p id="txt1">Unlock Exceptional Transport Options Here</p>
+    <p id="txt2">Embark on Your Ideal Journey!</p>
+    
+</div>
         </div>
         <form action="<?php echo URLROOT ?>loggedTraveler/searchVehicles" method="POST">
         <div class="main1searchbar">

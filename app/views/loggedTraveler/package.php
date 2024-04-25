@@ -34,7 +34,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/index">Home</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/hotel">Hotels</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
-            <li><a href="<?php echo URLROOT?>loggedTraveler/package" id="selected">Packages</a></li>
+            <li><a href="<?php echo URLROOT?>loggedTraveler/package" id="selected">Guides</a></li>
             <div class="rightcontent">
             <li><a href="<?php echo URLROOT ?>travelerDashboard/cart/<?php echo $_SESSION['user_id'] ?>"><i class='bx bxs-cart bx-lg bx-tada bx-rotate-90' ></i></a></li>
             <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
@@ -46,6 +46,10 @@
     <section class="main1">
         <div class="main1img">
             <img src="<?php echo URLROOT?>images/6.1.jpg" alt="">
+            <div class="onimagetext">
+    <p id="txt1">Discover Expert Guides for Your Travels Here</p>
+    <p id="txt2">Explore Your Adventure!</p>
+</div>
         </div>
         <form action="<?php echo URLROOT ?>loggedTraveler/searchGuides" method="POST">
         <div class="main1searchbar">

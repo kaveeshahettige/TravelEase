@@ -11,6 +11,7 @@
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&callback=initMap" async defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.2/css/boxicons.min.css">
     
     <style>
     /* Your CSS styles here */
@@ -28,8 +29,9 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/index">Home</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/hotel">Hotels</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
-            <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
+            <li><a href="<?php echo URLROOT?>loggedTraveler/package">Guides</a></li>
             <div class="rightcontent">
+            <li><a href="<?php echo URLROOT ?>travelerDashboard/cart/<?php echo $_SESSION['user_id'] ?>"><i class='bx bxs-cart bx-lg bx-tada bx-rotate-90' ></i></a></li>
                 <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
                 <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
             </div>
@@ -115,11 +117,12 @@
     </section>
 
     <section class="resultPagem2" id="B1">
-    <h1 class="ResultTopics">Top Places to Visit</h1>
-    <div class="whatToDo">
-        <?php if (!empty($data['places']) && is_array($data['places'])): ?>
-            <?php $chunks = array_chunk($data['places'], ceil(count($data['places']) / 2)); ?>
-            <div class="divleft">
+    <h1 class="ResultTopics">Top Places to Stay</h1>
+<div class="whatToDo">
+    <?php if (!empty($data['places']) && is_array($data['places'])): ?>
+        <?php $chunks = array_chunk($data['places'], ceil(count($data['places']) / 2)); ?>
+        <div class="divleft">
+            <?php if (isset($chunks[0]) && is_array($chunks[0])): ?>
                 <?php foreach ($chunks[0] as $place) : ?>
                     <div class="divleft1">
                         <h1><?php echo $place->place_name; ?></h1>
@@ -133,8 +136,10 @@
                         </div>
                     </div>
                 <?php endforeach; ?>
-            </div>
-            <div class="divright">
+            <?php endif; ?>
+        </div>
+        <div class="divright">
+            <?php if (isset($chunks[1]) && is_array($chunks[1])): ?>
                 <?php foreach ($chunks[1] as $place) : ?>
                     <div class="divright1">
                         <h1><?php echo $place->place_name; ?></h1>
@@ -148,11 +153,13 @@
                         </div>
                     </div>
                 <?php endforeach; ?>
-            </div>
-        <?php else: ?>
-            <p>No places available right now.</p>
-        <?php endif; ?>
-    </div>
+            <?php endif; ?>
+        </div>
+    <?php else: ?>
+        <p>No places available right now.</p>
+    <?php endif; ?>
+</div>
+
 </section>
             <!-- <?php echo $data['checkinDate']?> -->
             <!-- <?php echo $data['checkoutDate']?> -->
@@ -168,19 +175,19 @@
             ?>
 
     <section class="main2" id="B2">
-        <h1 class="ResultTopics">Top Places to Stay</h1>
+        <h1 class="ResultTopics" style="margin-left:5%">Top Places to Stay</h1>
         <?php if($days != 0): ?>
         <?php if (!empty($data['hotelrooms']) && is_array($data['hotelrooms'])): ?>
             <div class="main2images" id="div1">
     <?php foreach ($data['hotelrooms'] as $hotelroom): ?>
         <div class="main2img1content">
             <div><img src="<?php echo URLROOT ?>images/<?php echo $hotelroom->image; ?>" alt=""></div>
-            <div class="c1">
+            <div class="c1" style="padding-bottom:10px;">
                 <div>
                     <p style="font-size: 30px; margin: 0px; font-weight: bold;"><?php echo ($hotelroom ? $hotelroom->fname . ' ' . $hotelroom->lname : ' '); ?></p>
                     <p><?php echo $hotelroom->roomType ?>&nbsp;Room</p>
-                    <p><?php echo $hotelroom->addr ?></p>
-                    <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+                    <!-- <p><?php echo $hotelroom->addr ?></p> -->
+                    <div style="font-size: 24px;padding-left:10px;padding-bottom:10px;" > <!-- Adjust font-size here -->
         <?php
        // Extract the rating value from the ratings object
        $rating = isset($hotelroom->ratings->rating) ? $hotelroom->ratings->rating : 0;
@@ -201,7 +208,7 @@
         ?>
     </div>
                 </div>
-                <div><button class="view-button" onclick="booking(3, '<?php echo $hotelroom->room_id; ?>', '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">&rarr; View</button></div>
+                <div><button style="margin-top:50px;margin-right:0px" class="view-button" onclick="booking(3, '<?php echo $hotelroom->room_id; ?>', '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">&rarr; View</button></div>
             </div>
         </div>
     <?php endforeach; ?>
@@ -228,7 +235,7 @@
         <?php foreach ($data['vehicles'] as $vehicle): ?>
             <div class="vehicledetails">
                 <div> <img src="<?php echo URLROOT?>/images/<?php echo $vehicle->image; ?>" alt="">
-                <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+                <div style="font-size: 24px;padding-left:100px"> <!-- Adjust font-size here -->
         <?php
        // Extract the rating value from the ratings object
        $rating = isset($vehicle->vratings->rating) ? $vehicle->vratings->rating : 0;
@@ -248,7 +255,7 @@
         }
         ?>
     </div></div>
-                <div class="vehicleIndetails">
+                <div class="vehicleIndetails" style="margin:10px;" >
                     <div><strong><?php echo $vehicle->brand; ?> <?php echo $vehicle->model; ?></strong>&nbsp;by  <?php echo $vehicle->agency_name; ?></div>
                     <div style="padding: 10px;">
                         <ul>
@@ -264,7 +271,7 @@
                     <div>Price : <strong><?php echo $data['vehiclePrices'][$vehicle->vehicle_id]; ?> LkR</strong></div>
                 </div>
                 <div class="vehicleBookButton"> 
-                    <button onclick="booking(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">&rarr; View</button>
+                    <button style="" onclick="booking(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">&rarr; View</button>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -274,8 +281,8 @@
     </div>
 </section>
 <section class="main2" id="B4">
-        <h1 class="ResultTopics">Get Guidance from</h1>
-        <div class="pickupTimeField">
+        <h1 class="ResultTopics" style="margin-left:5%">Get Guidance from</h1>
+        <div class="pickupTimeField" style="margin-left:5%">
         <label for="meetTime">Meet Time:</label>
         <input type="time" id="meetTime" name="meetTime">
     </div>
@@ -315,7 +322,7 @@
             </div>
             
             <div>
-                <button style="margin-top: 10px; margin-bottom: 10px;" class="view-button" onclick="booking(5, '<?php echo $guide->user_id; ?>', '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">
+                <button style="margin-top:50px;margin-right:0px" class="view-button" onclick="booking(5, '<?php echo $guide->user_id; ?>', '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">
                 &rarr; View
                 </button>
                

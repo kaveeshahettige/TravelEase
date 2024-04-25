@@ -50,7 +50,7 @@
     <div class="reservation-details">
         <p><strong>Brand:</strong> <?php echo $data['furtherBookingDetails']->brand ?> </p>
         <p><strong>Model:</strong> <?php echo $data['furtherBookingDetails']->model ?></p>
-        <p><strong>Plate Number:</strong> <?php echo $data['furtherBookingDetails']->plate_number ?></p>
+        <!-- <p><strong>Plate Number:</strong> <?php echo $data['furtherBookingDetails']->plate_number ?></p> -->
         <p><strong>Fuel Type:</strong> <?php echo $data['furtherBookingDetails']->fuel_type ?></p>
         <p><strong>Year:</strong> <?php echo $data['furtherBookingDetails']->year ?></p>
         <p><strong>Seating Capacity:</strong> <?php echo $data['furtherBookingDetails']->seating_capacity ?></p>
@@ -61,8 +61,12 @@ if ($data['furtherBookingDetails']->ac_type  == 1) {
 } else {
     echo "Not Available";
 }
+
 ?>
 </p>
+        <!-- <p><strong>Air bags:</strong> <?php echo $data['furtherBookingDetails']->seating_capacity ?></p>
+        <p><strong>TV : </strong> <?php echo $data['furtherBookingDetails']->seating_capacity ?></p> -->
+
 
         
     </div>

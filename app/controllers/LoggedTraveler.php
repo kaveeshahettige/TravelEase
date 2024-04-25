@@ -945,9 +945,9 @@ public function fetchAvailableVehicles()
             // $html .= '<td>' . $count . '</td>';
             $html .= '<td>' . $vehicle->brand . '</td>';
             $html .= '<td>' . $vehicle->model . '</td>';
-            $html .= '<td>' . $vehicle->plate_number . '</td>';
             $html .= '<td>' . $vehicle->fuel_type . '</td>';
-            $html .= '<td>' . $vehicle->year . '</td>';
+            
+            $html .= '<td>' . $vehicle->priceperday . '</td>';
             $html .= '<td>' . $vehicle->seating_capacity . '</td>';
             // Construct the button to book the vehicle
             //hidden input to take pickyptime
