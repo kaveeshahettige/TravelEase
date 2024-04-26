@@ -37,7 +37,7 @@
             <div class="hotel-details">
 
                 <div class="image-container">
-                    <img src="<?php echo URLROOT ?>/images/<?php echo $data['furtherBookingDetails']->image ?>" alt="Image">
+                    <img src="<?php echo URLROOT ?>/images/<?php echo $data['furtherBookingDetails']->image ?> " style="border-radius:10%;" alt="Image">
                     <!-- <?php echo $data['furtherBookingDetails']->image ?> -->
                 </div>
 
@@ -48,14 +48,86 @@
                         <?php if ($data['type'] == 3) : ?>
                             <div class="reservation-details">
                                 <!-- <p><strong><i class="fas fa-door-open"></i> Room ID:</strong> <?php echo $data['furtherBookingDetails']->room_id ?></p> -->
-                                <p><strong><i class="fas fa-bed"></i> Number of Beds:</strong> <?php echo $data['furtherBookingDetails']->numOfBeds ?></p>
+                                <p><strong><i class="fas fa-bed"></i> Beds:</strong> <?php echo $data['furtherBookingDetails']->numOfBeds ?></p>
                                 <p><strong><i class="fas fa-align-left"></i> About:</strong> <?php echo $data['furtherBookingDetails']->description ?></p>
-                                <p><strong><i class="fas fa-snowflake"></i> AC availability:</strong> <?php echo $data['furtherBookingDetails']->acAvailability ?></p>
-                                <p><strong><i class="fas fa-tv"></i> TV availability:</strong> <?php echo $data['furtherBookingDetails']->tvAvailability ?></p>
-                                <p><strong><i class="fas fa-wifi"></i> Wifi availability:</strong> <?php echo $data['furtherBookingDetails']->wifiAvailability ?></p>
-                                <p><strong><i class="fas fa-file-contract"></i> Cancellation policy:</strong> <?php echo $data['furtherBookingDetails']->cancellationPolicy ?></p>
+                                <!-- <p><strong><i class="fas fa-snowflake"></i> AC :</strong> <?php echo $data['furtherBookingDetails']->acAvailability ?></p> -->
+                                <!-- <p><strong><i class="fas fa-tv"></i> TV :</strong> <?php echo $data['furtherBookingDetails']->tvAvailability ?></p> -->
+                                <!-- <p><strong><i class="fas fa-wifi"></i> Wifi :</strong> <?php echo $data['furtherBookingDetails']->wifiAvailability ?></p> -->
+                                <!-- <p><strong><i class="fas fa-file-contract"></i> Cancellation policy:</strong> <?php echo $data['furtherBookingDetails']->cancellationPolicy ?></p> -->
                                 <p><strong><i class="fas fa-smoking"></i> Smoking policy:</strong> <?php echo $data['furtherBookingDetails']->smokingPolicy ?></p>
                                 <p><strong><i class="fas fa-paw"></i> Pet policy:</strong> <?php echo $data['furtherBookingDetails']->petPolicy ?></p>
+                               
+                                <p>
+    <strong><i class="fas fa-coffee"></i> Breakfast: <?php echo $data['furtherBookingDetails']->breakfastIncluded ?></strong>
+    <?php if ($data['furtherBookingDetails']->breakfastIncluded == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+    <strong><i class="fas fa-utensils"></i> Lunch: <?php echo $data['furtherBookingDetails']->lunchIncluded ?></strong>
+    <?php if ($data['furtherBookingDetails']->lunchIncluded == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+    <strong><i class="fas fa-utensils"></i> Dinner: <?php echo $data['furtherBookingDetails']->dinnerIncluded ?></strong>
+    <?php if ($data['furtherBookingDetails']->dinnerIncluded == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+</p>
+
+</p>
+
+<p>
+    
+
+</p>
+<p>
+    
+<p>
+    <strong><i class="fas fa-box"></i> AC:</strong>
+    <?php if ($data['furtherBookingDetails']->acAvailability == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+    <strong><i class="fas fa-tv"></i> TV: </strong>
+    <?php if ($data['furtherBookingDetails']->tvAvailability == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+    <strong><i class="fas fa-wifi"></i> WiFi: </strong>
+    <?php if ($data['furtherBookingDetails']->wifiAvailability == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+</p>
+
+<p><strong><i class="fas fa-bed"></i> Room size:</strong> <?php echo $data['furtherBookingDetails']->roomSize ?></p>
+<p><strong><i class="fas fa-user"></i> Adults:</strong> <?php echo $data['furtherBookingDetails']->numAdults ?></p>
+<p><strong><i class="fas fa-child"></i> Children:</strong> <?php echo $data['furtherBookingDetails']->numChildren ?></p>
+
+<p>
+    <strong><i class="fas fa-box"></i> Private pool: <?php echo $data['furtherBookingDetails']->privatePoolAvailability ?></strong>
+    <?php if ($data['furtherBookingDetails']->privatePoolAvailability == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+</p>
+
+<p>
+    <strong><i class="fas fa-cube"></i> Hot tub: <?php echo $data['furtherBookingDetails']->hotTubAvailability ?></strong>
+    <?php if ($data['furtherBookingDetails']->hotTubAvailability == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+</p>
 
                             </div>
                         <?php elseif ($data['type'] == 4) : ?>
@@ -84,16 +156,17 @@
     <?php else: ?>
         <i style="color:red" class="fas fa-times-circle"></i>
     <?php endif; ?>
-</p>
-
-<!-- For Navigation -->
-<p>
     <strong><i class="fas fa-map"></i> Navigation: <?php echo $data['furtherBookingDetails']->nav ?></strong>
     <?php if ($data['furtherBookingDetails']->nav == 1): ?>
         <i style="color:green" class="fas fa-check-circle"></i>
     <?php else: ?>
         <i style="color:red" class="fas fa-times-circle"></i>
     <?php endif; ?>
+</p>
+
+<!-- For Navigation -->
+<p>
+    
 </p>
 
 <!-- For TV -->
@@ -104,16 +177,17 @@
     <?php else: ?>
         <i style="color:red" class="fas fa-times-circle"></i>
     <?php endif; ?>
-</p>
-
-<!-- For USB -->
-<p>
-    <strong><i class="fas fa-plug"></i> USB: <?php echo $data['furtherBookingDetails']->usb ?></strong>
+    <strong><i class="fas fa-plug"></i> USB: </strong>
     <?php if ($data['furtherBookingDetails']->usb == 1): ?>
         <i style="color:green" class="fas fa-check-circle"></i>
     <?php else: ?>
         <i style="color:red" class="fas fa-times-circle"></i>
     <?php endif; ?>
+</p>
+
+<!-- For USB -->
+<p>
+   
 </p>
 
 
@@ -122,12 +196,12 @@
                         <?php elseif ($data['type'] == 5) : ?>
                             <div class="reservation-details">
                                 <p><strong><i class="fas fa-user"></i> Name:</strong> <?php echo $data['serviceProvider']->fname ?></p>
-                                <p><strong><i class="fas fa-info-circle"></i> About:</strong> <?php echo $data['furtherBookingDetails']->description ?></p>
                                 <p><strong><i class="fas fa-tags"></i> Category:</strong> <?php echo $data['furtherBookingDetails']->category ?></p>
                                 <p><strong><i class="fas fa-language"></i> Languages:</strong> <?php echo $data['furtherBookingDetails']->languages ?></p>
                                 <p><strong><i class="fas fa-id-badge"></i> Guide Register Number:</strong> <?php echo $data['furtherBookingDetails']->GuideRegNumber ?></p>
                                 <p><strong><i class="fas fa-calendar-alt"></i> Lisence Expiry Date:</strong> <?php echo $data['furtherBookingDetails']->LisenceExpDate ?></p>
                                 <p><strong><i class="fas fa-map-marker-alt"></i> Sites:</strong> <?php echo $data['furtherBookingDetails']->sites ?></p>
+                                <p style="margin-right:30px;"><strong><i class="fas fa-info-circle" ></i> About:</strong> <?php echo $data['furtherBookingDetails']->description ?></p>
                                 </p>
 
 

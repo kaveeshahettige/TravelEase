@@ -68,7 +68,13 @@
     </section>
     <!-- <?php echo var_dump($data) ?> -->
     <?php 
-$agency_chunks = array_chunk($data['vehicles'], 3);
+if (is_array($data['vehicles'])) {
+    $agency_chunks = array_chunk($data['vehicles'], 3);
+    // Proceed with further processing
+} else {
+    // Handle the case where $data['vehicles'] is not an array
+}
+
 ?>
     <section class="main2">
         <div class="main2buttons">
@@ -150,7 +156,7 @@ $agency_chunks = array_chunk($data['vehicles'], 3);
             </div>
         
         <div class="copyright">
-            &copy; 2023 Your Company Name. All rights reserved.
+            &copy; 2023 Travelease. All rights reserved.
         </div>
         </div>
     </section>

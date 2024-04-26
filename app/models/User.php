@@ -2139,7 +2139,7 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
         AND (endDate >= :checkinDate OR endDate IS NULL)
     )
     AND vehicles.vehicleCondition = :vehicleCondition
-    AND users.profile_status = 1;
+    AND users.profile_status = 1 AND users.approval = 1;
 ');
     
         $this->db->bind(':location', '%' . $location . '%');
@@ -2168,7 +2168,7 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
             WHERE startDate <= :checkoutDate
             AND (endDate >= :checkinDate OR endDate IS NULL)
         )
-        AND users.profile_status = 1;
+        AND users.profile_status = 1 AND users.approval = 1;
     ');
         
             $this->db->bind(':location', '%' . $location . '%');
@@ -2187,7 +2187,7 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
         $this->db->query('SELECT * FROM guides
         JOIN users ON guides.user_id = users.id
         WHERE (guides.city LIKE :location OR guides.sites LIKE :location)
-        AND users.profile_status = 1;
+        AND users.profile_status = 1 AND users.approval = 1;
         ');
         $this->db->bind(':location', '%' . $location . '%');
         $result = $this->db->resultSet();
@@ -2699,10 +2699,12 @@ return $success; // Return success status after the loop
             $this->db->bind(':startDate', $startDate);
             $this->db->bind(':endDate', $endDate);
             $result = $this->db->resultSet();
-            if ($this->db->rowCount() > 0) {
-                return false;
+        
+            // Check if any overlapping bookings found
+            if (!empty($result)) {
+                return false; // Guide is not available
             } else {
-                return true;
+                return true; // Guide is available
             }
         }else if($type==4){
             $this->db->query('SELECT * FROM vehicle_availability WHERE vehicle_id = :serviceId AND startDate <= :endDate AND (endDate >= :startDate OR endDate IS NULL)');
@@ -2710,10 +2712,12 @@ return $success; // Return success status after the loop
             $this->db->bind(':startDate', $startDate);
             $this->db->bind(':endDate', $endDate);
             $result = $this->db->resultSet();
-            if ($this->db->rowCount() > 0) {
-                return false;
+        
+            // Check if any overlapping bookings found
+            if (!empty($result)) {
+                return false; // Guide is not available
             } else {
-                return true;
+                return true; // Guide is available
             }
         }else if($type==5){
         $this->db->query('SELECT * FROM guide_availability WHERE user_id = :serviceId AND startDate <= :endDate AND (endDate >= :startDate OR endDate IS NULL)');
@@ -2721,11 +2725,13 @@ return $success; // Return success status after the loop
         $this->db->bind(':serviceId', $serviceId);
         $this->db->bind(':startDate', $startDate);
         $this->db->bind(':endDate', $endDate);
-        $result = $this->db->resultSet();
-        if ($this->db->rowCount() > 0) {
-            return false;
+       $result = $this->db->resultSet();
+        
+        // Check if any overlapping bookings found
+        if (!empty($result)) {
+            return false; // Guide is not available
         } else {
-            return true;
+            return true; // Guide is available
         }
     }
 }

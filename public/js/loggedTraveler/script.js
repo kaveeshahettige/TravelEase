@@ -473,17 +473,18 @@ function bookingHas(type, id, checkinDate, checkoutDate) {
   if (type == 5) {
     url += "/" + meetTime; // Append meetTime to the URL only when type is 5
   }
-
-  // Open the URL in a pop-up modal
-  var customModal = document.createElement('div');
-  customModal.classList.add('modal');
-  customModal.innerHTML = `
-    <div class="modal-content">
-      <span class="close" onclick="closeCustomModal()">&times;</span>
-      <iframe src="${url}" frameborder="0"></iframe>
-    </div>
-  `;
-  document.body.appendChild(customModal);
+  //window.location.href = url;same page
+  window.open(url, '_blank');//anothe page
+  // // Open the URL in a pop-up modal
+  // var customModal = document.createElement('div');
+  // customModal.classList.add('modal');
+  // customModal.innerHTML = `
+  //   <div class="modal-content">
+  //     <span class="close" onclick="closeCustomModal()">&times;</span>
+  //     <iframe src="${url}" frameborder="0"></iframe>
+  //   </div>
+  // `;
+  // document.body.appendChild(customModal);
 }
 
 // Function to close the custom modal

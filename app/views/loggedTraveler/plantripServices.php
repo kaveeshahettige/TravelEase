@@ -90,8 +90,9 @@
 
             <div class="dark-overlay"></div>
             <div class="textonimage">
-                <p><?php echo $data['city']->city_description?$data['city']->city_description:$data['city']->city?></p>
-            </div>
+    <p><?php echo isset($data['city']->city_description) ? $data['city']->city_description : " "; ?></p>
+</div>
+
         </div>
         
         <div id="map"></div>
@@ -109,12 +110,17 @@
         });
 
         // Define an array to store all the places
-        var places = [
-            <?php foreach ($data['places'] as $place): ?>
-                '<?php echo $place->place_name ?>',
-            <?php endforeach; ?>
-        ];
+        <?php if (!empty($data['places'])): ?>
+    var places = [
+        <?php foreach ($data['places'] as $place): ?>
+            '<?php echo addslashes($place->place_name) ?>',
+        <?php endforeach; ?>
+    ];
+<?php else: ?>
+    var places = ['<?php echo addslashes($data['city']->city) ?>'];
+<?php endif; ?>
 
+        
         // Geocode each place and create markers
         places.forEach(function(place) {
             var geocoder = new google.maps.Geocoder();
@@ -163,9 +169,9 @@
                 <?php foreach ($chunks[0] as $place) : ?>
                     <div class="divleft1">
                         <h1><?php echo $place->place_name; ?></h1>
-                        <div class="divleft1_1">
-                            <div>
-                                <p><?php echo $place->place_description; ?></p>
+                        <div class="divleft1_1" >
+                            <div >
+                                <p style="margin-top:0px"><?php echo $place->place_description; ?></p>
                             </div>
                             <div>
                                 <img src="<?php echo URLROOT . '/images/' . $place->place_photo; ?>" alt="">
@@ -177,11 +183,11 @@
             <div class="divright">
                 <?php if (!empty($chunks[1]) && is_array($chunks[1])): ?>
                     <?php foreach ($chunks[1] as $place) : ?>
-                        <div class="divright1">
+                        <div class="divright1" style="margin-bottom:100px;">
                             <h1><?php echo $place->place_name; ?></h1>
                             <div class="divright1_1">
                                 <div>
-                                    <p><?php echo $place->place_description; ?></p>
+                                    <p style="margin-top:0px"><?php echo $place->place_description; ?></p>
                                 </div>
                                 <div>
                                     <img src="<?php echo URLROOT . '/images/' . $place->place_photo; ?>" alt="">
@@ -268,13 +274,13 @@ echo "Current PHP timezone: " . $timezone;
 
 </div>
 <?php elseif (empty($data['hotels'])): ?>
-    <p>No hotels available Right Now</p>
+    <p style="margin-left:5%">No hotels available Right Now</p>
 <?php else: ?>
     <p>Error retrieving hotel data.</p>
 <?php endif; ?>
 <?php endif; ?>
 <?php if ($days == 0): ?>
-    <span class="no-hotels-message">Hotels are not available when check-in and check-out dates are the same.</span>
+    <span class="no-hotels-message" style="margin-left:5%;">Hotels are not available when check-in and check-out dates are the same.</span>
 <?php endif; ?>
 
 </section>
@@ -325,12 +331,15 @@ echo "Current PHP timezone: " . $timezone;
         <ul>
             <li><i class="fas fa-gas-pump box-icon"></i>&nbsp; <?php echo $vehicle->fuel_type; ?> Vehicle</li>
             <li><i class="fas fa-user-friends box-icon"></i>&nbsp; <?php echo $vehicle->seating_capacity; ?> Persons</li>
-            <?php if ($vehicle->ac_type == 1) : ?>
-                <li><i class="fas fa-snowflake box-icon"></i>&nbsp; AC: Available</li>
-            <?php else: ?>
-                <li><i class="fas fa-sun box-icon"></i>&nbsp; AC: Not Available</li>
-            <?php endif; ?>
+            <?php
+                                    if ($vehicle->ac_type  == 1) {
+                                        echo '<i style="color:green" class="fas fa-check-circle"></i> &nbsp;Air Condition';
+                                    } else {
+                                        echo '<i style="color:red" class="fas fa-times-circle"></i> &nbsp;Air Condition';
+                                    }
+                                    ?>
         </ul>
+        
     </div>
     <div><i class="fas fa-dollar-sign box-icon"></i> Price: <strong><?php echo $data['vehiclePrices'][$vehicle->vehicle_id]; ?> LkR</strong></div>
 </div>
@@ -410,7 +419,7 @@ echo "Current PHP timezone: " . $timezone;
 
 </div>
 <?php elseif (empty($data['hotels'])): ?>
-    <p>No guides available Right Now</p>
+    <p style="margin-left:5%">No guides available Right Now</p>
 <?php else: ?>
     <p>Error retrieving guide data.</p>
 <?php endif; ?>
@@ -465,7 +474,7 @@ echo "Current PHP timezone: " . $timezone;
     </div>
     <br><br>
     <div class="copyright">
-        &copy; 2023 Your Company Name. All rights reserved.
+        &copy; 2023 Travelease. All rights reserved.
     </div>
 </div>
 

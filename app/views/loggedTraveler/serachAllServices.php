@@ -128,7 +128,7 @@
                         <h1><?php echo $place->place_name; ?></h1>
                         <div class="divleft1_1">
                             <div>
-                                <p><?php echo $place->place_description; ?></p>
+                                <p style="margin-top:0px"><?php echo $place->place_description; ?></p>
                             </div>
                             <div>
                                 <img src="<?php echo URLROOT . '/images/' . $place->place_photo; ?>" alt="">
@@ -145,7 +145,7 @@
                         <h1><?php echo $place->place_name; ?></h1>
                         <div class="divright1_1">
                             <div>
-                                <p><?php echo $place->place_description; ?></p>
+                                <p style="margin-top:0px"><?php echo $place->place_description; ?></p>
                             </div>
                             <div>
                                 <img src="<?php echo URLROOT . '/images/' . $place->place_photo; ?>" alt="">
@@ -214,13 +214,13 @@
     <?php endforeach; ?>
 </div>
 <?php elseif (empty($data['hotels'])): ?>
-    <p>No hotels available Right Now</p>
+    <p style="margin-left:5%">No hotels available Right Now</p>
 <?php else: ?>
     <p>Error retrieving hotel data.</p>
 <?php endif; ?>
 <?php endif; ?>
 <?php if ($days == 0): ?>
-    <span class="no-hotels-message">Hotels are not available when check-in and check-out dates are the same.</span>
+    <span class="no-hotels-message" style="margin-left:5%">Hotels are not available when check-in and check-out dates are the same.</span>
 <?php endif; ?>
 </section>
 
@@ -256,7 +256,7 @@
         ?>
     </div></div>
                 <div class="vehicleIndetails" style="margin:10px;" >
-                    <div><strong><?php echo $vehicle->brand; ?> <?php echo $vehicle->model; ?></strong>&nbsp;by  <?php echo $vehicle->agency_name; ?></div>
+                    <div><strong><?php echo $vehicle->brand; ?> <?php echo $vehicle->model; ?></strong>&nbsp;by  <?php echo $vehicle->fname; ?></div>
                     <div style="padding: 10px;">
                         <ul>
                             <li><?php echo $vehicle->fuel_type; ?>&nbsp;Vehicle</li>
@@ -276,7 +276,7 @@
             </div>
         <?php endforeach; ?>
         <?php else: ?>
-    <div>No vehicles available right now.</div>
+    <div >No vehicles available right now.</div>
 <?php endif; ?>
     </div>
 </section>
@@ -334,9 +334,9 @@
 
 </div>
 <?php elseif (empty($data['hotels'])): ?>
-    <p>No guides available Right Now</p>
+    <p style="margin-left:5%">No guides available Right Now</p>
 <?php else: ?>
-    <p>Error retrieving guide data.</p>
+    <p style="margin-left:5%">Error retrieving guide data.</p>
 <?php endif; ?>
 <!-- Vehicle Pickup Time Popup -->
 <div id="pickupTimePopup" class="popup">Please enter a pickup time.</div>
@@ -365,7 +365,7 @@
     </div>
     <br><br>
     <div class="copyright">
-        &copy; 2023 Your Company Name. All rights reserved.
+        &copy; 2023 Travelease. All rights reserved.
     </div>
 </div>
 

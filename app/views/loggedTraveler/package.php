@@ -78,7 +78,7 @@
             </div>
             <div class="c1">
                 <div>
-                    <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $package->fname; ?></p>
+                    <p style="font-size: 30px;margin:0px;font-weight:bold;padding-top:10px;"><?php echo $package->fname?> <?php echo $package->lname?></p>
                     <p><?php echo $package->city ?></p>
                     <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
@@ -142,7 +142,7 @@
             </div>
         
         <div class="copyright">
-            &copy; 2023 Your Company Name. All rights reserved.
+            &copy; 2023 Travelease. All rights reserved.
         </div>
         </div>
     </section>

@@ -33,7 +33,7 @@
             <li><a href="<?php echo URLROOT; ?>travelerDashboard/payments/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bxs-package bx-sm' class="nav-button "></i></i> Payments</a></li>
             <li><a href="<?php echo URLROOT; ?>travelerDashboard/notifications/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bxs-report bx-sm' class="nav-button "></i> Notifications</a></li>
             <li><a href="<?php echo URLROOT; ?>travelerDashboard/previoustrips/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bx-line-chart bx-sm' class="nav-button "></i> Previous Trips</a></li>
-            <li><a href="<?php echo URLROOT?>travelerDashboard/cart/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bx-cart bx-sm'></i> Cart</a></li>
+            <li><a href="<?php echo URLROOT?>travelerDashboard/cart/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bx-cart bx-sm'></i> Wish List</a></li>
             <li><a href="<?php echo URLROOT?>travelerDashboard/settings/<?php echo $_SESSION['user_id']?>" class="nav-button "><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
            
         </ul>
@@ -97,7 +97,7 @@
             echo '<p class="card-text"><strong>End Date:</strong> ' . $booking->endDate . '</p>';
             echo '<p class="card-text"><strong>Booking Date:</strong> ' . date('Y-m-d', strtotime($booking->bookingDate)) . '</p>';
             if ($booking->cancellation_eligibility === 'Unavailable') {
-                echo '<span class="badge badge-danger">Not Available</span>';
+                echo '<span class="badge badge-danger">Cancellation not Available</span>';
             } else {
                 echo '<button class="btn btn-danger" onclick="cancelBooking(\'' . $booking->temporyid . '\', \'' . $booking->booking_id . '\')">Cancel Booking</button>';
             }

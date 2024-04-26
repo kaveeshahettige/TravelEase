@@ -142,18 +142,26 @@ class TravelerDashboard extends Controller{
 
     $feedbackStatus = [];
 
-    foreach ($previousTrips as $trip) {
-      // Check if feedback has been provided for this booking
-      $feedbackProvided = $this->userModel->checkFeedbackProvided($trip->booking_id, $trip->temporyid);
-      
-      // Store the feedback status (1 if feedback provided, 0 otherwise)
-      $feedbackStatus[$trip->booking_id . '_' . $trip->temporyid] = $feedbackProvided ? 1 : 0;
+    if (is_array($previousTrips) || is_object($previousTrips)) {
+      foreach ($previousTrips as $trip) {
+          // Check if feedback has been provided for this booking
+          $feedbackProvided = $this->userModel->checkFeedbackProvided($trip->booking_id, $trip->temporyid);
+          
+          // Store the feedback status (1 if feedback provided, 0 otherwise)
+          $feedbackStatus[$trip->booking_id . '_' . $trip->temporyid] = $feedbackProvided ? 1 : 0;
+      }
+  } else {
+      // Handle the case where $previousTrips is not an array or object
+      // For example, you can log an error message or display a user-friendly error
+      // echo "Error: Unable to retrieve previous trips.";
   }
   
   // Store the feedback status array in the $previousTrips array
+  if (is_array($previousTrips) || is_object($previousTrips)) {
   foreach ($previousTrips as $key => $trip) {
       $previousTrips[$key]->feedback_provided = $feedbackStatus[$trip->booking_id . '_' . $trip->temporyid];
   }
+}
   
 
       $data = [
