@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/manager-reports.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <title>Business Financial Management</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
@@ -88,10 +89,46 @@ include 'navigation.php';
 
             </form>
         </div>
-
-
-
     </div>
+
+    <div class="table-content">
+        <h2>Previous Reports</h2>
+        <table class="booking-table">
+            <thead>
+            <tr>
+                <th>No</th>
+                <th>Report Type</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Created Date</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            $reports = $data["reports"];
+            foreach ($reports as $key => $report):
+                ?>
+                <tr>
+                    <td><?php echo $key + 1; ?></td>
+                    <td><?php echo $report->report_type; ?></td>
+                    <td><?php echo $report->start_date; ?></td>
+                    <td><?php echo $report->end_date; ?></td>
+                    <td><?php echo $report->created_date; ?></td>
+                    <td>
+                        <a href="../public/report/<?php echo $report->filename; ?>" target="_blank" class="view-button" title="View Document">
+                            <i class="bx bx-show"></i>
+                        </a>
+                        <a href="../public/report/<?php echo $report->filename; ?>" download="<?php echo $report->filename; ?>" class="download-button" title="Download Document">
+                            <i class="bx bx-download"></i>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
 
 
 

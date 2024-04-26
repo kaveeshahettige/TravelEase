@@ -64,12 +64,14 @@ class Businessmanager extends Controller
         $bookingsCount = $this->getBookingsCount();
         $OngoingCount = $this->getOngoingCount();
         $guestCount = $this->getGuestCount();
+        $reports = $this->BusinessmanagersModel->getReports();
 
         $data = [
             'profilePicture' => $profilePicture,
             'bookingsCount' => $bookingsCount,
             'OngoingCount'=> $OngoingCount,
             'guestCount'=> $guestCount,
+            'reports' => $reports
         ];
 
         $this->view('businessmanager/reports', $data);
@@ -746,8 +748,6 @@ class Businessmanager extends Controller
     }
 
 
-
-
     public function getCartBookingCount()
     {
         $cartBookingCount = $this->BusinessmanagersModel->getCartBookingCount();
@@ -1014,7 +1014,6 @@ class Businessmanager extends Controller
     }
 
 
-
     public function generateBookingReport($reportData, $startDate, $endDate){
 
     require_once __DIR__ . '/../libraries/dompdf/vendor/autoload.php';
@@ -1139,6 +1138,10 @@ class Businessmanager extends Controller
 
     // Save the PDF file to the directory
     file_put_contents($directory . $filename, $pdfContent);
+
+    $created_date = date('Y-m-d');
+
+    $reports = $this->BusinessmanagersModel->insertReport($filename,'Bookings', $startDate, $endDate,$created_date);
 
     //view pdf
     header('Content-Type: application/pdf');
@@ -1266,6 +1269,10 @@ class Businessmanager extends Controller
 
         // Save the PDF file to the directory
         file_put_contents($directory . $filename, $pdfContent);
+
+        $created_date = date('Y-m-d');
+
+        $reports = $this->BusinessmanagersModel->insertReport($filename,'Traveler Report', $startDate, $endDate,$created_date);
 
         //view pdf
         header('Content-Type: application/pdf');
@@ -1408,6 +1415,10 @@ class Businessmanager extends Controller
         // Save the PDF file to the directory
         file_put_contents($directory . $filename, $pdfContent);
 
+        $created_date = date('Y-m-d');
+
+        $reports = $this->BusinessmanagersModel->insertReport($filename,'Hotel Report', $startDate, $endDate,$created_date);
+
         //view pdf
         header('Content-Type: application/pdf');
         header('Content-Disposition: inline; filename="hotelReport.pdf"');
@@ -1549,6 +1560,10 @@ class Businessmanager extends Controller
         // Save the PDF file to the directory
         file_put_contents($directory . $filename, $pdfContent);
 
+        $created_date = date('Y-m-d');
+
+        $reports = $this->BusinessmanagersModel->insertReport($filename,'Transport Provider Report', $startDate, $endDate,$created_date);
+
         //view pdf
         header('Content-Type: application/pdf');
         header('Content-Disposition: inline; filename="transportReport.pdf"');
@@ -1689,6 +1704,11 @@ class Businessmanager extends Controller
         // Save the PDF file to the directory
         file_put_contents($directory . $filename, $pdfContent);
 
+
+        $created_date = date('Y-m-d');
+
+        $reports = $this->BusinessmanagersModel->insertReport($filename,'Tour Guide Report', $startDate, $endDate,$created_date);
+
         //view pdf
         header('Content-Type: application/pdf');
         header('Content-Disposition: inline; filename="guideReport.pdf"');
@@ -1697,7 +1717,16 @@ class Businessmanager extends Controller
     }
 
 
+    public function getReports(){
 
+        $reports = $this->BusinessmanagersModel->getReports();
+
+        if ($reports) {
+            return $reports;
+        } else {
+            return [];
+        }
+    }
 
 
 

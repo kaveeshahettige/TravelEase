@@ -841,5 +841,26 @@ class Businessmanagers
         return $this->db->resultSet();
     }
 
+    public function insertReport($filename, $reportType, $startDate, $endDate,$created_date){
+        $this->db->query("INSERT INTO reports (filename, report_type, start_date, end_date,created_date)
+                      VALUES (:filename, :reportType, :startDate, :endDate ,:created_date)");
+
+        $this->db->bind(':filename', $filename);
+        $this->db->bind(':reportType', $reportType);
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+        $this->db->bind(':created_date', $created_date);
+
+        return $this->db->execute();
+    }
+
+    public function getReports(){
+        $this->db->query('SELECT * FROM reports ORDER BY created_date DESC');
+        return $this->db->resultSet();
+    }
+
+
+
+
 
 }
