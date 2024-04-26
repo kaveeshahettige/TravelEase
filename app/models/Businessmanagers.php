@@ -733,100 +733,112 @@ class Businessmanagers
     }
 
 
-    public function getBookingHotelReportData($startDate, $endDate){
-        $this->db->query('SELECT COUNT(*) AS hotel_count, u.fname AS hotel_name,,u.id as User_ID
+    public function getHotelReportData($startDate, $endDate){
+        $this->db->query('SELECT COUNT(*) AS booking_count, u.fname AS hotel_name,b.serviceProvider_id as serviceProvider_id
                       FROM bookings b
                       LEFT JOIN users u ON b.serviceProvider_id = u.id
                       WHERE b.bookingCondition != "cancelled" 
                       AND b.endDate < CURDATE()
-                      AND b.bookingDate BETWEEN :startDate AND :endDate
+                      AND b.startDate >= :startDate 
+                     AND b.endDate <= :endDate 
                       AND b.serviceProvider_id IN (SELECT id FROM users WHERE type = 3)
+                       GROUP BY b.serviceProvider_id
                       ORDER BY COUNT(*) DESC');
 
         $this->db->bind(':startDate', $startDate);
         $this->db->bind(':endDate', $endDate);
 
-        return $this->db->single();
+        return $this->db->resultSet();
     }
 
     public function getCartHotelReportData($startDate, $endDate){
-        $this->db->query('SELECT COUNT(*) AS hotel_count, u.fname AS hotel_name
+        $this->db->query('SELECT COUNT(*) AS booking_count, u.fname AS hotel_name,cb.serviceProvider_id as serviceProvider_id
                       FROM cartbookings cb
                       LEFT JOIN users u ON cb.serviceProvider_id = u.id
                       WHERE cb.bookingCondition != "cancelled" 
                       AND cb.endDate < CURDATE()
-                      AND cb.bookingDate BETWEEN :startDate AND :endDate
+                      AND cb.startDate >= :startDate 
+                      AND cb.endDate <= :endDate
                       AND cb.serviceProvider_id IN (SELECT id FROM users WHERE type = 3)
+                     GROUP BY cb.serviceProvider_id
                       ORDER BY COUNT(*) DESC');
 
         $this->db->bind(':startDate', $startDate);
         $this->db->bind(':endDate', $endDate);
 
-        return $this->db->single();
+        return $this->db->resultSet();
     }
 
-    public function getBookingTransportReportData($startDate, $endDate){
-        $this->db->query('SELECT COUNT(*) AS travel_agency_count, u.fname AS travel_agency_name
+    public function getTransportReportData($startDate, $endDate){
+        $this->db->query('SELECT COUNT(*) AS booking_count, u.fname AS transport_name,b.serviceProvider_id as serviceProvider_id
                       FROM bookings b
                       LEFT JOIN users u ON b.serviceProvider_id = u.id
                       WHERE b.bookingCondition != "cancelled" 
                       AND b.endDate < CURDATE()
-                      AND b.bookingDate BETWEEN :startDate AND :endDate
+                      AND b.startDate >= :startDate 
+                      AND b.endDate <= :endDate
                       AND b.serviceProvider_id IN (SELECT id FROM users WHERE type = 4)
+                      GROUP BY b.serviceProvider_id
                       ORDER BY COUNT(*) DESC');
 
         $this->db->bind(':startDate', $startDate);
         $this->db->bind(':endDate', $endDate);
 
-        return $this->db->single();
+        return $this->db->resultSet();
     }
 
     public function getCartTransportReportData($startDate, $endDate){
-        $this->db->query('SELECT COUNT(*) AS travel_agency_count, u.fname AS travel_agency_name
+        $this->db->query('SELECT COUNT(*) AS booking_count, u.fname AS transport_name,cb.serviceProvider_id as serviceProvider_id
                       FROM cartbookings cb
                       LEFT JOIN users u ON cb.serviceProvider_id = u.id
                       WHERE cb.bookingCondition != "cancelled" 
                       AND cb.endDate < CURDATE()
-                      AND cb.bookingDate BETWEEN :startDate AND :endDate
+                      AND cb.startDate >= :startDate 
+                      AND cb.endDate <= :endDate
                       AND cb.serviceProvider_id IN (SELECT id FROM users WHERE type = 4)
+                      GROUP BY cb.serviceProvider_id
                       ORDER BY COUNT(*) DESC');
 
         $this->db->bind(':startDate', $startDate);
         $this->db->bind(':endDate', $endDate);
 
-        return $this->db->single();
+        return $this->db->resultSet();
     }
 
-    public function getBookingGuideReportData($startDate, $endDate){
-        $this->db->query('SELECT COUNT(*) AS guide_count, u.fname AS guide_name
+    public function getGuideReportData($startDate, $endDate){
+        $this->db->query('SELECT COUNT(*) AS booking_count, u.fname AS guide_name
                       FROM bookings b
                       LEFT JOIN users u ON b.serviceProvider_id = u.id
                       WHERE b.bookingCondition != "cancelled" 
                       AND b.endDate < CURDATE()
-                      AND b.bookingDate BETWEEN :startDate AND :endDate
+                      AND b.startDate >= :startDate 
+                      AND b.endDate <= :endDate
                       AND b.serviceProvider_id IN (SELECT id FROM users WHERE type = 5)
+                      GROUP BY b.serviceProvider_id
                       ORDER BY COUNT(*) DESC');
 
         $this->db->bind(':startDate', $startDate);
         $this->db->bind(':endDate', $endDate);
 
-        return $this->db->single();
+        return $this->db->resultSet();
     }
 
     public function getCartGuideReportData($startDate, $endDate){
-        $this->db->query('SELECT COUNT(*) AS guide_count, u.fname AS guide_name
+        $this->db->query('SELECT COUNT(*) AS booking_count, u.fname AS guide_name
                       FROM cartbookings cb
                       LEFT JOIN users u ON cb.serviceProvider_id = u.id
                       WHERE cb.bookingCondition != "cancelled" 
                       AND cb.endDate < CURDATE()
-                      AND cb.bookingDate BETWEEN :startDate AND :endDate
+                      AND cb.startDate >= :startDate 
+                      AND cb.endDate <= :endDate
                       AND cb.serviceProvider_id IN (SELECT id FROM users WHERE type = 5)
+                      GROUP BY cb.serviceProvider_id
                       ORDER BY COUNT(*) DESC');
 
         $this->db->bind(':startDate', $startDate);
         $this->db->bind(':endDate', $endDate);
 
-        return $this->db->single();
+        return $this->db->resultSet();
     }
 
 

@@ -941,22 +941,214 @@ class Businessmanager extends Controller
 
             //merge by User_ID
             foreach ($reportData as $key => $row) {
-                if(!isset($r[$row->User_ID])){
+                if (!isset($r[$row->User_ID])) {
                     $r[$row->User_ID] = $row;
-                }else{
+                } else {
                     $r[$row->User_ID]->booking_count += $row->booking_count;
                 }
             }
 
             $this->generateGuestReport($r, $startDate, $endDate);
+        } else if ($reportType == 'hotel') {
 
+            $reportData1 = $this->BusinessmanagersModel->getHotelReportData($startDate, $endDate);
+            $reportData2 = $this->BusinessmanagersModel->getCartHotelReportData($startDate, $endDate);
+
+            $reportData = array_merge($reportData1, $reportData2);
+            $r = array();
+
+            //merge by serviceProvider_ID
+
+            foreach ($reportData as $key => $row) {
+                if (!isset($r[$row->serviceProvider_id])) {
+                    $r[$row->serviceProvider_id] = $row;
+                } else {
+                    $r[$row->serviceProvider_id]->booking_count += $row->booking_count;
+                }
+            }
+
+            $this->generateHotelReport($r, $startDate, $endDate);
+
+        }else if($reportType =='transport') {
+
+            $reportData1 = $this->BusinessmanagersModel->getTransportReportData($startDate, $endDate);
+            $reportData2 = $this->BusinessmanagersModel->getCartTransportReportData($startDate, $endDate);
+
+            $reportData = array_merge($reportData1, $reportData2);
+            $r = array();
+
+            //merge by serviceProvider_ID
+
+            foreach ($reportData as $key => $row) {
+                if (!isset($r[$row->serviceProvider_id])) {
+                    $r[$row->serviceProvider_id] = $row;
+                } else {
+                    $r[$row->serviceProvider_id]->booking_count += $row->booking_count;
+                }
+            }
+
+            $this->generateTransportReport($r, $startDate, $endDate);
+
+        }else if ($reportType == 'guide') {
+
+                $reportData1 = $this->BusinessmanagersModel->getGuideReportData($startDate, $endDate);
+                $reportData2 = $this->BusinessmanagersModel->getCartGuideReportData($startDate, $endDate);
+
+                $reportData = array_merge($reportData1, $reportData2);
+                $r = array();
+
+                //merge by serviceProvider_ID
+
+                foreach ($reportData as $key => $row) {
+                    if (!isset($r[$row->serviceProvider_id])) {
+                        $r[$row->serviceProvider_id] = $row;
+                    } else {
+                        $r[$row->serviceProvider_id]->booking_count += $row->booking_count;
+                    }
+                }
+
+                $this->generateGuideReport($r, $startDate, $endDate);
         } else {
             echo 'Invalid report type';
         }
     }
 
 
+
     public function generateBookingReport($reportData, $startDate, $endDate){
+
+    require_once __DIR__ . '/../libraries/dompdf/vendor/autoload.php';
+
+    // Create a new Dompdf instance
+    $dompdf = new Dompdf\Dompdf();
+
+    // HTML content for the report
+    $html = '<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .date-range {
+            margin-bottom: 20px;
+        }
+        .total-revenue {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 10px; /* Center the image */
+            max-width: 75px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <img src="http://localhost/TravelEase/public/images/TravelEase.png" alt="Logo" class="logo"> 
+    <h1>Booking Report</h1>
+    <div class="date-range">
+        <strong>Start Date:</strong> ' . $startDate . '<br>
+        <strong>End Date:</strong> ' . $endDate . '
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Service Name</th>
+                <th>Service Type</th>
+                <th>Service Price</th>
+                <th>Revenue</th>
+            </tr>
+        </thead>
+        <tbody>';
+
+    $totalRevenue = 0;
+    $rowNumber = 1;
+
+    foreach ($reportData as $row) {
+        // Ensure that the values are not NULL before accessing them
+        $serviceName = isset($row->service_name) ? $row->service_name : '';
+        $serviceType = isset($row->service_type) ? $row->service_type : '';
+        $servicePrice = isset($row->total_revenue) ? $row->total_revenue : 0;
+        $revenue = isset($row->total_revenue) ? $row->total_revenue * 0.1 : 0;
+
+        // Accumulate total revenue
+        $totalRevenue += $revenue;
+
+        // Output the row in the table
+        $html .= '<tr>
+            <td>' . $rowNumber . '</td>
+            <td>' . $serviceName . '</td>
+            <td>' . $serviceType . '</td>
+            <td>' . $servicePrice . '</td>
+            <td>' . $revenue . '</td>
+        </tr>';
+        $rowNumber++;
+    }
+
+    $html .= '</tbody>
+    </table>
+    <div class="total-revenue">
+        <strong>Total Revenue:</strong> ' . $totalRevenue . '
+    </div>
+</body>
+</html>';
+
+    // Load HTML content into Dompdf
+    $dompdf->loadHtml($html);
+
+    // Set paper size and orientation
+    $dompdf->setPaper('A4', 'portrait');
+
+    $dompdf->set_option('isRemoteEnabled', true);
+
+    // Render the HTML as PDF
+    $dompdf->render();
+
+    // Get the PDF content
+    $pdfContent = $dompdf->output();
+
+    // Define the directory where PDF reports will be stored
+    $directory = '../public/report/';
+
+    // Generate a unique filename for the PDF report
+    $filename = 'booking_report_' . uniqid() . '.pdf';
+
+    // Save the PDF file to the directory
+    file_put_contents($directory . $filename, $pdfContent);
+
+    //view pdf
+    header('Content-Type: application/pdf');
+    header('Content-Disposition: inline; filename="bookingReport.pdf"');
+    header('Content-Length: ' . strlen($pdfContent));
+    echo $pdfContent;
+}
+
+
+    public function generateGuestReport($reportData, $startDate, $endDate){
 
         require_once __DIR__ . '/../libraries/dompdf/vendor/autoload.php';
 
@@ -965,71 +1157,241 @@ class Businessmanager extends Controller
 
         // HTML content for the report
         $html = '<!DOCTYPE html>
-    <head>
-        <title>Booking Report</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            th, td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Booking Report</h1>
-        <p><strong>Start Date:</strong> ' . $startDate . '</p>
-        <p><strong>End Date:</strong> ' . $endDate . '</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Service Name</th>
-                    <th>Service Type</th>
-                    <th>Service Price</th>
-                    <th>Revenue</th>
-                </tr>
-            </thead>
-            <tbody>';
+<head>
+    <title>Guest Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .date-range {
+            margin-bottom: 20px;
+        }
+        .footer {
+            text-align: right;
+            margin-top: 50px;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 10px; /* Center the image */
+            max-width: 75px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <img src="http://localhost/TravelEase/public/images/TravelEase.png" alt="Logo" class="logo"> 
+    <h1>Guest Report</h1>
+    <div class="date-range">
+        <strong>Start Date:</strong> ' . $startDate . '<br>
+        <strong>End Date:</strong> ' . $endDate . '
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Guest Name</th>
+                <th>Booking Count</th>
+            </tr>
+        </thead>
+        <tbody>';
 
         $rowNumber = 1;
+        $totalGuests = 0;
 
         foreach ($reportData as $row) {
             // Ensure that the values are not NULL before accessing them
-            $serviceName = isset($row->service_name) ? $row->service_name : '';
-            $serviceType = isset($row->service_type) ? $row->service_type : '';
-            $totalRevenue = isset($row->total_revenue) ? $row->total_revenue: 0;
-            $Revenue = isset($row->total_revenue) ? $row->total_revenue * 0.1 : 0;
+            $guestName = isset($row->Guest_Name) ? $row->Guest_Name : '';
+            $bookingCount = isset($row->booking_count) ? $row->booking_count : 0;
+
+            // Accumulate total guests
+
             // Output the row in the table
             $html .= '<tr>
             <td>' . $rowNumber . '</td>
-            <td>' . $serviceName . '</td>
-            <td>' . $serviceType . '</td>
-            <td>' . $totalRevenue . '</td>
-            <td>' . $Revenue . '</td>
+            <td>' . $guestName . '</td>
+            <td>' . $bookingCount . '</td>
         </tr>';
             $rowNumber++;
         }
+        $totalGuests = $rowNumber-1;
 
         $html .= '</tbody>
-    </table>
-    </body>
-    </html>';
+</table>
+<div class="footer">
+    <strong>Total Guests:</strong> ' . $totalGuests . '
+</div>
+</body>
+</html>';
 
         // Load HTML content into Dompdf
         $dompdf->loadHtml($html);
 
         // Set paper size and orientation
         $dompdf->setPaper('A4', 'portrait');
+
+        $dompdf->set_option('isRemoteEnabled', true);
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+
+        // Get the PDF content
+        $pdfContent = $dompdf->output();
+
+        // Define the directory where PDF reports will be stored
+        $directory = '../public/report/';
+
+        // Generate a unique filename for the PDF report
+        $filename = 'guest_report_' . uniqid() . '.pdf';
+
+        // Save the PDF file to the directory
+        file_put_contents($directory . $filename, $pdfContent);
+
+        //view pdf
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: inline; filename="Guest Report.pdf"');
+        header('Content-Length: ' . strlen($pdfContent));
+        echo $pdfContent;
+    }
+
+
+
+    public function generateHotelReport($reportData, $startDate, $endDate){
+        require_once __DIR__ . '/../libraries/dompdf/vendor/autoload.php';
+
+        // Create a new Dompdf instance
+        $dompdf = new Dompdf\Dompdf();
+
+        // Total count of hotel bookings
+        $totalHotelBookings = 0;
+        foreach ($reportData as $row) {
+            $totalHotelBookings += isset($row->booking_count) ? $row->booking_count : 0;
+        }
+
+        // HTML content for the report
+        $html = '<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Hotel Report</title>
+    <style>
+        body {
+            font-family: Poppins, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .date-range {
+            margin-bottom: 20px;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 10px; /* Center the image */
+            max-width: 75px;
+            height: auto;
+        }
+        .footer {
+            text-align: right;
+            margin-top: 50px;
+        }
+        .main-footer {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <img src="http://localhost/TravelEase/public/images/TravelEase.png" alt="Logo" class="logo"> 
+    <h1>Hotel Report</h1>
+    <div class="date-range">
+        <strong>Start Date:</strong> ' . $startDate . '<br>
+        <strong>End Date:</strong> ' . $endDate . '
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Hotel Name</th>
+                <th>Booking Count</th>
+            </tr>
+        </thead>
+        <tbody>';
+
+        $rowNumber = 1;
+
+        foreach ($reportData as $row) {
+            // Ensure that the values are not NULL before accessing them
+            $hotelName = isset($row->hotel_name) ? $row->hotel_name : '';
+            $bookingCount = isset($row->booking_count) ? $row->booking_count : 0;
+
+            // Output the row in the table
+            $html .= '<tr>
+            <td>' . $rowNumber . '</td>
+            <td>' . $hotelName . '</td>
+            <td>' . $bookingCount . '</td>
+        </tr>';
+            $rowNumber++;
+        }
+
+        $html .= '</tbody>
+    </table>
+    <div class="footer">
+        Total Hotel Bookings: ' . $totalHotelBookings . '<br>
+    </div>
+    <div class="main-footer">
+        Generated by Your Company &copy; ' . date("Y") . '
+    </div>
+</body>
+</html>';
+
+        // Load HTML content into Dompdf
+        $dompdf->loadHtml($html);
+
+        // Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        $dompdf->set_option('isRemoteEnabled', true);
 
         // Render the HTML as PDF
         $dompdf->render();
@@ -1041,22 +1403,24 @@ class Businessmanager extends Controller
         $directory = '../public/report/';
 
         // Generate a unique filename for the PDF report
-        $filename = 'booking_report_' . uniqid() . '.pdf';
+        $filename = 'hotel_report_' . uniqid() . '.pdf';
 
         // Save the PDF file to the directory
         file_put_contents($directory . $filename, $pdfContent);
 
         //view pdf
         header('Content-Type: application/pdf');
-        header('Content-Disposition: inline; filename="invoice.pdf"');
+        header('Content-Disposition: inline; filename="hotelReport.pdf"');
         header('Content-Length: ' . strlen($pdfContent));
         echo $pdfContent;
     }
 
-    public function generateGuestReport($reportData, $startDate, $endDate){
-        echo "<pre>";
-        print_r($reportData);
-        exit();
+
+
+    public function generateTransportReport($reportData, $startDate, $endDate){
+//        echo "<pre>";
+//        print_r($reportData);
+//        exit();
 
         require_once __DIR__ . '/../libraries/dompdf/vendor/autoload.php';
 
@@ -1066,7 +1430,7 @@ class Businessmanager extends Controller
         // HTML content for the report
         $html = '<!DOCTYPE html>
 <head>
-    <title>Guest Report</title>
+    <title>Transport Report</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -1086,14 +1450,14 @@ class Businessmanager extends Controller
     </style>
 </head>
 <body>
-    <h1>Guest Report</h1>
+    <h1>Transport Report</h1>
     <p><strong>Start Date:</strong> ' . $startDate . '</p>
     <p><strong>End Date:</strong> ' . $endDate . '</p>
     <table>
         <thead>
             <tr>
                 <th>No</th>
-                <th>Guest Name</th>
+                <th>Transport Name</th>
                 <th>Booking Count</th>
             </tr>
         </thead>
@@ -1103,18 +1467,17 @@ class Businessmanager extends Controller
 
         foreach ($reportData as $row) {
             // Ensure that the values are not NULL before accessing them
-            $guestName = isset($row->Guest_Name) ? $row->Guest_Name : '';
+            $transportName = isset($row->transport_name) ? $row->transport_name : '';
             $bookingCount = isset($row->booking_count) ? $row->booking_count : 0;
 
             // Output the row in the table
             $html .= '<tr>
         <td>' . $rowNumber . '</td>
-        <td>' . $guestName . '</td>
+        <td>' . $transportName . '</td>
         <td>' . $bookingCount . '</td>
     </tr>';
             $rowNumber++;
         }
-
         $html .= '</tbody>
 </table>
 </body>
@@ -1136,20 +1499,111 @@ class Businessmanager extends Controller
         $directory = '../public/report/';
 
         // Generate a unique filename for the PDF report
-        $filename = 'guest_report_' . uniqid() . '.pdf';
+        $filename = 'transport_report_' . uniqid() . '.pdf';
 
         // Save the PDF file to the directory
         file_put_contents($directory . $filename, $pdfContent);
 
-        // Provide a link for the user to download the PDF report
-        echo '<a href="' . $directory . $filename . '">Download Guest Report</a>';
+        //view pdf
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: inline; filename="invoice.pdf"');
+        header('Content-Length: ' . strlen($pdfContent));
+        echo $pdfContent;
     }
 
+    public function generateGuideReport($reportData, $startDate, $endDate){
+//        echo "<pre>";
+//        print_r($reportData);
+//        exit();
 
+        require_once __DIR__ . '/../libraries/dompdf/vendor/autoload.php';
 
+        // Create a new Dompdf instance
+        $dompdf = new Dompdf\Dompdf();
 
+        // HTML content for the report
+        $html = '<!DOCTYPE html>
+<head>
+    <title>Guide Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Guide Report</h1>
+    <p><strong>Start Date:</strong> ' . $startDate . '</p>
+    <p><strong>End Date:</strong> ' . $endDate . '</p>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Guide Name</th>
+                <th>Booking Count</th>
+            </tr>
+        </thead>
+        <tbody>';
 
+        $rowNumber = 1;
 
+        foreach ($reportData as $row) {
+            // Ensure that the values are not NULL before accessing them
+            $guideName = isset($row->guide_name) ? $row->guide_name : '';
+            $bookingCount = isset($row->booking_count) ? $row->booking_count : 0;
+
+            // Output the row in the table
+            $html .= '<tr>
+        <td>' . $rowNumber . '</td>
+        <td>' . $guideName . '</td>
+        <td>' . $bookingCount . '</td>
+    </tr>';
+            $rowNumber++;
+        }
+        $html .= '</tbody>
+</table>
+</body>
+</html>';
+
+        // Load HTML content into Dompdf
+        $dompdf->loadHtml($html);
+
+        // Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Get the PDF content
+        $pdfContent = $dompdf->output();
+
+        // Define the directory where PDF reports will be stored
+        $directory = '../public/report/';
+
+        // Generate a unique filename for the PDF report
+        $filename = 'guide_report_' . uniqid() . '.pdf';
+
+        // Save the PDF file to the directory
+        file_put_contents($directory . $filename, $pdfContent);
+
+        //view pdf
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: inline; filename="invoice.pdf"');
+        header('Content-Length: ' . strlen($pdfContent));
+        echo $pdfContent;
+    }
 
 
 
