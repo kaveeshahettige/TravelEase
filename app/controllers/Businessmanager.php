@@ -23,6 +23,8 @@ class Businessmanager extends Controller
         $refundData = $this->getRefunds();
         $OngoingCount = $this->getOngoingCount();
         $guestCount = $this->getGuestCount();
+        $monthlyData = $this->getMonthlyData();
+        $revenueData = $this->getRevenueData();
 
         $data = [
             'profilePicture' => $profilePicture,
@@ -30,7 +32,9 @@ class Businessmanager extends Controller
             'bookingData' => $bookingData,
             'refundData'=>$refundData,
             'OngoingCount'=> $OngoingCount,
-            'guestCount'=> $guestCount
+            'guestCount'=> $guestCount,
+            'monthlyData' => $monthlyData,
+            'revenueData' => $revenueData
         ];
 
         $this->view('businessmanager/index', $data);
@@ -924,8 +928,12 @@ class Businessmanager extends Controller
 
         if ($reportType == 'booking') {
 
-            $reportData1 = $this->BusinessmanagersModel->getBookingReportData($startDate, $endDate);
-            $reportData2 = $this->BusinessmanagersModel->getCartBookingReportData($startDate, $endDate);
+//            $reportData1 = $this->BusinessmanagersModel->getBookingReportData($startDate, $endDate);
+//            $reportData2 = $this->BusinessmanagersModel->getCartBookingReportData($startDate, $endDate);
+
+            $reportData1 = $this->BusinessmanagersModel->getCompletedBookings();
+
+            $reportData2 = $this->BusinessmanagersModel->getCompletedCartBookings();
 
             $reportData = array_merge($reportData1, $reportData2);
 
@@ -1029,7 +1037,6 @@ class Businessmanager extends Controller
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             padding: 20px;
         }
         h1 {
@@ -1040,6 +1047,7 @@ class Businessmanager extends Controller
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            font-size: 12px;
         }
         th, td {
             border: 1px solid #ddd;
@@ -1067,7 +1075,7 @@ class Businessmanager extends Controller
 </head>
 <body>
     <img src="http://localhost/TravelEase/public/images/TravelEase.png" alt="Logo" class="logo"> 
-    <h1>Booking Report</h1>
+    <h1>Details of Bookings</h1>
     <div class="date-range">
         <strong>Start Date:</strong> ' . $startDate . '<br>
         <strong>End Date:</strong> ' . $endDate . '
@@ -1076,8 +1084,11 @@ class Businessmanager extends Controller
         <thead>
             <tr>
                 <th>No</th>
-                <th>Service Name</th>
+                <th>Service Provider</th>
                 <th>Service Type</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Service Details</th>
                 <th>Service Price</th>
                 <th>Revenue</th>
             </tr>
@@ -1089,10 +1100,13 @@ class Businessmanager extends Controller
 
     foreach ($reportData as $row) {
         // Ensure that the values are not NULL before accessing them
-        $serviceName = isset($row->service_name) ? $row->service_name : '';
+        $serviceName = isset($row->serviceprovider_name) ? $row->serviceprovider_name : '';
         $serviceType = isset($row->service_type) ? $row->service_type : '';
-        $servicePrice = isset($row->total_revenue) ? $row->total_revenue : 0;
-        $revenue = isset($row->total_revenue) ? $row->total_revenue * 0.1 : 0;
+        $startDate = isset($row->startDate) ? $row->startDate : '';
+        $endDate = isset($row->endDate) ? $row->endDate : '';
+        $serviceDetails = isset($row->service_detail) ? $row->service_detail : '';
+        $servicePrice = isset($row->payment_amount) ? $row->payment_amount : 0;
+        $revenue = isset($row->payment_amount) ? $row->payment_amount * 0.1 : 0;
 
         // Accumulate total revenue
         $totalRevenue += $revenue;
@@ -1102,8 +1116,11 @@ class Businessmanager extends Controller
             <td>' . $rowNumber . '</td>
             <td>' . $serviceName . '</td>
             <td>' . $serviceType . '</td>
-            <td>' . $servicePrice . '</td>
-            <td>' . $revenue . '</td>
+            <td>'. $startDate .'</td>
+            <td>'. $endDate .'</td>
+            <td>' . $serviceDetails . '</td>
+            <td>Rs. ' . $servicePrice . '</td>
+            <td>Rs. ' . $revenue . '</td>
         </tr>';
         $rowNumber++;
     }
@@ -1111,7 +1128,7 @@ class Businessmanager extends Controller
     $html .= '</tbody>
     </table>
     <div class="total-revenue">
-        <strong>Total Revenue:</strong> ' . $totalRevenue . '
+        <strong>Total Revenue:</strong>Rs. ' . $totalRevenue . '
     </div>
 </body>
 </html>';
@@ -1165,7 +1182,6 @@ class Businessmanager extends Controller
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             padding: 20px;
         }
         h1 {
@@ -1304,7 +1320,6 @@ class Businessmanager extends Controller
     <style>
         body {
             font-family: Poppins, sans-serif;
-            background-color: #f4f4f4;
             padding: 20px;
         }
         h1 {
@@ -1449,7 +1464,6 @@ class Businessmanager extends Controller
         <style>
             body {
                 font-family: Poppins, sans-serif;
-                background-color: #f4f4f4;
                 padding: 20px;
             }
             h1 {
@@ -1593,7 +1607,6 @@ class Businessmanager extends Controller
         <style>
             body {
                 font-family: Poppins, sans-serif;
-                background-color: #f4f4f4;
                 padding: 20px;
             }
             h1 {
@@ -1727,6 +1740,58 @@ class Businessmanager extends Controller
             return [];
         }
     }
+
+    public function getMonthlyData()
+    {
+        $bookingData = $this->BusinessmanagersModel->getBookingChartData();
+        $cartBookingData = $this->BusinessmanagersModel->getCartBookingChartData();
+
+        $chartData = array_merge($bookingData, $cartBookingData);
+        $monthlyData = [];
+
+        // Group by month-year and calculate total booking count for each month
+        foreach ($chartData as $row) {
+            $monthYear = date('Y-m', strtotime($row->bookingDate));
+            if (!isset($monthlyData[$monthYear])) {
+                $monthlyData[$monthYear] = 0;
+            }
+            // Increment the booking count for the corresponding month-year
+            $monthlyData[$monthYear]++;
+        }
+
+        return $monthlyData;
+    }
+
+
+    public function getRevenueData()
+    {
+        $bookingData = $this->BusinessmanagersModel->getBookingChartData();
+        $cartBookingData = $this->BusinessmanagersModel->getCartBookingChartData();
+
+
+        $allBookingsData = array_merge($bookingData, $cartBookingData);
+        $revenueData = [];
+
+        // Iterate over all bookings to calculate revenue for each month
+        foreach ($allBookingsData as $booking) {
+            $monthYear = date('Y-m', strtotime($booking->bookingDate));
+
+            // Calculate revenue for this booking (10% of payment_amount)
+            $revenue = $booking->payment_amount * 0.1;
+
+            // Add revenue to the corresponding month-year key
+            if (!isset($revenueData[$monthYear])) {
+                $revenueData[$monthYear] = 0;
+            }
+            $revenueData[$monthYear] += $revenue;
+        }
+
+//        var_dump($revenueData);
+
+        return $revenueData;
+    }
+
+
 
 
 

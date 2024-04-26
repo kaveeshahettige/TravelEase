@@ -59,7 +59,9 @@ include 'navigation.php';
     </div>
 
     <div class ="dashboard-sub-content">
+        <h2 style="margin-left: 25px;">Update Your Availability in the Calendar</h2>
         <div class="calendar-container">
+
 
             <div class="calendar-content">
                 <div class="calendar-header">

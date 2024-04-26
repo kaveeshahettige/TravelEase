@@ -90,6 +90,32 @@ class Packages extends Controller
         $this->view('packages/bookings',$data);
     }
 
+    public function cancelledBookings()
+    {
+        $userData = $this->getUserInfo();
+        $cancelledBookings = $this->getCancelledBookings();
+
+        $data = [
+            'userData' => $userData,
+            'cancelledBookings' => $cancelledBookings,
+        ];
+
+        $this->view('packages/cancelledBookings',$data);
+    }
+
+    public function ComBookings()
+    {
+        $userData = $this->getUserInfo();
+        $combookings = $this->getCompleteBookings();
+
+        $data = [
+            'userData' => $userData,
+            'combookings' => $combookings,
+        ];
+
+        $this->view('packages/combookings',$data);
+    }
+
 
     public function revenue()
     {
@@ -335,6 +361,37 @@ class Packages extends Controller
             return [];
     }
 
+    public function getCancelledBookings()
+    {
+        $user_id = $_SESSION['user_id'];
+
+        $cancelledBooking1 = $this->packagesModel->getCancelledBookings($user_id);
+        $cancelledBooking2 = $this->packagesModel->getCancelledCartBookings($user_id);
+
+        $cancelledBookings = array_merge($cancelledBooking1, $cancelledBooking2);
+
+
+        if ($cancelledBookings)
+            return $cancelledBookings;
+        else
+            return [];
+    }
+
+    public function getCompleteBookings()
+    {
+        $user_id = $_SESSION['user_id'];
+
+        $comBooking1 = $this->packagesModel->getCompleteBookings($user_id);
+        $comBooking2 = $this->packagesModel->getCompleteCartBookings($user_id);
+
+        $comBookings = array_merge($comBooking1, $comBooking2);
+
+        if ($comBookings)
+            return $comBookings;
+        else
+            return [];
+    }
+
     public function getReviews(){
 
         $user_id = $_SESSION['user_id'];
@@ -425,10 +482,14 @@ class Packages extends Controller
         }
 
         // Construct the notification message
-        $notification_message = "Tour Guide,"." $sender_name" . " has cancelled your booking with the booking details were for tour guide room from" . " $startDate". " to" ." $endDate." ." We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
+        $notification_message = "Tour Guide,"." $sender_name" . " has cancelled your booking with the booking details were for tour guide  from" . " $startDate". " to" ." $endDate." ." We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
 
         // Insert notification
         $notification_inserted = $this->packagesModel->insertNotification($booking_id, $sender_id, $receiver_id, $notification_message);
+
+        $manager_notification = "Tour Guide,"." $sender_name" . " has cancelled the booking with the booking details were for tour guide  from" . " $startDate". " to" ." $endDate." ." Please make sure about the refund process.";
+
+        $manager_notification_inserted = $this->packagesModel->notifyUsersWithType2($booking_id, $sender_id,$manager_notification);
 
         $cancelled_id = $_SESSION['user_id'];
 
@@ -458,7 +519,7 @@ class Packages extends Controller
         }
 
         // Return JSON response based on the result
-        if ($updated && $notification_inserted && $message->getStatus() == 0) {
+        if ($updated && $notification_inserted && $manager_notification_inserted && $message->getStatus() == 0) {
             echo json_encode(['success' => true]);
         } else {
             echo json_encode(['success' => false]);

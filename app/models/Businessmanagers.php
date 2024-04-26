@@ -859,6 +859,31 @@ class Businessmanagers
         return $this->db->resultSet();
     }
 
+    public function getBookingChartData(){
+        $this->db->query('SELECT b.booking_id, b.bookingDate, b.endDate, u.fname AS service_name, u.type AS service_type, p.amount AS payment_amount
+                      FROM bookings b
+                      LEFT JOIN users u ON b.serviceProvider_id = u.id
+                      LEFT JOIN payments p ON b.booking_id = p.booking_id
+                      WHERE b.bookingCondition != "cancelled" 
+                      AND b.endDate < CURDATE()
+                      ORDER BY b.bookingDate DESC');
+
+        return $this->db->resultSet();
+    }
+
+    public function getCartBookingChartData(){
+        $this->db->query('SELECT cb.booking_id, cb.bookingDate, cb.endDate, u.fname AS service_name, u.type AS service_type, cp.amount AS payment_amount
+                      FROM cartbookings cb
+                      LEFT JOIN users u ON cb.serviceProvider_id = u.id
+                      LEFT JOIN cartpayments cp ON cb.booking_id = cp.booking_id
+                      WHERE cb.bookingCondition != "cancelled" 
+                      AND cb.endDate < CURDATE()
+                      ORDER BY cb.bookingDate DESC');
+
+        return $this->db->resultSet();
+    }
+
+
 
 
 

@@ -62,9 +62,9 @@ include 'navigation.php';
 
     <div class="table-content">
         <div class="tab">
-            <a href="<?php echo URLROOT?>/packages/bookings"><button class="tablinks active">Ongoing Bookings</button></a>
+            <a href="<?php echo URLROOT?>/packages/bookings"><button class="tablinks">Ongoing Bookings</button></a>
             <a href="<?php echo URLROOT?>/packages/combookings"><button class="tablinks">Completed Bookings</button></a>
-            <a href="<?php echo URLROOT?>/packages/cancelledBookings"><button class="tablinks">Cancelled Bookings</button></a>
+            <a href="<?php echo URLROOT?>/packages/cancelledBookings"><button class="tablinks active">Cancelled Bookings</button></a>
         </div>
     </div>
 
@@ -96,9 +96,9 @@ include 'navigation.php';
 
 
             <?php
-            $bookings = $data["bookings"];
-            var_dump($bookings);
-            foreach ($bookings as $key => $booking): ?>
+            $cancelledBookings = $data["cancelledBookings"];
+//            var_dump($bookings);
+            foreach ($cancelledBookings as $key => $booking): ?>
                 <tr>
                     <td><?php echo $key + 1; ?></td>
                     <td><?php echo $booking->fname; ?></td>

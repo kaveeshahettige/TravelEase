@@ -96,6 +96,7 @@ include 'navigation.php';
             <tbody>
             <?php
             $bookings = $data["bookingData"];
+//            var_dump($bookings[1]);
             foreach ($bookings as $key => $booking):
                 ?>
 

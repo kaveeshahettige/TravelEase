@@ -188,7 +188,41 @@ class Package{
             FROM bookings b
             JOIN users u ON b.user_id = u.id
             LEFT JOIN guide_bookings g ON b.booking_id = g.booking_id
-            WHERE b.package_id = :user_id";
+            WHERE b.package_id = :user_id
+            AND b.endDate >= CURDATE()
+            AND b.bookingCondition != 'cancelled'
+            ";
+
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->resultSet();
+    }
+
+    public function getCancelledBookings($user_id){
+        $sql = "SELECT b.*, u.fname, u.profile_picture, g.meetTime
+            FROM bookings b
+            JOIN users u ON b.user_id = u.id
+            LEFT JOIN guide_bookings g ON b.booking_id = g.booking_id
+            WHERE b.package_id = :user_id
+            AND b.bookingCondition = 'cancelled'
+            ";
+
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->resultSet();
+    }
+
+    public function getCompleteBookings($user_id){
+        $sql = "SELECT b.*, u.fname, u.profile_picture, g.meetTime
+            FROM bookings b
+            JOIN users u ON b.user_id = u.id
+            LEFT JOIN guide_bookings g ON b.booking_id = g.booking_id
+            WHERE b.package_id = :user_id
+            AND b.endDate < CURDATE()
+            AND b.bookingCondition != 'cancelled'
+            ";
 
         $this->db->query($sql);
         $this->db->bind(':user_id', $user_id);
@@ -202,7 +236,38 @@ class Package{
             FROM cartbookings cb
             JOIN users u ON cb.user_id = u.id
             LEFT JOIN guide_bookings g ON cb.booking_id = g.booking_id
-            WHERE cb.package_id = :user_id";
+            WHERE cb.package_id = :user_id
+            AND cb.endDate >= CURDATE()
+            AND cb.bookingCondition = 'cancelled'";
+
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->resultSet();
+    }
+
+    public function getCancelledCartBookings($user_id){
+        $sql = "SELECT cb.*, u.fname, u.profile_picture, g.meetTime
+            FROM cartbookings cb
+            JOIN users u ON cb.user_id = u.id
+            LEFT JOIN guide_bookings g ON cb.booking_id = g.booking_id
+            WHERE cb.package_id = :user_id
+            AND cb.bookingCondition = 'cancelled'";
+
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->resultSet();
+    }
+
+    public function getCompleteCartBookings($user_id){
+        $sql = "SELECT cb.*, u.fname, u.profile_picture, g.meetTime
+            FROM cartbookings cb
+            JOIN users u ON cb.user_id = u.id
+            LEFT JOIN guide_bookings g ON cb.booking_id = g.booking_id
+            WHERE cb.package_id = :user_id
+            AND cb.endDate < CURDATE()
+            AND cb.bookingCondition != 'cancelled'";
 
         $this->db->query($sql);
         $this->db->bind(':user_id', $user_id);
@@ -316,6 +381,32 @@ class Package{
 
         return $this->db->execute();
     }
+
+    public function notifyUsersWithType2($booking_id, $sender_id, $notification_message){
+
+        // Query to select users with type 2
+        $sql = "SELECT id FROM users WHERE type = 2";
+        $this->db->query($sql);
+        $users = $this->db->resultSet();
+
+        // Insert notifications for each user with type 2
+        foreach ($users as $user) {
+            $receiver_id = $user['id'];
+            $this->insertNotification2($booking_id, $sender_id, $receiver_id, $notification_message);
+        }
+    }
+
+    public function insertNotification2($booking_id, $sender_id, $receiver_id, $notification_message){
+        $sql = "INSERT INTO notifications (booking_id, sender_id, receiver_id, notification) VALUES (:booking_id, :sender_id, :receiver_id, :notification_message)";
+        $this->db->query($sql);
+        $this->db->bind(':booking_id', $booking_id);
+        $this->db->bind(':sender_id', $sender_id);
+        $this->db->bind(':receiver_id', $receiver_id); // Use the provided receiver_id
+        $this->db->bind(':notification_message', $notification_message);
+
+        return $this->db->execute();
+    }
+
 
     public function getNotifications($user_id)
     {

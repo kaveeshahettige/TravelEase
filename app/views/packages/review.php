@@ -86,7 +86,7 @@ include 'navigation.php';
         <?php endforeach; ?>
     </div>
 
-<!--    <button class="read-more-btn" onclick="openModal('--><?php //echo $review->fname; ?>//', '<?php //echo $review->created_at; ?>//', '<?php //echo $review->comment; ?>//')">Read More</button>
+
     <?php
     function getStarRating($rating) {
         $stars = '';
