@@ -107,8 +107,8 @@ include 'navigation.php';
                     datasets: [{
                         label: 'Number of Bookings in each Month',
                         data: sortedBookingCounts,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgb(255,236,179)',
+                        borderColor: 'rgb(255,193,102)',
                         borderWidth: 1
                     }]
                 },
@@ -145,8 +145,8 @@ include 'navigation.php';
                     datasets: [{
                         label: 'Total Revenue',
                         data: sortedRevenue,
-                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgb(255,236,179)',
+                        borderColor: 'rgb(255,193,102)',
                         borderWidth: 1
                     }]
                 },
