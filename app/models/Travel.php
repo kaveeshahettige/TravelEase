@@ -984,18 +984,6 @@ public function updateCartBookingStatus($booking_id, $vehicle_id)
 }
 
 
-public function insertNotification($booking_id, $sender_id, $receiver_id, $notification_message)
-{
-   $sql = "INSERT INTO notifications (booking_id, sender_id, receiver_id, notification) VALUES (:booking_id, :sender_id, :receiver_id, :notification_message)";
-   $this->db->query($sql);
-   $this->db->bind(':booking_id', $booking_id);
-   $this->db->bind(':sender_id', $sender_id);
-   $this->db->bind(':receiver_id', $receiver_id);
-   $this->db->bind(':notification_message', $notification_message);
-
-
-   return $this->db->execute();
-}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1199,6 +1187,7 @@ public function insertNotification($booking_id, $sender_id, $receiver_id, $notif
             b.temporyid AS tempory_id,
             b.booking_id,
             b.user_id,
+            b.bookingDate,
             u.fname,
             u.lname,
             u.number,
@@ -1235,6 +1224,7 @@ public function insertNotification($booking_id, $sender_id, $receiver_id, $notif
             cb.temporyid AS tempory_id,
             cb.booking_id,
             cb.user_id,
+            cb.bookingDate,
             u.fname,
             u.lname,
             u.number,
@@ -1537,11 +1527,79 @@ public function insertNotification($booking_id, $sender_id, $receiver_id, $notif
         
             return $paymentAmounts;
         }
-        
 
-       
-        
-        
+
+    public function insertNotification($booking_id, $sender_id, $receiver_id, $notification_message)
+    {
+        $sql = "INSERT INTO notifications (booking_id, sender_id, receiver_id, notification) VALUES (:booking_id, :sender_id, :receiver_id, :notification_message)";
+        $this->db->query($sql);
+        $this->db->bind(':booking_id', $booking_id);
+        $this->db->bind(':sender_id', $sender_id);
+        $this->db->bind(':receiver_id', $receiver_id);
+        $this->db->bind(':notification_message', $notification_message);
+
+        return $this->db->execute();
+    }
+
+    public function notifyUsersWithType2($booking_id, $sender_id, $notification_message){
+
+        $sql = "SELECT id FROM users WHERE type = 2";
+        $this->db->query($sql);
+        $users = $this->db->resultSet();
+
+        foreach ($users as $user){
+            $this->insertNotification($booking_id, $sender_id, $user->id, $notification_message);
+        }
+    }
+
+
+
+
+    public function updateRefund($temporyid,$booking_id,$sender_id,$receiver_id,$cancelled_id,$amount,$currentDate){
+
+        $sql = "INSERT INTO refunds (tempory_id,booking_id,serviceProvider_id,user_id,cancel_user_id,refund_amount,cancelled_date) 
+                VALUES (:temporyid,:booking_id, :sender_id, :receiver_id, :cancelled_id, :amount, :currentDate)";
+
+        $this->db->query($sql);
+
+        $this->db->bind(':temporyid', $temporyid);
+        $this->db->bind(':booking_id', $booking_id);
+        $this->db->bind(':sender_id', $sender_id);
+        $this->db->bind(':receiver_id', $receiver_id);
+        $this->db->bind(':cancelled_id', $cancelled_id);
+        $this->db->bind(':amount', $amount);
+        $this->db->bind(':currentDate', $currentDate);
+
+        return $this->db->execute();
+    }
+
+    public function insertNotification2($booking_id, $sender_id, $receiver_id, $notification_message){
+        $sql = "INSERT INTO notifications (booking_id, sender_id, receiver_id, notification) VALUES (:booking_id, :sender_id, :receiver_id, :notification_message)";
+        $this->db->query($sql);
+        $this->db->bind(':booking_id', $booking_id);
+        $this->db->bind(':sender_id', $sender_id);
+        $this->db->bind(':receiver_id', $receiver_id); // Use the provided receiver_id
+        $this->db->bind(':notification_message', $notification_message);
+
+        return $this->db->execute();
+    }
+
+    public function updateAvailability($vehicle_id, $startDate, $endDate){
+        // Prepare the SQL query
+        $sql = 'DELETE FROM vehicle_availability 
+            WHERE vehicle_id = :vehicle_id 
+            AND startDate = :startDate 
+            AND endDate = :endDate';
+
+        // Execute the query
+        $this->db->query($sql);
+        $this->db->bind(':vehicle_id', $vehicle_id);
+        $this->db->bind(':startDate', $startDate);
+        $this->db->bind(':endDate', $endDate);
+
+        // Execute the deletion
+        return $this->db->execute();
+    }
         
     
 }
