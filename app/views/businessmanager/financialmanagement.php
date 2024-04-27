@@ -95,8 +95,11 @@ include 'navigation.php';
                         <tr>
                             <td>
                                 <div class="service-provider-info">
-                                    <!-- Assuming there's a profile_picture property in the transaction object -->
-                                    <img src="<?php echo $transaction[0]->profile_picture ?>" alt="Service Provider Photo">
+                                    <?php
+                                    $profilePicture = $transaction[0]->profile_picture ?? 'profile.png';
+                                    ?>
+                                    <img src="../public/images/<?php echo $profilePicture ?>" alt="Service Provider Photo">
+
                                     <span><?php echo $transaction[0]->serviceprovider_name; ?></span>
                                 </div>
                             </td>

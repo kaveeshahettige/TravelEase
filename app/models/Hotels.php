@@ -109,7 +109,7 @@ class Hotels
           // Insert the data into the hotel_rooms table
             $this->db->query('INSERT INTO hotel_rooms 
             (hotel_id, roomType, numOfBeds, numAdults, numChildren, price, roomSize, acAvailability, tvAvailability, wifiAvailability, smokingPolicy, petPolicy, balconyAvailability, privatePoolAvailability, hotTubAvailability, refrigeratorAvailability, hotShowerHeaterAvailability, washingMachineAvailability, kitchenAvailability, breakfastIncluded, lunchIncluded, dinnerIncluded, description, cancellationPolicy, registration_number, roomImages1, roomImages2, roomImages3, image) 
-            VALUES (:hotel_id, :roomType, :numOfBeds, :numAdults, :numChildren, :price, :roomSize, :acAvailability, :tvAvailability, :wifiAvailability, :smokingPolicy, :petPolicy, :balconyAvailability, :privatePoolAvailability, :hotTubAvailability, :refrigeratorAvailability, :hotShowerHeaterAvailability, :washingMachineAvailability, :kitchenAvailability, :breakfastIncluded, :lunchIncluded, :dinnerIncluded, :description, :cancellationPolicy, :registration_number, :roomImages1, :roomImages2, :roomImages3, :image)');
+            VALUES (:hotel_id, :roomType, :numOfBeds, :numAdults, :numChildren, :price, :roomSize, :acAvailability, :tvAvailability, :wifiAvailability, :smokingPolicy, :petPolicy, :balconyAvailability, :privatePoolAvailability, :hotTubAvailability, :refrigeratorAvailability, :hotShowerHeaterAvailability, :washingMachineAvailability, :kitchenAvailability, :breakfastIncluded, :lunchIncluded, :dinnerIncluded, :description, :cancellationPolicy, :registration_number, :roomImages1, :roomImages2, :roomImages3, :roomImages4)');
 
             // Bind values
             $this->db->bind(':hotel_id', $roomData['hotel_id']);
@@ -140,7 +140,7 @@ class Hotels
             $this->db->bind(':roomImages1', $roomData['roomImages'][0] ?? '');
             $this->db->bind(':roomImages2', $roomData['roomImages'][1] ?? '');
             $this->db->bind(':roomImages3', $roomData['roomImages'][2] ?? '');
-            $this->db->bind(':image', $roomData['image'][3] ?? '');
+            $this->db->bind(':roomImages4', $roomData['roomImages'][3] ?? '');
 
 
             // Execute
@@ -202,7 +202,7 @@ class Hotels
         roomImages1 = :roomImages1,
         roomImages2 = :roomImages2,
         roomImages3 = :roomImages3,
-        image = :image          
+        image = :roomImages4       
         WHERE room_id = :room_id');
 
         // Bind values
@@ -230,10 +230,10 @@ class Hotels
         $this->db->bind(':breakfastIncluded', $roomData['breakfastIncluded']);
         $this->db->bind(':lunchIncluded', $roomData['lunchIncluded']);
         $this->db->bind(':dinnerIncluded', $roomData['dinnerIncluded']);
-        $this->db->bind(':image', $roomData['image'][3] ?? '');
         $this->db->bind(':roomImages1', $roomData['roomImages'][0] ?? '');
         $this->db->bind(':roomImages2', $roomData['roomImages'][1] ?? '');
         $this->db->bind(':roomImages3', $roomData['roomImages'][2] ?? '');
+        $this->db->bind(':roomImages4', $roomData['roomImages'][3] ?? '');
 
         // Execute
         if ($this->db->execute()) {
@@ -572,7 +572,7 @@ class Hotels
     public function insertRoomStatus($room_id, $startDate)
     {
         // Prepare and execute the SQL query to insert room availability
-        $sql = "INSERT INTO room_availability (room_id, startDate) VALUES (:room_id, :startDate)";
+        $sql = "INSERT INTO room_availability (room_id, startDate,endDate) VALUES (:room_id, :startDate,:startDate)";
         $this->db->query($sql);
         $this->db->bind(':room_id', $room_id);
         $this->db->bind(':startDate', $startDate);

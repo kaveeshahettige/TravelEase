@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/settingssub.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
     <title>Hotel - Add Rooms</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -39,9 +40,9 @@ include 'navigation.php';
                 ?>
                 <div class="room-box" >
                     <div onclick="openPopup(<?php echo $hotel_rooms->room_id; ?>)">
-                    <h2><?php echo ucfirst($hotel_rooms->registration_number); ?></h2>
-                    <h3><?php echo ucfirst($hotel_rooms->roomType);?> -<?php echo ucfirst($hotel_rooms->price);?></h3>
-                    <p><?php echo ucfirst($hotel_rooms->description);?></p>
+                        <h2><?php echo ucfirst($hotel_rooms->registration_number); ?></h2>
+                        <h3><?php echo ucfirst($hotel_rooms->roomType);?> -<?php echo ucfirst($hotel_rooms->price);?></h3>
+                         <p><?php echo ucfirst($hotel_rooms->description);?></p>
                     </div>
                     <div class="icons">
                         <a href="<?php echo URLROOT; ?>Hotel/hotelupdaterooms/<?= $hotel_rooms->room_id ?>"><i class='bx bx-edit'></i></a>
@@ -51,7 +52,7 @@ include 'navigation.php';
             <?php endforeach; ?>
         </div>
 
-        <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
+
 
         <div class="add-room">
             <a href="<?php echo URLROOT; ?>Hotel/hoteladdroomsedit" class="add-room-link">
@@ -62,48 +63,90 @@ include 'navigation.php';
 
     </div>
 
-    <<!-- Popup -->
-    <div id="room-popup" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closePopup()">&times;</span>
-            <h2>Room Details</h2>
-            <p><strong>Room Type:</strong> <?php echo $hotel_rooms->roomType; ?></p>
-            <p><strong>Number of Beds:</strong> <?php echo $hotel_rooms->numOfBeds; ?></p>
-            <p><strong>Price:</strong> <?php echo $hotel_rooms->price; ?></p>
-            <p><strong>Description:</strong> <?php echo $hotel_rooms->description; ?></p>
-            <p><strong>Pet Policy:</strong> <?php echo $hotel_rooms->petPolicy; ?></p>
-            <!-- Displaying the image -->
-            <img id="profile-picture" src="<?= isset($hotel_rooms->roomImages2) ? '../public/images/' . $hotel_rooms->roomImages2 : '../Images/wikum.jpg'; ?>" alt="Room Image">
-            <?php
-            var_dump($hotel_rooms->roomImages3);
-            ?>
+    <!-- Popup -->
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <div class="close-btn" onclick="closePopup()">&times;</div>
+            <div class="popup-text">
+                <h2>Room Details</h2>
+                <div class="popup-details">
+                    <img id="room-image" src="" alt="Room Image">
+                    <h3>Room Number: <span id="room-number"></span></h3>
+                    <h3>Room Type: <span id="room-type"></span></h3>
+                    <h3>Price: <span id="room-price"></span></h3>
+                    <h3>Description: <span id="room-description"></span></h3>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Get the modal
-        var modal = document.getElementById('room-popup');
-
-        // Function to open the popup
         function openPopup(room_id) {
-            // Here, you can use the room_id parameter to fetch additional data or perform any other actions
-            modal.style.display = "block";
-            console.log("Room ID: " + room_id);
+            // Fetch room details based on room ID
+            var roomDetails = <?php echo json_encode($data["activeRooms"]); ?>.find(room => room.room_id === room_id);
+
+            // Populate the popup with room details
+
+            document.getElementById("room-number").innerText = roomDetails.registration_number;
+            document.getElementById("room-type").innerText = roomDetails.roomType;
+            document.getElementById("room-price").innerText = roomDetails.price;
+            document.getElementById("room-description").innerText = roomDetails.description;
+
+            // Set the image source
+            document.getElementById("room-image").src = "<?php echo URLROOT; ?>/public/images/" + roomDetails.image;
+            // Display the popup
+            document.getElementById("popup").style.display = "block";
         }
 
-        // Function to close the popup
         function closePopup() {
-            modal.style.display = "none";
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
+            // Hide the popup
+            document.getElementById("popup").style.display = "none";
         }
     </script>
 
+    <style>
+        /* Popup Styles */
+        .popup {
+            display: none; /* Hide popup by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .popup-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px; /* Increased border-radius for a more rounded appearance */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+            text-align: center; /* Center-align the content */
+        }
+
+        /* Style for the room image */
+        #room-image {
+            max-width: 100%; /* Ensure the image doesn't exceed its container */
+            height: 50%; /* Maintain aspect ratio */
+            display: block; /* Ensure the image is displayed as a block element */
+            margin-top: 10px; /* Add some space between the image and other details */
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+    </style>
 
 
 </main>

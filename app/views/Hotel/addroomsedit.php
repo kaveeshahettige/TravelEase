@@ -259,7 +259,7 @@ include 'navigation.php';
                         <div>
                             <div class="form-group">
                                 <label for="roomImages4">Room Images 4:</label>
-                                <input type="file" id="image" name="roomImages[]" accept="image/*" required>
+                                <input type="file" id="roomImages4" name="roomImages[]" accept="image/*" required>
                             </div>
                         </div>
                     </div>

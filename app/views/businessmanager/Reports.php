@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
-    <title>Business Financial Management</title>
+    <title>Business Reports</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
