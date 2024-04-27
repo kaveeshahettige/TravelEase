@@ -38,7 +38,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/index" id="selected">Home</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/hotel">Hotels</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
-            <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
+            <li><a href="<?php echo URLROOT?>loggedTraveler/package">Guides</a></li>
             <div class="rightcontent">
             <li><a href="<?php echo URLROOT ?>travelerDashboard/cart/<?php echo $_SESSION['user_id'] ?>"><i class='bx bxs-cart bx-lg bx-tada bx-rotate-90' ></i></a></li>
             <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
@@ -126,7 +126,7 @@
                 <div class="c1"> 
                     <div>
                         <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider1Name']?></p>
-                        <p><?php echo $data['randomServiceProvider1Location']?></p>
+                        <p style="margin-bottom:6px"><?php echo $data['randomServiceProvider1Location']?></p>
                         <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
                     
@@ -156,7 +156,7 @@
                 <div class="c2">
                     <div>
                         <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider2Name']?></p>
-                        <p><?php echo $data['randomServiceProvider2Location']?></p>
+                        <p style="margin-bottom:6px"><?php echo $data['randomServiceProvider2Location']?></p>
                         <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
                     
@@ -184,7 +184,7 @@
                 <div class="c3">
                     <div>
                         <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider3Name']?></p>
-                        <p><?php echo $data['randomServiceProvider3Location']?></p>
+                        <p style="margin-bottom:6px"><?php echo $data['randomServiceProvider3Location']?></p>
                         <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
                     
@@ -234,7 +234,7 @@
                 </div>
             
             <div class="copyright">
-                &copy; 2023 Your Company Name. All rights reserved.
+                &copy; 2023 Travelease. All rights reserved.
             </div>
 
             

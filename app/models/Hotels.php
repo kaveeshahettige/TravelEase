@@ -108,7 +108,7 @@ class Hotels
 
           // Insert the data into the hotel_rooms table
             $this->db->query('INSERT INTO hotel_rooms 
-            (hotel_id, roomType, numOfBeds, numAdults, numChildren, price, roomSize, acAvailability, tvAvailability, wifiAvailability, smokingPolicy, petPolicy, balconyAvailability, privatePoolAvailability, hotTubAvailability, refrigeratorAvailability, hotShowerHeaterAvailability, washingMachineAvailability, kitchenAvailability, breakfastIncluded, lunchIncluded, dinnerIncluded, description, cancellationPolicy, registration_number, roomImages1, roomImages2, roomImages3, roomImages4) 
+            (hotel_id, roomType, numOfBeds, numAdults, numChildren, price, roomSize, acAvailability, tvAvailability, wifiAvailability, smokingPolicy, petPolicy, balconyAvailability, privatePoolAvailability, hotTubAvailability, refrigeratorAvailability, hotShowerHeaterAvailability, washingMachineAvailability, kitchenAvailability, breakfastIncluded, lunchIncluded, dinnerIncluded, description, cancellationPolicy, registration_number, roomImages1, roomImages2, roomImages3, image) 
             VALUES (:hotel_id, :roomType, :numOfBeds, :numAdults, :numChildren, :price, :roomSize, :acAvailability, :tvAvailability, :wifiAvailability, :smokingPolicy, :petPolicy, :balconyAvailability, :privatePoolAvailability, :hotTubAvailability, :refrigeratorAvailability, :hotShowerHeaterAvailability, :washingMachineAvailability, :kitchenAvailability, :breakfastIncluded, :lunchIncluded, :dinnerIncluded, :description, :cancellationPolicy, :registration_number, :roomImages1, :roomImages2, :roomImages3, :roomImages4)');
 
             // Bind values
@@ -202,7 +202,7 @@ class Hotels
         roomImages1 = :roomImages1,
         roomImages2 = :roomImages2,
         roomImages3 = :roomImages3,
-        roomImages4 = :roomImages4           
+        image = :roomImages4       
         WHERE room_id = :room_id');
 
         // Bind values
@@ -572,7 +572,7 @@ class Hotels
     public function insertRoomStatus($room_id, $startDate)
     {
         // Prepare and execute the SQL query to insert room availability
-        $sql = "INSERT INTO room_availability (room_id, startDate) VALUES (:room_id, :startDate)";
+        $sql = "INSERT INTO room_availability (room_id, startDate,endDate) VALUES (:room_id, :startDate,:startDate)";
         $this->db->query($sql);
         $this->db->bind(':room_id', $room_id);
         $this->db->bind(':startDate', $startDate);
@@ -841,6 +841,37 @@ class Hotels
         }
     }
 
+    public function getOngoingBookingCount($user_id){
+        $this->db->query('SELECT COUNT(b.booking_id) AS booking_count
+                      FROM bookings b
+                      WHERE b.serviceProvider_id = :user_id AND bookingCondition != "cancelled" AND b.endDate >= CURDATE()');
 
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->single()->booking_count;
+    }
+
+    public function getOngoingCartCount($user_id){
+        $this->db->query('SELECT COUNT(cb.booking_id) AS booking_count
+                      FROM cartbookings cb
+                      WHERE cb.serviceProvider_id = :user_id AND bookingCondition != "cancelled" AND cb.endDate >= CURDATE()');
+
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->single()->booking_count;
+    }
+
+
+    public function deleteProfile($user_id)
+    {
+        $this->db->query('UPDATE users SET profile_status = 0 WHERE id = :user_id');
+        $this->db->bind(':user_id', $user_id);
+
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }

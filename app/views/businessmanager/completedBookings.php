@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/manager-bookings.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
     <title>Business Manager Bookings</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
@@ -70,12 +70,55 @@ include 'navigation.php';
 
     <div class="search-content">
         <div class="booking-search">
-            <input type="text" id="booking-search" placeholder="Search for Boookings">
+            <input type="text" id="booking-search" placeholder="Enter Name">
+            <input type="date" id="start-date" placeholder="Start Date">
+            <input type="date" id="end-date" placeholder="End Date">
             <button onclick="filterBookings()">
-                <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
+                <i class="bx bx-search"></i>
             </button>
         </div>
     </div>
+
+    <script>
+        function filterBookings() {
+            var input, filter, startDate, endDate, table, tr, tdGuestName, tdServiceType, tdServiceProvider, tdStartDate, tdEndDate, i, txtGuestName, txtServiceType, txtServiceProvider;
+            input = document.getElementById("booking-search");
+            filter = input.value.toUpperCase();
+            startDate = document.getElementById("start-date").value;
+            endDate = document.getElementById("end-date").value;
+            table = document.querySelector(".booking-table");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 0; i < tr.length; i++) {
+                tdGuestName = tr[i].getElementsByTagName("td")[1]; // Index 1 for Guest Name column
+                tdServiceType = tr[i].getElementsByTagName("td")[2]; // Index 2 for Service Type column
+                tdServiceProvider = tr[i].getElementsByTagName("td")[3]; // Index 3 for Service Provider column
+                tdStartDate = tr[i].getElementsByTagName("td")[4]; // Index 4 for Start Date column
+                tdEndDate = tr[i].getElementsByTagName("td")[5]; // Index 5 for End Date column
+
+                if (tdGuestName && tdServiceType && tdServiceProvider) {
+                    txtGuestName = tdGuestName.textContent || tdGuestName.innerText;
+                    txtServiceType = tdServiceType.textContent || tdServiceType.innerText;
+                    txtServiceProvider = tdServiceProvider.textContent || tdServiceProvider.innerText;
+
+                    if ((txtGuestName.toUpperCase().indexOf(filter) > -1 || txtServiceType.toUpperCase().indexOf(filter) > -1 || txtServiceProvider.toUpperCase().indexOf(filter) > -1) &&
+                        (compareDates(startDate, tdStartDate.textContent.trim()) && compareDates(tdEndDate.textContent.trim(), endDate))) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        function compareDates(start, end) {
+            if (!start || !end) return true;
+            var startDate = new Date(start);
+            var endDate = new Date(end);
+            return startDate <= endDate;
+        }
+    </script>
+
 
     <div class="table-content">
         <h2>Completed Bookings</h2>
@@ -96,6 +139,7 @@ include 'navigation.php';
             <tbody>
             <?php
             $bookings = $data["bookingData"];
+//            var_dump($bookings[1]);
             foreach ($bookings as $key => $booking):
                 ?>
 

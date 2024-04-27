@@ -3,12 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/bookingpayment.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/bookingcartpayment.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <title>Payment</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
+        .reservation-details p{
+                padding: 3px;
+        }
+        .reservation-details p i{
+                padding-right: 20px;
+        }
         .final-info {
     margin-top: 20px;
     padding: 15px;
@@ -40,7 +47,7 @@
 
     </style>
 </head>
-<body style="margin-top:50%">
+<body >
 <!-- <?php echo var_dump($data['bookingcartArray'])?> -->
 
 <?php $servicePrices = [];?>
@@ -49,7 +56,7 @@
     <!-- <?php echo var_dump($data['resultArray'])?> -->
     <h2 style="text-align: center;">Booking Information</h2>
     <?php foreach ($data['resultArray'] as $data1): ?>
-        <div class="hotel-details">
+        <div class="hotel-details" >
             <div class="image-container">
                 <img src="<?php echo URLROOT ?>/images/<?php echo $data1['furtherBookingDetails']->image ?>" alt="Image">
             </div>
@@ -57,52 +64,157 @@
                 <div>
                     <?php if ($data1['type'] == 3): ?>
                         <div class="reservation-details">
-                            <p><strong>Room ID:</strong> <?php echo $data1['furtherBookingDetails']->room_id ?></p>
-                            <p><strong>Number of Beds:</strong> <?php echo $data1['furtherBookingDetails']->numOfBeds ?> </p>
-                            <p><strong>About:</strong> <?php echo $data1['furtherBookingDetails']->description ?></p>
-                            <p><strong>AC availability:</strong> <?php echo $data1['furtherBookingDetails']->acAvailability ?></p>
-                            <p><strong>TV availability:</strong> <?php echo $data1['furtherBookingDetails']->tvAvailability ?></p>
-                            <p><strong>Wifi availability:</strong> <?php echo $data1['furtherBookingDetails']->wifiAvailability ?></p>
-                        </div>
-                        <div class="reservation-details">
-                            <p><strong>Cancellation policy:</strong> <?php echo $data1['furtherBookingDetails']->cancellationPolicy ?> </p>
-                            <p><strong>Smoking policy:</strong> <?php echo $data1['furtherBookingDetails']->smokingPolicy ?></p>
-                            <p><strong>Pet policy:</strong> <?php echo $data1['furtherBookingDetails']->petPolicy ?></p>
-                        </div>
-                    <?php elseif ($data1['type'] == 4): ?>
-                        <div class="reservation-details">
-                            <p><strong>Brand:</strong> <?php echo $data1['furtherBookingDetails']->brand ?> </p>
-                            <p><strong>Model:</strong> <?php echo $data1['furtherBookingDetails']->model ?></p>
-                            <p><strong>Plate Number:</strong> <?php echo $data1['furtherBookingDetails']->plate_number ?></p>
-                            <p><strong>Fuel Type:</strong> <?php echo $data1['furtherBookingDetails']->fuel_type ?></p>
-                            <p><strong>Year:</strong> <?php echo $data1['furtherBookingDetails']->year ?></p>
-                            <p><strong>Seating Capacity:</strong> <?php echo $data1['furtherBookingDetails']->seating_capacity ?></p>
-                            <p><strong>Air Condition:</strong> 
-                                <?php 
-                                    if ($data1['furtherBookingDetails']->ac_type  == 1) {
-                                        echo "Available";
-                                    } else {
-                                        echo "Not Available";
-                                    }
-                                ?>
-                            </p>
-                        </div>
-                        <?php elseif ($data1['type'] == 5): ?>
-    <div class="reservation-details">
-        <p><strong>Name:</strong> <?php echo $data1['serviceProvider']->fname ?> </p>
-        <!-- <p><strong>About:</strong> <?php echo $data1['furtherBookingDetails']->description ?></p> -->
-        <p><strong>Category:</strong> <?php echo $data1['furtherBookingDetails']->category ?></p>
-        <p><strong>Languages:</strong> <?php echo $data1['furtherBookingDetails']->languages ?></p>
-        <p><strong>Guide Register Number:</strong> <?php echo $data1['furtherBookingDetails']->GuideRegNumber ?></p>
-        <p><strong>Lisence Expiry Date:</strong> <?php echo $data1['furtherBookingDetails']->LisenceExpDate ?></p>
-        <p><strong>Sites:</strong> <?php echo $data1['furtherBookingDetails']->sites ?></p>
-        <p><strong>facebook :</strong> <?php echo $data1['furtherBookingDetails']->facebook ?></p>
-        <p><strong>Instagram:</strong> <?php echo $data1['furtherBookingDetails']->instagram ?></p>
-        <p><strong>Contact number:</strong> <?php echo $data1['furtherBookingDetails']->number ?></p>
+                             <!-- <p><strong><i class="fas fa-door-open"></i> Room ID:</strong> <?php echo $data1['furtherBookingDetails']->room_id ?></p> -->
+                             <p><strong><i class="fas fa-bed"></i> Beds:</strong> <?php echo $data1['furtherBookingDetails']->numOfBeds ?></p>
+                                <p><strong><i class="fas fa-align-left"></i> About:</strong> <?php echo $data1['furtherBookingDetails']->description ?></p>
+                                <!-- <p><strong><i class="fas fa-snowflake"></i> AC :</strong> <?php echo $data1['furtherBookingDetails']->acAvailability ?></p> -->
+                                <!-- <p><strong><i class="fas fa-tv"></i> TV :</strong> <?php echo $data1['furtherBookingDetails']->tvAvailability ?></p> -->
+                                <!-- <p><strong><i class="fas fa-wifi"></i> Wifi :</strong> <?php echo $data1['furtherBookingDetails']->wifiAvailability ?></p> -->
+                                <!-- <p><strong><i class="fas fa-file-contract"></i> Cancellation policy:</strong> <?php echo $data1['furtherBookingDetails']->cancellationPolicy ?></p> -->
+                                <p><strong><i class="fas fa-smoking"></i> Smoking policy:</strong> <?php echo $data1['furtherBookingDetails']->smokingPolicy ?></p>
+                                <p><strong><i class="fas fa-paw"></i> Pet policy:</strong> <?php echo $data1['furtherBookingDetails']->petPolicy ?></p>
+                               
+                                <p>
+    <strong><i class="fas fa-coffee"></i> Breakfast: </strong>
+    <?php if ($data1['furtherBookingDetails']->breakfastIncluded == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+    <strong><i class="fas fa-utensils"></i> Lunch: </strong>
+    <?php if ($data1['furtherBookingDetails']->lunchIncluded == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+    <strong><i class="fas fa-utensils"></i> Dinner: </strong>
+    <?php if ($data1['furtherBookingDetails']->dinnerIncluded == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+</p>
+    
+<p>
+    <strong><i class="fas fa-box"></i> AC:</strong>
+    <?php if ($data1['furtherBookingDetails']->acAvailability == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+    <strong><i class="fas fa-tv"></i> TV: </strong>
+    <?php if ($data1['furtherBookingDetails']->tvAvailability == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+    <strong><i class="fas fa-wifi"></i> WiFi: </strong>
+    <?php if ($data1['furtherBookingDetails']->wifiAvailability == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
 </p>
 
-        
-    </div>
+<p><strong><i class="fas fa-bed"></i> Room size:</strong> <?php echo $data1['furtherBookingDetails']->roomSize ?></p>
+<p><strong><i class="fas fa-user"></i> Adults:</strong> <?php echo $data1['furtherBookingDetails']->numAdults ?></p>
+<p><strong><i class="fas fa-child"></i> Children:</strong> <?php echo $data1['furtherBookingDetails']->numChildren ?></p>
+
+<p>
+    <strong><i class="fas fa-box"></i> Private pool: <?php echo $data1['furtherBookingDetails']->privatePoolAvailability ?></strong>
+    <?php if ($data1['furtherBookingDetails']->privatePoolAvailability == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+</p>
+
+<p>
+    <strong><i class="fas fa-cube"></i> Hot tub: <?php echo $data1['furtherBookingDetails']->hotTubAvailability ?></strong>
+    <?php if ($data1['furtherBookingDetails']->hotTubAvailability == 'yes'): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+</p>
+
+                            </div>
+                    <?php elseif ($data1['type'] == 4): ?>
+                        <div class="reservation-details">
+                                <p><strong><i class="fas fa-car"></i> Brand:</strong> <?php echo $data1['furtherBookingDetails']->brand ?></p>
+                                <p><strong><i class="fas fa-car"></i> Model:</strong> <?php echo $data1['furtherBookingDetails']->model ?></p>
+                                <p><strong><i class="fas fa-car"></i> Plate Number:</strong> <?php echo $data1['furtherBookingDetails']->plate_number ?></p>
+                                <p><strong><i class="fas fa-gas-pump"></i> Fuel Type:</strong> <?php echo $data1['furtherBookingDetails']->fuel_type ?></p>
+                                <p><strong><i class="fas fa-calendar-alt"></i> Year:</strong> <?php echo $data1['furtherBookingDetails']->year ?></p>
+                                <p><strong><i class="fas fa-chair"></i> Seating Capacity:</strong> <?php echo $data1['furtherBookingDetails']->seating_capacity ?></p>
+                                <p><strong><i class="fas fa-snowflake"></i> Air Condition:</strong>
+                                    <?php
+                                    if ($data1['furtherBookingDetails']->ac_type  == 1) {
+                                        echo '<i style="color:green" class="fas fa-check-circle"></i>';
+                                    } else {
+                                        echo '<i style="color:red" class="fas fa-times-circle"></i>';
+                                    }
+                                    ?>
+                                </p>
+<!-- For Air bags -->
+<!-- For Air bags -->
+<p>
+    <strong><i class="fas fa-circle"></i> Air bags: <?php echo $data1['furtherBookingDetails']->airbag ?></strong>
+    <?php if ($data1['furtherBookingDetails']->airbag == 1): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+    <strong><i class="fas fa-map"></i> Navigation: <?php echo $data1['furtherBookingDetails']->nav ?></strong>
+    <?php if ($data1['furtherBookingDetails']->nav == 1): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+</p>
+
+<!-- For Navigation -->
+<p>
+    
+</p>
+
+<!-- For TV -->
+<p>
+    <strong><i class="fas fa-tv"></i> TV: <?php echo $data1['furtherBookingDetails']->tv ?></strong>
+    <?php if ($data1['furtherBookingDetails']->tv == 1): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+    <strong><i class="fas fa-plug"></i> USB: <?php echo $data1['furtherBookingDetails']->usb ?></strong>
+    <?php if ($data1['furtherBookingDetails']->usb == 1): ?>
+        <i style="color:green" class="fas fa-check-circle"></i>
+    <?php else: ?>
+        <i style="color:red" class="fas fa-times-circle"></i>
+    <?php endif; ?>
+</p>
+
+<!-- For USB -->
+<p>
+   
+</p>
+
+
+
+                            </div>
+                        <?php elseif ($data1['type'] == 5): ?>
+                            <div class="reservation-details">
+                                <p><strong><i class="fas fa-user"></i> Name:</strong> <?php echo $data1['serviceProvider']->fname ?></p>
+                                <p><strong><i class="fas fa-tags"></i> Category:</strong> <?php echo $data1['furtherBookingDetails']->category ?></p>
+                                <p><strong><i class="fas fa-language"></i> Languages:</strong> <?php echo $data1['furtherBookingDetails']->languages ?></p>
+                                <p><strong><i class="fas fa-id-badge"></i> Guide Register Number:</strong> <?php echo $data1['furtherBookingDetails']->GuideRegNumber ?></p>
+                                <p><strong><i class="fas fa-calendar-alt"></i> Lisence Expiry Date:</strong> <?php echo $data1['furtherBookingDetails']->LisenceExpDate ?></p>
+                                <p><strong><i class="fas fa-map-marker-alt"></i> Sites:</strong> <?php echo $data1['furtherBookingDetails']->sites ?></p>
+                                <!-- <p style="margin-right:30px;"><strong><i class="fas fa-info-circle" ></i> About:</strong> <?php echo $data1['furtherBookingDetails']->description ?></p> -->
+                                </p>
+
+
+                            </div>
                     <?php else: ?>
                         <p>No details available for this type.</p>
                     <?php endif; ?>
@@ -115,7 +227,7 @@
                         <div class="reservation-details">
                             <!-- <p><strong>Pick-up Date:</strong> <?php echo $data1['checkinDate'] ?></p>
                             <p><strong>Drop-off Date:</strong> <?php echo $data1['checkoutDate'] ?></p> -->
-                            <p><strong>Pickup time:</strong> <?php echo $data1['pickupTime']?></p>
+                            <p><strong><i class="fas fa-clock"></i> Pickup time:</strong> <?php echo $data1['pickupTime']?></p>
                         </div>
                     <?php elseif($data1['type'] == 3): ?>
                         <!-- <div class="reservation-details">
@@ -123,7 +235,7 @@
                             <p><strong>Check-out Date:</strong> <?php echo $data1['checkoutDate'] ?></p>
                         </div> -->
                         <?php elseif($data1['type'] == 5): ?>
-                            <p><strong>Meet time:</strong> <?php echo $data1['meetTime']?></p>
+                            <p><strong><i class="fas fa-clock"></i> Meet time:</strong> <?php echo $data1['meetTime']?></p>
         
                     <?php else: ?>
                     <?php endif; ?>
@@ -136,11 +248,11 @@
                             $daysD = ceil($diffTime / (60 * 60 * 24)); // Convert seconds
                             ?>
                             <div class="driver-selection">
-                                <strong>With Driver</strong>
+                                <strong><i class="fas fa-user"></i> With Driver</strong>
                                 <input type="checkbox" id="withDriver" name="withDriver" value="1" onclick="handleCheckboxClick('withDriver', '<?php echo htmlspecialchars($data1['furtherBookingDetails']->vehicle_id, ENT_QUOTES, 'UTF-8') ?>', <?php echo $daysD; ?>)">
                                 <label for="withDriver"></label>
     
-                                <strong>Without Driver</strong>
+                                <strong><i class="fas fa-user-slash"></i> Without Driver</strong>
                                 <input type="checkbox" id="withoutDriver" name="withoutDriver" value="0" checked onclick="handleCheckboxClick('withoutDriver', '<?php echo htmlspecialchars($data1['furtherBookingDetails']->vehicle_id, ENT_QUOTES, 'UTF-8') ?>', <?php echo $daysD; ?>)">
                                 <label for="withoutDriver"></label>
                             </div>
@@ -303,7 +415,7 @@ endforeach;
     <input type="hidden" name="driverType" id="driverTypeInput" value="">
     <div class="buttons">
         <button type="submit" class="payment-button">Make Payment</button>
-        <button type="submit" formaction="<?php echo URLROOT ?>loggedTraveler/addtocart/<?php echo urlencode(json_encode($data['bookingcartArray'])) . '/' .$data['checkinDate'].'/'.$data['checkoutDate'] . '/' . $data['pickupTime'] . '/' .$data1['meetTime']?>" class="payment-button">Add to Cart</button>
+        <button type="submit" formaction="<?php echo URLROOT ?>loggedTraveler/addtocart/<?php echo urlencode(json_encode($data['bookingcartArray'])) . '/' .$data['checkinDate'].'/'.$data['checkoutDate'] . '/' . $data['pickupTime'] . '/' .$data1['meetTime']?>" class="payment-button">Add to Wish List</button>
     </div>
 </form>
 

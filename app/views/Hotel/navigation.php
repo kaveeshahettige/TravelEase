@@ -19,7 +19,7 @@
     ?>
 
     <div class="user-profile">
-        <img id="profile-picture" src="<?= isset($userData->profile_picture) ? '../public/images/' . $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="User Profile Photo">
+        <img id="profile-picture" src="<?= isset($userData->profile_picture) ? '../public/images/' . $userData->profile_picture : '../images/profile.png'; ?>" alt="User Profile Photo">
         <span class="user-name"><?=($userData->fname)?></span>
         <button class="notification-button" href="hotel/gallery">
             <i class="bx bx-bell"></i> <!-- Bell icon from Boxicons -->

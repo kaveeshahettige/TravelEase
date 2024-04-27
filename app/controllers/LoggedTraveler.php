@@ -478,7 +478,7 @@ foreach ($guides as &$guide) {
       ];
   
       // Create a Stripe Checkout session
-      require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+      require __DIR__ . "/../libraries/stripe/vendor/autoload.php";
       $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
       \Stripe\Stripe::setApiKey($stripe_secret_key);
       $checkout_session = \Stripe\Checkout\Session::create([
@@ -581,7 +581,7 @@ foreach ($guides as &$guide) {
     
 
     // Create a Stripe Checkout session
-    require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+    require __DIR__ . "/../libraries/stripe/vendor/autoload.php";
     $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
     \Stripe\Stripe::setApiKey($stripe_secret_key);
     $checkout_session = \Stripe\Checkout\Session::create([
@@ -623,7 +623,7 @@ foreach ($guides as &$guide) {
 //     $user = $this->userModel->findUserDetail($id);
 //     $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($type, $serviceid);
 
-//     require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+//     require __DIR__ . "/../libraries/stripe/vendor/autoload.php";
 //     $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
 
 //     \Stripe\Stripe::setApiKey($stripe_secret_key);
@@ -658,7 +658,7 @@ foreach ($guides as &$guide) {
 //     $user = $this->userModel->findUserDetail($id);
 //     $furtherBookingDetails = $this->userModel->findBookingDetailByServiceid($type, $serviceid);
 
-//     require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+//     require __DIR__ . "/../libraries/stripe/vendor/autoload.php";
 //     $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
 
 //     \Stripe\Stripe::setApiKey($stripe_secret_key);
@@ -1021,7 +1021,7 @@ public function dopaymentVehicles($type, $serviceid, $checkinDate, $checkoutDate
   ];
 
 
-    require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+    require __DIR__ . "/../libraries/stripe/vendor/autoload.php";
     $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
 
     \Stripe\Stripe::setApiKey($stripe_secret_key);
@@ -1542,7 +1542,7 @@ foreach ($bookingcartArray as $type => $serviceIds) {
   ];
 
   // Create a Stripe Checkout session
-  require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+  require __DIR__ . "/../libraries/stripe/vendor/autoload.php";
   $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
   \Stripe\Stripe::setApiKey($stripe_secret_key);
   $checkout_session = \Stripe\Checkout\Session::create([
