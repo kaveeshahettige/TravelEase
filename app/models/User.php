@@ -1236,6 +1236,17 @@ public function addroomUnavailabilityfromCart($furtherbookingdetail,$transaction
    
 }
 
+//removefromCartByBookingId
+public function removefromCartByBookingId($booking_id){
+    $this->db->query('DELETE FROM cart WHERE cartbooking_id = :booking_id');
+    $this->db->bind(':booking_id', $booking_id);
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 
 
 
