@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>TraveleEase</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
-    <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/searchAll.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/planTripServices.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&callback=initMap" async defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.2/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         
         .modal {
@@ -65,8 +68,9 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/index">Home</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/hotel">Hotels</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
-            <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
+            <li><a href="<?php echo URLROOT?>loggedTraveler/package">Guides</a></li>
             <div class="rightcontent">
+            <li><a href="<?php echo URLROOT ?>travelerDashboard/cart/<?php echo $_SESSION['user_id'] ?>"><i class='bx bxs-cart bx-lg bx-tada bx-rotate-90' ></i></a></li>
                 <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
                 <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
             </div>
@@ -86,8 +90,9 @@
 
             <div class="dark-overlay"></div>
             <div class="textonimage">
-                <p><?php echo $data['city']->city_description?$data['city']->city_description:$data['city']->city?></p>
-            </div>
+    <p><?php echo isset($data['city']->city_description) ? $data['city']->city_description : " "; ?></p>
+</div>
+
         </div>
         
         <div id="map"></div>
@@ -105,12 +110,17 @@
         });
 
         // Define an array to store all the places
-        var places = [
-            <?php foreach ($data['places'] as $place): ?>
-                '<?php echo $place->place_name ?>',
-            <?php endforeach; ?>
-        ];
+        <?php if (!empty($data['places'])): ?>
+    var places = [
+        <?php foreach ($data['places'] as $place): ?>
+            '<?php echo addslashes($place->place_name) ?>',
+        <?php endforeach; ?>
+    ];
+<?php else: ?>
+    var places = ['<?php echo addslashes($data['city']->city) ?>'];
+<?php endif; ?>
 
+        
         // Geocode each place and create markers
         places.forEach(function(place) {
             var geocoder = new google.maps.Geocoder();
@@ -159,9 +169,9 @@
                 <?php foreach ($chunks[0] as $place) : ?>
                     <div class="divleft1">
                         <h1><?php echo $place->place_name; ?></h1>
-                        <div class="divleft1_1">
-                            <div>
-                                <p><?php echo $place->place_description; ?></p>
+                        <div class="divleft1_1" >
+                            <div >
+                                <p style="margin-top:0px"><?php echo $place->place_description; ?></p>
                             </div>
                             <div>
                                 <img src="<?php echo URLROOT . '/images/' . $place->place_photo; ?>" alt="">
@@ -173,11 +183,11 @@
             <div class="divright">
                 <?php if (!empty($chunks[1]) && is_array($chunks[1])): ?>
                     <?php foreach ($chunks[1] as $place) : ?>
-                        <div class="divright1">
+                        <div class="divright1" style="margin-bottom:100px;">
                             <h1><?php echo $place->place_name; ?></h1>
                             <div class="divright1_1">
                                 <div>
-                                    <p><?php echo $place->place_description; ?></p>
+                                    <p style="margin-top:0px"><?php echo $place->place_description; ?></p>
                                 </div>
                                 <div>
                                     <img src="<?php echo URLROOT . '/images/' . $place->place_photo; ?>" alt="">
@@ -210,7 +220,7 @@ echo "Current PHP timezone: " . $timezone;
             ?>
 
      <section class="main2" id="B2"> <!--id="S1" -->
-        <h1 class="ResultTopics">Top Places to Stay</h1>
+        <h1 class="ResultTopics" style="margin-left:5%">Top Places to Stay</h1>
         <?php if($days != 0): ?>
         <?php if (!empty($data['hotelrooms']) && is_array($data['hotelrooms'])): ?>
             <div class="main2images" id="div1">
@@ -242,18 +252,18 @@ echo "Current PHP timezone: " . $timezone;
         }
         ?>
     </div>
-                <button class="add-to-cart-button" style="margin-top:0px;margin-left:10px;background-color: #45a049;color: white; border: none; cursor: pointer;transition: background-color 0.3s;" onclick="addToCart(3,<?php echo $hotelroom->room_id ?>,this)">&#x271A;&nbsp;Cart</button>
+                <button class="add-to-cart-button" style="margin-top:0px;margin-left:10px;background-color: #45a049;color: white; border: none; cursor: pointer;transition: background-color 0.3s;margin-bottom:50px;" onclick="addToCart(3,<?php echo $hotelroom->room_id ?>,this)">&#x271A;&nbsp;Cart</button>
                 
                 <!-- Add to Cart button -->
                 
             </div>
             
             <div>
-                <button style="margin-top: 10px; margin-bottom: 10px;" onclick="bookingHas(3, <?php echo $hotelroom->room_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">
+                <button style="margin-top: 10px; margin-bottom: 10px" onclick="bookingHas(3, <?php echo $hotelroom->room_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">
                     &rarr; View Deal
                 </button>
-                <button style="margin-top: 10px; margin-bottom: 10px;" class="view-button" onclick="booking(3, '<?php echo $hotelroom->room_id; ?>', '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">
-                    &#x1F4C5; Book Now
+                <button style="margin-top: 10px; margin-bottom: 10px;padding:10px 30px" class="view-button" onclick="booking(3, '<?php echo $hotelroom->room_id; ?>', '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">
+                    &#x1F4C5; Book 
                 </button>
                
             </div>
@@ -264,13 +274,13 @@ echo "Current PHP timezone: " . $timezone;
 
 </div>
 <?php elseif (empty($data['hotels'])): ?>
-    <p>No hotels available Right Now</p>
+    <p style="margin-left:5%">No hotels available Right Now</p>
 <?php else: ?>
     <p>Error retrieving hotel data.</p>
 <?php endif; ?>
 <?php endif; ?>
 <?php if ($days == 0): ?>
-    <span class="no-hotels-message">Hotels are not available when check-in and check-out dates are the same.</span>
+    <span class="no-hotels-message" style="margin-left:5%;">Hotels are not available when check-in and check-out dates are the same.</span>
 <?php endif; ?>
 
 </section>
@@ -285,7 +295,7 @@ echo "Current PHP timezone: " . $timezone;
         <?php if (!empty($data['vehicles']) && is_array($data['vehicles'])): ?>
             <?php foreach ($data['vehicles'] as $vehicle): ?>
                 <div class="vehicledetails">
-                    <div style="display: flex;margin-bottom: 10px;align-items: center; justify-content: center;flex-direction: column; ">
+                    <div style="display: flex;margin-bottom: 10px;align-items: center; justify-content: center;flex-direction: column;">
                         <img src="<?php echo URLROOT?>/images/<?php echo $vehicle->image; ?>" alt="">
                         <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
@@ -313,25 +323,32 @@ echo "Current PHP timezone: " . $timezone;
                         </div>
                     </div>
 
-                    <div class="vehicleIndetails">
-                        <div><strong><?php echo $vehicle->brand; ?> <?php echo $vehicle->model; ?></strong>&nbsp;by  <?php echo $vehicle->agency_name; ?></div>
-                        <div style="padding: 10px;">
-                            <ul>
-                                <li><?php echo $vehicle->fuel_type; ?>&nbsp;Vehicle</li>
-                                <li><?php echo $vehicle->seating_capacity; ?>&nbsp;Persons</li>
-                                <?php if ($vehicle->ac_type == 1) : ?>
-                                    <li>AC :&nbsp;Available</li>
-                                <?php else: ?>
-                                    <li>AC :&nbsp;Not Available</li>
-                                <?php endif; ?>
-                            </ul>
-                        </div>
-                        <div>Price : <strong><?php echo $data['vehiclePrices'][$vehicle->vehicle_id]; ?> LkR</strong></div>
-                    </div>
+                    <div class="vehicleIndetails" style="margin-left:10px;padding:40px 40px;margin-bottom:100px">
+    <div>
+        <strong><i class="fas fa-car"></i> <?php echo $vehicle->brand; ?> <?php echo $vehicle->model; ?></strong>&nbsp;by <?php echo $vehicle->agency_name; ?>
+    </div>
+    <div style="padding: 10px;">
+        <ul>
+            <li><i class="fas fa-gas-pump box-icon"></i>&nbsp; <?php echo $vehicle->fuel_type; ?> Vehicle</li>
+            <li><i class="fas fa-user-friends box-icon"></i>&nbsp; <?php echo $vehicle->seating_capacity; ?> Persons</li>
+            <?php
+                                    if ($vehicle->ac_type  == 1) {
+                                        echo '<i style="color:green" class="fas fa-check-circle"></i> &nbsp;Air Condition';
+                                    } else {
+                                        echo '<i style="color:red" class="fas fa-times-circle"></i> &nbsp;Air Condition';
+                                    }
+                                    ?>
+        </ul>
+        
+    </div>
+    <div><i class="fas fa-dollar-sign box-icon"></i> Price: <strong><?php echo $data['vehiclePrices'][$vehicle->vehicle_id]; ?> LkR</strong></div>
+</div>
 
-                    <div class="vehicleBookButton"><button onclick="bookingHas(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">View Deal</button></div>
 
-                    <div class="vehicleBookButton">
+
+                    <div class="vehicleBookButton" style="margin-bottom:100px"><button onclick="bookingHas(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">View Deal</button></div>
+
+                    <div class="vehicleBookButton" style="margin-bottom:100px">
                         <!-- <div><button class="view-button" onclick="openPopup(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">View</button></div>  -->
                         <button onclick="booking(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">Book now</button>
                     </div>
@@ -345,13 +362,13 @@ echo "Current PHP timezone: " . $timezone;
     
 </section>
 <section class="main2" id="B4">
-        <h1 class="ResultTopics">Get Guidance from</h1>
-        <div class="pickupTimeField">
+        <h1 class="ResultTopics" style="margin-left:5%">Get Guidance from</h1>
+        <div class="pickupTimeField" style="margin-left:5%;margin-bottom:0px;">
         <label for="meetTime">Meet Time:</label>
         <input type="time" id="meetTime" name="meetTime">
     </div>
         <?php if (!empty($data['guides']) && is_array($data['guides'])): ?>
-            <div class="main2images" id="div1">
+            <div class="main2images" style="margin-top:0px;" id="div1">
             <?php foreach ($data['guides'] as $guide): ?>
     <div class="main2img1content">
         <div><img src="<?php echo URLROOT ?>images/<?php echo $guide->image; ?>" alt=""></div>
@@ -380,7 +397,7 @@ echo "Current PHP timezone: " . $timezone;
         }
         ?>
     </div>
-                <button class="add-to-cart-button" style="margin-top:0px;margin-left:10px;background-color: #45a049;color: white; border: none; cursor: pointer;transition: background-color 0.3s;" onclick="addToCart(5,<?php echo $guide->user_id ?>,this)">&#x271A;&nbsp;Cart</button>
+                <button class="add-to-cart-button" style="margin-top:0px;margin-left:10px;background-color: #45a049;color: white; border: none; cursor: pointer;transition: background-color 0.3s;margin-bottom:40px;" onclick="addToCart(5,<?php echo $guide->user_id ?>,this)">&#x271A;&nbsp;Cart</button>
                 
                 <!-- Add to Cart button -->
                 
@@ -402,7 +419,7 @@ echo "Current PHP timezone: " . $timezone;
 
 </div>
 <?php elseif (empty($data['hotels'])): ?>
-    <p>No guides available Right Now</p>
+    <p style="margin-left:5%">No guides available Right Now</p>
 <?php else: ?>
     <p>Error retrieving guide data.</p>
 <?php endif; ?>
@@ -457,7 +474,7 @@ echo "Current PHP timezone: " . $timezone;
     </div>
     <br><br>
     <div class="copyright">
-        &copy; 2023 Your Company Name. All rights reserved.
+        &copy; 2023 Travelease. All rights reserved.
     </div>
 </div>
 

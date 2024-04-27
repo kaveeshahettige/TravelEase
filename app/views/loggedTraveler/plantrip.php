@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title>TraveleEase Landpage</title>
+    <title>TraveleEase</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>images/TravelEase_logo.png">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/landpage/plantrip.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -32,7 +32,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/index" id="selected">Home</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/hotel">Hotels</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
-            <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
+            <li><a href="<?php echo URLROOT?>loggedTraveler/package">Guides</a></li>
             <div class="rightcontent">
             <!-- <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li> -->
             <!-- <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li> -->
@@ -45,16 +45,16 @@
             <div><h1>Plan a New Trip</h1></div>
             <form id="planTripForm" action="<?php echo URLROOT?>loggedTraveler/plantrip" method="post"> 
                 <div class="wherediv">
-                    <label for="where">Where to go?</label>
+                    <label for="where" style="margin-left:100px;">Where to go?</label>
                 <input type="text" placeholder="eg. Galle/Kandy" name="location" id="location-input" required>
                 </div>
                 
                 
                 <div class="datediv">
                 
-                <label for="where">Start Date</label>
+                <label for="where" style="margin-left:100px;">Start Date</label>
                 <input type="date" placeholder="start" name="checkinDate" id="checkinDate" min="<?php echo date('Y-m-d'); ?>" required>
-                <label for="where" id="enddate">End Date</label>
+                <label for="where" style="margin-left:100px;" id="enddate">End Date</label>
                 <input type="date" placeholder="end" name="checkoutDate" id="checkoutDate" min="<?php echo date('Y-m-d'); ?>" required>
                 </div>
                 <div class="buttondiv"><button id="startplan" type="submit">Start Planning</button></div>

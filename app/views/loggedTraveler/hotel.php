@@ -37,7 +37,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/index">Home</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/hotel" id="selected">Hotels</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport">Transport Providers</a></li>
-            <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
+            <li><a href="<?php echo URLROOT?>loggedTraveler/package">Guides</a></li>
             <div class="rightcontent">
             <li><a href="<?php echo URLROOT ?>travelerDashboard/cart/<?php echo $_SESSION['user_id'] ?>"><i class='bx bxs-cart bx-lg bx-tada bx-rotate-90' ></i></a></li>
             <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
@@ -46,8 +46,14 @@
         </ul>
     </div>
     <section class="main1">
-        <div class="main1img">
+        <div class="main1img" >
             <img src="<?php echo URLROOT?>/images/7.1.jpg" alt="">
+            <div class="image-overlay"></div>
+            <div class="onimagetext">
+    <p id="txt1">Unveil Unforgettable Hotels Here</p>
+    <p id="txt2">Discover Your Dream Stay!</p>
+    
+</div>
         </div>
         <div class="main1searchbar">
     <form id="locationInputForm" action="<?php echo URLROOT ?>loggedTraveler/searchHotels" method="POST">
@@ -156,7 +162,7 @@
             </div>
         
         <div class="copyright">
-            &copy; 2023 Your Company Name. All rights reserved.
+            &copy; 2023 Travelease. All rights reserved.
         </div>
         </div>
     </section>

@@ -33,7 +33,7 @@
             <li><a href="<?php echo URLROOT; ?>travelerDashboard/payments/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bxs-package bx-sm' class="nav-button "></i></i> Payments</a></li>
             <li><a href="<?php echo URLROOT; ?>travelerDashboard/notifications/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bxs-report bx-sm' class="nav-button "></i> Notifications</a></li>
             <li><a href="<?php echo URLROOT; ?>travelerDashboard/previoustrips/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bx-line-chart bx-sm' class="nav-button "></i> Previous Trips</a></li>
-            <li><a href="<?php echo URLROOT?>travelerDashboard/cart/<?php echo $_SESSION['user_id']?>" class="nav-button active"><i class='bx bx-cart bx-sm'></i> Cart</a></li>
+            <li><a href="<?php echo URLROOT?>travelerDashboard/cart/<?php echo $_SESSION['user_id']?>" class="nav-button active"><i class='bx bx-cart bx-sm'></i> Wish List</a></li>
             <li><a href="<?php echo URLROOT?>travelerDashboard/settings/<?php echo $_SESSION['user_id']?>" class="nav-button "><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
            
         </ul>
@@ -51,7 +51,7 @@
         </div>
         
         <div class="dashboard-content">
-            <h1>Carts</h1>
+            <h1>Wish Lists</h1>
         </div>
 
         <div class="dashboard-sub-content">
@@ -85,7 +85,7 @@
 
         <div class="table-content">
 
-    <h2>Cart Details</h2>
+    <h2>Wish List Details</h2>
     <div class="card-container">
         <!-- Loop through each cart item to display as a card -->
         <?php
@@ -239,7 +239,10 @@ function submitDates() {
 
     // Here you can do further processing or send the data to the server
     // For now, just an example alert
-    window.location.href = "<?php echo URLROOT; ?>travelerDashboard/myCartDetails/" + cartId + "/" + checkinDate + "/" + checkoutDate;
+    // window.location.href = "<?php echo URLROOT; ?>travelerDashboard/myCartDetails/" + cartId + "/" + checkinDate + "/" + checkoutDate;
+    var url = "<?php echo URLROOT; ?>travelerDashboard/myCartDetails/" + cartId + "/" + checkinDate + "/" + checkoutDate;
+    window.open(url, '_blank');
+
     //alert("Proceeding with Cart ID: " + cartId + "\nCheck-in: " + checkinDate + "\nCheck-out: " + checkoutDate);
 }
 
