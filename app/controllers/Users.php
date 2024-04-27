@@ -212,6 +212,8 @@ class Users extends Controller{
             'email' => trim($_POST['email']),
             'number' => trim($_POST['number']),
             'id' => $_SESSION['user_id'],
+            'card_holder_name' => trim($_POST['cardholdername']),
+            'account_number' => trim($_POST['accountnumber']),
             'fname_err'=>'',
             'lname_err'=>'',
             'email_err'=>'',
@@ -268,6 +270,9 @@ class Users extends Controller{
             'lname' => $user->lname,
             'fname' => $user->fname,
             'number' => $user->number,
+            'card_holder_name' => $user->card_holder_name,
+            'account_number' => $user->account_number,
+            'profile_picture' => $user->profile_picture,
           ];
     
           $this->view('travelerDashboard/editinfo', $data);
