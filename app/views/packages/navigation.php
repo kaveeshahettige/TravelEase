@@ -18,7 +18,7 @@ $userData = $data['userData'];
 ?>
 <nav class="left-menu">
     <div class="user-profile">
-        <img id="profile-picture" src="<?= isset($userData->profile_picture) ? $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="Profile Picture">
+        <img id="profile-picture" src="<?= isset($userData->profile_picture) ? '../public/images/' . $userData->profile_picture : '../images/profile.png'; ?>" alt="User Profile Photo">
         <span class="user-name"><?php echo isset($userData->fname) ? $userData->fname : ''; ?></span>
     </div>
 

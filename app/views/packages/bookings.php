@@ -41,21 +41,30 @@ include 'navigation.php';
 
 
             <!-- Total Bookings Box -->
+            <?php
+            $bookingCount = $data["bookingCount"];
+            ?>
             <div class="box">
                 <h2>Total Bookings</h2>
-                <p>120</p>
+                <p><?php echo $bookingCount;?></p>
             </div>
 
             <!-- Ongoing Bookings Box -->
+            <?php
+            $totalRevenue = $data["totalRevenue"];
+            ?>
             <div class="box">
-                <h2>Ongoing Bookings</h2>
-                <p>35</p>
+                <h2>Total Revenue</h2>
+                <p><?php echo $totalRevenue;?> LKR</p>
             </div>
 
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"];
+            ?>
             <div class="box">
                 <h2>Total Customers</h2>
-                <p>10</p>
+                <p><?php echo $guestCount; ?></p>
             </div>
         </div>
     </div>
@@ -87,8 +96,8 @@ include 'navigation.php';
                 <th>No</th>
                 <th>Guest Name</th>
                 <th>Check-in Date</th>
+                <th>Check-out Date</th>
                 <th>Pickup Time</th>
-                <th>Booking Status</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -97,19 +106,39 @@ include 'navigation.php';
 
             <?php
             $bookings = $data["bookings"];
-            var_dump($bookings);
+//            var_dump($bookings);
             foreach ($bookings as $key => $booking): ?>
                 <tr>
                     <td><?php echo $key + 1; ?></td>
                     <td><?php echo $booking->fname; ?></td>
                     <td><?php echo $booking->startDate; ?></td>
+                    <td><?php echo $booking->endDate; ?></td>
                     <td><?php echo date('H:i', strtotime($booking->meetTime)); ?></td>
-                    <td><?php echo $booking->bookingCondition; ?></td>
                     <td>
                         <button class="view-button" onclick="openPopup(); updatePopupDetails('<?php echo $booking->profile_picture; ?>','<?php echo $booking->fname; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->roomType; ?>')">
                             <i class='bx bx-show'></i>
                         </button>
-                        <button class="cancel-button" <?php if ($booking->bookingCondition === 'cancelled') echo 'disabled'; ?> onclick="showCancelPopup(<?php echo $booking->package_id; ?>, <?php echo $booking->user_id; ?>, '<?php echo $booking->booking_id;?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->endDate; ?>', <?php echo $booking->temporyid; ?>, '<?php echo $booking->meetTime; ?>')">
+
+                        <?php
+                        // Calculate the difference in days between today and the start date of the booking
+                        $diffStart = strtotime($booking->startDate) - strtotime(date('Y-m-d'));
+                        $daysStart = round($diffStart / 86400); // Convert seconds to days
+
+                        // Calculate the difference in days between the booking date and today
+                        $diffBooking = strtotime(date('Y-m-d')) - strtotime($booking->bookingDate);
+                        $daysBooking = round($diffBooking / 86400); // Convert seconds to days
+
+                        // Check both conditions
+                        if ($daysStart > 3 && $daysBooking < 7) {
+                            // Enable the cancel button
+                            $disableCancel = '';
+                        } else {
+                            // Disable the cancel button
+                            $disableCancel = 'disabled';
+                        }
+                        ?>
+
+                        <button class="cancel-button" <?php echo $disableCancel; ?>  onclick="showCancelPopup(<?php echo $booking->package_id; ?>, <?php echo $booking->user_id; ?>, '<?php echo $booking->booking_id;?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->endDate; ?>', <?php echo $booking->temporyid; ?>, '<?php echo $booking->meetTime; ?>',<?php echo $booking->amount;?>)">
                             <i class='bx bx-x'></i>
                         </button>
                     </td>

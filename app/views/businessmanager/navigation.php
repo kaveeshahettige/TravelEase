@@ -20,7 +20,7 @@
         $profilePicture = $data["profilePicture"];
         ?>
 
-        <img id="profile-picture" src="<?= isset($profilePicture->profile_picture) ? $profilePicture->profile_picture : '../Images/wikum.jpg'; ?>" alt="User Profile Photo">
+        <img id="profile-picture" src="<?= isset($profilePicture->profile_picture) ? '../public/images/' . $profilePicture->profile_picture : '../public/images/profile.png'; ?>" alt="User Profile Photo">
         <span class="user-name"><?=$_SESSION['user_fname']?></span>
 
     </div>

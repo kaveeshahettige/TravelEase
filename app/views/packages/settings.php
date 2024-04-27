@@ -38,7 +38,7 @@ include 'navigation.php';
                     <!-- Rectangle 1: Basic Info -->
                     <div class="basic-info-content">
                         <div class="center-image" onclick="openPopup()">
-                            <img id="profile-picture" src="<?= isset($userData->profile_picture) ? $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="Profile Picture">
+                            <img id="profile-picture" src="<?= isset($userData->profile_picture) ? '../public/images/' . $userData->profile_picture : '../public/images/profile.png'; ?>" alt="Profile Picture">
                             <div class="edit-icon">&#9998;</div>
                         </div>
                         <div class="hotel-details">

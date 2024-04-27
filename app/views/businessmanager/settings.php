@@ -39,9 +39,10 @@ include 'navigation.php';
 
                     <div class="basic-info-content">
                         <div class="center-image" onclick="openPopup()">
-                            <img id="profile-picture" src="<?= isset($profilePicture->profile_picture) ? $profilePicture->profile_picture : '../Images/wikum.jpg'; ?>" alt="User Profile Photo">
+                            <img id="profile-picture" src="<?= isset($profilePicture->profile_picture) ? '../public/images/' . $profilePicture->profile_picture : '../public/images/profile.png'; ?>" alt="User Profile Photo">
                             <div class="edit-icon">&#9998;</div>
                         </div>
+
                     </div>
 
 
@@ -53,8 +54,6 @@ include 'navigation.php';
                             <p><?=$_SESSION['user_number']?></p>
                             <h6>Email</h6>
                             <p><?=$_SESSION['user_email']?></p>
-<!--                            <h6>Location</h6>-->
-<!--                            <p>--><?php //=$hotelData->add ?><!-- </p>-->
                     </div>
 
                         <a href="<?php echo URLROOT; ?>businessmanager/businessmanageredit">

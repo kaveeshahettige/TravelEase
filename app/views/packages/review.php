@@ -38,21 +38,30 @@ include 'navigation.php';
 
 
             <!-- Total Bookings Box -->
+            <?php
+            $bookingCount = $data["bookingCount"];
+            ?>
             <div class="box">
-                <h2>Total Reviews</h2>
-                <p>100</p>
+                <h2>Total Bookings</h2>
+                <p><?php echo $bookingCount;?></p>
             </div>
 
             <!-- Ongoing Bookings Box -->
+            <?php
+            $totalRevenue = $data["totalRevenue"];
+            ?>
             <div class="box">
-                <h2>Total Bookings</h2>
-                <p>100</p>
+                <h2>Total Revenue</h2>
+                <p><?php echo $totalRevenue;?> LKR</p>
             </div>
 
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"];
+            ?>
             <div class="box">
                 <h2>Total Customers</h2>
-                <p>50</p>
+                <p><?php echo $guestCount; ?></p>
             </div>
         </div>
     </div>

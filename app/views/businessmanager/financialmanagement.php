@@ -82,16 +82,14 @@ include 'navigation.php';
                     <th>To Paid</th>
                     <th>Current Date</th>
                     <th>Account Number</th>
-<!--                    <th>Payment Status</th>-->
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
                 $finalTransactionData = $data['finalTransactionData'];
-                foreach ($finalTransactionData as $key => $transaction):
-//                    var_dump($finalTransactionData);
-                ?>
+                if (isset($finalTransactionData) && is_array($finalTransactionData) && count($finalTransactionData) > 0) {
+                foreach ($finalTransactionData as $key => $transaction): ?>
                         <tr>
                             <td>
                                 <div class="service-provider-info">
@@ -114,7 +112,11 @@ include 'navigation.php';
                                 </a>
                             </td>
                         </tr>
-                    <?php endforeach; ?>
+                <?php endforeach;
+                } else {
+                    echo "<tr><td colspan='7'>No transactions found.</td></tr>";
+                }
+                ?>
                     <tr>
                     </tr>
               </tbody>

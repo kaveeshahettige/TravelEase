@@ -18,16 +18,21 @@ class Packages extends Controller
     {
 
         $userData = $this->getUserInfo();
-
         $guideData = $this->updateGuideDetails($userData->id);
-
         $bookings = $this->getBookings();
+        $bookingCount = $this->getBookingCount();
+        $totalRevenue = $this->totalRevenue();
+        $guestCount = $this->getGuestCount();
+
 
 
         $data = [
             'userData' => $userData,
             'guideData' => $guideData,
             'bookings' => $bookings,
+            'bookingCount' => $bookingCount,
+            'totalRevenue' => $totalRevenue,
+            'guestCount' => $guestCount,
         ];
 
         $this->view('packages/index', $data);
@@ -36,10 +41,16 @@ class Packages extends Controller
     public function Calender()
     {
         $userData = $this->getUserInfo();
+        $bookingCount = $this->getBookingCount();
+        $totalRevenue = $this->totalRevenue();
+        $guestCount = $this->getGuestCount();
 
         $data=[
             'selectedDate' => date('Y-m-d'),
             'userData' => $userData,
+            'bookingCount' => $bookingCount,
+            'totalRevenue' => $totalRevenue,
+            'guestCount' => $guestCount,
         ];
 
         $this->view('packages/calender',$data);
@@ -81,10 +92,16 @@ class Packages extends Controller
     {
         $userData = $this->getUserInfo();
         $bookings = $this->getBookings();
+        $bookingCount = $this->getBookingCount();
+        $totalRevenue = $this->totalRevenue();
+        $guestCount = $this->getGuestCount();
 
         $data = [
             'userData' => $userData,
             'bookings' => $bookings,
+            'bookingCount' => $bookingCount,
+            'totalRevenue' => $totalRevenue,
+            'guestCount' => $guestCount,
         ];
 
         $this->view('packages/bookings',$data);
@@ -94,10 +111,16 @@ class Packages extends Controller
     {
         $userData = $this->getUserInfo();
         $cancelledBookings = $this->getCancelledBookings();
+        $bookingCount = $this->getBookingCount();
+        $totalRevenue = $this->totalRevenue();
+        $guestCount = $this->getGuestCount();
 
         $data = [
             'userData' => $userData,
             'cancelledBookings' => $cancelledBookings,
+            'bookingCount' => $bookingCount,
+            'totalRevenue' => $totalRevenue,
+            'guestCount' => $guestCount,
         ];
 
         $this->view('packages/cancelledBookings',$data);
@@ -107,10 +130,16 @@ class Packages extends Controller
     {
         $userData = $this->getUserInfo();
         $combookings = $this->getCompleteBookings();
+        $bookingCount = $this->getBookingCount();
+        $totalRevenue = $this->totalRevenue();
+        $guestCount = $this->getGuestCount();
 
         $data = [
             'userData' => $userData,
             'combookings' => $combookings,
+            'bookingCount' => $bookingCount,
+            'totalRevenue' => $totalRevenue,
+            'guestCount' => $guestCount,
         ];
 
         $this->view('packages/combookings',$data);
@@ -121,12 +150,18 @@ class Packages extends Controller
     {
         $userData = $this->getUserInfo();
         $finalPayment = $this->getFinalPayment();
+        $bookingCount = $this->getBookingCount();
+        $totalRevenue = $this->totalRevenue();
+        $guestCount = $this->getGuestCount();
 
         $user_id = $_SESSION['user_id'];
 
         $data = [
             'userData' => $userData,
-            'finalPayment' => $finalPayment
+            'finalPayment' => $finalPayment,
+            'bookingCount' => $bookingCount,
+            'totalRevenue' => $totalRevenue,
+            'guestCount' => $guestCount,
         ];
 
         $this->view('packages/revenue',$data);
@@ -137,10 +172,16 @@ class Packages extends Controller
 
         $notifications = $this->getNotifications();
         $userData = $this->getUserInfo();
+        $bookingCount = $this->getBookingCount();
+        $totalRevenue = $this->totalRevenue();
+        $guestCount = $this->getGuestCount();
 
         $data = [
             'userData' => $userData,
             'notifications' => $notifications,
+            'bookingCount' => $bookingCount,
+            'totalRevenue' => $totalRevenue,
+            'guestCount' => $guestCount,
         ];
 
         $this->view('packages/notifications',$data);
@@ -150,10 +191,16 @@ class Packages extends Controller
     {
         $reviews = $this->getReviews();
         $userData = $this->getUserInfo();
+        $bookingCount = $this->getBookingCount();
+        $totalRevenue = $this->totalRevenue();
+        $guestCount = $this->getGuestCount();
 
         $data = [
             'userData' => $userData,
             'reviews' => $reviews,
+            'bookingCount' => $bookingCount,
+            'totalRevenue' => $totalRevenue,
+            'guestCount' => $guestCount,
         ];
 
         $this->view('packages/review',$data);
@@ -246,14 +293,15 @@ class Packages extends Controller
         if ($_FILES['profile-picture']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = '../public/images/';
             $uploadFile = $uploadDir . basename($_FILES['profile-picture']['name']);
+            $fileName = basename($_FILES['profile-picture']['name']); // Extracting the file name
 
             // Move the uploaded file to the desired directory
             if (move_uploaded_file($_FILES['profile-picture']['tmp_name'], $uploadFile)) {
                 // Update the session with the new file path
                 $_SESSION['user_profile_picture'] = $uploadFile;
 
-                // Update the profile picture in the database
-                $this->packagesModel->updateProfilePicture($_SESSION['user_id'], $uploadFile);
+                // Update the profile picture file name in the database
+                $this->packagesModel->updateProfilePicture($_SESSION['user_id'], $fileName);
             } else {
                 echo 'Error uploading the file.';
             }
@@ -271,20 +319,26 @@ class Packages extends Controller
         $userId = $_SESSION['user_id'];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $targetDir = "../public/uploads/service_validations/";
-            $targetFile = $targetDir . basename($_FILES['service-validation-pdf']['name']);
+            $targetDir = '../public/documents/';
+            $fileName = basename($_FILES['service-validation-pdf']['name']); // Extract the filename
+
+            $targetFile = $targetDir . $fileName;
 
             // Move the uploaded file to the target directory
-            move_uploaded_file($_FILES['service-validation-pdf']['tmp_name'], $targetFile);
-
-            // Call the model to insert the PDF information into the database
-            if ($this->packagesModel->insertPdf($targetFile, $userId)) {
-                // Success - You can redirect or show a success message
-                flash('success', 'PDF submitted successfully');
-                redirect('packages/settings');
+            if (move_uploaded_file($_FILES['service-validation-pdf']['tmp_name'], $targetFile)) {
+                // Call the model to insert the filename into the database
+                if ($this->packagesModel->insertPdf($fileName, $userId)) {
+                    // Success - You can redirect or show a success message
+                    flash('success', 'PDF submitted successfully');
+                    redirect('packages/settings');
+                } else {
+                    // Error - You can redirect or show an error message
+                    flash('error', 'Failed to submit PDF');
+                    redirect('packages/settings');
+                }
             } else {
-                // Error - You can redirect or show an error message
-                flash('error', 'Failed to submit PDF');
+                // Error handling for file upload failure
+                flash('error', 'Failed to upload PDF');
                 redirect('packages/settings');
             }
         }
@@ -471,7 +525,6 @@ class Packages extends Controller
 
         // Check if temporyid is 0
         if ($temporyid == 0) {
-            // Call the model function to update the booking status
             $updated = $this->packagesModel->updateBookingStatus($booking_id);
         } elseif ($temporyid !== 1) {
             // Handle the case where temporyid is 1
@@ -482,19 +535,22 @@ class Packages extends Controller
         }
 
         // Construct the notification message
-        $notification_message = "Tour Guide,"." $sender_name" . " has cancelled your booking with the booking details were for tour guide  from" . " $startDate". " to" ." $endDate." ." We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
+        $notification_message = "Tour Guide,"." $sender_name" . " has cancelled your booking with the booking details were for tour guide  from " . " $startDate". " to" ." $endDate." ." We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
 
         // Insert notification
         $notification_inserted = $this->packagesModel->insertNotification($booking_id, $sender_id, $receiver_id, $notification_message);
 
-        $manager_notification = "Tour Guide,"." $sender_name" . " has cancelled the booking with the booking details were for tour guide  from" . " $startDate". " to" ." $endDate." ." Please make sure about the refund process.";
-
-        $manager_notification_inserted = $this->packagesModel->notifyUsersWithType2($booking_id, $sender_id,$manager_notification);
 
         $cancelled_id = $_SESSION['user_id'];
-
+        $amount = $_POST['amount'];
+        $currentDate = date('Y-m-d');
 
         $refund = $this->packagesModel->updateRefund($temporyid,$booking_id,$sender_id,$receiver_id,$cancelled_id,$amount,$currentDate);
+
+
+        $manager_notification = "Tour Guide,"." $sender_name" . " has cancelled the booking with the booking details were for tour guide  from " . " $startDate". " to" ." $endDate." ." Please make sure about the refund process.";
+
+        $manager_notification_inserted = $this->packagesModel->notifyUsersWithType2($booking_id, $sender_id,$manager_notification);
 
 
         $availabilityUpdate = $this->packagesModel->updateAvailability($sender_id,$startDate,$endDate);
@@ -563,5 +619,33 @@ class Packages extends Controller
         return $finalPayment;
     }
 
+    public function getBookingCount(){
 
+        $user_id = $_SESSION['user_id'];
+
+        $bookingCount1 = $this->packagesModel->getBookingCount($user_id);
+        $cartCount = $this->packagesModel->getCartBookingCount($user_id);
+
+        $bookingCount = $bookingCount1 + $cartCount;
+
+        return $bookingCount;
+
+    }
+
+    public function totalRevenue(){
+        $user_id = $_SESSION['user_id'];
+
+        $totalRevenue = $this->packagesModel->getTotalRevenue($user_id);
+
+        return $totalRevenue;
+    }
+
+    public function getGuestCount(){
+
+            $user_id = $_SESSION['user_id'];
+
+            $guestCount = $this->packagesModel->getGuestCount($user_id);
+
+            return $guestCount;
+    }
 }

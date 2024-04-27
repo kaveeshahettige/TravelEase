@@ -41,21 +41,30 @@ include 'navigation.php';
 
 
             <!-- Total Bookings Box -->
+            <?php
+            $bookingCount = $data["bookingCount"];
+            ?>
             <div class="box">
                 <h2>Total Bookings</h2>
-                <p>120</p>
+                <p><?php echo $bookingCount;?></p>
             </div>
 
             <!-- Ongoing Bookings Box -->
+            <?php
+            $totalRevenue = $data["totalRevenue"];
+            ?>
             <div class="box">
-                <h2>Ongoing Bookings</h2>
-                <p>35</p>
+                <h2>Total Revenue</h2>
+                <p><?php echo $totalRevenue;?> LKR</p>
             </div>
 
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"];
+            ?>
             <div class="box">
                 <h2>Total Customers</h2>
-                <p>10</p>
+                <p><?php echo $guestCount; ?></p>
             </div>
         </div>
     </div>
@@ -87,8 +96,8 @@ include 'navigation.php';
                 <th>No</th>
                 <th>Guest Name</th>
                 <th>Check-in Date</th>
+                <th>Check-out Date</th>
                 <th>Pickup Time</th>
-                <th>Booking Status</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -103,8 +112,8 @@ include 'navigation.php';
                     <td><?php echo $key + 1; ?></td>
                     <td><?php echo $booking->fname; ?></td>
                     <td><?php echo $booking->startDate; ?></td>
+                    <td><?php echo $booking->endDate; ?></td>
                     <td><?php echo date('H:i', strtotime($booking->meetTime)); ?></td>
-                    <td><?php echo $booking->bookingCondition; ?></td>
                     <td>
                         <button class="view-button" onclick="openPopup(); updatePopupDetails('<?php echo $booking->profile_picture; ?>','<?php echo $booking->fname; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->roomType; ?>')">
                             <i class='bx bx-show'></i>

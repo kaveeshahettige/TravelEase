@@ -841,6 +841,37 @@ class Hotels
         }
     }
 
+    public function getOngoingBookingCount($user_id){
+        $this->db->query('SELECT COUNT(b.booking_id) AS booking_count
+                      FROM bookings b
+                      WHERE b.serviceProvider_id = :user_id AND bookingCondition != "cancelled" AND b.endDate >= CURDATE()');
 
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->single()->booking_count;
+    }
+
+    public function getOngoingCartCount($user_id){
+        $this->db->query('SELECT COUNT(cb.booking_id) AS booking_count
+                      FROM cartbookings cb
+                      WHERE cb.serviceProvider_id = :user_id AND bookingCondition != "cancelled" AND cb.endDate >= CURDATE()');
+
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->single()->booking_count;
+    }
+
+
+    public function deleteProfile($user_id)
+    {
+        $this->db->query('UPDATE users SET profile_status = 0 WHERE id = :user_id');
+        $this->db->bind(':user_id', $user_id);
+
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }

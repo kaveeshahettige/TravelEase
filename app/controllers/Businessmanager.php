@@ -182,8 +182,13 @@ class Businessmanager extends Controller
 
 
         $totalAmount = 0;
-        foreach ($finalTransactionData[0] as $transaction) {
-            $totalAmount += $transaction->payment_amount;
+
+        if (!empty($finalTransactionData) && is_array($finalTransactionData) && isset($finalTransactionData[0])) {
+            foreach ($finalTransactionData[0] as $transaction) {
+                if (isset($transaction->payment_amount)) {
+                    $totalAmount += $transaction->payment_amount;
+                }
+            }
         }
 
         $data = [
@@ -354,14 +359,15 @@ class Businessmanager extends Controller
         if ($_FILES['profile-picture']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = '../public/images/';
             $uploadFile = $uploadDir . basename($_FILES['profile-picture']['name']);
+            $fileName = basename($_FILES['profile-picture']['name']);
 
             // Move the uploaded file to the desired directory
             if (move_uploaded_file($_FILES['profile-picture']['tmp_name'], $uploadFile)) {
                 // Update the session with the new file path
                 $_SESSION['user_profile_picture'] = $uploadFile;
 
-                // Update the profile picture in the database
-                $this->BusinessmanagersModel->updateProfilePicture($_SESSION['user_id'], $uploadFile);
+                // Update the profile picture file name in the database
+                $this->BusinessmanagersModel->updateProfilePicture($_SESSION['user_id'], $fileName);
             } else {
                 echo 'Error uploading the file.';
             }
@@ -389,6 +395,7 @@ class Businessmanager extends Controller
     {
         // Get bookings from the bookings table
         $bookingsFromBookingsTable = $this->BusinessmanagersModel->getBookingsFromBookingsTable();
+//        var_dump($bookingsFromBookingsTable);
 
         // Get bookings from the cartbookings table
         $bookingsFromCartBookingsTable = $this->BusinessmanagersModel->getBookingsFromCartBookingsTable();
@@ -874,9 +881,9 @@ class Businessmanager extends Controller
 
 
         $bookingCount = $this->BusinessmanagersModel->getBookingsCount();
-//        var_dump($bookingCount);
+
         $cartCount = $this->BusinessmanagersModel->getCartCount();
-//        var_dump($cartCount);
+
 
         $bookingsCount = $bookingCount + $cartCount;
 

@@ -39,21 +39,30 @@ include 'navigation.php';
 
 
             <!-- Total Bookings Box -->
+            <?php
+            $bookingCount = $data["bookingCount"];
+            ?>
             <div class="box">
-                <h2>Total Revenue</h2>
-                <p>45,000 LKR</p>
+                <h2>Total Bookings</h2>
+                <p><?php echo $bookingCount;?></p>
             </div>
 
             <!-- Ongoing Bookings Box -->
+            <?php
+            $totalRevenue = $data["totalRevenue"];
+            ?>
             <div class="box">
-                <h2>Revenue Recieved</h2>
-                <p>30,000 LKR</p>
+                <h2>Total Revenue</h2>
+                <p><?php echo $totalRevenue;?> LKR</p>
             </div>
 
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"];
+            ?>
             <div class="box">
-                <h2>To Recieve</h2>
-                <p>12,000 LKR</p>
+                <h2>Total Customers</h2>
+                <p><?php echo $guestCount; ?></p>
             </div>
         </div>
 
