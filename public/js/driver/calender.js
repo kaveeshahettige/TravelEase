@@ -197,24 +197,55 @@ function handleFormSubmit() {
  // Function to set the selected date as unavailable
  
 
-// Function to remove the selected date from unavailability
-function removeUnavailableDate(vehicle_id, date) {
+// // Function to remove the selected date from unavailability
+// function removeUnavailableDate(vehicle_id, date) {
 
-    console.log('Vehicle ID:', vehicleId);
-    console.log('Date:', date);
-    fetch(
-        'http://localhost/TravelEase/driver/removeUnavailableDate',
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                vehicle_id: vehicleId,
-                date: date,
-            }),
-        }
-    )
+//     console.log('Vehicle ID:', vehicleId);
+//     console.log('Date:', date);
+//     fetch(
+//         'http://localhost/TravelEase/driver/removeUnavailableDate',
+//         {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({
+//                 vehicle_id: vehicleId,
+//                 date: date,
+//             }),
+//         }
+//     )
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         return response.json();
+//     })
+//     .then(data => {
+//         console.log(data);
+//         // Handle success or display a message to the user
+//         window.location.reload(); // Reload the page to reflect changes
+//     })
+//     .catch(error => {
+//         console.error('Error removing unavailable date:', error);
+//         alert('Error removing unavailable date. Please check console for details.'); // Display a generic error message
+//     });
+// }
+
+    
+function setUnavailableDate(vehicle_id, date) {
+    const requestData = {
+        vehicle_id: vehicle_id,
+        date: date
+    };
+
+    fetch('http://localhost/TravelEase/Driver/setUnavailableDate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+    })
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -223,49 +254,22 @@ function removeUnavailableDate(vehicle_id, date) {
     })
     .then(data => {
         console.log(data);
-        // Handle success or display a message to the user
-        window.location.reload(); // Reload the page to reflect changes
-    })
-    .catch(error => {
-        console.error('Error removing unavailable date:', error);
-        alert('Error removing unavailable date. Please check console for details.'); // Display a generic error message
-    });
-}
-
-    
-function setUnavailableDate(vehicle_id, date) {
-    // Prepare the data to send
-    const requestData = {
-        vehicle_id: vehicle_id,
-        date: date // Adjust variable name to match PHP controller
-    };
-
-    // Create a new FormData object and append data to it
-    const formData = new FormData();
-    formData.append('vehicle_id', vehicle_id);
-    formData.append('date', date); // Adjust variable name to match PHP controller
-
-    // Make an AJAX request using fetch
-    fetch('http://localhost/TravelEase/Driver/setUnavailableDate', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
+        if (data.success) {
+            // Update the UI or perform other actions as needed
+            console.log('Vehicle status updated successfully');
+            // You may choose to update the UI here without reloading the page
+            window.location.reload(); // Reload the page to reflect changes (optional)
         } else {
-            throw new Error('Error updating room status:', response);
+            console.error('Failed to update vehicle status:', data.message);
+            alert('Failed to update vehicle status. Please try again.'); // Display an error message
         }
     })
-    .then(data => {
-        console.log(data);
-        console.log('Room status updated successfully');
-        window.location.reload(); // Reload the page after successful update
-    })
     .catch(error => {
-        console.error('Error updating room status:', error);
+        console.error('Error updating vehicle status:', error);
+        alert('Error updating vehicle status. Please check console for details.'); // Display a generic error message
     });
 }
+
 
 
 function removeUnavailableDate(vehicle_id, date) {

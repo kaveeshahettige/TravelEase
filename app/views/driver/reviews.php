@@ -1,7 +1,4 @@
-<?php
-$timezone = date_default_timezone_get();
-echo "Current PHP timezone: " . $timezone;
-?>
+<!-- <?php var_dump($data['feedbackDetails']) ;?> -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,10 +16,16 @@ echo "Current PHP timezone: " . $timezone;
 
 <body>
     <nav class="left-menu">
-       <div class="user-profile">
-            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
+        <div class="user-profile">
+            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>"
+                alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
+            <a class="" href="<?php echo URLROOT; ?>/driver/notification">
+                <i class="bx bx-bell"></i>
+            </a>
+
         </div>
+
 
 
         <div class="search-bar">
@@ -100,45 +103,42 @@ echo "Current PHP timezone: " . $timezone;
         </div>
 
 
-        <?php
-$feedbackDetails = $data['feedbackDetails'] ?? [];
-
-foreach ($feedbackDetails as $feedback): ?>
-    <div class="review-content">
-        <div class="feedback">
-            <div class="card">
-                <div class="feedback-details">
-                    <!-- Profile picture -->
-                    <img src="<?php echo URLROOT; ?>/images1/<?php echo $feedback->profile_picture; ?>" alt="Publisher Picture" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; display: inline-block; vertical-align: middle;">
-                    <!-- Publisher name -->
-                    <span style="margin-bottom: 5px; display: inline-block; vertical-align: middle;">Publisher:
-                        <?php echo $feedback->fname . " " . $feedback->lname; ?>
-                    </span>
-                    <!-- Time -->
-                    <span style="margin-bottom: 5px; display:block;">&nbsp;&nbsp;&nbsp;
-                        <?php echo $feedback->time; ?>
-                    </span>
-                    <!-- Booking ID -->
-                    <span style="margin-bottom: 5px; display:block;">
-                        <p style="margin-left: 15px;">Booking ID: <?php echo $feedback->booking_id; ?></p>
-                    </span>
+        <div class="review-content">
+            <?php
+            $reviews = $data['feedbackDetails'];
+            if (empty($reviews)): ?>
+            <p>No reviews available.</p>
+            <?php else:
+                foreach ($reviews as $review): ?>
+            <!-- <?php var_dump($review); ?> -->
+            <div class="review-box">
+                <div class="review-image">
+                    <img src="<?php echo URLROOT; ?>/images/<?php echo $review->profile_picture; ?>"
+                        alt="Publisher Picture"
+                        style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; display: inline-block; vertical-align: middle;">
                 </div>
-                <div class="feedback-details"></div>
-                <div class="rating">
-                    <!-- Rating stars -->
-                    <?php for ($i = 0; $i < $feedback->rating; $i++): ?>
-                        <span class="star">&#9733;</span>
-                    <?php endfor; ?>
-                </div>
-                <div class="comment">
-                    <!-- Feedback comment -->
-                    <p><?php echo $feedback->feedback; ?></p>
+                <div class="review-sub-content">
+                    <h2><?= $review->fname . " " . $review->lname; ?></h2>
+                    <p class="review-text"><?= $review->feedback; ?></p>
+                    <p>Review for : <?=$review->booking_id?></p>
+                    <p>Rating: <?= getStarRating($review->rating); ?></p>
+                    <p>Date: <?= $review->time; ?></p>
                 </div>
             </div>
+            <?php endforeach;
+            endif; ?>
         </div>
-    </div>
-<?php endforeach; ?>
 
+
+        <?php
+        function getStarRating($rating) {
+            $stars = '';
+            for ($i = 0; $i < $rating; $i++) {
+                $stars .= '<i class="bx bxs-star"></i>';
+            }
+            return $stars;
+        }
+        ?>
 
 
 
