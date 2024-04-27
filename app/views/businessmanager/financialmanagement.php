@@ -82,21 +82,22 @@ include 'navigation.php';
                     <th>To Paid</th>
                     <th>Current Date</th>
                     <th>Account Number</th>
-<!--                    <th>Payment Status</th>-->
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
                 $finalTransactionData = $data['finalTransactionData'];
-                foreach ($finalTransactionData as $key => $transaction):
-//                    var_dump($finalTransactionData);
-                ?>
+                if (isset($finalTransactionData) && is_array($finalTransactionData) && count($finalTransactionData) > 0) {
+                foreach ($finalTransactionData as $key => $transaction): ?>
                         <tr>
                             <td>
                                 <div class="service-provider-info">
-                                    <!-- Assuming there's a profile_picture property in the transaction object -->
-                                    <img src="<?php echo $transaction[0]->profile_picture ?>" alt="Service Provider Photo">
+                                    <?php
+                                    $profilePicture = $transaction[0]->profile_picture ?? 'profile.png';
+                                    ?>
+                                    <img src="../public/images/<?php echo $profilePicture ?>" alt="Service Provider Photo">
+
                                     <span><?php echo $transaction[0]->serviceprovider_name; ?></span>
                                 </div>
                             </td>
@@ -111,12 +112,18 @@ include 'navigation.php';
                                 </a>
                             </td>
                         </tr>
-                    <?php endforeach; ?>
+                <?php endforeach;
+                } else {
+                    echo "<tr><td colspan='7'>No transactions found.</td></tr>";
+                }
+                ?>
                     <tr>
                     </tr>
               </tbody>
             </table>
         </div>
+
+
 
     </main>
 </body>

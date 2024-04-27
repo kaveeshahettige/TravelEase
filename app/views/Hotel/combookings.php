@@ -136,9 +136,9 @@ include 'navigation.php';
                     <th>No</th>
                     <th>Guest Name</th>
                     <th>Check-in Date</th>
+                    <th>Check-out Date</th>
                     <th>Room Number</th>
                     <th>Room Type</th>
-                    <th>Booking Status</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -156,9 +156,9 @@ include 'navigation.php';
                         <td><?php echo $key + 1; ?></td>
                         <td><?php echo $completedbooking->fname; ?></td>
                         <td><?php echo date("Y-m-d", strtotime($completedbooking->startDate)); ?></td>
+                        <td><?php echo date("Y-m-d", strtotime($completedbooking->endDate)); ?></td>
                         <td><?php echo $completedbooking->registration_number; ?></td>
                         <td><?php echo $completedbooking->roomType; ?></td>
-                        <td><?php echo $completedbooking->bookingCondition; ?></td>
                         <td>
                             <button class="view-button" onclick="openPopup(); updatePopupDetails('<?php echo $completedbooking->profile_picture; ?>','<?php echo $completedbooking->fname; ?>', '<?php echo $completedbooking->startDate; ?>', '<?php echo $completedbooking->roomType; ?>')">
                                 <i class='bx bx-show'></i>

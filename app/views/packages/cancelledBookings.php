@@ -71,9 +71,9 @@ include 'navigation.php';
 
     <div class="table-content">
         <div class="tab">
-            <a href="<?php echo URLROOT?>/packages/bookings"><button class="tablinks active">Ongoing Bookings</button></a>
+            <a href="<?php echo URLROOT?>/packages/bookings"><button class="tablinks">Ongoing Bookings</button></a>
             <a href="<?php echo URLROOT?>/packages/combookings"><button class="tablinks">Completed Bookings</button></a>
-            <a href="<?php echo URLROOT?>/packages/cancelledBookings"><button class="tablinks">Cancelled Bookings</button></a>
+            <a href="<?php echo URLROOT?>/packages/cancelledBookings"><button class="tablinks active">Cancelled Bookings</button></a>
         </div>
     </div>
 
@@ -105,9 +105,9 @@ include 'navigation.php';
 
 
             <?php
-            $bookings = $data["bookings"];
+            $cancelledBookings = $data["cancelledBookings"];
 //            var_dump($bookings);
-            foreach ($bookings as $key => $booking): ?>
+            foreach ($cancelledBookings as $key => $booking): ?>
                 <tr>
                     <td><?php echo $key + 1; ?></td>
                     <td><?php echo $booking->fname; ?></td>
@@ -118,27 +118,7 @@ include 'navigation.php';
                         <button class="view-button" onclick="openPopup(); updatePopupDetails('<?php echo $booking->profile_picture; ?>','<?php echo $booking->fname; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->roomType; ?>')">
                             <i class='bx bx-show'></i>
                         </button>
-
-                        <?php
-                        // Calculate the difference in days between today and the start date of the booking
-                        $diffStart = strtotime($booking->startDate) - strtotime(date('Y-m-d'));
-                        $daysStart = round($diffStart / 86400); // Convert seconds to days
-
-                        // Calculate the difference in days between the booking date and today
-                        $diffBooking = strtotime(date('Y-m-d')) - strtotime($booking->bookingDate);
-                        $daysBooking = round($diffBooking / 86400); // Convert seconds to days
-
-                        // Check both conditions
-                        if ($daysStart > 3 && $daysBooking < 7) {
-                            // Enable the cancel button
-                            $disableCancel = '';
-                        } else {
-                            // Disable the cancel button
-                            $disableCancel = 'disabled';
-                        }
-                        ?>
-
-                        <button class="cancel-button" <?php echo $disableCancel; ?>  onclick="showCancelPopup(<?php echo $booking->package_id; ?>, <?php echo $booking->user_id; ?>, '<?php echo $booking->booking_id;?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->endDate; ?>', <?php echo $booking->temporyid; ?>, '<?php echo $booking->meetTime; ?>',<?php echo $booking->amount;?>)">
+                        <button class="cancel-button" <?php if ($booking->bookingCondition === 'cancelled') echo 'disabled'; ?> onclick="showCancelPopup(<?php echo $booking->package_id; ?>, <?php echo $booking->user_id; ?>, '<?php echo $booking->booking_id;?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->endDate; ?>', <?php echo $booking->temporyid; ?>, '<?php echo $booking->meetTime; ?>')">
                             <i class='bx bx-x'></i>
                         </button>
                     </td>

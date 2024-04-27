@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/settings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
-    <title>Package Dashboard</title>
+    <title>Guide Dashboard</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -40,21 +40,30 @@ include 'navigation.php';
 
 
             <!-- Total Bookings Box -->
+            <?php
+            $bookingCount = $data["bookingCount"];
+            ?>
             <div class="box">
                 <h2>Total Bookings</h2>
-                <p>120</p>
+                <p><?php echo $bookingCount;?></p>
             </div>
 
             <!-- Ongoing Bookings Box -->
+            <?php
+            $totalRevenue = $data["totalRevenue"];
+            ?>
             <div class="box">
                 <h2>Total Revenue</h2>
-                <p>65,000 LKR</p>
+                <p><?php echo $totalRevenue;?> LKR</p>
             </div>
 
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"];
+            ?>
             <div class="box">
                 <h2>Total Customers</h2>
-                <p>10</p>
+                <p><?php echo $guestCount; ?></p>
             </div>
         </div>
     </div>
@@ -70,7 +79,7 @@ include 'navigation.php';
         <!-- Rectangle 1: Basic Info -->
         <div class="basic-info-content">
             <div class="center-image" onclick="openPopup()">
-                <img id="profile-picture" src="<?= isset($userData->profile_picture) ? $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="Profile Picture">
+                <img id="profile-picture" src="<?= isset($userData->profile_picture) ? '../public/images/' . $userData->profile_picture : '../public/images/profile.png'; ?>" alt="Profile Picture">
                 <div class="edit-icon">&#9998;</div>
             </div>
             <div class="hotel-details">

@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/packages/navigation.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
-    <title>Packages Navigation</title>
+    <title>Guide Navigation</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/packages/x-icon" href="<?php echo URLROOT; ?>/images/packages/PackageEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@ $userData = $data['userData'];
 ?>
 <nav class="left-menu">
     <div class="user-profile">
-        <img id="profile-picture" src="<?= isset($userData->profile_picture) ? $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="Profile Picture">
+        <img id="profile-picture" src="<?= isset($userData->profile_picture) ? '../public/images/' . $userData->profile_picture : '../images/profile.png'; ?>" alt="User Profile Photo">
         <span class="user-name"><?php echo isset($userData->fname) ? $userData->fname : ''; ?></span>
     </div>
 

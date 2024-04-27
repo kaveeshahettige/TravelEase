@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/gallery.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
-    <title>Hotel Notifications</title>
+    <title>Guide Notifications</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -39,21 +39,30 @@ include 'navigation.php';
 
 
             <!-- Total Bookings Box -->
+            <?php
+            $bookingCount = $data["bookingCount"];
+            ?>
             <div class="box">
                 <h2>Total Bookings</h2>
-                <p>120</p>
+                <p><?php echo $bookingCount;?></p>
             </div>
 
             <!-- Ongoing Bookings Box -->
+            <?php
+            $totalRevenue = $data["totalRevenue"];
+            ?>
             <div class="box">
-                <h2>Ongoing Bookings</h2>
-                <p>35</p>
+                <h2>Total Revenue</h2>
+                <p><?php echo $totalRevenue;?> LKR</p>
             </div>
 
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"];
+            ?>
             <div class="box">
                 <h2>Total Customers</h2>
-                <p>10</p>
+                <p><?php echo $guestCount; ?></p>
             </div>
         </div>
     </div>
