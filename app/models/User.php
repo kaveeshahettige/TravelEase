@@ -992,8 +992,8 @@ foreach ($transactionData['furtherBookingDetails'] as $bookingDetail) {
         $this->db->bind(':cartbooking_id', $cartbooking_id);
         $this->db->bind(':user_id', $transactionData['user']->id);
         $this->db->bind(':serviceProvider_id', $bookingDetail->user_id);
-        $this->db->bind(':startDate', $currentDate);
-        $this->db->bind(':endDate', $currentDate);
+        $this->db->bind(':startDate', $transactionData['checkinDate']);
+        $this->db->bind(':endDate', $transactionData['checkoutDate']);
         $this->db->bind(':package_id', $bookingDetail->user_id);
         $this->db->bind(':meetTime', $transactionData['meetTime']);
     }
@@ -2679,6 +2679,20 @@ return $success; // Return success status after the loop
             return false;
         }
     }
+    // //findCartDetailsByCartId
+    // public function findCartDetailsByCartId($cart_id){
+    //     $this->db->query('SELECT users.type, cart.*
+    //                       FROM cart 
+    //                       JOIN users ON cart.serviceProvider_id = users.id
+    //                       WHERE cart.cart_id = :cart_id');
+    //     $this->db->bind(':cart_id', $cart_id);
+    //     $result = $this->db->resultSet(); // Use resultSet() to fetch multiple rows
+    //     if (!empty($result)) {
+    //         return $result;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     //removefromCart($cart_id)
     public function removefromCartByCartId($cart_id){

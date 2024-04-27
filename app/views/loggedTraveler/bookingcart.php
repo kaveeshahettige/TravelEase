@@ -52,7 +52,7 @@
 
 <?php $servicePrices = [];?>
     <div class="payment-container" >
-    <div class="booking-box" style="margin-top:60%">
+    <div class="booking-box">
     <!-- <?php echo var_dump($data['resultArray'])?> -->
     <h2 style="text-align: center;">Booking Information</h2>
     <?php foreach ($data['resultArray'] as $data1): ?>
@@ -75,19 +75,19 @@
                                 <p><strong><i class="fas fa-paw"></i> Pet policy:</strong> <?php echo $data1['furtherBookingDetails']->petPolicy ?></p>
                                
                                 <p>
-    <strong><i class="fas fa-coffee"></i> Breakfast: <?php echo $data1['furtherBookingDetails']->breakfastIncluded ?></strong>
+    <strong><i class="fas fa-coffee"></i> Breakfast: </strong>
     <?php if ($data1['furtherBookingDetails']->breakfastIncluded == 'yes'): ?>
         <i style="color:green" class="fas fa-check-circle"></i>
     <?php else: ?>
         <i style="color:red" class="fas fa-times-circle"></i>
     <?php endif; ?>
-    <strong><i class="fas fa-utensils"></i> Lunch: <?php echo $data1['furtherBookingDetails']->lunchIncluded ?></strong>
+    <strong><i class="fas fa-utensils"></i> Lunch: </strong>
     <?php if ($data1['furtherBookingDetails']->lunchIncluded == 'yes'): ?>
         <i style="color:green" class="fas fa-check-circle"></i>
     <?php else: ?>
         <i style="color:red" class="fas fa-times-circle"></i>
     <?php endif; ?>
-    <strong><i class="fas fa-utensils"></i> Dinner: <?php echo $data1['furtherBookingDetails']->dinnerIncluded ?></strong>
+    <strong><i class="fas fa-utensils"></i> Dinner: </strong>
     <?php if ($data1['furtherBookingDetails']->dinnerIncluded == 'yes'): ?>
         <i style="color:green" class="fas fa-check-circle"></i>
     <?php else: ?>

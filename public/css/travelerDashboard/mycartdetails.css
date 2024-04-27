@@ -285,7 +285,7 @@ input[type="number"] {
     font-size: 18px;
     border-radius: 5px;
     display: inline-block; /* Ensures the background wraps around the text */
-    width: 15%;
+    width: 25%;
     text-align: center;
 }
 .available {
@@ -295,7 +295,7 @@ input[type="number"] {
     font-size: 18px;
     border-radius: 5px;
     display: inline-block; /* Ensures the background wraps around the text */
-    width: 15%;
+    width: 25%;
     text-align: center;
 }
 
@@ -334,13 +334,12 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* height: 100vh; */
     background-color: #f4f4f4;
 }
 
 .payment-container {
     display: flex;
-    width: 90%;
+    width: 75%;
     
     justify-content: space-between; /* Distribute space between payment-box and booking-box */
     margin-top: 50px; /* Adjusted margin for better spacing */
@@ -558,7 +557,78 @@ body {
     border-radius: 5px;
 }
 
-
+/* Modal Styles */
+.modal2 {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal2-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  /* Close Button */
+  .close2 {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close2:hover,
+  .close2:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+/* Confirm Button */
+#confirmCancelBtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #confirmCancelBtn:hover {
+    background-color: #45a049;
+  }
+  #denyCancelBtn {
+    background-color: #ce091c;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+  }
+  #denyCancelBtn:hover {
+    background-color: #970615;
+  }
 
 
 

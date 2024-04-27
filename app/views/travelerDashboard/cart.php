@@ -51,7 +51,7 @@
         </div>
         
         <div class="dashboard-content">
-            <h1>Carts</h1>
+            <h1>Wish Lists</h1>
         </div>
 
         <div class="dashboard-sub-content">
@@ -85,7 +85,7 @@
 
         <div class="table-content">
 
-    <h2>Cart Details</h2>
+    <h2>Wish List Details</h2>
     <div class="card-container">
         <!-- Loop through each cart item to display as a card -->
         <?php

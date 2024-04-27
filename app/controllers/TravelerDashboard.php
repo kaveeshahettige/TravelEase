@@ -819,6 +819,8 @@ public function myCartDetails($cartbooking_id,$newcheckinDate,$newcheckoutDate){
               'meetTime' => $cartDetail->meetTime?$cartDetail->meetTime:null,
               'serviceProvider'=>$serviceProvider?$serviceProvider:null,
               'checkAvailbility'=>$checkAvailbility,
+              'newcheckinDate'=>$newcheckinDate,
+              'newcheckoutDate'=>$newcheckoutDate,
               
           ];
       }
@@ -843,5 +845,393 @@ public function removefromCartByCartId($cart_id){
   $remove=$this->userModel->removefromCartByCartId($cart_id);
 }
 
+
+/////////////
+
+
+//proceedWishList($cartid, $newcheckinDate, $newcheckoutDate)
+public function proceedWishList($cartid, $newcheckinDate, $newcheckoutDate){
+  $cartDetails=$this->userModel->findCartDetailsByBookingId($cartid);
+  $id = $_SESSION['user_id'];
+  $user=$this->userModel->findUserDetail($id);
+  $driverType = $_POST['driverType'];
+  $meetTime = $_POST['meetTime'];
+  $pickupTime = $_POST['pickupTime'];
+  //echo $cartid;
+  //echo $driverType;
+  //echo $pickupTime;
+  //echo $meetTime;
+
+  //echo var_dump($cartDetails);
+
+  $furtherBookingDetails = [];
+foreach ($cartDetails as $cartDetail) {
+    // Reset $allDetails for each iteration
+   
+    $allDetails = [];
+
+    //find type
+    if ($cartDetail->room_id != null) {
+        $type = 3;
+        $serviceId = $cartDetail->room_id;
+    } else if ($cartDetail->vehicle_id != null) {
+        $type = 4;
+        $serviceId = $cartDetail->vehicle_id;
+    } else if ($cartDetail->package_id != null) {
+        $type = 5;
+        $serviceId = $cartDetail->package_id;
+    }
+    
+    //find availability
+    // echo $serviceId ."".$type;
+    $available = $this->userModel->checkAvailbility($type, $serviceId, $newcheckinDate, $newcheckoutDate);
+  
+    if ($available) {
+        // if available, retrieve further details
+        $allDetails = $this->userModel->findBookingDetailByServiceId($type, $serviceId);
+        //echo var_dump($allDetails);
+        $furtherBookingDetails[] = $allDetails;
+    }
+    
+    
 }
+
+
+    //echo var_dump($furtherBookingDetails);
+
+  $data = [
+    'meetTime'=>$meetTime,
+    'pickupTime'=>$pickupTime,
+    'driverType'=>$driverType,
+    'checkinDate'=>$newcheckinDate,
+    'checkoutDate'=>$newcheckoutDate,
+    'cartDetails'=>$cartDetails,
+    'furtherBookingDetails'=>$furtherBookingDetails,
+    'user'=>$user,
+    'cartid'=>$cartid,
+  ];
+  
+
+  $this->view('travelerDashboard/proceedWishList',$data);
+}
+
+//paymentwishlist
+public function paymentwishlist($cartid,$servicePricesArray){
+
+  $servicePricesArray = json_decode(urldecode($servicePricesArray), true);
+  $user = $this->userModel->findUserDetail($_SESSION['user_id']);
+
+  $driverType=$_POST['driverType'];
+  $meetTime = $_POST['meetTime'];
+  $pickupTime = $_POST['pickupTime'];
+  $checkinDate = $_POST['checkinDate'];
+  $checkoutDate = $_POST['checkoutDate'];
+  $total=$_POST['totalAmount'];
+
+  if($driverType=='withDriver'){
+    $driver = 1;
+  }else{
+      $driver=0;
+    };
+
+  $cartDetails=$this->userModel->findCartDetailsByBookingId($cartid);
+
+    $furtherBookingDetails = [];
+foreach ($cartDetails as $cartDetail) {
+    $allDetails = [];
+
+    //find type
+    if ($cartDetail->room_id != null) {
+        $type = 3;
+        $serviceId = $cartDetail->room_id;
+    } else if ($cartDetail->vehicle_id != null) {
+        $type = 4;
+        $serviceId = $cartDetail->vehicle_id;
+    } else if ($cartDetail->package_id != null) {
+        $type = 5;
+        $serviceId = $cartDetail->package_id;
+    }
+    
+    //find availability
+    // echo $serviceId ."".$type;
+    $available = $this->userModel->checkAvailbility($type, $serviceId, $checkinDate, $checkoutDate);
+  
+    if ($available) {
+        // if available, retrieve further details
+        $allDetails = $this->userModel->findBookingDetailByServiceId($type, $serviceId);
+
+        //echo var_dump($allDetails);
+        $furtherBookingDetails[] = $allDetails;
+    }
+    
+    
+}
+
+
+
+  $transactionData = [
+    'user' => $user,
+    'checkinDate' => $checkinDate,
+    'checkoutDate' => $checkoutDate,
+    'pickupTime' => $pickupTime ? $pickupTime : null,
+    'price' => $total,
+    'driver' => $driver,
+    'meetTime' => $meetTime ? $meetTime : null,
+    'cartid'=>$cartid,
+    'furtherBookingDetails' => $furtherBookingDetails,
+    'servicePricesArray' => $servicePricesArray,
+    // Add any other relevant transaction details
+];
+
+  require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+  $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
+  \Stripe\Stripe::setApiKey($stripe_secret_key);
+  $checkout_session = \Stripe\Checkout\Session::create([
+    'payment_method_types' => ['card'],
+      'mode' => 'payment',
+      'success_url' => "http://localhost/TravelEase/TravelerDashboard/paymentwishlistSuccessful",
+      'line_items' => [[
+          'quantity' => 1,
+          'price_data' => [
+              'currency' => 'lkr',
+              'unit_amount' => $total * 100,
+              'product_data' => [
+                  'name' => 'Payment from WishList',
+              ],
+          ],
+      ]],
+      'cancel_url' => 'https://example.com/cancel',
+  ]);
+
+  // Store the Stripe Checkout session ID in the transaction data
+  $transactionData['stripe_session_id'] = $checkout_session->id;
+
+  // Store the transaction data in the session or database for retrieval in the paymentSuccessful() function
+  $_SESSION['transaction_data'] = $transactionData;
+
+  // Redirect the user to the Stripe Checkout session URL
+  http_response_code(303);
+  header("Location: " . $checkout_session->url);
+
+
+
+}
+
+//paymentwishlistSuccessful
+public function paymentwishlistSuccessful() {
+  // Check if transaction data exists in the session
+  if (isset($_SESSION['transaction_data'])) {
+      // Retrieve transaction data from the session
+      $transactionData = $_SESSION['transaction_data'];
+      //echo $transactionData['furtherBookingDetails'];
+      $this->userModel->addBookingfromCart($transactionData);
+      $lastcartBooking = $this->userModel->getLastCartBooking();
+      $temporyIds=$this->userModel->getTemportIdsByBookingId($lastcartBooking->booking_id);
+      $servicePricesArray = $transactionData['servicePricesArray'];
+    
+      // Ensure both arrays have the same length
+      if (count($temporyIds) === count($servicePricesArray)) {
+        $count = count($temporyIds); // Get the length of the arrays
+    
+        // Iterate through each temporyId
+        for ($i = 0; $i < $count; $i++) {
+            $temporyId = $temporyIds[$i]->temporyid; // Assuming the ID property is 'id'
+            $servicePrice = $servicePricesArray[$i]; // Get the corresponding service price
+    
+            // Call your function with the temporyId and corresponding service price
+            $this->userModel->addCartPaymentDetails($temporyId, $servicePrice, $lastcartBooking->booking_id);
+        }
+    } else {
+  // Handle error: Arrays are not of equal length
+  // You
+  }
+      
+
+      //Iterate over each booking detail in $transactionData['furtherBookingDetails']
+      foreach ($transactionData['furtherBookingDetails'] as $bookingDetail) {
+          $type = $bookingDetail->type; 
+          $driver = isset($transactionData['driver']) ? $transactionData['driver'] : null; 
+          if ($type == 3) {
+         
+             $this->userModel->addroomUnavailabilityfromCart($bookingDetail, $transactionData);
+          } elseif ($type == 4) {
+             $this->userModel->addVehicleBookingfromCart($lastcartBooking->booking_id,$bookingDetail,$transactionData,$driver);
+             $this->userModel->addUnavailabilityVehiclesfromCart($transactionData,$bookingDetail);//vehicleAvailbilty
+             
+          }elseif($type==5){
+           $this->userModel->addGuideBookingfromCart($lastcartBooking->booking_id,$transactionData);
+            $this->userModel->addUnavailabilityGuidesfromCart($transactionData,$bookingDetail);//guideAvilbilty
+          }
+      }
+      //remove from wishlist
+      $this->userModel->removefromCartByBookingId($transactionData['cartid']);
+      
+  //     // Optionally, you can pass data to the view if needed
+      $data = [
+          // Add any data you want to pass to the view
+      ];
+
+      // Load the view for the payment successful page
+      $this->view('loggedTraveler/paymentSuccessful', $data);
+  } else {
+      // Handle the case where transaction data is missing
+      // Redirect the user to an error page or perform any other action as needed
+  }
+}
+
+
+//cartpayment
+public function cartpayment($bookingcartArrayString,$servicePricesArray, $checkinDate, $checkoutDate, $pickupTime=null,$meetTime=null) {
+  $bookingcartArray = json_decode(urldecode($bookingcartArrayString), true);
+  $servicePricesArray = json_decode(urldecode($servicePricesArray), true);
+  // echo var_dump($servicePricesArray);
+
+  $totalAmount = $_POST['totalAmount'];
+  $driverType = $_POST['driverType'];
+  //echo $driverType;
+  //if driver type==withdriver
+  if($driverType=='withDriver'){
+    $driver = 1;
+  }else{
+      $driver=0;
+    };
+  //echo $driverType;
+
+  // Retrieve user details
+  
+  $id = $_SESSION['user_id'];
+  $user = $this->userModel->findUserDetail($id);
+
+  // Initialize an empty array to store booking details
+$furtherBookingDetails = [];
+
+// Iterate over each key-value pair in the $bookingcartArray
+foreach ($bookingcartArray as $type => $serviceIds) {
+    // Iterate over each service ID for the current type
+    foreach ($serviceIds as $serviceId) {
+        // Retrieve booking details for the current type and service ID
+        $bookingDetails = $this->userModel->findBookingDetailByServiceid($type, $serviceId);
+        // Add the retrieved booking details to the array
+        $furtherBookingDetails[] = $bookingDetails;
+    }
+}
+
+// Now $allBookingDetails contains booking details for all items in $bookingcartArray
+
+
+  //Construct transaction data
+  $transactionData = [
+      'user' => $user,
+      'checkinDate' => $checkinDate,
+      'checkoutDate' => $checkoutDate,
+      'bookingcartArray' => $bookingcartArray,
+      'pickupTime' => $pickupTime ? $pickupTime : null,
+      'price' => $totalAmount,
+      'furtherBookingDetails' => $furtherBookingDetails,
+      'driver' => $driver,
+      'meetTime' => $meetTime ? $meetTime : null,
+      'servicePricesArray'=>$servicePricesArray,
+      // Add any other relevant transaction details
+  ];
+
+  // Create a Stripe Checkout session
+  require __DIR__ . "./../libraries/stripe/vendor/autoload.php";
+  $stripe_secret_key = "sk_test_51Ocov6EA71SQLGmwC6ccRw0MOKifZar2SWG5ln18XfHjkQN2zMp1wG9XOjVf2Q7mjMSEjrCsL1V8jGKQuYOCp8Un00rNzNhS2c";
+  \Stripe\Stripe::setApiKey($stripe_secret_key);
+  $checkout_session = \Stripe\Checkout\Session::create([
+    'payment_method_types' => ['card'],
+      'mode' => 'payment',
+      'success_url' => "http://localhost/TravelEase/loggedTraveler/cartpaymentSuccessful",
+      'line_items' => [[
+          'quantity' => 1,
+          'price_data' => [
+              'currency' => 'lkr',
+              'unit_amount' => $totalAmount * 100,
+              'product_data' => [
+                  'name' => 'Cart Payment',
+              ],
+          ],
+      ]],
+      'cancel_url' => 'https://example.com/cancel',
+  ]);
+
+  // Store the Stripe Checkout session ID in the transaction data
+  $transactionData['stripe_session_id'] = $checkout_session->id;
+
+  // Store the transaction data in the session or database for retrieval in the paymentSuccessful() function
+  $_SESSION['transaction_data'] = $transactionData;
+
+  // Redirect the user to the Stripe Checkout session URL
+  http_response_code(303);
+  header("Location: " . $checkout_session->url);
+  
+}
+/////////////////////////////////////
+
+public function cartpaymentSuccessful() {
+  // Check if transaction data exists in the session
+  if (isset($_SESSION['transaction_data'])) {
+      // Retrieve transaction data from the session
+      $transactionData = $_SESSION['transaction_data'];
+      $this->userModel->addBookingfromCart($transactionData);
+      $lastcartBooking = $this->userModel->getLastCartBooking();
+      $temporyIds=$this->userModel->getTemportIdsByBookingId($lastcartBooking->booking_id);
+      $servicePricesArray = $transactionData['servicePricesArray'];
+    
+      // Ensure both arrays have the same length
+      if (count($temporyIds) === count($servicePricesArray)) {
+        $count = count($temporyIds); // Get the length of the arrays
+    
+        // Iterate through each temporyId
+        for ($i = 0; $i < $count; $i++) {
+            $temporyId = $temporyIds[$i]->temporyid; // Assuming the ID property is 'id'
+            $servicePrice = $servicePricesArray[$i]; // Get the corresponding service price
+    
+            // Call your function with the temporyId and corresponding service price
+            $this->userModel->addCartPaymentDetails($temporyId, $servicePrice, $lastcartBooking->booking_id);
+        }
+    } else {
+  // Handle error: Arrays are not of equal length
+  // You might want to log an error or handle this case appropriately
+}
+      
+      
+
+      //Iterate over each booking detail in $transactionData['furtherBookingDetails']
+      foreach ($transactionData['furtherBookingDetails'] as $bookingDetail) {
+          $type = $bookingDetail->type; 
+          $driver = isset($transactionData['driver']) ? $transactionData['driver'] : null; 
+          if ($type == 3) {
+         
+              $this->userModel->addroomUnavailabilityfromCart($bookingDetail, $transactionData);
+          } elseif ($type == 4) {
+              $this->userModel->addVehicleBookingfromCart($lastcartBooking->booking_id,$bookingDetail,$transactionData,$driver);
+              $this->userModel->addUnavailabilityVehiclesfromCart($transactionData,$bookingDetail);//vehicleAvailbilty
+             
+          }elseif($type==5){
+            $this->userModel->addGuideBookingfromCart($lastcartBooking->booking_id,$transactionData);
+            $this->userModel->addUnavailabilityGuidesfromCart($transactionData,$bookingDetail);//guideAvilbilty
+          }
+      }
+      
+      // Optionally, you can pass data to the view if needed
+      $data = [
+          // Add any data you want to pass to the view
+      ];
+
+      // Load the view for the payment successful page
+      $this->view('loggedTraveler/paymentSuccessful', $data);
+  } else {
+      // Handle the case where transaction data is missing
+      // Redirect the user to an error page or perform any other action as needed
+  }
+}
+
+
+
+
+}
+
+
+//////////////////
 
