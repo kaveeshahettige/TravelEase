@@ -1,3 +1,5 @@
+<?php                     var_dump($data['bookedVehicles']); ?>
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,12 +60,17 @@
     </script>
 
 </head>
+<!-- <?php var_dump($data['profileimage']->profile_picture) ?> -->
 
 <body>
     <nav class="left-menu">
-       <div class="user-profile">
-            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
+        <div class="user-profile">
+            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>"
+                alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
+            <a class="" href="<?php echo URLROOT; ?>/driver/notification">
+                <i class="bx bx-bell"></i>
+            </a>
         </div>
 
 
@@ -141,15 +148,13 @@
 
 
         <div class="interim_container">
-            <div class="dashboard-subcontent" >
+            <div class="dashboard-subcontent">
                 <div class="content-container">
                     <?php if (!empty($data['vehicledetails'])): ?>
                     <?php foreach ($data['vehicledetails'] as $vehicle): ?>
-
-
                     <div class="vehicle-card">
                         <div class="card-image">
-                            <div class="slider" ">
+                            <div class="slider">
                                 <img src="<?php echo URLROOT; ?>/images/<?php echo $vehicle['image']; ?>"
                                     alt="Vehicle Image 1">
                                 <img src="<?php echo URLROOT; ?>/images/<?php echo $vehicle['vehi_img2']; ?>"
@@ -159,10 +164,10 @@
                                 <img src="<?php echo URLROOT; ?>/images/<?php echo $vehicle['vehi_img4']; ?>"
                                     alt="Vehicle Image 4">
                             </div>
-                            <button class="prev-btn"><</button>
+                            <button class="prev-btn"></button>
                             <button class="next-btn">></button>
                         </div>
-                        <div class="card-details" >
+                        <div class="card-details">
                             <h1><?php echo $vehicle['brand']; ?> <?php echo $vehicle['model']; ?></h1>
                             <p><strong>Plate Number:</strong> <?php echo $vehicle['plate_number']; ?></p>
                             <p><strong>Year:</strong> <?php echo $vehicle['year']; ?></p>
@@ -174,12 +179,21 @@
                             <div class="buttons">
                                 <a href="<?php echo URLROOT; ?>driver/vehicleedit/<?php echo $vehicle['vehicle_id']; ?>"
                                     class="edit-button">Edit</a>
-                                <a href="<?php echo URLROOT; ?>driver/vehicledelete/<?php echo $vehicle['vehicle_id']; ?>"
-                                    class="delete-button">Delete</a>
+                                <form id="deleteForm" action="<?php echo URLROOT; ?>driver/vehicledelete" method="POST">
+                                    <input type="hidden" id="vehicle_id" name="vehicle_id">
+                                    <button type="button" onclick="confirmDelete(<?php echo $vehicle['vehicle_id']; ?>)"
+                                        class="delete-button">
+                                        <i class='bx bx-trash'></i> Delete
+                                    </button>
+                                </form>
+
+
                             </div>
+
+
+
                         </div>
                     </div>
-
                     <?php endforeach; ?>
                     <?php endif; ?>
                 </div>
@@ -188,8 +202,48 @@
 
 
 
+        <div id="deleteConfirmationModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Are you sure you want to delete this vehicle?</p>
+        <button id="confirmDeleteBtn">Yes</button>
+        <button class="cancel-btn">Cancel</button>
+    </div>
+</div>
+
 
         <script src="<?php echo URLROOT?>/js/driver/vehicle.js"></script>
+        <script>
+    function confirmDelete(vehicleId) {
+        // Check if the vehicleId is in the bookedVehicles array
+        if (<?php echo json_encode($data['bookedVehicles']); ?>.includes(vehicleId)) {
+            alert("This vehicle cannot be deleted as it has pending bookings.");
+        } else {
+            // Open the modal
+            document.getElementById('deleteConfirmationModal').style.display = 'block';
+
+            // Set the vehicleId in the hidden input field
+            document.getElementById('vehicle_id').value = vehicleId;
+        }
+    }
+
+    // Close the modal when the user clicks on the close button or outside the modal
+    document.querySelector('.close').addEventListener('click', function() {
+        document.getElementById('deleteConfirmationModal').style.display = 'none';
+    });
+
+    // Handle cancellation by closing the modal
+    document.querySelector('.cancel-btn').addEventListener('click', function() {
+        document.getElementById('deleteConfirmationModal').style.display = 'none';
+    });
+
+    // Handle deletion confirmation
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+        document.getElementById('deleteForm').submit();
+    });
+</script>
+
+
     </main>
 </body>
 

@@ -93,41 +93,37 @@
 
                 <!-- Ongoing Bookings Box -->
                 <div class="box">
-                    <h2>Ongoing Bookings</h2>
+                    <h2>Completed Bookings</h2>
                     <p></p>
                 </div>
 
-                <!-- Customers Box -->
-                <div class="box">
-                    <h2>Total Customers</h2>
-                    <p></p>
-                </div>
+            
             </div>
         </div>
 
         <div class="table-content">
             <div class="tab">
-                <a href="<?php echo URLROOT?>/driver/bookings"><button class="tablinks active">Ongoing
+                <a href="<?php echo URLROOT?>/driver/bookings"><button class="tablinks">Ongoing
                         Bookings</button></a>
                 <a href="<?php echo URLROOT?>/driver/combookings"><button class="tablinks">Completed
                         Bookings</button></a>
-                <a href="<?php echo URLROOT?>/driver/rejbookings"><button class="tablinks">Cancelled
+                <a href="<?php echo URLROOT?>/driver/rejbookings"><button class="tablinks active">Cancelled
                         Bookings</button></a>
             </div>
         </div>
 
         <div class="search-content">
-    <div class="booking-search">
-        <input type="text" id="cab-search" placeholder="Name or Vehicle Number">
-        <input type="date" id="start-date" placeholder="Start Date">
-        <input type="date" id="end-date" placeholder="End Date">
-        <button onclick="filterCabBookings()">
-            <i class="bx bx-search"></i>
-        </button>
-    </div>
-</div>
+            <div class="booking-search">
+                <input type="text" id="cab-search" placeholder="Name or Vehicle Number">
+                <input type="date" id="start-date" placeholder="Start Date">
+                <input type="date" id="end-date" placeholder="End Date">
+                <button onclick="filterCabBookings()">
+                    <i class="bx bx-search"></i>
+                </button>
+            </div>
+        </div>
 
-<script>
+        <script>
     function filterCabBookings() {
         var input, filter, startDate, endDate, table, tr, tdPassengerName, tdPlateNumber, tdDate, i, txtPassengerName, txtPlateNumber, txtDate ;
         input = document.getElementById("cab-search");
@@ -166,63 +162,153 @@
     }
 </script>
 
+
+
+
+       
+
+        
         <div class="table-content">
-            <h2>Ongoing Booking Details</h2>
-            <?php
-    // Check if $data exists and has the expected structure
-    if (!empty($data) && isset($data['pendingBookings'])) {
-    ?>
+            <h2>Completed Booking Details</h2>
             <table class="booking-table">
                 <thead>
                     <tr>
                         <th>No</th>
-                        <!-- <th>Booking ID</th> -->
-                        <!-- <th>Temp ID</th> -->
-                        <th>Passenger Name</th>
-                        <th>Passenger Contact Number</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Time</th>
-                        <th>Vehicle Plate Number</th>
-                        <th>Amount</th>
-                        <th>With Driver</th>
-                        <th>Actions</th>
+                        <th>Trip ID</th>
+                                                <th>Passenger Name</th>
+
+                        <th>Trip Charges</th>
+                        <!-- <th>Comments</th> -->
+                        <th>More Details</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                $pendingBookings = $data['pendingBookings'] ?? [];
-                
+
+                  
+            // Check if $data exists and has the expected structure
+            if (!empty($data) && isset($data['CancelledBookings']) ) {
+                $completedBookings = $data['CancelledBookings'];
+                // var_dump($data['CancelledBookings']);
                 $count = 0; // Initialize a counter variable
 
-                foreach ($pendingBookings as $booking) {
+                foreach ($completedBookings as $Cbooking) {
+                    
                     $count++; // Increment the counter for each iteration
-                ?>
+            ?>
                     <tr>
-                        <td><?php echo $count; ?></td> <!-- Display the count -->
-                        <!-- <td><?php echo $booking->booking_id; ?></td> -->
-                        <!-- <td><?php echo $booking->temporyid; ?></td> -->
-                        <td><?php echo $booking->fname . ' ' . $booking->lname; ?>
+                        <td><?php echo $count; ?></td>
+                        <td><?php echo $Cbooking->booking_id; ?></td>
+                        <td><?php echo $Cbooking->fname . ' ' . $Cbooking->lname; ?>
+                        <td><?php echo $Cbooking->payment_amount; ?></td>
+                       
+                        <td>
+                            <!-- Add onclick event to trigger showDetails function -->
+                            <button class="view-button"
+                                onclick="showDetails(<?php echo $count; ?>,
+    '<?php echo $Cbooking->booking_id; ?>',
+    '                        <td><?php echo $Cbooking->fname . ' ' . $Cbooking->lname; ?>',
+    '<?php echo $Cbooking->number; ?>',
+    '<?php echo $Cbooking->startDate; ?>',
+    '<?php echo $Cbooking->endDate; ?>',
+    '<?php echo $Cbooking->start_time; ?>',
+    '<?php echo $Cbooking->plate_number; ?>',
+    '<?php echo $Cbooking->payment_amount; ?>',
+
+    '<?php echo isset($Cbooking->feedbacks_details[0]->feedback) ? $booking->feedbacks_details[0]->feedback : 'No feedback'; ?>')">More</button>
                         </td>
-                        <td><?php echo $booking->number; ?></td>
-                        <td><?php echo $booking->startDate; ?></td>
-                        <td><?php echo $booking->endDate; ?></td>
-                        <td><?php echo $booking->start_time; ?></td>
-                        <td><?php echo $booking->plate_number; ?></td>
-                        <td><?php echo $booking->payment_amount; ?></td>
-                        <td><?php echo $booking->withDriver ? 'Yes' : 'No'; ?></td>
-                        <td><button class="cancel-button">
-                                <i class='bx bx-x'></i>
-                            </button></td>
-
-
-
                     </tr>
-                    <?php } ?>
+                    <?php
+                }
+            } else {
+                // Handle case where data is missing or not in expected format
+                echo '<tr><td colspan="6">No data available</td></tr>';
+            }
+            ?>
+            <!-- <?php   var_dump($Cbooking->fname . ' ' . $booking->lname); ?> -->
                 </tbody>
             </table>
-            <?php } ?>
-        </div>        
+        </div>
+
+
+
+
+
+
+    </main>
+
+    <script>
+    function showDetails(rowNumber, bookingId, travelerName, travelerNumber, startDate, endDate, start_time,
+        plate_number, payment, rating, feedback) {
+        var popupContainer = document.createElement('div');
+        popupContainer.classList.add('popup-container');
+
+        var popupContent = document.createElement('div');
+        popupContent.classList.add('popup-content');
+        popupContent.innerHTML = `
+  
+
+<div class="popup-content">
+    <h3>Booking Details</h3>
+    <div class="booking-detail">
+        <strong>Booking ID:</strong> ${bookingId}
+    </div>
+    <div class="booking-detail">
+        <strong>Traveler Name:</strong> ${travelerName}
+    </div>
+    <div class="booking-detail">
+        <strong>Traveler Number:</strong> ${travelerNumber}
+    </div>
+    <div class="booking-detail">
+        <strong>Start Date:</strong> ${startDate}
+    </div>
+    <div class="booking-detail">
+        <strong>End Date:</strong> ${endDate}
+    </div>
+    <div class="booking-detail">
+        <strong>Start Time:</strong> ${start_time}
+    </div>
+    <div class="booking-detail">
+        <strong>Vehicle Number:</strong> ${plate_number}
+    </div>
+   
+    <div class="booking-detail">
+        <strong>Amount:</strong> ${payment}
+    </div>
+   
+</div>
+
+
+
+   
+
+
+`;
+
+        function generateRatingStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<span class="rating-stars"></span>';
+                } else {
+                    stars += '<span class="rating-stars empty"></span>';
+                }
+            }
+            return stars;
+        }
+
+
+        popupContainer.appendChild(popupContent);
+        document.body.appendChild(popupContainer);
+
+        // Close the popup when clicked outside the content
+        popupContainer.addEventListener('click', function(event) {
+            if (event.target === popupContainer) {
+                document.body.removeChild(popupContainer);
+            }
+        });
+    }
+    </script>
 </body>
 
 

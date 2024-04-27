@@ -5,6 +5,7 @@
  define('DB_USER', 'root');
  define('DB_PASS', '12345');
  define('DB_NAME', 'travelease');
+
 //app root
 define('APPROOT',dirname(dirname(__FILE__)));
 

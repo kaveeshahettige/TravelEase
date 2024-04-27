@@ -190,7 +190,7 @@ class Travel{
     
 
     public function vehicleDetails($agency_id) {
-        $this->db->query('SELECT * FROM vehicles WHERE agency_id = :agency_id');
+        $this->db->query('SELECT * FROM vehicles WHERE agency_id = :agency_id AND status = 1');
         $this->db->bind(':agency_id', $agency_id);
         $data = $this->db->resultSet();
         $data = json_decode(json_encode($data), true);
@@ -651,12 +651,76 @@ public function getPaymentDetailsForBooking($bookingId) {
         }
          
         public function getVehicleCount($agencyId){
-            $this->db->query('SELECT COUNT(*) AS count FROM vehicles WHERE agency_id = :agency_id');
+            $this->db->query('SELECT COUNT(*) AS count FROM vehicles WHERE agency_id = :agency_id AND status = 1');
             $this->db->bind(':agency_id', $agencyId);
             $row = $this->db->single();
             return $row->count;
         }
 
+        public function deleteVehicle($vehicle_id){
+            $this->db->query('UPDATE vehicles SET status = 0 WHERE vehicle_id = :vehicle_id');
+            $this->db->bind(':vehicle_id', $vehicle_id);
+            if($this->db->execute()){
+                return true;
+            } else {
+                return false;
+            }
+        }
+         public function deleteProfile($userId){
+            $this->db->query('UPDATE users SET profile_status = 0 WHERE id = :userId');
+            $this->db->bind(':userId', $userId);
+            if($this->db->execute()){
+                return true;
+            } else {
+                return false;
+            }
+         }
+
+         public function checkPendingBookings($userId){
+            try {
+                $sql = "SELECT 
+                            (
+                                SELECT COUNT(*) FROM bookings 
+                                WHERE serviceProvider_id = :user_id 
+                                AND endDate > :current_date 
+                                AND bookingCondition != 'cancelled'
+                            ) AS count_bookings,
+                            (
+                                SELECT COUNT(*) FROM cartbookings 
+                                WHERE serviceProvider_id = :user_id 
+                                AND endDate > :current_date 
+                                AND bookingCondition != 'cancelled'
+                            ) AS count_cartbookings";
+                $this->db->query($sql);
+                $this->db->bind(':user_id', $userId);
+                $this->db->bind(':current_date', date('Y-m-d'));
+                $this->db->execute();
+                $row = $this->db->single();
+        
+                if ($row && isset($row->count_bookings) && isset($row->count_cartbookings)) {
+                    $totalBookingsCount = $row->count_bookings + $row->count_cartbookings;
+                    return $totalBookingsCount;
+                } else {
+                    return 0; // Return 0 or handle the case where no bookings are found
+                }
+            } catch (PDOException $e) {
+                // Handle database connection or query errors
+                error_log('Database Error: ' . $e->getMessage());
+                return false; // Or handle the error in a way appropriate for your application
+            }
+        }
+
+
+        public function getBookedVehicles($userId){
+            $query = "SELECT vehicle_id FROM bookings WHERE serviceProvider_id = :user_id AND startDate > CURDATE() AND bookingCondition != 'cancelled'
+            UNION
+            SELECT vehicle_id FROM cartbookings WHERE serviceProvider_id = :user_id AND startDate > CURDATE() AND bookingCondition != 'cancelled'";
+            $this->db->query($query);
+            $this->db->bind(':user_id', $userId);
+            $this->db->execute();
+            return $this->db->resultSet();      
+        }
+        
         
         
         
@@ -664,14 +728,16 @@ public function getPaymentDetailsForBooking($bookingId) {
 
 
         public function insertUnavailableDate($vehicle_id, $date) {
-            $query = "INSERT INTO vehicle_availability (vehicle_id, startDate) VALUES (:vehicle_id, :startDate)";
+            $query = "INSERT INTO vehicle_availability (vehicle_id, startDate, endDate) VALUES (:vehicle_id, :startDate, :endDate)";
             $this->db->query($query);
             $this->db->bind(':vehicle_id', $vehicle_id);
             $this->db->bind(':startDate', $date);
-            
+            $this->db->bind(':endDate', $date); // Set endDate to the same value as startDate
+        
             // Execute the query
             return $this->db->execute();
         }
+        
         
         
         public function removeUnavailableDate($vehicle_id, $date) {
@@ -795,7 +861,28 @@ public function updatePassword($user_id, $new_password){
 }
 
         
-        
+public function setVehicleAvailability($data){
+    $query = "UPDATE vehicles SET vehicleCondition = :vehicleCondition WHERE vehicle_id = :vehicle_id";
+    $this->db->query($query);
+    $this->db->bind(':vehicleCondition', $data['vehicleCondition']);  // Bind vehicleCondition parameter
+    $this->db->bind(':vehicle_id', $data['vehicle_id']);  // Bind vehicle_id parameter
+    
+    // Debugging: Log the SQL query
+    error_log('SQL Query: ' . $query);
+    
+    // Execute the query
+    $result = $this->db->execute();
+    
+    // Debugging: Log the result of the execution
+    error_log('Execution Result: ' . ($result ? 'Success' : 'Failed'));
+    
+    return $result;
+}
+
+
+
+
+    
         
         
         
@@ -1268,7 +1355,107 @@ public function insertNotification($booking_id, $sender_id, $receiver_id, $notif
             
             return $this->db->resultSet();
         }
+        
+    public function markAsRead($notification_id) {
+        $sql = "UPDATE notifications SET markAsRead = 1 WHERE notification_id = :notification_id";
+        $this->db->query($sql);
+        $this->db->bind(':notification_id', $notification_id);
 
+        return $this->db->execute();
+    }
+
+    public function getUnreadNotificationCount($userId) {
+        $sql = "SELECT COUNT(*) AS unread_count FROM notifications WHERE markAsRead = 0 AND receiver_id = :user_id";
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $userId);
+        $this->db->execute();
+
+    
+        return $this->db->single()->unread_count;
+    }
+    
+
+        
+        public function getCancelledBookings($userId) {
+            $sql = "(SELECT 
+            b.temporyid AS tempory_id,
+            b.booking_id,
+            b.user_id,
+            u.fname,
+            u.lname,
+            u.number,
+            b.startDate,
+            b.endDate,
+            b.vehicle_id,
+            vb.start_time,
+            vb.withDriver,
+            v.plate_number,
+            CASE
+                WHEN p.tempory_id = 0 THEN p.amount
+                ELSE cp.amount
+            END AS payment_amount
+        FROM 
+            bookings b
+        JOIN 
+            users u ON b.user_id = u.id
+        JOIN 
+            vehicle_bookings vb ON b.booking_id = vb.booking_id
+        JOIN 
+            vehicles v ON b.vehicle_id = v.vehicle_id
+        LEFT JOIN 
+            payments p ON b.booking_id = p.booking_id
+        LEFT JOIN 
+            cartpayments cp ON b.temporyid = cp.tempory_id AND b.booking_id = cp.booking_id
+        WHERE 
+            b.serviceProvider_id = :user_id
+        AND 
+            bookingCondition = 'cancelled'
+        AND 
+            b.vehicle_id != 0)
+        UNION
+        (SELECT 
+            cb.temporyid AS tempory_id,
+            cb.booking_id,
+            cb.user_id,
+            u.fname,
+            u.lname,
+            u.number,
+            cb.startDate,
+            cb.endDate,
+            cb.vehicle_id,
+            vb.start_time,
+            vb.withDriver,
+            v.plate_number,
+            CASE
+                WHEN p.tempory_id = 0 THEN p.amount
+                ELSE cp.amount
+            END AS payment_amount
+        FROM 
+            cartbookings cb
+        JOIN 
+            users u ON cb.user_id = u.id
+        JOIN 
+            vehicle_bookings vb ON cb.booking_id = vb.booking_id
+        JOIN 
+            vehicles v ON cb.vehicle_id = v.vehicle_id
+        LEFT JOIN 
+            payments p ON cb.booking_id = p.booking_id
+        LEFT JOIN 
+            cartpayments cp ON cb.temporyid = cp.tempory_id AND cb.booking_id = cp.booking_id
+        WHERE 
+            cb.serviceProvider_id = :user_id
+        AND 
+            bookingCondition = 'cancelled'
+        AND 
+            cb.vehicle_id != 0)";
+        
+                        
+            $this->db->query($sql);
+            $this->db->bind(':user_id', $userId);
+            $this->db->execute();
+            
+            return $this->db->resultSet();
+        }
         // public function getCompletedBookings($agencyId) {
         //     $sql = "(SELECT 
         //                 b.booking_id, b.user_id, b.startDate, b.endDate, b.vehicle_id, b.bookingCondition, b.bookingDate, ta.agency_id

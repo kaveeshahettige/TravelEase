@@ -1,3 +1,5 @@
+<!-- <?php var_dump($data["notification"]); ?> -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +17,9 @@
        <div class="user-profile">
             <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
+            <a class="" href="<?php echo URLROOT; ?>/driver/notification">
+                <i class="bx bx-bell"></i>
+            </a>
         </div>
 
         
@@ -56,7 +61,7 @@
             <!-- Total Request Box -->
             <div class="box">
                 <h2>Total Notification</h2>
-                <p><?php echo $data['count']?></p>
+                <p><?php echo $data['count'];?></p>
             </div>
         
 
@@ -72,28 +77,62 @@
         </div>
         </div>
 
-        <div class="notification-container">
-    <?php foreach ($data['notifications'] as $notifications): ?>
-        <div class="notification">
-            <div class="notification-header">
-                
-            <div class="notification-sender">
-            <img src="<?php echo URLROOT; ?>/images1/<?php echo $notifications->profile_picture ?>" alt="Sender Image" class="sender-image">
+        
 
-    <span class="sender-name"><?php echo $notifications->fname." ".$notifications->lname ?></span>
+        <div class="notifications-content">
+    <?php
+    $notification = $data["notification"];
+    if (!empty($notification)) {
+        foreach ($notification as $key => $notifications):
+            if ($notifications->markAsRead == 0) {
+                ?>
+                <div class="notification-item">
+                    <!-- Assuming you have an image path stored in $notification->sender_image -->
+                    <img src="<?php echo URLROOT; ?>/images/<?php echo $notifications->profile_picture; ?>" alt="Sender Image" class="sender-image">
+
+                    <div class="notification-text-container">
+                        <span class="sender-name"><?php echo $notifications->fname." ".$notifications->lname ?></span>
+                        <span class="notification-date"><?php echo $notifications->nDate; ?></span>
+                        <p class="notification-text"><?php echo $notifications->notification; ?></p>
+                        <button onclick="markAsRead(<?php echo $notifications->notification_id; ?>)" class="mark-as-read-btn">Mark as read</button>
+                    </div>
+                </div>
+                <?php
+            }
+        endforeach;
+    } else {
+        echo "<h3>No new notifications to display.</h3>";
+    }
+    ?>
 </div>
 
-                <div class="notification-date"><?php echo $notifications->nDate; ?></div>
-            </div>
-            <div class="notification-content">
-                <?php echo $notifications->notification; ?>
-            </div>
-        </div>
-    <?php endforeach;?>
-</div>
-       
        
 
     </main>
+
+    <script>
+        function markAsRead(notification_id) {
+    var form = new FormData();
+    form.append('notification_id', notification_id);
+
+    fetch('http://localhost/TravelEase/driver/markNotificationAsRead', {
+        method: 'POST',
+        body: form
+    })
+        .then(async function(response) {
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                console.log('Notification marked as read successfully');
+                window.location.reload();
+            } else {
+                console.error('Error marking notification as read:', response.status);
+            }
+        })
+        .catch(function(error) {
+            console.error('Error marking notification as read:', error);
+        });
+}
+    </script>
 </body>
 </html>

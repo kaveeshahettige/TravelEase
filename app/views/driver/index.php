@@ -18,6 +18,9 @@
             <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>"
                 alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
+            <a class="" href="<?php echo URLROOT; ?>/driver/notification">
+    <i class="bx bx-bell"></i>
+</a>
         </div>
 
 
@@ -66,7 +69,7 @@
             <div class="top-boxes">
                 <div class="box">
                     <?php if (empty($data['agencyDetails'])) : ?>
-                    <h2>Register Your Agency</h2>
+                    <h2>Provide Agency Details</h2>
                     <a href="<?php echo URLROOT; ?>driver/addagency">
                         <button class="edit-button">Click Here</button>
                     </a>

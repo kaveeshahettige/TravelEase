@@ -17,8 +17,12 @@
 <body>
     <nav class="left-menu">
         <div class="user-profile">
-        <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
+            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>"
+                alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'] . ' ' . $_SESSION['user_lname'] ?></span>
+            <a class="" href="<?php echo URLROOT; ?>/driver/notification">
+                <i class="bx bx-bell"></i>
+            </a>
         </div>
 
         <div class="search-bar">
@@ -156,32 +160,27 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label for="seating_capacity">Seating Capacity: <div class="error-message">Please
-                                    enter a valid seating capacity.</div>
-                            </label>
-                            <input type="number" id="seating_capacity" name="seating_capacity" min="1" required>
-
-
-                        </div>
-
-                        <div class="form-group">
-                            <label for="number_of_doors">Number of Doors:
-                                <div class="error-message">Please enter a valid number.</div>
-                            </label>
-
-                            <input type="number" id="number_of_doors" name="number_of_doors" min="1" max="10" required>
-
-                        </div>
-
-
-
-
-
-
-                        
-
                        
+
+                        <div class="form-group">
+                            <label for="seating_capacity">Seating Capacity: <div class="error-message">Please enter a
+                                    valid seating capacity.</div></label>
+                            <input type="text" id="seating_capacity" name="seating_capacity" pattern="[1-9][0-9]*"
+                                title="Please enter a positive number" required>
+                        </div>
+
+
+                        <div class="form-group">
+    <label for="number_of_doors">Number of Doors: <div class="error-message">Please enter a valid number.</div></label>
+    <input type="text" id="number_of_doors" name="number_of_doors" pattern="[1-9][0-9]*" title="Please enter a positive number" required>
+</div>
+
+
+
+
+
+
+
                         <label for="description">Description :</label>
                         <textarea id="description" name="description" rows="4" required></textarea>
 
@@ -191,31 +190,34 @@
 
                         <h3>Without Driver Pricing:</h3>
 
-                            <div class="form-group">
-                                <label for="priceperday">Per Day Price (LKR)*:</label>
-                                <input type="number" id="priceperday" name="priceperday" min="0" required>
-                            </div>
-                            
-                            <h3>With Driver Pricing:</h3>
+                        <div class="form-group">
+    <label for="priceperday">Per Day Price (LKR)*:</label>
+    <input type="text" id="priceperday" name="priceperday" pattern="[0-9]+" title="Please enter a positive number" required>
+</div>
 
-                            <p class="description">Leave this field blank if no driver is provided.</p>
 
-                            <div class="form-group">
-                                <label for="withDriverPerDayr">Per Day Price (LKR)*:</label>
-                                <input type="number" id="withDriverPerDay" name="withDriverPerDay" min="0" >
-                            </div>
-                        
-                        
-                       
-                        
-                            <h3>Daily Kilometer Limit:</h3>
-                            <p class="description">Leave this field blank for unlimited kilometers.</p>
+                        <h3>With Driver Pricing:</h3>
 
-                            <div class="form-group">
-                                <label for="dailyKmLimit">Kilometer Limit (LKR)*:</label>
-                                <input type="number" id="dailyKmLimit" name="dailyKmLimit" min="0" >
-                            </div>
-                        
+                        <p class="description">Leave this field blank if no driver is provided.</p>
+
+                        <div class="form-group">
+    <label for="withDriverPerDay">Per Day Price (LKR)*:</label>
+    <input type="text" id="withDriverPerDay" name="withDriverPerDay" pattern="^[0-9]+$" title="Please enter a positive number" required>
+</div>
+
+
+
+
+
+                        <h3>Daily Kilometer Limit:</h3>
+                        <p class="description">Leave this field blank for unlimited kilometers.</p>
+
+                        <div class="form-group">
+    <label for="dailyKmLimit">Kilometer Limit (LKR)*:</label>
+    <input type="number" id="dailyKmLimit" name="dailyKmLimit" min="0" required>
+</div>
+
+
 
                         <h2>Upload Photos</h2>
 
@@ -420,7 +422,6 @@
                 "City": 5,
                 "CR-V": 5
             },
-            // Add seating capacity limits for other brands and models
         };
 
         if (selectedBrand && selectedModel) {
