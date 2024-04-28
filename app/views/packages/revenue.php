@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/revenue.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
-    <title>Package Revenue</title>
+    <title>Guide Revenue</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
+<?php
+$userData = $data['userData'];
+?>
 <?php
 $activePage = 'packages/revenue'; // Set the active page dynamically based on your logic
 include 'navigation.php';
@@ -35,21 +39,30 @@ include 'navigation.php';
 
 
             <!-- Total Bookings Box -->
+            <?php
+            $bookingCount = $data["bookingCount"];
+            ?>
             <div class="box">
-                <h2>Total Revenue</h2>
-                <p>45,000 LKR</p>
+                <h2>Total Bookings</h2>
+                <p><?php echo $bookingCount;?></p>
             </div>
 
             <!-- Ongoing Bookings Box -->
+            <?php
+            $totalRevenue = $data["totalRevenue"];
+            ?>
             <div class="box">
-                <h2>Revenue Recieved</h2>
-                <p>30,000 LKR</p>
+                <h2>Total Revenue</h2>
+                <p><?php echo $totalRevenue;?> LKR</p>
             </div>
 
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"];
+            ?>
             <div class="box">
-                <h2>To Recieve</h2>
-                <p>12,000 LKR</p>
+                <h2>Total Customers</h2>
+                <p><?php echo $guestCount; ?></p>
             </div>
         </div>
 
@@ -65,36 +78,46 @@ include 'navigation.php';
         </div>
     </div>
 
-    <div class = "revenue-content">
+    <div class="table-content">
         <h2>Revenue Details</h2>
-        <table class="booking-table">
-            <thead>
-            <tr>
-                <th>Date</th>
-                <th>Room Type</th>
-                <th>Revenue</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>2023-10-01</td>
-                <td>Single</td>
-                <td>1500 LKR</td>
-                <td><button class="view-button">View</button></td>
-            </tr>
-            <tr>
-                <td>2023-10-02</td>
-                <td>Double</td>
-                <td>2400 LKR</td>
-                <td><button class="view-button">View</button></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="more-content">
-        <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
+        <?php if (empty($data["finalPayment"]) || !is_array($data["finalPayment"])): ?>
+            <p>No revenue details available.</p>
+        <?php else: ?>
+            <table class="booking-table">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Payment Date</th>
+                    <th>Total Amount</th>
+                    <th>TravelEase Revenue</th>
+                    <th>Payment Amount</th>
+                    <th>Invoice</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($data["finalPayment"] as $key => $payment): ?>
+                    <tr>
+                        <td><?php echo $key + 1; ?></td>
+                        <td><?php echo $payment->paidDate; ?></td>
+                        <td><?php echo number_format($payment->paidAmount / 0.9, 2) . ' LKR'; ?></td>
+                        <td><?php echo number_format(($payment->paidAmount / 0.9) * 0.1, 2) . ' LKR'; ?></td>
+                        <td><?php echo strval($payment->paidAmount) . ' LKR'; ?></td>
+                        <td>
+                            <a href="../public/invoice/<?php echo $payment->invoice; ?>" target="_blank" class="view-button" title="View Document">
+                                <i class="bx bx-show"></i>
+                            </a>
+                            <a href="../public/invoice/<?php echo $payment->invoice; ?>" download="<?php echo $payment->invoice; ?>" class="download-button" title="Download Document">
+                                <i class="bx bx-download"></i>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+            <div class="more-content">
+                <button class="next-page-btn">More Bookings <i class='bx bx-chevron-right'></i></button>
+            </div>
+        <?php endif; ?>
     </div>
 
 </main>

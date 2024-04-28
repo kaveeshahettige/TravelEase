@@ -55,12 +55,35 @@ function createDayCell(date) {
     dayNumber.innerText = date.getDate();
     cell.appendChild(dayNumber);
 
-    cell.addEventListener("click", function () {
-        handleDayClick(date);
-    });
+    // Check if the date is today
+    const today = new Date();
+    if (isSameDate(date, today)) {
+        cell.classList.add("today"); // Add the "today" class
+    }
+
+    // Check if the date is in the past
+    if (date < today && !isSameDate(date, today)) {
+        // If the date is in the past (excluding today), disable the click event handler
+        cell.classList.add("disabled");
+    } else {
+        // If the date is today or in the future, attach the click event handler
+        cell.addEventListener("click", function () {
+            handleDayClick(date);
+        });
+    }
 
     return cell;
 }
+
+function isSameDate(date1, date2) {
+    return (
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate()
+    );
+}
+
+
 
 function getFormattedDateStringForSQL(date) {
     const year = date.getFullYear();
@@ -69,7 +92,6 @@ function getFormattedDateStringForSQL(date) {
 
     return `${year}-${month}-${day}`;
 }
-
 
 function handleDayClick(date) {
     const selectedDateElement = document.getElementById("selected-date");
@@ -83,7 +105,6 @@ function handleDayClick(date) {
     // Add logic here to fetch and display availability information for the selected date
     availabilityInfoElement.innerText = "Availability: Available";
 }
-
 
 function getFormattedDateString(date) {
     const options = { weekday: "short", day: "numeric" };
@@ -165,7 +186,6 @@ function deleteRoom(roomId) {
     updateRoomStatus('delete_room', roomId);
 }
 
-
 function handleFormSubmit() {
     // var selectedDate = document.getElementById('selectedDate').value;
     // if (!selectedDate) {
@@ -174,16 +194,42 @@ function handleFormSubmit() {
     // }
 }
 
-function updateRoomStatus(room_id, date) {
+
+function updateRoomPopup(room_id, startDate) {
+    // Create overlay div
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+
+    const confirmDialog = document.createElement('div');
+    confirmDialog.className = 'confirm-dialog';
+    confirmDialog.innerHTML = `
+        <div class="confirm-message">Are you sure you want to unavailable this date?</div>
+        <div class="buttons">
+            <button class="btn btn-yes" onclick="updateRoomStatus('${room_id}','${startDate}')">Yes</button>
+            <button class="btn btn-no" onclick="cancelCancel()">No</button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(confirmDialog);
+}
+
+function cancelCancel() {
+    // Hide the popup
+    document.body.removeChild(document.querySelector('.overlay'));
+    document.body.removeChild(document.querySelector('.confirm-dialog'));
+}
+
+function updateRoomStatus(room_id, startDate) {
     // Prepare the data to send
-    console.log(room_id, date);
+    console.log(room_id, startDate);
     var requestData = {
         room_id: room_id,
-        date: date
+        startDate: startDate // Adjust variable name to match PHP controller
     };
     const form = new FormData();
     form.append('room_id', room_id);
-    form.append('date', date);
+    form.append('startDate', startDate); // Adjust variable name to match PHP controller
 
     // Make an AJAX request
     fetch(
@@ -195,7 +241,7 @@ function updateRoomStatus(room_id, date) {
     )
         .then(async function(response) {
             if (response.ok) {
-                const data =await response.json();
+                const data = await response.json();
                 console.log(data);
                 console.log('Room status updated successfully');
                 window.location.reload();
@@ -204,22 +250,41 @@ function updateRoomStatus(room_id, date) {
             }
         })
         .catch(function(error) {
-            console.error('Error updating room status:', error);
-        }
-    )
+                console.error('Error updating room status:', error);
+            }
+        )
 }
 
-function deleteRoomStatus(room_id,date) {
+function deleteRoomPopup(room_id, startDate) {
+    // Create overlay div
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+
+    const confirmDialog = document.createElement('div');
+    confirmDialog.className = 'confirm-dialog';
+    confirmDialog.innerHTML = `
+        <div class="confirm-message">Are you sure you want to make available this date again?</div>
+        <div class="buttons">
+            <button class="btn btn-yes" onclick="deleteRoomStatus('${room_id}','${startDate}')">Yes</button>
+            <button class="btn btn-no" onclick="cancelCancel()">No</button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(confirmDialog);
+}
+
+function deleteRoomStatus(room_id, startDate) {
     // Prepare the data to send
     var requestData = {
         room_id: room_id,
-        date: date
+        startDate: startDate // Adjust variable name to match PHP controller
     };
     const form = new FormData();
     form.append('room_id', room_id);
-    form.append('date', date);
+    form.append('startDate', startDate); // Adjust variable name to match PHP controller
 
-    console.log(room_id,date);
+    console.log(room_id, startDate);
     // Make an AJAX request
     fetch(
         'http://localhost/TravelEase/hotel/deleteRoomStatus',
@@ -230,7 +295,7 @@ function deleteRoomStatus(room_id,date) {
     )
         .then(async function(response) {
             if (response.ok) {
-                const data =await response.json();
+                const data = await response.json();
                 console.log('Room Status deleted successfully');
                 window.location.reload();
             } else {
@@ -238,9 +303,9 @@ function deleteRoomStatus(room_id,date) {
             }
         })
         .catch(function(error) {
-            console.error('Error deleting room:', error);
-        }
-    )
+                console.error('Error deleting room:', error);
+            }
+        )
 }
 
 

@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/reviews.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
-    <title>Package Reviews</title>
+    <title>Guide Reviews</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
+<?php
+$userData = $data['userData'];
+?>
 <?php
 $activePage = 'packages/review'; // Set the active page dynamically based on your logic
 include 'navigation.php';
@@ -35,21 +38,30 @@ include 'navigation.php';
 
 
             <!-- Total Bookings Box -->
+            <?php
+            $bookingCount = $data["bookingCount"];
+            ?>
             <div class="box">
-                <h2>Total Reviews</h2>
-                <p>100</p>
+                <h2>Total Bookings</h2>
+                <p><?php echo $bookingCount;?></p>
             </div>
 
             <!-- Ongoing Bookings Box -->
+            <?php
+            $totalRevenue = $data["totalRevenue"];
+            ?>
             <div class="box">
-                <h2>Total Bookings</h2>
-                <p>100</p>
+                <h2>Total Revenue</h2>
+                <p><?php echo $totalRevenue;?> LKR</p>
             </div>
 
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"];
+            ?>
             <div class="box">
                 <h2>Total Customers</h2>
-                <p>50</p>
+                <p><?php echo $guestCount; ?></p>
             </div>
         </div>
     </div>
@@ -66,24 +78,33 @@ include 'navigation.php';
     <div class="review-content">
         <?php
         $reviews = $data["reviews"];
-        //           var_dump($reviews);
         foreach ($reviews as $review): ?>
             <div class="review-box">
-                <div class="review-sub-content">
                     <div class="review-image">
                         <!-- You may want to display the actual user image if available -->
-                        <img src="<?php echo URLROOT; ?>/images/hotel/wikum.jpg" alt="Guest Photo">
+                        <img src="<?php echo URLROOT; ?>/images/hotel/<?php echo $review->profile_picture; ?>" alt="Guest Photo">
                     </div>
-                    <h2><?= $review->fname; ?></h2>
-                    <!--                        <p>Date: --><?php //= $review->created_at; ?><!--</p>-->
-                    <p class="review-text"><?= $review->comment; ?></p>
-                    <button class="read-more-btn" onclick="openModal('<?= $review->fname; ?>', '<?= $review->created_at; ?>', '<?= $review->comment; ?>')">Read More</button>
+                <div class="eview-sub-content">
+                    <h2><?php echo $review->fname; ?></h2>
+                    <p>Date: <?php echo $review->time; ?></p>
+                    <p class="review-text"><?php echo $review->feedback; ?></p>
+                    <p>Rating: <?= getStarRating($review->rating); ?></p>
+                    <p>Date: <?= $review->time; ?></p>
                 </div>
             </div>
         <?php endforeach; ?>
     </div>
 
 
+    <?php
+    function getStarRating($rating) {
+        $stars = '';
+        for ($i = 0; $i < $rating; $i++) {
+            $stars .= '<i class="bx bxs-star"></i>';
+        }
+        return $stars;
+    }
+    ?>
 
     <div class="more-content">
         <button class="next-page-btn">More Reviews <i class='bx bx-chevron-right'></i></button>

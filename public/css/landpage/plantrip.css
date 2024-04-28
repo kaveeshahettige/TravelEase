@@ -135,3 +135,16 @@ body{
     outline: none; /* This removes the default focus outline as well */
     font-size: 15px;
 }
+
+.datediv input{
+    margin:0px 10px 0px 10px;
+}
+
+
+.datediv #enddate{
+    margin-left: 20px;
+}
+
+.datediv,.wherediv{
+    padding-left: 50px;
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/manager-bookings.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
     <title>Business Manager Bookings</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
@@ -32,49 +32,111 @@ include 'navigation.php';
             <div class="img-box">
                 <img src="<?php echo URLROOT?>/images/dashboard.jpg" alt="hotel Image">
             </div>
-           
 
-            <!-- Total Bookings Box -->
+
+            <?php
+            $bookingsCount = $data["bookingsCount"]; ?>
             <div class="box">
                 <h2>Total Bookings</h2>
-                <p>120</p>
+                <p><?php echo $bookingsCount ?></p>
             </div>
-        
+
+
             <!-- Ongoing Bookings Box -->
+            <?php
+            $OngoingCount = $data["OngoingCount"]; ?>
             <div class="box">
                 <h2>Ongoing Bookings</h2>
-                <p>35</p>
+                <p><?php echo $OngoingCount ?></p>
             </div>
         
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"]; ?>
             <div class="box">
                 <h2>Total Customers</h2>
-                <p>10</p>
+                <p><?php echo $guestCount ?></p>
             </div>
         </div>
         </div>
 
-        <div class="search-content">
-        <div class="booking-search">
-            <input type="text" id="booking-search" placeholder="Search for Boookings">
-            <button onclick="filterBookings()">
-                <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
-            </button>
-        </div>
-        </div>
-       
         <div class="table-content">
-        <h2>All Bookings</h2>
+            <div class="tab">
+                <a href="<?php echo URLROOT?>/businessmanager/bookings"><button class="tablinks active">Ongoing Bookings</button></a>
+                <a href="<?php echo URLROOT?>/businessmanager/completedBookings"><button class="tablinks">Completed Bookings</button></a>
+                <a href="<?php echo URLROOT?>/businessmanager/rejectedBookings"><button class="tablinks">Cancelled Bookings</button></a>
+            </div>
+        </div>
+
+        <div class="search-content">
+            <div class="booking-search">
+                <input type="text" id="booking-search" placeholder="Enter Name">
+                <input type="date" id="start-date" placeholder="Start Date">
+                <input type="date" id="end-date" placeholder="End Date">
+                <button onclick="filterBookings()">
+                    <i class="bx bx-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <script>
+            function filterBookings() {
+                var input, filter, startDate, endDate, table, tr, tdGuestName, tdServiceType, tdServiceProvider, tdStartDate, tdEndDate, i, txtGuestName, txtServiceType, txtServiceProvider;
+                input = document.getElementById("booking-search");
+                filter = input.value.toUpperCase();
+                startDate = document.getElementById("start-date").value;
+                endDate = document.getElementById("end-date").value;
+                table = document.querySelector(".booking-table");
+                tr = table.getElementsByTagName("tr");
+
+                for (i = 0; i < tr.length; i++) {
+                    tdGuestName = tr[i].getElementsByTagName("td")[1]; // Index 1 for Guest Name column
+                    tdServiceType = tr[i].getElementsByTagName("td")[2]; // Index 2 for Service Type column
+                    tdServiceProvider = tr[i].getElementsByTagName("td")[3]; // Index 3 for Service Provider column
+                    tdStartDate = tr[i].getElementsByTagName("td")[4]; // Index 4 for Start Date column
+                    tdEndDate = tr[i].getElementsByTagName("td")[5]; // Index 5 for End Date column
+
+                    if (tdGuestName && tdServiceType && tdServiceProvider) {
+                        txtGuestName = tdGuestName.textContent || tdGuestName.innerText;
+                        txtServiceType = tdServiceType.textContent || tdServiceType.innerText;
+                        txtServiceProvider = tdServiceProvider.textContent || tdServiceProvider.innerText;
+
+                        if ((txtGuestName.toUpperCase().indexOf(filter) > -1 || txtServiceType.toUpperCase().indexOf(filter) > -1 || txtServiceProvider.toUpperCase().indexOf(filter) > -1) &&
+                            (compareDates(startDate, tdStartDate.textContent.trim()) && compareDates(tdEndDate.textContent.trim(), endDate))) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+
+            function compareDates(start, end) {
+                if (!start || !end) return true;
+                var startDate = new Date(start);
+                var endDate = new Date(end);
+                return startDate <= endDate;
+            }
+        </script>
+
+
+
+
+        <div class="table-content">
+            <h2>Ongoing Bookings</h2>
             <table class="booking-table">
                 <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Guest Name</th>
-                        <th>Service Type</th>
-                        <th>Service Name</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
+                <tr>
+                    <th>No</th>
+                    <th>Guest Name</th>
+                    <th>Service Type</th>
+                    <th>Service Provider</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Service Details</th>
+                    <th>Payment Amount</th>
+                    <th>Action</th>
+                </tr>
                 </thead>
                 <tbody>
                 <?php
@@ -84,52 +146,25 @@ include 'navigation.php';
 
                     <tr>
                         <td><?php echo $key + 1; ?></td>
-                        <td><?php echo $booking->user_fname; ?></td>
-                        <td><?php
-                            switch ($booking->provider_type) {
-                                case 0:
-                                    echo "Admin";
-                                    break;
-                                case 1:
-                                    echo "Traveler";
-                                    break;
-                                case 2:
-                                    echo "Business Manager";
-                                    break;
-                                case 3:
-                                    echo "Hotel";
-                                    break;
-                                case 4:
-                                    echo "Transport Provider";
-                                    break;
-                                case 5:
-                                    echo "Guide";
-                                    break;
-                                default:
-                                    echo "Unknown";
-                                    break;
-                            }
-                            ?></td>
-                        <td><?php echo $booking->provider_fname; ?></td>
-                        <td><?php echo !empty($booking->payment_id) ? "Paid" : "Not Paid"; ?></td>
+                        <td><?php echo $booking->traveler_name; ?></td>
+                        <td><?php echo $booking->service_type; ?></td>
+                        <td><?php echo $booking->serviceprovider_name; ?></td>
+                        <td><?php echo $booking->startDate; ?></td>
+                        <td><?php echo $booking->endDate; ?></td>
+                        <td><?php echo $booking->service_detail?></td>
+                        <td><?php echo $booking->payment_amount; ?></td>
                         <td>
-                            <button class="view-button" onclick="openPopup(); updatePopupDetails(
-                                    '<?php echo $booking->user_profile_picture; ?>',
-                                    '<?php echo $booking->user_fname; ?>',
-                                    '<?php echo $booking->provider_type; ?>',
-                                    '<?php echo $booking->provider_fname; ?>',
-                                    '<?php echo !empty($booking->payment_id) ? "Paid" : "Not Paid"; ?>'
-                                    )">
+                            <button class="view-button" onclick="openPopup(<?php echo $key; ?>)">
                                 <i class='bx bx-show'></i>
                             </button>
-                        </td>
                     </tr>
 
                 <?php endforeach; ?>
-
                 </tbody>
             </table>
         </div>
+
+
 
         <div class="more-content">
             <button class="next-page-btn">See More <i class='bx bx-chevron-right'></i></button>
@@ -148,6 +183,7 @@ include 'navigation.php';
                 <!-- Add more details as needed -->
             </div>
         </div>
+
 
         <script src= "<?php echo URLROOT?>/public/js/businessmanager/bookings.js"></script>
        

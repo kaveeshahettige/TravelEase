@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/settingssub.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
-    <title>Package - Edit</title>
+    <title>Guide - Edit</title>
     <link rel="icon" type="image/x-icon" href="../Images/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
+<?php
+$userData = $data['userData'];
+?>
 <?php
 $activePage = 'packages/settings'; // Set the active page dynamically based on your logic
 include 'navigation.php';
@@ -28,26 +31,21 @@ include 'navigation.php';
         <div id="base">
             <?php
             $userData = $data['userData'];
-            $hotelData = $data['hotelData'];
             ?>
             <h3 style="padding-left:20px;">Basic Info</h3>
             <div id="form">
                 <form class="registration-form">
                     <div>
                         <div class="form-group">
-                            <label for="hotel-name">Hotel Name</label>
+                            <label for="hotel-name">Name</label>
                             <input type="text" id="hotel-name" name="hotel-name" placeholder="Hotel Name" value="<?php echo $userData->fname; ?>" required>
                         </div>
-                        <div class="form-group">
-                            <label for="hotel-type">Hotel Type</label>
-                            <input type="text" id="hotel-type" name="hotel-type" placeholder="Hotel Type" value="<?php echo $hotelData->hotel_type; ?>" required>
-                        </div>
-                    </div>
-                    <div>
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input type="text" id="email" name="email" placeholder="email@gmail.com" value="<?php echo $userData->email; ?>" required>
                         </div>
+                    </div>
+                    <div>
                         <div class="form-group">
                             <label for="phone-number">Phone Number</label>
                             <input type="text" id="phone-number" name="phone-number" placeholder="0764532789" value="<?php echo $userData->number; ?>" required>
@@ -61,82 +59,108 @@ include 'navigation.php';
                     </div>
                 </form>
             </div>
-        </div>
 
-
-        <div id="base">
             <?php
-            $userData = $data['userData'];
-            $hotelData = $data['hotelData'];
+            $guideData = $data['guideData'];
             ?>
-            <h3 style="padding-left:20px;">Add Details</h3>
+            <h3 style="padding-left:20px;">Additional Details</h3>
             <div id="form">
-                <form class="registerForm">
-
+                <form class="registration-form" method="POST" action="<?php echo URLROOT; ?>/packages/updateGuideDetails/<?php echo $_SESSION['user_id']; ?>">
                     <div>
                         <div class="form-group">
-                            <label for="altPhoneNumber">Alternate Phone Number</label>
-                            <input type="text" id="altPhoneNumber" name="altPhoneNumber" placeholder="Alternate Phone Number" value="<?php echo $hotelData->alt_phone_number; ?>">
+                            <label for="address">Address</label>
+                            <input type="text" id="address" name="address" placeholder="Enter address" required value="<?php echo $guideData->address; ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="pricePerDay">Price Per Day</label>
+                            <input type="number" id="pricePerDay" name="pricePerDay" placeholder="Enter price per day" required value="<?php echo $guideData->pricePerDay; ?>">
                         </div>
                     </div>
 
                     <div>
                         <div class="form-group">
-                            <label for="managerInfo">Manager's Name</label>
-                            <input type="text" id="managerInfo" name="managerInfo" placeholder="Manager's name" value="<?php echo $hotelData->manager_name; ?>">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" placeholder="Enter city" required value="<?php echo $guideData->city; ?>">
                         </div>
-                        <div>
-                            <div class="form-group">
-                                <label for="managerPhoneNumber">Manager's Phone Number</label>
-                                <input type="text" id="managerPhoneNumber" name="managerPhoneNumber" placeholder="0764532789" value="<?php echo $hotelData->manager_phone_number; ?>" required>
+                        <div class="form-group">
+                            <label for="province">Province</label>
+                            <input type="text" id="province" name="province" placeholder="Enter province" required value="<?php echo $guideData->province; ?>">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label for="facebook">Facebook</label>
+                            <input type="text" id="facebook" name="facebook" placeholder="Enter Facebook URL" value="<?php echo $guideData->facebook; ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="instagram">Instagram</label>
+                            <input type="text" id="instagram" name="instagram" placeholder="Enter Instagram URL" value="<?php echo $guideData->instagram; ?>">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <input type="text" id="category" name="category" placeholder="Enter category" value="<?php echo $guideData->category; ?>">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label>Languages</label><br>
+                            <div class="column">
+                                <?php
+                                $languages = explode(', ', $guideData->languages);
+                                $allLanguages = ["Sinhala", "English", "Tamil", "Spanish", "French", "German", "Italian", "Chinese", "Japanese", "Korean", "Arabic", "Russian", "Hindi"];
+                                $halfLength = ceil(count($allLanguages) / 2); // Split languages into two columns
+                                $firstColumn = array_slice($allLanguages, 0, $halfLength);
+                                foreach ($firstColumn as $language) {
+                                    $checked = in_array(strtolower($language), $languages) ? 'checked' : '';
+                                    echo '<div class="checkbox-container">';
+                                    echo '<input type="checkbox" id="language-' . strtolower($language) . '" name="languages[]" value="' . strtolower($language) . '" ' . $checked . '>';
+                                    echo '<label for="language-' . strtolower($language) . '">' . $language . '</label>';
+                                    echo '</div>';
+                                }
+                                ?>
+                            </div>
+                            <div class="column">
+                                <?php
+                                $secondColumn = array_slice($allLanguages, $halfLength);
+                                foreach ($secondColumn as $language) {
+                                    $checked = in_array(strtolower($language), $languages) ? 'checked' : '';
+                                    echo '<div class="checkbox-container">';
+                                    echo '<input type="checkbox" id="language-' . strtolower($language) . '" name="languages[]" value="' . strtolower($language) . '" ' . $checked . '>';
+                                    echo '<label for="language-' . strtolower($language) . '">' . $language . '</label>';
+                                    echo '</div>';
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
 
                     <div>
                         <div class="form-group">
-                            <label for="Address">Street Address</label>
-                            <input type="text" id="Address" name="Address" placeholder="Address" value="<?php echo $hotelData->street_address; ?>">
+                            <label for="GuideRegNumber">Guide Registration Number</label>
+                            <input type="text" id="GuideRegNumber" name="GuideRegNumber" placeholder="Enter registration number" value="<?php echo $guideData->GuideRegNumber; ?>">
                         </div>
                         <div class="form-group">
-                            <label for="city">City</label>
-                            <input type="text" id="city" name="city" placeholder="City" value="<?php echo $hotelData->city; ?>">
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="form-group">
-                            <label for="state">Province</label>
-                            <input type="text" id="state" name="state" placeholder="Province" value="<?php echo $hotelData->state_province; ?>">
+                            <label for="LisenceExpDate">License Expiry Date</label>
+                            <input type="date" id="LisenceExpDate" name="LisenceExpDate" placeholder="Select expiry date" value="<?php echo $guideData->LisenceExpDate; ?>">
                         </div>
                     </div>
 
                     <div>
                         <div class="form-group">
-                            <label for="website">Website</label>
-                            <input type="url" id="website" name="website" placeholder="Hotel Website" value="<?php echo $hotelData->website; ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="facebook">Facebook</label>
-                            <input type="url" id="facebook" name="facebook" placeholder="Hotel Facebook" value="<?php echo $hotelData->facebook; ?>">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" rows="4" placeholder="Enter description" required><?php echo $guideData->description; ?></textarea>
                         </div>
                     </div>
 
                     <div>
                         <div class="form-group">
-                            <label for="twitter">Twitter Handle</label>
-                            <input type="url" id="twitter" name="twitter" placeholder="Twitter Handle" value="<?php echo $hotelData->twitter; ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="instagram">Instagram Handle</label>
-                            <input type="url" id="instagram" name="instagram" placeholder="Instagram Handle" value="<?php echo $hotelData->instagram; ?>">
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="form-group">
-                            <label for="additionalNotes">Additional Comments/Notes</label>
-                            <textarea id="additionalNotes" name="additionalNotes" rows="4" placeholder="Any other relevant information or special requests"><?php echo $hotelData->additional_notes; ?></textarea>
+                            <label for="sites">Sites</label>
+                            <textarea id="sites" name="sites" rows="2" placeholder="Enter sites"><?php echo $guideData->sites; ?></textarea>
                         </div>
                     </div>
 
@@ -148,8 +172,9 @@ include 'navigation.php';
                     </div>
                 </form>
             </div>
-        </div>
 
+
+        </div>
     </div>
 </main>
 </body>

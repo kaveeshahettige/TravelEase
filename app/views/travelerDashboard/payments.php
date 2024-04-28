@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">    
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/travelerDashboard/bookings.css">    
     <title>TravelEase</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -32,6 +32,7 @@
             <li><a href="<?php echo URLROOT; ?>travelerDashboard/payments/<?php echo $_SESSION['user_id']?>" class="nav-button active"><i class='bx bxs-package bx-sm' class="nav-button "></i></i> Payments</a></li>
             <li><a href="<?php echo URLROOT; ?>travelerDashboard/notifications/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bxs-report bx-sm' class="nav-button "></i> Notifications</a></li>
             <li><a href="<?php echo URLROOT; ?>travelerDashboard/previoustrips/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bx-line-chart bx-sm' class="nav-button "></i> Previous Trips</a></li>
+            <li><a href="<?php echo URLROOT?>travelerDashboard/cart/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bx-cart bx-sm'></i> Wish List</a></li>
             <li><a href="<?php echo URLROOT?>travelerDashboard/settings/<?php echo $_SESSION['user_id']?>" class="nav-button "><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
            
         </ul>
@@ -65,18 +66,16 @@
                 <h2>Total Payments</h2>
                 <p><?php  echo $data['noofPayments']?></p>
             </div>
-        
-            <!-- Ongoing Bookings Box
             <div class="box">
-                <h2>Ongoing Bookings</h2>
-                <p>35</p>
+                <h2>MonthlyTotal Payments</h2>
+                <p><?php  echo $data['noofPaymentsMonth']?></p>
+            </div>
+            <div class="box">
+                <h2>Monthly Payment Amount</h2>
+                <p><?php  echo $data['amountofPaymentsMonth']?>.00 &nbsp LKR</p>
             </div>
         
-            <!-- Customers Box -->
-            <!--<div class="box">
-                <h2>Total Customers</h2>
-                <p>10</p>
-            </div> -->
+           
         </div>
         </div>
         <!-- <?php echo var_dump($data['payments']) ?> -->
@@ -90,49 +89,43 @@
         </div>
         </div>
 
-        <div class="table-content">
-            <h2>Payments Details</h2>
-            <table class="booking-table">
-                <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Payment ID</th>
-                    <th>Booking ID</th>
-                    <!-- <th>Booking</th> -->
-                    <th>Amount (LKR)</th>
-                   
-                </tr>
-                </thead>
-                <tbody>
+        <div class="card-container">
+    <?php
+    $count = 1;
+    if (!empty($data['payments']) && is_array($data['payments'])) {
+        foreach ($data['payments'] as $payment) {
+            echo '<div class="card" style="background-color: #fff8e9;">';
+            echo '<div class="card-header">';
+            echo '<h3>' . $count . '</h3>';
+            echo '</div>';
+            echo '<div class="card-body">';
+            // echo '<p><strong>Payment ID:</strong> ' . $payment->payment_id . '</p>';
+            // echo '<p><strong>Booking ID:</strong> ' . $payment->booking_id . '</p>';
+            echo '<p><strong>Booking:</strong> ' . $payment->fname . '</p>';
+            echo '<p><strong>Amount (LKR):</strong> ' . $payment->amount . '.00</p>'; // Assuming all payments for the same booking have the same amount
+            echo '<p><strong>Date of Payment:</strong> ' . $payment->payment_date . '</p>'; // Assuming all payments for the same booking have the same booking date
 
+            // Add additional card content or buttons as needed
 
-                <?php
-$count = 1;
-
-if (!empty($data['payments']) && is_array($data['payments'])) {
-    foreach ($data['payments'] as $payment ) {
-        echo '<tr class="t-row">';
-        echo '<td>' . $count . '</td>';
-        echo '<td>' . $payment->payment_id . '</td>';
-        echo '<td>' .$payment->booking_id .'</td>';
-        // echo '<td>' . $payment->startDate . '</td>';
-        echo '<td>' . $payment->amount . '</td>';
-        echo '</tr>';
-        $count++;
+            echo '</div>'; // card-body
+            echo '</div>'; // card
+            $count++;
+        }
+    } else {
+        echo '<div class="card">';
+        echo '<div class="card-body">';
+        echo '<p>No payments available</p>';
+        echo '</div>'; // card-body
+        echo '</div>'; // card
     }
-} else {
-    echo '<tr><td colspan="4">No payments available</td></tr>';
-}
-?>
-
-                </tbody>
-            </table>
-        </div>
+    ?>
+</div>
 
 
-        <div class="more-content">
+
+        <!-- <div class="more-content">
             <button class="next-page-btn">More <i class='bx bx-chevron-right'></i></button>
-        </div>
+        </div> -->
 
     </main>
 

@@ -174,7 +174,7 @@ font-size: 40px;
     display: flex;
   flex-direction: row; /* Stack items vertically */
    /* Center items horizontally */
-  text-align: center; 
+  text-align: left; 
 }
 .divleft1_1 img{
     width: 300px;
@@ -191,7 +191,7 @@ font-size: 40px;
     display: flex;
   flex-direction: row; /* Stack items vertically */
    /* Center items horizontally */
-  text-align: center; 
+  text-align: left; 
 }
 .divright1_1 img{
     width: 300px;
@@ -201,16 +201,25 @@ font-size: 40px;
 
 /* /////////////mainsection3////////////////// */
 
+.resultPagem2{
+    margin-left: 5%;
+    margin-right: 5%;
+}
 .resultPagem3{
     margin-top: 70px;
+    
 }
 
 /* ////////////////// */
+
 .main2images{
     display: grid;
     grid-template-columns:33% 33% 33%;
     column-gap: 1%;
     align-items: center;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding-top: 0px;
 }
 
 .main2images .main2img1content{
@@ -219,6 +228,9 @@ font-size: 40px;
     grid-template-rows: 65% 10%;
     margin: 2%;
     margin-top: 0px;
+    padding: 0px 0px 20px 0px;
+    border-radius: 5%;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
     
 }
 .main2images .main2img1content:hover{
@@ -254,9 +266,10 @@ font-size: 40px;
 
 }
 .main2images img{
-    width: 90%;
-    height:90%;
+    width: 100%;
+    height:100%;
     padding: 0px;
+    border-radius: 2%;
 }
 
 .main2images p{
@@ -295,8 +308,12 @@ font-size: 40px;
 }
 
 /* ////resultPagem4/// */
+.resultPagem4{
+    margin-left: 5%;
+    margin-right: 5%;
+}
 .resultPagem4 .vehicles{
-    display: flex;
+    display: grid;
     flex-direction: column;
     gap: 10px;
 }
@@ -307,6 +324,7 @@ font-size: 40px;
    padding-left: 50px;
    padding-right: 100px;
    align-items: center;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     
 }
 .resultPagem4 .vehicles .vehicledetails:hover{
@@ -316,8 +334,14 @@ font-size: 40px;
     padding-left: 50px;
     padding-right: 100px;
    align-items: center;
-   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
     
+}
+.vehicles img{
+    width: 350px;
+    height: 200px;
+    margin-top: 35px;
+    border-radius: 5%;
 }
 
 .vehicles .vehicledetails .vehicleIndetails{
@@ -418,3 +442,192 @@ font-size: 40px;
     margin: 0 10px;
     transition: color 0.3s ease;
 }
+.pickupTimeField {
+    margin-bottom: 20px;
+}
+
+.pickupTimeField label {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.pickupTimeField input[type="time"] {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Styles for the modal */
+.modal {
+    display: none; /* Hide the modal by default */
+    position: fixed; /* Position the modal */
+    z-index: 1; /* Make sure it appears on top of other elements */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scrolling if needed */
+    background-color: rgba(0,0,0,0.5); /* Black background with transparency */
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* 80% width */
+}
+
+/* Close button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.continue-button {
+    position: fixed;
+    bottom: 20px; /* Adjust as needed to leave space from the bottom */
+    right: 20px; /* Adjust as needed to leave space from the right */
+    background-color: #007bff; /* Blue background color */
+    color: white; /* White text color */
+    border: none;
+    padding: 10px 20px; /* Adjust padding as needed */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.continue-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* ////////////// */
+
+.modalpt {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  .modalpt-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  .closept {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .closept:hover,
+  .closept:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+
+/* /////////// */
+
+/* Notification CSS */
+#cartNotification {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #36923b;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#removecartNotification{
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #c33427;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Popup CSS */
+.popup {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #c33427;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.popup1 {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #b43327;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+.no-hotels-message {
+        display: block;
+        background-color: #ffcccc;
+        color: #cc0000;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        width:40%;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

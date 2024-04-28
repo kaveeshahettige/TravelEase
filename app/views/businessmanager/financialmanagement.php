@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/manager-financial management.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <title>Business Financial Management</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -31,33 +32,43 @@ include 'navigation.php';
                 <div class="img-box">
                     <img src="<?php echo URLROOT?>/images/dashboard.jpg" alt="hotel Image">
                 </div>
-               
-    
-                <!-- Total Bookings Box -->
+
+
+                <?php
+                $bookingsCount = $data["bookingsCount"]; ?>
                 <div class="box">
-                    <h2>Total Revenue</h2>
-                    <p>45,000 LKR</p>
+                    <h2>Total Bookings</h2>
+                    <p><?php echo $bookingsCount ?></p>
                 </div>
-            
+
+
                 <!-- Ongoing Bookings Box -->
+                <?php
+                $OngoingCount = $data["OngoingCount"]; ?>
                 <div class="box">
-                    <h2>Revenue Recieved</h2>
-                    <p>30,000 LKR</p>
+                    <h2>Ongoing Bookings</h2>
+                    <p><?php echo $OngoingCount ?></p>
                 </div>
-            
+
                 <!-- Customers Box -->
+                <?php
+                $guestCount = $data["guestCount"]; ?>
                 <div class="box">
-                    <h2>To Recieve</h2>
-                    <p>12,000 LKR</p>
+                    <h2>Total Customers</h2>
+                    <p><?php echo $guestCount ?></p>
                 </div>
             </div>
         
                 
             </div>
 
-        <div class = "search-content">
-            <input type="text" id="transaction-search" placeholder="Search Transactions">
-            <button class="filter-button"><i class='bx bx-filter-alt'></i></button>
+        <div class="search-content">
+            <div class="booking-search">
+                <input type="text" id="booking-search" placeholder="Search for New Transactions">
+                <button onclick="filterBookings()">
+                    <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
+                </button>
+            </div>
         </div>
         
         <div class="table-content">
@@ -65,43 +76,54 @@ include 'navigation.php';
             <table class="transaction-table">
                 <thead>
                 <tr>
-                    <th>Service Provider</th>
+                    <th>Service Provider Name</th>
+                    <th>Service Type</th>
                     <th>Total Amount</th>
                     <th>To Paid</th>
-                    <th>Booking Date</th>
+                    <th>Current Date</th>
                     <th>Account Number</th>
-                    <th>Payment Status</th>
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
-                $transactions = $data['transactionData'];
-                foreach ($transactions as $transaction): ?>
+                $finalTransactionData = $data['finalTransactionData'];
+                if (isset($finalTransactionData) && is_array($finalTransactionData) && count($finalTransactionData) > 0) {
+                foreach ($finalTransactionData as $key => $transaction): ?>
+                        <tr>
+                            <td>
+                                <div class="service-provider-info">
+                                    <?php
+                                    $profilePicture = $transaction[0]->profile_picture ?? 'profile.png';
+                                    ?>
+                                    <img src="../public/images/<?php echo $profilePicture ?>" alt="Service Provider Photo">
+
+                                    <span><?php echo $transaction[0]->serviceprovider_name; ?></span>
+                                </div>
+                            </td>
+                            <td><?php echo $transaction[0]->service_type; ?></td>
+                            <td><?php echo number_format($data['totalAmount'], 2); ?> LKR</td>
+                            <td><?php echo number_format($data['totalAmount'] * 0.90, 2); ?> LKR</td>
+                            <td><?php echo date('Y-m-d'); ?></td>
+                            <td><?php echo $transaction[0]->account_number; ?></td>
+                            <td>
+                                <a href="<?php echo URLROOT; ?>businessmanager/payment?serviceProvider_id=<?php echo $transaction[0]->serviceProvider_id; ?>&totalAmount=<?php echo $data['totalAmount']; ?>" class="view-button">
+                                    Proceed Payment
+                                </a>
+                            </td>
+                        </tr>
+                <?php endforeach;
+                } else {
+                    echo "<tr><td colspan='7'>No transactions found.</td></tr>";
+                }
+                ?>
                     <tr>
-                        <td>
-                            <div class="service-provider-info">
-                                <img src="<?php echo $transaction->profile_picture ?>" alt="Service Provider Photo">
-                                <span><?php echo $transaction->service_provider_name; ?></span>
-                            </div>
-                        </td>
-                        <td><?php echo $transaction->amount; ?> LKR</td>
-                        <td><?php echo ($transaction->amount * 0.85); ?> LKR</td>
-                        <td><?php echo date('Y-m-d', strtotime($transaction->date)); ?></td>
-                        <td><?php echo $transaction->account_number; ?></td>
-
-                        <td class="<?php echo strtolower($transaction->payment_status); ?>">
-                            <?php echo ($transaction->payment_status == 'Paid') ? 'Paid' : 'Pending'; ?>
-                        </td>
-
-
-                        <td><button class="view-button" onclick="openPopup(<?php echo $transaction->transaction_id; ?>)">View</button></td>
                     </tr>
-                <?php endforeach; ?>
-                </tbody>
+              </tbody>
             </table>
-
         </div>
+
+
 
     </main>
 </body>

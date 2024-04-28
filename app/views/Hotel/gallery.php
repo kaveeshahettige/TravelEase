@@ -36,49 +36,53 @@ include 'navigation.php';
                     <img src="<?php echo URLROOT; ?>/images/hotel/dashboard.jpg" alt="hotel Image">
                 </div>
 
-
                 <!-- Total Bookings Box -->
+                <?php $bookingsCount = $data["bookingsCount"]; ?>
                 <div class="box">
                     <h2>Total Bookings</h2>
-                    <p>120</p>
+                    <p><?php echo $bookingsCount ?></p>
                 </div>
 
-                <!-- Ongoing Bookings Box -->
+                <?php $totalRevenue = $data["totalRevenue"]; ?>
                 <div class="box">
-                    <h2>Ongoing Bookings</h2>
-                    <p>35</p>
+                    <h2>Total Revenue</h2>
+                    <p><?php echo $totalRevenue ?> LKR</p>
                 </div>
 
-                <!-- Customers Box -->
+                <?php
+                $guestCount = $data["guestCount"]; ?>
                 <div class="box">
                     <h2>Total Customers</h2>
-                    <p>10</p>
+                    <p><?php echo $guestCount?></p>
                 </div>
             </div>
         </div>
 
         <div class="notifications-content">
             <?php
-                $notifications = $data["notifications"];
+            $notifications = $data["notifications"];
+            if (!empty($notifications)) {
                 foreach ($notifications as $key => $notification):
-                var_dump($notification);
-                ?>
+                    ?>
+                    <div class="notification-item">
+                        <!-- Assuming you have an image path stored in $notification->sender_image -->
+                        <img src="<?php echo $notification->sender_profile_picture; ?>" alt="Sender Image" class="sender-image">
 
-                <div class="notification-item">
-                    <!-- Assuming you have an image path stored in $notification->sender_image -->
-                    <img src="<?php echo $notification->sender_image; ?>" alt="Sender Image" class="sender-image">
-
-                    <div class="notification-text-container">
-                        <span class="sender-name"><?php echo $notification->sender_name; ?></span>
-                        <span class="notification-date"><?php echo $notification->created_at; ?></span>
-                        <p class="notification-text"><?php echo $notification->message; ?></p>
-                        <a href="<?php echo URLROOT . '/hotel/markNotificationAsRead/' . $notification->id; ?>" class="mark-as-read-btn">Mark as Read</a>
+                        <div class="notification-text-container">
+                            <span class="sender-name"><?php echo $notification->sender_name; ?></span>
+                            <span class="notification-date"><?php echo $notification->nDate; ?></span>
+                            <p class="notification-text"><?php echo $notification->notification; ?></p>
+                            <button onclick="markAsRead(<?php echo $notification->notification_id; ?>)" class="mark-as-read-btn">Mark as read</button>
+                        </div>
                     </div>
-
-                    <div class="read-status-dot <?php echo $notification->is_read ? 'read' : 'unread'; ?>"></div>
-                </div>
-            <?php endforeach; ?>
+                <?php
+                endforeach;
+            } else {
+                echo "<h3>No new notifications to display.</h3>";
+            }
+            ?>
         </div>
+
 
         <script src= "<?php echo URLROOT?>/public/js/hotel/notifications.js"></script>
     </main>

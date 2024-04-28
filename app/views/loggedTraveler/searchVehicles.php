@@ -5,12 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>TravelEase</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
-    <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/styletr.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/styleve.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>/js/loggedTraveler/script.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&libraries=places"></script>
     <style>
-
+        /* Style for the suggestions dropdown */
+        .pac-container {
+            background-color: #FFF;
+            z-index: 1000;
+            position: fixed;
+            display: inline-block;
+            float: left;
+        }
     </style>
 </head>
 <body>
@@ -24,7 +32,7 @@
             <li><a href="<?php echo URLROOT?>loggedTraveler/index">Home</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/hotel" >Hotels</a></li>
             <li><a href="<?php echo URLROOT?>loggedTraveler/transport" id="selected">Transport Providers</a></li>
-            <li><a href="<?php echo URLROOT?>loggedTraveler/package">Packages</a></li>
+            <li><a href="<?php echo URLROOT?>loggedTraveler/package">Guides</a></li>
             <div class="rightcontent">
             <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
                 <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
@@ -32,13 +40,20 @@
         </ul>
     </div>
     <section class="main1">
-        <div class="main1img">
+    <div class="main1img">
             <img src="<?php echo URLROOT?>/images/tr.jpg" alt="">
+            
+            <div class="image-overlay"></div>
+            <div class="onimagetext">
+    <p id="txt1">Unlock Exceptional Transport Options Here</p>
+    <p id="txt2">Embark on Your Ideal Journey!</p>
+    
+</div>
         </div>
         <form action="<?php echo URLROOT ?>loggedTraveler/searchVehicles" method="POST">
         <div class="main1searchbar">
         <div class="search">
-    <div class="search1"><input type="text" placeholder="Location: <?php echo $data['location']; ?>" name="location" value="<?php echo $data['location']; ?>"></div>
+    <div class="search1"><input type="text" id="location-input" placeholder="Location: <?php echo $data['location']; ?>" name="location" value="<?php echo $data['location']; ?>"></div>
     <div class="search2">Pick-up Date:<br><?php echo $data['checkinDate']; ?><input type="date" placeholder="Pick-up Date:" name="pickupdate" value="<?php echo $data['checkinDate']; ?>"></div>
     <div class="search3">Time:<br><?php echo $data['checkinTime']; ?><input id="pickupTime" type="time" placeholder="Pick-up Time:" name="pickuptime" value="<?php echo $data['checkinTime']; ?>"></div>
     <div class="search4">Drop-off Date:<br><?php echo $data['checkoutDate']; ?><input type="date" placeholder="Drop-off Date" name="dropoffdate" value="<?php echo $data['checkoutDate']; ?>"></div>
@@ -53,7 +68,13 @@
     </section>
     <!-- <?php echo var_dump($data) ?> -->
     <?php 
-$agency_chunks = array_chunk($data['vehicles'], 3);
+if (is_array($data['vehicles'])) {
+    $agency_chunks = array_chunk($data['vehicles'], 3);
+    // Proceed with further processing
+} else {
+    // Handle the case where $data['vehicles'] is not an array
+}
+
 ?>
     <section class="main2">
         <div class="main2buttons">
@@ -71,6 +92,26 @@ $agency_chunks = array_chunk($data['vehicles'], 3);
                     <div>
                         <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $vehicles->brand . ' ' .ucfirst( $vehicles->model)?></p>
                         <p><?php echo $vehicles->city; ?></p>
+                        <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+       // Extract the rating value from the ratings object
+       $rating = isset($vehicles->vratings->rating) ? $vehicles->vratings->rating : 0;
+                    
+       // Round the rating value
+       $filled_stars = $rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
                     </div>
                     <div><button onclick="bookingV(4, <?php echo $vehicles->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>','<?php echo $data['checkinTime']; ?>')">View</button></div>
                     <!-- <div> <button onclick="Tripdetails(<?= $vehicles->user_id?>)">View</button></div> -->
@@ -115,10 +156,44 @@ $agency_chunks = array_chunk($data['vehicles'], 3);
             </div>
         
         <div class="copyright">
-            &copy; 2023 Your Company Name. All rights reserved.
+            &copy; 2023 Travelease. All rights reserved.
         </div>
         </div>
     </section>
+    <script>
+        // JavaScript code to scroll to section with ID "S1"
+        window.onload = function() {
+                // Scroll to the section with ID "S1"
+                document.getElementById('location-input').scrollIntoView();
+            
+        };
+    </script>
+     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const locationInput = document.getElementById("location-input");
+            const options = {
+                types: ['(cities)'],
+                componentRestrictions: { country: 'LK' } // Restrict to Sri Lanka (LK)
+            };
+            const autocomplete = new google.maps.places.Autocomplete(locationInput, options);
+
+            // Listen for place selection
+            autocomplete.addListener("place_changed", function() {
+                const place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    console.error("Place selection failed:", place);
+                    return;
+                }
+                // Extract city name without country
+                const city = place.address_components.find(component => {
+                    return component.types.includes("locality");
+                });
+                if (city) {
+                    locationInput.value = city.long_name;
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>

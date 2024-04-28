@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/settings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
     <title>Hotel Settings</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -43,28 +45,33 @@ include 'navigation.php';
 
                     $hotelData= $data['basicInfo']['hotelData'];
                     $userData= $data['basicInfo']['userData'];
+//                    var_dump($hotelData);
 //                    var_dump($userData);
                     $profile_picture = $userData->profile_picture;
                     ?>
                     <!-- Rectangle 1: Basic Info -->
                     <div class="basic-info-content">
                         <div class="center-image" onclick="openPopup()">
-                        <img id="profile-picture" src="<?= isset($userData->profile_picture) ? $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="User Profile Photo">
+                            <img id="profile-picture" src="<?= isset($userData->profile_picture) ? '../public/images/' . $userData->profile_picture : '../images/profile.png'; ?>" alt="User Profile Photo">
                             <div class="edit-icon">&#9998;</div>
                         </div>
+
                         <div class="hotel-details">
-                            <h3><?=$_SESSION['user_fname']?></h3>
+                            <h3><?=($userData->fname)?></h3>
+                            <h6>Hotel Type</h6>
+                            <p><?=($hotelData->hotel_type)?></p>
                             <h6>Contact Number</h6>
-                            <p><?=$_SESSION['user_number']?></p>
+                            <p><?=($userData->number)?></p>
                             <h6>Email</h6>
-                            <p><?=$_SESSION['user_email']?></p>
+                            <p><?=($userData->email)?></p>
                             <h6>Location</h6>
-                            <p><?=$hotelData->add ?> </p>
+                            <p><?=$hotelData->addr ?> </p>
                         </div>
                         <a href="<?php echo URLROOT; ?>hotel/hoteledit">
                             <button class="edit-button">Edit</button>
                         </a>
                     </div>
+
                     <!-- Profile Picture Change Popup -->
                     <div id="profile-picture-form" class="popup">
                         <div class="popup-content">
@@ -93,28 +100,35 @@ include 'navigation.php';
 
 
                 <div class="rectangle">
-                    <!-- Rectangle 2: Change Password -->
                     <div class="basic-info-content">
                         <h2>Change Password</h2>
-                        <!-- Add change password form here -->
                             <a href="<?php echo URLROOT; ?>hotel/hotelpassword">
                                 <button  class ="edit-button">Edit</button>
                             </a>
                     </div>
                 </div>
 
+                <!-- Assuming this is your 'hotel/settings' view file -->
+                <?php
+//                var_dump($data['verificationStatus']);
+                ?>
                 <div class="rectangle">
-                    <!-- Rectangle 3: Service Validation -->
                     <div class="basic-info-content">
-                        <h2>Service Validation</h2>
-                        <form class="service-validation-form" method="POST" action="<?php echo URLROOT; ?>/hotel/processServiceValidation" enctype="multipart/form-data">
-                            <p>Submit a PDF for Service Validation:</p>
-                            <input type="file" id="service-validation-pdf" name="service-validation-pdf" accept=".pdf" required>
-                            <button class="edit-button" type="submit">Submit</button>
-                        </form>
+                        <h2>Insert Service Validations</h2>
+                        <?php if ($data['verificationStatus'] === 0):                            ?>
+                            <p style="color: orange;">Add your verification documents</p>
+                        <?php elseif ($data['verificationStatus'] === 1): ?>
+                            <p style="color: #2189ff;">Yet to be approved</p>
+                        <?php elseif ($data['verificationStatus'] === 2): ?>
+                            <p style="color: green;">Congratulations! Your verification has been approved</p>
+                        <?php elseif ($data['verificationStatus'] === 3): ?>
+                            <p style="color: red;">Your verification has been rejected</p>
+                        <?php endif; ?>
+                        <a href="<?php echo URLROOT; ?>hotel/hotelvalidation">
+                            <button class="edit-button">Insert</button>
+                        </a>
                     </div>
                 </div>
-
 
             </div>
 
@@ -145,12 +159,9 @@ include 'navigation.php';
                 </div>
 
                 <div class="rectangle">
-                    <!-- Rectangle 3: Profile Deletion -->
                     <div class="basic-info-content">
                         <h2>Profile Deletion</h2>
-                        <!-- Add profile deletion option here -->
-                        <a href="<?php echo URLROOT; ?>hotel/hoteledit">
-                            <button class ="delete-button">Delete</button></a>
+                            <button class ="delete-button" onclick="onDeleteClick(event,<?= $_SESSION['user_id'] ?>)">Delete</button>
                     </div>
             </div>
 

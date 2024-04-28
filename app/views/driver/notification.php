@@ -1,3 +1,5 @@
+<!-- <?php var_dump($data["notification"]); ?> -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,10 +14,14 @@
 </head>
 <body>
     <nav class="left-menu">
-        <div class="user-profile">
-            <img src="<?php echo URLROOT; ?>/images/driver/wikum.jpg" alt="User Profile Photo">
+       <div class="user-profile">
+            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
+            <a class="" href="<?php echo URLROOT; ?>/driver/notification">
+                <i class="bx bx-bell"></i>
+            </a>
         </div>
+
         
         <div class="search-bar">
             <form action="#" method="GET">
@@ -55,7 +61,7 @@
             <!-- Total Request Box -->
             <div class="box">
                 <h2>Total Notification</h2>
-                <p>2</p>
+                <p><?php echo $data['count'];?></p>
             </div>
         
 
@@ -70,56 +76,63 @@
             </button>
         </div>
         </div>
-       
-        <div class="table-content">
-    <h2>Pending Booking Details</h2>
-    <table class="booking-table">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Trip ID</th>
-                <th>Pickup Date</th>
-                <th>End Date</th>
-                <th>Pickup Location</th>
-                <th>Dropoff Location</th>
-                <th>Number of passengers</th>
-                <th>Accept</th>
-                <th>Decline</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if (!empty($data['pendingbookings'])) {
-                $count = 1;
-                foreach ($data['pendingbookings'] as $booking) :
-            ?>
-                    <tr>
-                        <td><?php echo $count; ?></td>
-                        <td><?php echo $booking->trip_id; ?></td>
-                        <td><?php echo $booking->start_date; ?></td>
-                        <td><?php echo $booking->end_date; ?></td>
-                        <td><?php echo $booking->pickup_location; ?></td>
-                        <td><?php echo $booking->dropoff_location; ?></td>
-                        <td><?php echo $booking->passenger_count; ?></td>
-                        <td><button class="view-button">Accept</button></td>
-                        <td><button class="view-button">Decline</button></td>
-                    </tr>
-            <?php
-                    $count++;
-                endforeach;
-            } else {
-                echo '<tr><td colspan="8"><center>No pending bookings available.</center></td></tr>';
+
+        
+
+        <div class="notifications-content">
+    <?php
+    $notification = $data["notification"];
+    if (!empty($notification)) {
+        foreach ($notification as $key => $notifications):
+            if ($notifications->markAsRead == 0) {
+                ?>
+                <div class="notification-item">
+                    <!-- Assuming you have an image path stored in $notification->sender_image -->
+                    <img src="<?php echo URLROOT; ?>/images/<?php echo $notifications->profile_picture; ?>" alt="Sender Image" class="sender-image">
+
+                    <div class="notification-text-container">
+                        <span class="sender-name"><?php echo $notifications->fname." ".$notifications->lname ?></span>
+                        <span class="notification-date"><?php echo $notifications->nDate; ?></span>
+                        <p class="notification-text"><?php echo $notifications->notification; ?></p>
+                        <button onclick="markAsRead(<?php echo $notifications->notification_id; ?>)" class="mark-as-read-btn">Mark as read</button>
+                    </div>
+                </div>
+                <?php
             }
-            ?>
-        </tbody>
-    </table>
+        endforeach;
+    } else {
+        echo "<h3>No new notifications to display.</h3>";
+    }
+    ?>
 </div>
 
-
-        <div class="more-content">
-            <button class="next-page-btn">More Notifications <i class='bx bx-chevron-right'></i></button>
-        </div>
+       
 
     </main>
+
+    <script>
+        function markAsRead(notification_id) {
+    var form = new FormData();
+    form.append('notification_id', notification_id);
+
+    fetch('http://localhost/TravelEase/driver/markNotificationAsRead', {
+        method: 'POST',
+        body: form
+    })
+        .then(async function(response) {
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                console.log('Notification marked as read successfully');
+                window.location.reload();
+            } else {
+                console.error('Error marking notification as read:', response.status);
+            }
+        })
+        .catch(function(error) {
+            console.error('Error marking notification as read:', error);
+        });
+}
+    </script>
 </body>
 </html>

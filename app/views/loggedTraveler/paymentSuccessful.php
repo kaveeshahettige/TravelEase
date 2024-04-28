@@ -37,6 +37,7 @@
     </style>
 </head>
 <body>
+    <!-- <?php echo var_dump($data['transaction'])?> -->
     <div class="container">
         <h1>Payment Successful</h1>
         <p>Your payment has been successfully processed. Thank you!</p>

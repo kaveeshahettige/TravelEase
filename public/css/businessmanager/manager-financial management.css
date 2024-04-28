@@ -6,6 +6,14 @@
     font-family: "Poppins", sans;
 }
 
+.table-content2 {
+    padding-left: 30px;
+    margin-right: 20px;
+    padding-top: 5px;
+    font-family: "Poppins", sans;
+}
+
+
 .transaction-table {
     width: 100%;
     border-collapse: collapse;
@@ -61,48 +69,104 @@ td.pending {
     background-color: #FFDB8B;
 }
 
-
-/* Search bar styles */
-.search-content input[type="text"] {
-    width: 50%;
-    padding: 10px;
-    border: none;
-    border-radius: 15px;
-    outline: none;
-    background-color: #f1f1f1;
-    font-family: "Poppins", sans-serif;
-    margin-bottom: 10px; /* Add spacing below the search bar */
-}
-
-/* Filter button styles using a class */
-.search-content{
+/* Style for the search input */
+.search-content {
     padding-left: 550px;
-    margin-right: auto;
     padding-top: 5px;
     font-family: "Poppins", sans;
 }
 
-.filter-button {
-    background-color: #F9B314;
-    color: #ffffff;
-    padding: 10px 20px;
+.booking-search input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    width: 500px;
+}
+
+
+/* Style for the search button */
+.booking-search button {
+    background-color:#F9B314;
+    color: #fff;
     border: none;
-    border-radius: 15px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-left: 10px;
     cursor: pointer;
-    font-family: "Poppins", sans-serif;
-    font-weight: bold;
+    transition: background-color 0.3s;
 }
 
-.filter-button i {
-    margin-right: 5px; /* Add spacing between icon and text */
-}
-
-.filter-button:hover {
+/* Style for the search button on hover */
+.booking-search button:hover {
     background-color: #FFDB8B;
 }
 
+/* Style for the search icon */
+.booking-search button i {
+    font-size: 20px;
+}
 
 
+.final-transaction {
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.transaction-heading {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.transaction-details {
+    display: flex;
+    justify-content: space-between;
+}
+
+.total-amount, .commission, .final-payment {
+    flex-basis: 30%;
+}
+
+.total-amount h4, .commission h4, .final-payment h4 {
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.total-amount .amount, .commission .percentage, .final-payment .amount {
+    font-weight: bold;
+    color: #333;
+}
+
+
+
+/* Style for action buttons */
+.action-buttons {
+    margin-top: 70px;
+    display: flex;
+    justify-content: center;
+}
+
+.action-buttons button {
+    border: 1px solid #fdc101; /* Yellow stroke */
+    color: #edb202; /* Text color matches the stroke */
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+.action-buttons button:hover {
+    background-color: #F9B314; /* Yellow background on hover */
+    color: #fff; /* Text color becomes white on hover */
+}
+
+.action-buttons button i {
+    margin-right: 5px;
+}
 
 
 /* Media Query for Responsive Design */
@@ -111,7 +175,7 @@ td.pending {
         padding-left: 10px;
         text-align: center;
     }
-    
+
     .dashboard-content h1 {
         font-size: 24px; /* Reduce font size for smaller screens */
     }
@@ -155,5 +219,7 @@ td.pending {
         padding: 8px 16px; /* Reduce padding for smaller screens */
     }
 
-
+    .total-amount {
+       margin-left:100px;
+    }
 }

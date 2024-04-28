@@ -1,3 +1,4 @@
+<!-- <?php var_dump($data['feedbackDetails']) ;?> -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,9 +17,16 @@
 <body>
     <nav class="left-menu">
         <div class="user-profile">
-            <img src="<?php echo URLROOT; ?>/images/driver/wikum.jpg" alt="User Profile Photo">
+            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>"
+                alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
+            <a class="" href="<?php echo URLROOT; ?>/driver/notification">
+                <i class="bx bx-bell"></i>
+            </a>
+
         </div>
+
+
 
         <div class="search-bar">
             <form action="#" method="GET">
@@ -68,19 +76,19 @@
                 <!-- Total Bookings Box -->
                 <div class="box">
                     <h2>Total Reviews</h2>
-                    <p>100</p>
+                    <p></p>
                 </div>
 
                 <!-- Ongoing Bookings Box -->
                 <div class="box">
                     <h2>Total Bookings</h2>
-                    <p>100</p>
+                    <p></p>
                 </div>
 
                 <!-- Customers Box -->
                 <div class="box">
                     <h2>Total Customers</h2>
-                    <p>50</p>
+                    <p></p>
                 </div>
             </div>
         </div>
@@ -95,45 +103,47 @@
         </div>
 
 
-
         <div class="review-content">
-            <!-- Assuming $data['reviews'] is an array of reviews -->
             <?php
-    if (!empty($data['reviews'])) {
-        foreach ($data['reviews'] as $review) :
-    ?>
+            $reviews = $data['feedbackDetails'];
+            if (empty($reviews)): ?>
+            <p>No reviews available.</p>
+            <?php else:
+                foreach ($reviews as $review): ?>
+            <!-- <?php var_dump($review); ?> -->
             <div class="review-box">
+                <div class="review-image">
+                    <img src="<?php echo URLROOT; ?>/images/<?php echo $review->profile_picture; ?>"
+                        alt="Publisher Picture"
+                        style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; display: inline-block; vertical-align: middle;">
+                </div>
                 <div class="review-sub-content">
-                    <div class="review-image">
-                        <img src="<?php echo URLROOT; ?>/images/driver/wikum.jpg" alt="Guest Photo">
-                    </div>
-                    <!-- <h2><?php echo $review->user_name; ?></h2> -->
-
-                    <div class="rating">
-                        <?php
-                    $rating = $review->rating;
-                    for ($i = 1; $i <= 5; $i++) {
-                        echo ($i <= $rating) ? '<span class="star">&#9733;</span>' : '<span class="star">&#9734;</span>';
-                    }
-                    ?>
-                    </div>
-                    <p>Trip ID: <?php echo $review->trip_id; ?></p>
-                    <p>Date: <?php echo $review->end_date; ?></p>
-                    <p class="review-text"><?php echo $review->comments; ?></p>
-
-
+                    <h2><?= $review->fname . " " . $review->lname; ?></h2>
+                    <p class="review-text"><?= $review->feedback; ?></p>
+                    <p>Review for : <?=$review->booking_id?></p>
+                    <p>Rating: <?= getStarRating($review->rating); ?></p>
+                    <p>Date: <?= $review->time; ?></p>
                 </div>
             </div>
-            <?php
-        endforeach;
-    } else {
-        echo '<p>No reviews available.</p>';
-    }
-    ?>
+            <?php endforeach;
+            endif; ?>
         </div>
 
 
-        </div>
+        <?php
+        function getStarRating($rating) {
+            $stars = '';
+            for ($i = 0; $i < $rating; $i++) {
+                $stars .= '<i class="bx bxs-star"></i>';
+            }
+            return $stars;
+        }
+        ?>
+
+
+
+
+
 
 
 

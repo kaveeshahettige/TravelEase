@@ -145,7 +145,7 @@
             </div>
         
         <div class="copyright">
-            &copy; 2023 Your Company Name. All rights reserved.
+            &copy; 2023 Travelease. All rights reserved.
         </div>
         </div>
 

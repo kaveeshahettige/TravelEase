@@ -118,7 +118,7 @@ body{
 }
  .images .mainimage img{
     max-width: 100%;
-    height: 250px;
+    height: 350px;
     width: 500px;
     border-radius: 5%;
 }
@@ -179,7 +179,7 @@ body{
     background-color: #FDFFFF;
     color: #F9B314;
     font-size: 20px;
-    padding: 20px 30px 20px 30px;
+    padding: 10px 20px 10px 20px;
     border-radius: 20px;
     border: 2px solid #F9B314;
     font-weight: bold;
@@ -190,7 +190,7 @@ body{
     background-color: #F9B314;
     color: #FDFFFF;
     font-size: 20px;
-    padding: 20px 30px 20px 30px;
+    padding: 10px 20px 10px 20px;
     border-radius: 20px;
     border: 2px solid #F9B314;
     font-weight: bold;
@@ -208,7 +208,7 @@ body{
     justify-content: center;
     align-items: center;
     margin-right: 50px;
-    padding: 20px 30px 20px 30px;
+    padding: 10px 20px 10px 20px;
     background-color: #ee774c;
     color: #FDFFFF;
     border-radius: 20px;
@@ -219,6 +219,7 @@ body{
 .delbuttonContain button{
     margin-right: 50px;
 }
+
 
 .table-content {
     padding-left: 275px;
@@ -303,7 +304,199 @@ body{
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+/* //////////// */
+.feedback {
+    border: 2px solid #efdc0b;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f7f7f7;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 1000px;
+}
 
+.feedback-details {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.feedback-details img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.feedback-details span {
+    color: #555;
+    font-size: 15px;
+}
+
+.rating {
+    margin-bottom: 10px;
+}
+
+.star {
+    font-size: 25px;
+    color: #FFD700;
+    margin-right: 5px;
+}
+
+.comment p {
+    color: #444;
+    font-size: 20px;
+    line-height: 1.6;
+}
+
+
+/* //////////
+///// */
+/* Modal Styles */
+.modal2 {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal2-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  /* Close Button */
+  .close2 {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close2:hover,
+  .close2:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  /* Confirm Button */
+  #confirmCancelBtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #confirmCancelBtn:hover {
+    background-color: #45a049;
+  }
+  #denyCancelBtn {
+    background-color: #ce091c;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+  }
+  #denyCancelBtn:hover {
+    background-color: #970615;
+  }
+
+    /* ////////// */
+
+    /* Modal CSS */
+.modalguide {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .modalguide-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+  
+  .closeguide {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .closeguide:hover,
+  .closeguide:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  /* ///////////// */
+  .des {
+    /* Add general styling for the container */
+    background-color: #f9f9f9;
+    padding: 10px;
+}
+
+.des h5 {
+    /* Style for the heading */
+    margin: 0;
+    font-size: 1.2em;
+    color: #333; /* Change the color as needed */
+}
+
+.des p {
+    /* Style for the paragraph */
+    margin-top: 5px;
+    font-size: 1em;
+    line-height: 1.4;
+     /* Change the color as needed */
+}
+
+.ldiv1 {
+    margin-bottom: 10px; /* Adjust spacing between each ldiv1 */
+}
+
+.booking-label {
+    font-weight: bold; /* Make the label bold */
+    margin-right: 10px; /* Add some space between label and value */
+}
+
+.booking-value {
+    /* You can add additional styling as needed */
+}
 
 
 

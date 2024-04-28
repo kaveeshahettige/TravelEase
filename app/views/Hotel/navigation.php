@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <title>Navigation</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -18,9 +19,14 @@
     ?>
 
     <div class="user-profile">
-        <img src="<?= isset($userData->profile_picture) ? $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="User Profile Photo">
-        <span class="user-name"><?=$_SESSION['user_fname']?></span>
+        <img id="profile-picture" src="<?= isset($userData->profile_picture) ? '../public/images/' . $userData->profile_picture : '../images/profile.png'; ?>" alt="User Profile Photo">
+        <span class="user-name"><?=($userData->fname)?></span>
+        <button class="notification-button" href="hotel/gallery">
+            <i class="bx bx-bell"></i> <!-- Bell icon from Boxicons -->
+        </button>
     </div>
+
+
 
     <div class="search-bar">
         <form id="searchForm" action="#" method="GET">
@@ -94,8 +100,10 @@
 
 
     <div class="logout">
-        <a href="<?php echo URLROOT?>users/logout" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
+        <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a>
     </div>
+
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
 
 
 </nav>

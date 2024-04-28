@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/notifications.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
-    <title>Hotel Gallery</title>
+    <title>Business Manager Notifications</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -30,55 +30,62 @@ include 'navigation.php';
         <div class="top-boxes">
             <!-- Small Image Boxes -->
             <div class="img-box">
-                <img src="<?php echo URLROOT; ?>/images/hotel/dashboard.jpg" alt="hotel Image">
+                <img src="<?php echo URLROOT?>/images/dashboard.jpg" alt="hotel Image">
             </div>
 
 
-            <!-- Total Bookings Box -->
+            <?php
+            $bookingsCount = $data["bookingsCount"]; ?>
             <div class="box">
                 <h2>Total Bookings</h2>
-                <p>120</p>
+                <p><?php echo $bookingsCount ?></p>
             </div>
 
+
             <!-- Ongoing Bookings Box -->
+            <?php
+            $OngoingCount = $data["OngoingCount"]; ?>
             <div class="box">
                 <h2>Ongoing Bookings</h2>
-                <p>35</p>
+                <p><?php echo $OngoingCount ?></p>
             </div>
 
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"]; ?>
             <div class="box">
                 <h2>Total Customers</h2>
-                <p>10</p>
+                <p><?php echo $guestCount ?></p>
             </div>
         </div>
     </div>
 
     <div class="notifications-content">
-        <div class="notification-item">
-            <img src="<?php echo URLROOT; ?>public/images/hotel/wikum.jpg" alt="Sender Image" class="sender-image">
-            <div class="notification-text-container">
-                <span class="sender-name">Wikum Preethika</span>
-                <span class="notification-date">5 minutes ago</span>
-                <p class="notification-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam hendrerit velit eu turpis vulputate, a cursus dui sagittis.</p>
-                <button class="mark-as-read-btn">Mark as Read</button>
-            </div>
-            <div class="read-status-dot read"></div>
-        </div>
+        <?php
+        $notifications = $data["notifications"];
+        if (!empty($notifications)) {
+            foreach ($notifications as $key => $notification):
+                ?>
+                <div class="notification-item">
+                    <!-- Assuming you have an image path stored in $notification->sender_image -->
+                    <img src="<?php echo $notification->sender_profile_picture; ?>" alt="Sender Image" class="sender-image">
 
-        <div class="notification-item">
-            <img src="<?php echo URLROOT; ?>public/images/hotel/wikum.jpg" alt="Sender Image" class="sender-image">
-            <div class="notification-text-container">
-                <span class="sender-name">Wikum Preethika</span>
-                <span class="notification-date">5 minutes ago</span>
-                <p class="notification-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam hendrerit velit eu turpis vulputate, a cursus dui sagittis.</p>
-                <button class="mark-as-read-btn">Mark as Read</button>
-            </div>
-            <div class="read-status-dot unread"></div>
-        </div>
-
+                    <div class="notification-text-container">
+                        <span class="sender-name"><?php echo $notification->sender_name; ?></span>
+                        <span class="notification-date"><?php echo $notification->nDate; ?></span>
+                        <p class="notification-text"><?php echo $notification->notification; ?></p>
+                        <button onclick="markAsRead(<?php echo $notification->notification_id; ?>)" class="mark-as-read-btn">Mark as read</button>
+                    </div>
+                </div>
+            <?php
+            endforeach;
+        } else {
+            echo "<h3>No new notifications to display.</h3>";
+        }
+        ?>
     </div>
 
 </main>
+<script src= "<?php echo URLROOT?>/public/js/businessmanager/script.js"></script>
 </body>
 </html>

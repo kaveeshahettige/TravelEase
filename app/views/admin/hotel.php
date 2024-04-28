@@ -13,7 +13,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+
+
 </head>
+<!-- <?php var_dump($data)?> -->
 <body>
     <nav class="left-menu">
         <div class="user-profile">
@@ -68,6 +72,8 @@
         </div>
         </div>
 
+
+
         <div class="search-content">
         <div class="booking-search">
             <input type="text" id="booking-search" placeholder="Search Hotels">
@@ -77,47 +83,153 @@
         </div>
         </div>
        
-        <div class="table-content">
-        <h2>Hotel Details</h2>
-            <table class="booking-table">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Registration Number</th>
-                        <th>Hotel Name</th>
-                        <!-- <th>Provider Name</th> -->
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php
-$count = 1;
-
-if (!empty($data['hotel']) && is_array($data['hotel'])) {
-    foreach ($data['hotel'] as $user) {
-        echo '<tr class="t-row">';
-        echo '<td>' . $count . '</td>';
-        echo '<td>' . $user->id . '</td>';
-        echo '<td>' . ucfirst($user->fname) . '  ' . ucfirst($user->lname) . '</td>';
-        echo '<td><button class="view-button">View</button>&nbsp;
-            <button class="view-button" onclick="deleteHotel(' . $user->id . ')">Delete</button></td>';
-        echo '</tr>';
-        $count++;
-    }
-} else {
-    echo '<tr><td colspan="4">No data available</td></tr>';
-}
+        <?php
+if (!empty($data['hoteldetails']) && is_array($data['hoteldetails'])):
+?>
+<div class="table-content">
+    <h2>Hotel Details</h2>
+    <table class="booking-table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Registration Number</th>
+                <th>Hotel Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $count = 1;
+            foreach ($data['hoteldetails'] as $hotel):
+            ?>
+            <tr class="t-row">
+                <td><?php echo $count ?></td>
+                <td><?php echo $hotel->id ?></td>
+                <td><?php echo ucfirst($hotel->fname) . ' ' . ucfirst($hotel->lname) ?></td>
+                <td>
+                    <button class="view-button"
+                        data-description="<?php echo $hotel->description ?>"
+                        data-address="<?php echo $hotel->address ?>"
+                        data-no-rooms="<?php echo $hotel->no_rooms ?>"
+                        data-alt-phone="<?php echo $hotel->alt_phone_number ?>"
+                        data-manager-name="<?php echo $hotel->manager_name ?>"
+                        data-manager-phone="<?php echo $hotel->manager_phone_number ?>"
+                        data-street-address="<?php echo $hotel->street_address ?>"
+                        data-city="<?php echo $hotel->city ?>"
+                        data-state="<?php echo $hotel->state_province ?>"
+                        data-website="<?php echo $hotel->website ?>"
+                        data-facebook="<?php echo $hotel->facebook ?>"
+                        data-twitter="<?php echo $hotel->twitter ?>"
+                        data-instagram="<?php echo $hotel->instagram ?>"
+                        data-additional-notes="<?php echo $hotel->additional_notes ?>"
+                        data-card-holder-name="<?php echo $hotel->card_holder_name ?>"
+                        data-account-number="<?php echo $hotel->account_number ?>"
+                    >View</button>&nbsp;
+                    <button onclick="deleteHotel(<?php echo $hotel->id ?>)" class="view-button">Delete</button>
+                </td>
+            </tr>
+            <?php
+            $count++;
+            endforeach;
+            ?>
+        </tbody>
+    </table>
+</div>
+<?php
+else:
+    echo '<div class="table-content"><h2>Hotel Details</h2><table class="booking-table"><tbody><tr><td colspan="4">No data available</td></tr></tbody></table></div>';
+endif;
 ?>
 
-                </tbody>
-            </table>
-        </div>
+
 
         <div class="more-content">
         <button class="next-page-btn" id="moreBtn">More Hotels <i class='bx bx-chevron-right'></i></button>
 
         </div>
 
+        <div id="popup-container" class="popup" >
+            <div class="popup-content">
+                <span class="close">&times;</span>
+                <div id="hotel-details"></div>
+            </div>
+        </div>
+
+
+
     </main>
 </body>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    const viewButtons = document.querySelectorAll('.view-button');
+    const popup = document.getElementById('popup-container');
+    const hotelDetailsContainer = document.getElementById('hotel-details');
+
+    viewButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const hotelId = this.closest('.t-row').querySelector('td:nth-child(2)').innerText;
+            const hotelName = this.closest('.t-row').querySelector('td:nth-child(3)').innerText;
+            const hotelDescription = this.getAttribute('data-description');
+            const hotelAddress = this.getAttribute('data-address');
+            const noRooms = this.getAttribute('data-no-rooms');
+            const altPhoneNumber = this.getAttribute('data-alt-phone');
+            const managerName = this.getAttribute('data-manager-name');
+            const managerPhoneNumber = this.getAttribute('data-manager-phone');
+            const streetAddress = this.getAttribute('data-street-address');
+            const city = this.getAttribute('data-city');
+            const state = this.getAttribute('data-state');
+            const website = this.getAttribute('data-website');
+            const facebook = this.getAttribute('data-facebook');
+            const twitter = this.getAttribute('data-twitter');
+            const instagram = this.getAttribute('data-instagram');
+            const additionalNotes = this.getAttribute('data-additional-notes');
+            const cardHolderName = this.getAttribute('data-card-holder-name');
+            const accountNumber = this.getAttribute('data-account-number');
+
+            hotelDetailsContainer.innerHTML = `
+            <h2>${hotelName}</h2>
+            <div class="hotel_popup" style="display: flex">
+            
+            <div class="popup-column"  >
+        
+        <p>ID: ${hotelId}</p>
+        <p>Address: ${hotelAddress}</p>
+        <p>No. of Rooms: ${noRooms}</p>
+        <p>Alt Phone Number: ${altPhoneNumber}</p>
+        <p>Manager Name: ${managerName}</p>
+        <p>Manager Phone Number: ${managerPhoneNumber}</p>
+        <p>Description: ${hotelDescription}</p>
+
+    </div>
+    <div class="popup-column" >
+        <p>Street Address: ${streetAddress}</p>
+        <p>City: ${city}</p>
+        <p>State/Province: ${state}</p>
+        <p>Website: ${website}</p>
+        <p>Facebook: ${facebook}</p>
+        <p>Twitter: ${twitter}</p>
+        <p>Instagram: ${instagram}</p>
+        <p>Additional Notes: ${additionalNotes}</p>
+        <p>Card Holder Name: ${cardHolderName}</p>
+        <p>Account Number: ${accountNumber}</p>
+
+    </div>
+            </div>
+   
+`;
+
+
+            popup.style.display = 'block';
+        });
+    });
+
+    const closeBtn = document.querySelector('.close');
+    closeBtn.addEventListener('click', function() {
+        popup.style.display = 'none';
+    });
+});
+
+</script>
 </html>

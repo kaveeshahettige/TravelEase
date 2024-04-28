@@ -32,8 +32,9 @@
             <li><a href="<?php echo URLROOT?>travelerDashboard/index/<?php echo $_SESSION['user_id']?>"><i class='bx bxs-dashboard bx-sm'></i> Overview</a></li>
             <li><a href="<?php echo URLROOT?>travelerDashboard/bookings/<?php echo $_SESSION['user_id']?>"><i class='bx bxs-book bx-sm'></i> Bookings</a></li>
             <li><a href="<?php echo URLROOT?>travelerDashboard/payments/<?php echo $_SESSION['user_id']?>"><i class='bx bxs-package bx-sm'></i></i> Payments</a></li>
-            <li><a href=""><i class='bx bxs-report bx-sm'></i> Notifications</a></li>
-            <li><a href=""><i class='bx bx-line-chart bx-sm'></i> Previous Trips</a></li>
+            <li><a href="<?php echo URLROOT; ?>travelerDashboard/notifications/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bxs-report bx-sm' class="nav-button "></i> Notifications</a></li>
+            <li><a href="<?php echo URLROOT; ?>travelerDashboard/previoustrips/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bx-line-chart bx-sm' class="nav-button "></i> Previous Trips</a></li>
+            <li><a href="<?php echo URLROOT?>travelerDashboard/cart/<?php echo $_SESSION['user_id']?>" class="nav-button"><i class='bx bx-cart bx-sm'></i> Wish List</a></li>
             <li><a href="<?php echo URLROOT?>travelerDashboard/settings/<?php echo $_SESSION['user_id']?>" class="active"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
         </ul>
         
@@ -121,19 +122,9 @@
                 
 
                 <div class="rectangle">
-                    <!-- Rectangle 2: Rooms Allocated -->
-                    <!-- <div class="basic-info-content">
-                    <div class="hotel-details">
-                        <h2>Rooms Allocated</h2>
-                        <h6>No.of Rooms</h6>
-                        <p>5</p>
-                    </div>
-                        <button>Add</button>
-                    </div> -->
                     <div class="basic-info-content">
-                        <h2>Profile Deletion</h2>
-                        <!-- Add profile deletion option here -->
-                        <a href="<?php echo URLROOT?>users/delete/<?php echo $_SESSION['user_id']?>"><button class ="delete-button">Delete</button></a>
+                        <h2>Profile Deactivation</h2>
+                        <button class ="delete-button" onclick="deactivateUser(<?php echo $_SESSION['user_id']?>)">Deactivate</button>
                         
                         </div>
                 </div>
@@ -143,6 +134,17 @@
         </div>
 
     </div>
+       <!-- Hidden modal for cancellation confirmation -->
+<div id="confirmationModal" class="modal2">
+  <div class="modal2-content">
+    <span class="close2">&times;</span>
+    <p>Are you sure you want to deactivate the profile?</p>
+    <button id="confirmCancelBtn">Yes, Deactivate</button>
+    <button id="denyCancelBtn">No,Close</button>
+    <div id="confirmationMessage"></div>
+  </div>
+</div>
+<iframe id="cancelFrame" style="display: none;"></iframe>
     </main>
 </body>
 </html>

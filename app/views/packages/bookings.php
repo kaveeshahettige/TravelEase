@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
-    <title>Packages Bookings</title>
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
+    <title>Guide Bookings</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
+<?php
+$userData = $data['userData'];
+?>
 <?php
 $activePage = 'packages/bookings'; // Set the active page dynamically based on your logic
 include 'navigation.php';
@@ -37,30 +41,49 @@ include 'navigation.php';
 
 
             <!-- Total Bookings Box -->
+            <?php
+            $bookingCount = $data["bookingCount"];
+            ?>
             <div class="box">
                 <h2>Total Bookings</h2>
-                <p>120</p>
+                <p><?php echo $bookingCount;?></p>
             </div>
 
             <!-- Ongoing Bookings Box -->
+            <?php
+            $totalRevenue = $data["totalRevenue"];
+            ?>
             <div class="box">
-                <h2>Ongoing Bookings</h2>
-                <p>35</p>
+                <h2>Total Revenue</h2>
+                <p><?php echo $totalRevenue;?> LKR</p>
             </div>
 
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"];
+            ?>
             <div class="box">
                 <h2>Total Customers</h2>
-                <p>10</p>
+                <p><?php echo $guestCount; ?></p>
             </div>
+        </div>
+    </div>
+
+    <div class="table-content">
+        <div class="tab">
+            <a href="<?php echo URLROOT?>/packages/bookings"><button class="tablinks active">Ongoing Bookings</button></a>
+            <a href="<?php echo URLROOT?>/packages/combookings"><button class="tablinks">Completed Bookings</button></a>
+            <a href="<?php echo URLROOT?>/packages/cancelledBookings"><button class="tablinks">Cancelled Bookings</button></a>
         </div>
     </div>
 
     <div class="search-content">
         <div class="booking-search">
-            <input type="text" id="booking-search" placeholder="Search for Boookings">
+            <input type="text" id="booking-search" placeholder="Enter Name or Room Type">
+            <input type="date" id="start-date" placeholder="Start Date">
+            <input type="date" id="end-date" placeholder="End Date">
             <button onclick="filterBookings()">
-                <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
+                <i class="bx bx-search"></i>
             </button>
         </div>
     </div>
@@ -74,7 +97,7 @@ include 'navigation.php';
                 <th>Guest Name</th>
                 <th>Check-in Date</th>
                 <th>Check-out Date</th>
-                <th>Room Type</th>
+                <th>Pickup Time</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -82,23 +105,47 @@ include 'navigation.php';
 
 
             <?php
-            $bookingData = $data["bookingData"];
-            foreach ($bookingData as $key => $booking): ?>
+            $bookings = $data["bookings"];
+//            var_dump($bookings);
+            foreach ($bookings as $key => $booking): ?>
                 <tr>
                     <td><?php echo $key + 1; ?></td>
                     <td><?php echo $booking->fname; ?></td>
                     <td><?php echo $booking->startDate; ?></td>
                     <td><?php echo $booking->endDate; ?></td>
-                    <td><?php echo $booking->roomType; ?></td>
+                    <td><?php echo date('H:i', strtotime($booking->meetTime)); ?></td>
                     <td>
                         <button class="view-button" onclick="openPopup(); updatePopupDetails('<?php echo $booking->profile_picture; ?>','<?php echo $booking->fname; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->roomType; ?>')">
                             <i class='bx bx-show'></i>
+                        </button>
+
+                        <?php
+                        // Calculate the difference in days between today and the start date of the booking
+                        $diffStart = strtotime($booking->startDate) - strtotime(date('Y-m-d'));
+                        $daysStart = round($diffStart / 86400); // Convert seconds to days
+
+                        // Calculate the difference in days between the booking date and today
+                        $diffBooking = strtotime(date('Y-m-d')) - strtotime($booking->bookingDate);
+                        $daysBooking = round($diffBooking / 86400); // Convert seconds to days
+
+                        // Check both conditions
+                        if ($daysStart > 3 && $daysBooking < 7) {
+                            // Enable the cancel button
+                            $disableCancel = '';
+                        } else {
+                            // Disable the cancel button
+                            $disableCancel = 'disabled';
+                        }
+                        ?>
+
+                        <button class="cancel-button" <?php echo $disableCancel; ?>  onclick="showCancelPopup(<?php echo $booking->package_id; ?>, <?php echo $booking->user_id; ?>, '<?php echo $booking->booking_id;?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->endDate; ?>', <?php echo $booking->temporyid; ?>, '<?php echo $booking->meetTime; ?>',<?php echo $booking->amount;?>)">
+                            <i class='bx bx-x'></i>
                         </button>
                     </td>
                 </tr>
             <?php endforeach; ?>
 
-
+            <script src= "<?php echo URLROOT?>/public/js/package/bookings.js"></script>
             </tbody>
         </table>
     </div>
@@ -122,6 +169,5 @@ include 'navigation.php';
         <!-- Add more details as needed -->
     </div>
 </div>
-<script src= "<?php echo URLROOT?>/public/js/hotel/bookings.js"></script>
 </body>
 </html>

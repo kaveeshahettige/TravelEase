@@ -4,6 +4,64 @@ body, ul {
     font-family: "Poppins", sans-serif;
 }
 
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    /* border:2px solid red; */
+
+
+}
+
+.popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    max-width: 1200px;
+    /* max-height: 1000px; */
+    width: 100%;
+    text-align: left;
+}
+.popup-column{
+    border: 1px solid red;
+    width: 100%;
+
+}
+.popup-content .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    color: #555;
+
+}
+
+.popup-content h2 {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.popup-content img.popupimg {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.popup-content p {
+    margin-bottom: 5px;
+}
 /* Left menu styles */
 .left-menu {
     background-color: #FFDB8B;
