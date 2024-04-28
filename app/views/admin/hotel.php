@@ -40,7 +40,7 @@
 
             <li><a href="<?php echo URLROOT; ?>admin/hotel" class="active"><i class='bx bxs-hotel bx-sm'></i></i> Hotels</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/agency"><i class='bx bxs-car bx-sm'></i> Travel Agencies </a></li>
-            <li><a href="<?php echo URLROOT; ?>admin/package"><i class='bx bx-package bx-sm'></i>Packages</a></li>
+            <li><a href="<?php echo URLROOT; ?>admin/package"><i class='bx bx-package bx-sm'></i>Guide</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/settings"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
             <li><a href="<?php echo URLROOT?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
         </ul> 
@@ -109,7 +109,7 @@ if (!empty($data['hoteldetails']) && is_array($data['hoteldetails'])):
                 <td>
                     <button class="view-button"
                         data-description="<?php echo $hotel->description ?>"
-                        data-address="<?php echo $hotel->address ?>"
+                        data-address="<?php echo $hotel->addr ?>"
                         data-no-rooms="<?php echo $hotel->no_rooms ?>"
                         data-alt-phone="<?php echo $hotel->alt_phone_number ?>"
                         data-manager-name="<?php echo $hotel->manager_name ?>"
@@ -125,7 +125,7 @@ if (!empty($data['hoteldetails']) && is_array($data['hoteldetails'])):
                         data-card-holder-name="<?php echo $hotel->card_holder_name ?>"
                         data-account-number="<?php echo $hotel->account_number ?>"
                     >View</button>&nbsp;
-                    <button onclick="deleteHotel(<?php echo $hotel->id ?>)" class="view-button">Delete</button>
+                    <button class="delete-button"  onclick="DeletePopup(<?php echo $hotel->hotel_id ?>)">Delete</button>
                 </td>
             </tr>
             <?php
@@ -230,6 +230,60 @@ document.addEventListener('DOMContentLoaded', function() {
         popup.style.display = 'none';
     });
 });
+
+function DeletePopup(id) {
+    // Create overlay div
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+
+    const confirmDialog = document.createElement('div');
+    confirmDialog.className = 'confirm-dialog';
+    confirmDialog.innerHTML = `
+        <div class="confirm-message">Are you sure you want to delete this room?</div>
+        <div class="buttons">
+            <button class="btn btn-yes" onclick="confirmDeleteUser('${id}')">Yes</button>
+            <button class="btn btn-no" onclick="cancelDelete()">No</button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(confirmDialog);
+}
+
+function cancelDelete() {
+    document.body.removeChild(document.querySelector('.overlay'));
+    document.body.removeChild(document.querySelector('.confirm-dialog'));
+}
+
+function confirmDeleteUser(id) {
+    // Prepare the data to send
+    const requestData = {
+        id: id,
+// Adjust variable name to match PHP controller
+    };
+
+    // Create a new FormData object and append data to it
+    const formData = new FormData();
+    formData.append('id', id);
+
+    // Make an AJAX request using fetch
+    fetch('http://localhost/TravelEase/Admin/deleteTraveler', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Traveler removed successfully');
+            window.location.reload(); // Reload the page after successful removal
+        } else {
+            throw new Error('Error removing traveler: ', response);
+        }
+    })
+    .catch(error => {
+        console.error('Error removing traveler:', error);
+    });
+}
+
 
 </script>
 </html>

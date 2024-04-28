@@ -38,20 +38,48 @@ class Admin extends Controller{
         public function request(){
           $admindetail=$this->userModel->getadmindata();
           $hotelRequests=$this->userModel->findHotelRequests();
-          $guideRequests=$this->userModel->findGuideRequests();
-          $agencyRequests=$this->userModel->findAgencyRequests();
+          
           $nore=$this->userModel->noOfRequests();
           // var_dump($hotelRequests);
           $data = [
               'fname'=>$admindetail->fname,
               'hotelRequests'=>$hotelRequests,
-              'guideRequests'=>$guideRequests,
-              'agencyRequests'=>$agencyRequests,
+             
               'nore'=>$nore,
               // 'document'=>$document,
           ];
           $this->view('admin/request',$data);
       }
+
+      public function agencyrequest(){
+        $admindetail=$this->userModel->getadmindata();
+        $agencyRequests=$this->userModel->findAgencyRequests();
+        $nore=$this->userModel->noOfRequests();
+        // var_dump($hotelRequests);
+        $data = [
+            'fname'=>$admindetail->fname,
+            'agencyRequests'=>$agencyRequests,
+            'nore'=>$nore,
+            // 'document'=>$document,
+        ];
+
+        // var_dump($agencyRequests);
+        $this->view('admin/agencyrequest',$data);
+    }
+
+    public function guiderequests(){
+      $admindetail=$this->userModel->getadmindata();
+      $guideRequests=$this->userModel->findGuideRequests();
+      $nore=$this->userModel->noOfRequests();
+      // var_dump($hotelRequests);
+      $data = [
+          'fname'=>$admindetail->fname,
+          'guideRequests'=>$guideRequests,
+          'nore'=>$nore,
+          // 'document'=>$document,
+      ];
+      $this->view('admin/guiderequests',$data);
+  }
       
       
 
@@ -83,6 +111,31 @@ class Admin extends Controller{
 
         
             $userId = $_POST['id'];
+
+            $ongoingBookings = $this->userModel->checkOngoingBooking($userId);
+
+            var_dump(
+                
+                  $ongoingBookings
+  
+              );
+
+              if($ongoingBookings>0){
+                echo '<script>alert("Cannot delete user. User has ongoing bookings.");</script>';
+                redirect('admin/traveler');
+              }else{
+                $success = $this->userModel->updateProfileStatus($userId);
+            
+                if ($success) {
+                  redirect('admin/traveler');
+                    // Redirect or show success message
+                } else {
+                  redirect('admin/traveler');
+                    // Handle deletion failure
+                }
+              }
+            
+
             
             $success = $this->userModel->updateProfileStatus($userId);
             
@@ -95,6 +148,23 @@ class Admin extends Controller{
             }
         
     }
+    public function deleteHotel() {
+
+
+        
+      $hotelId = $_POST['hotel_id'];
+      
+      $success = $this->userModel->updateProfileStatus($hotelId);
+      
+      if ($success) {
+        redirect('admin/hotel');
+          // Redirect or show success message
+      } else {
+        redirect('admin/hotel');
+          // Handle deletion failure
+      }
+  
+}
     
         public function agency(){
           $admindetail=$this->userModel->getadmindata();
@@ -125,6 +195,18 @@ class Admin extends Controller{
             $this->view('admin/package',$data);
         }
         public function settings(){
+
+          // $userId = 4;
+
+          //   $ongoingBookings = $this->userModel->checkOngoingBooking($userId);
+
+          //   var_dump(
+                
+          //         $ongoingBookings
+  
+          //     );
+
+
             $no=$this->userModel->noOfManagers();
             $admindetail=$this->userModel->getadmindata();
             $data=[
@@ -414,9 +496,9 @@ class Admin extends Controller{
         // public function deleteTraveler($id){
         //   $user=$this->userModel->deleteTraveler($id);
         // }
-        public function deleteHotel($id){
-          $user=$this->userModel->deleteHotel($id);
-        }
+        // public function deleteHotel($id){
+        //   $user=$this->userModel->deleteHotel($id);
+        // }
         public function deleteAgency($id){
           $user=$this->userModel->deleteAgency($id);
         }

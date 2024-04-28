@@ -172,7 +172,7 @@
                             </div>
                         </div>
 
-                        <?php var_dump($data['pendingBookingCount'])?>
+                        <!-- <?php var_dump($data['pendingBookingCount'])?> -->
 
                         <div class="rectangle">
                             <!-- Rectangle 2: Change Password -->

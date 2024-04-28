@@ -556,6 +556,7 @@ li {
 }
 
 
+
 /* Style for the booking search container */
 .booking-search {
     display: flex;
@@ -764,4 +765,106 @@ li {
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
+}
+
+.table-content-button{
+    display: flex;
+    justify-content: center;
+    padding-left: 275px;
+    margin-right: 100px;
+    padding-top: 2px;
+
+    font-family: "Poppins", sans;
+}
+
+.tab {
+    margin-right: 100px;
+    display: flex;
+    /* border:1px solid #e62020; */
+
+}
+
+.tab a {
+    text-decoration: none; /* Remove underline from links */
+}
+
+/* Style the individual tabs */
+.tab button {
+    background-color: #f1f1f1;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: border-bottom 0.3s ease;
+}
+
+/* Style the active tab */
+.tab button.active {
+    background-color: #F9B314;
+    font-weight: bold;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .card {
+        flex-direction: column;
+    }
+    .right-half {
+        margin-top: 20px;
+    }
+}
+#popup-container {
+    display: none; /* Initially hide the popup container */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    z-index: 1000; /* Ensure the popup is above other content */
+    overflow:auto; /* Enable scrolling if the content overflows */
+}
+
+.popup-content {
+    display: none; /* Initially hide the popup content */
+    position: fixed;
+    background-color: #fff;
+    /* margin: 10% auto;  */
+    padding: 20px;
+    /* border:2px solid red; */
+    width: 80%;
+    max-width: 600px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Shadow for the popup */
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: #333;
+    font-size: 20px;
+}
+
+
+.view-button1 {
+    background-color: #F9B314;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+
+.view-button1:hover {
+    background-color: #FFDB8B;
 }
