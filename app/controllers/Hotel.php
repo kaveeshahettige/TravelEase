@@ -24,6 +24,8 @@ class Hotel extends Controller
         $bookingsCount = $this->getBookingsCount();
         $guestCount = $this->getGuestCount();
         $totalRevenue = $this->getTotalRevenue();
+        $approval = $this->getProfileStatus();
+        $verificationStatus = $this->checkServiceValidations();
 
         $data = [
             'bookingsCount' => $bookingsCount,
@@ -31,7 +33,10 @@ class Hotel extends Controller
             'basicInfo' => $this->basicInfo(),
             'roomCount' => $this->roomCount(),
             'bookingData' => $bookingData,
-            'totalRevenue' => $totalRevenue
+            'totalRevenue' => $totalRevenue,
+            'approval' => $approval,
+            'verificationStatus' => $verificationStatus,
+
         ];
 
         $this->view('hotel/index',$data);
@@ -1279,6 +1284,15 @@ class Hotel extends Controller
             echo json_encode(['error' => 'Failed to delete profile']);
         }
 
+    }
+
+
+    public function getProfileStatus(){
+        $user_id = $_SESSION['user_id'];
+
+        $profileStatus = $this->hotelsModel->getProfileStatus($user_id);
+
+        return $profileStatus;
     }
 
 

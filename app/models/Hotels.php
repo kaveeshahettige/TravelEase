@@ -888,4 +888,18 @@ class Hotels
         }
     }
 
+
+    public function getProfileStatus($user_id)
+    {
+        $this->db->query('SELECT approval FROM users WHERE id = :user_id');
+        $this->db->bind(':user_id', $user_id);
+
+        $result = $this->db->single();
+
+        if ($result) {
+            return $result->approval;
+        } else {
+            return 0;
+        }
+    }
 }
