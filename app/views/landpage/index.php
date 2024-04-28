@@ -21,10 +21,10 @@
             <label for="logoname">Travel<span style="color: #458A9E;">Ease</span> </label>
         </div>
         <ul>
-            <li><a href="<?php echo URLROOT?>Landpage/index" id="selected">Home</a></li>
+            <li><a href="<?php echo URLROOT?>Landpage" >Home</a></li>
             <li><a href="<?php echo URLROOT?>Landpage/hotel">Hotels</a></li>
             <li><a href="<?php echo URLROOT?>Landpage/transport">Transport Providers</a></li>
-            <li><a href="<?php echo URLROOT?>Landpage/package">Packages</a></li>
+            <li><a href="<?php echo URLROOT?>Landpage/package">Guides</a></li>
             <div class="buttons">
             <li><a href="<?php echo URLROOT?>Users/login" id="loginbut">Login</a></li>
             
@@ -43,7 +43,7 @@
                 <img src="<?php echo URLROOT?>/images/1.png" alt="image" width="100%" height="100%">
             </div>
         </div>
-        <form action="<?php echo URLROOT?>Landpage/searchPage" method="GET">
+        <form action="<?php echo URLROOT?>Landpage/searchPage" method="POST">
         <div class="searchbar1">
             <input type="text" class="search-input" name="location" placeholder="Place you want to go..." required>
             <button type="submit" class="search-button">Search</button>
@@ -89,38 +89,92 @@
         </div>
         <div class="main3images">
             <div class="main3img1content">
-                <div><img src="<?php echo URLROOT?>/images/4.jpg" alt=""></div>
+            <div><img src="<?php echo URLROOT . '/images/' . $data['service1pp'] ?>" alt=""></div>
                 <div class="c1"> 
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wildlife in Yala</p>
-                        <p>Hambantota</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider1Name']?></p>
+                        <p style="margin-bottom:6px"><?php echo $data['randomServiceProvider1Location']?></p>
+                        <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+                    
+       // Round the rating value
+       $filled_stars = $data['service1Ratings']->rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
                     </div>
-                    <div><button id="bookNowButton">Book Now</button></div>
+                    <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider1Id'] ?>)">View</button></div>
+                    <!-- <?php echo $data['randomServiceProvider1Id']?> -->
                 </div>
                 
             </div>
             <div class="main3img2content">
-                <div><img src="<?php echo URLROOT?>/images/jaffna.jpg" alt=""></div>
+            <div><img src="<?php echo URLROOT . '/images/' . $data['service2pp'] ?>" alt=""></div>
                 <div class="c2">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Wonder of Jaffna</p>
-                        <p>Jaffna</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider2Name']?></p>
+                        <p style="margin-bottom:6px"><?php echo $data['randomServiceProvider2Location']?></p>
+                        <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+                    
+       // Round the rating value
+       $filled_stars = $data['service2Ratings']->rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
                     </div>
-                    <div><button id="bookNowButton1">Book Now</button></div>
+                    <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider2Id'] ?>)">View</button></div>
                 </div>
             </div>
             <div class="main3img3content">
-                <div><img src="<?php echo URLROOT?>/images/nuwaraeliya.jpg" alt=""></div>
+            <div><img src="<?php echo URLROOT . '/images/' . $data['service3pp'] ?>" alt=""></div>
                 <div class="c3">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold">Nuwara Eliya</p>
-                        <p>Nuwara Eliya</p>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider3Name']?></p>
+                        <p style="margin-bottom:6px"><?php echo $data['randomServiceProvider3Location']?></p>
+                        <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php
+                    
+       // Round the rating value
+       $filled_stars = $data['service3Ratings']->rating;
+        
+        // Output filled stars
+        for ($i = 0; $i < $filled_stars; $i++) {
+            echo '<span style="color: #FFD700;">★</span>';
+        }
+        
+        // Output unfilled stars
+        $unfilled_stars = 5 - $filled_stars;
+        for ($i = 0; $i < $unfilled_stars; $i++) {
+            echo '<span style="color: #ccc;">★</span>';
+        }
+        ?>
+    </div>
                     </div>
-                    <div><button id="bookNowButton2">Book Now</button></div>
+                    <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider3Id'] ?>)">View</button></div>
                 </div>
             </div>
         </div>
-
     </section>
     <section class="main4">
         <div class="main4img">

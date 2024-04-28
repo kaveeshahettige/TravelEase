@@ -24,7 +24,7 @@
             <li><a href="<?php echo URLROOT?>Landpage">Home</a></li>
             <li><a href="<?php echo URLROOT?>Landpage/hotel">Hotels</a></li>
             <li><a href="<?php echo URLROOT?>Landpage/transport">Transport Providers</a></li>
-            <li><a href="<?php echo URLROOT?>Landpage/package">Packages</a></li>
+            <li><a href="<?php echo URLROOT?>Landpage/package">Guides</a></li>
             <div class="buttons">
             <li><a href="<?php echo URLROOT?>Users/login" id="loginbut">Login</a></li>
             

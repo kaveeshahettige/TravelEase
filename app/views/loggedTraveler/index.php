@@ -10,8 +10,10 @@
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-NwdoN0yM5JcJJ4jX1KvJXrQhQ+6RMo3hV3brvytgePvVzSlc3PjMFbpL5T+VUAq7" crossorigin="anonymous">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTDElEffBAws-JYjYaUELqmkOCpa6C5R8&libraries=places"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.2/css/boxicons.min.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
 
 
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADD6_nBEr9ZJd44sKcqr0dj-JRvbt5ogo&libraries=places"></script> -->
@@ -42,8 +44,9 @@
             <div class="rightcontent">
             <li><a href="<?php echo URLROOT ?>travelerDashboard/cart/<?php echo $_SESSION['user_id'] ?>"><i class='bx bxs-cart bx-lg bx-tada bx-rotate-90' ></i></a></li>
             <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
-            <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
+            <li><a href="#" onclick="confirmLogout(event)" id="logout">Log Out</a></li>
             </div>
+            
         </ul>
     </div>
     <section class="main1">
@@ -328,21 +331,34 @@ window.onclick = function(event) {
             //Check if check-in date is after check-out date
             if (checkinDate > checkoutDate) {
                 
-                document.getElementById("checkingBigger").style.display = "block";
+                //document.getElementById("checkingBigger").style.display = "block";
+                var notification = document.getElementById("notification");
+            notification.innerText = "Check-in Date is smalle !";
+            notification.style.display = "block";
+
+            // Hide notification after 3 seconds
+            setTimeout(function() {
+                notification.style.display = "none";
+                notification.innerText = "";
+            }, 3000);
+
+            // Prevent form submission
+            event.preventDefault();
+
                 return false;
             }
 
             // Check if check-in date is in the past
-            if (checkinDate < today) {
-                alert("Check-in date cannot be in the past.");
-                return false;
-            }
+            // if (checkinDate < today) {
+            //     alert("Check-in date cannot be in the past.");
+            //     return false;
+            // }
 
             // Check if check-out date is in the past
-            if (checkoutDate < today) {
-                alert("Check-out date cannot be in the past.");
-                return false;
-            }
+            // if (checkoutDate < today) {
+            //     alert("Check-out date cannot be in the past.");
+            //     return false;
+            // }
 
             // All validations passed
             return true;

@@ -94,7 +94,6 @@ class LoggedTraveler extends Controller
   }
   public function hotel()
   {
-
     // $location = $_POST['location'];
     $id = $_SESSION['user_id'];
     $user = $this->userModel->findUserDetail($id);

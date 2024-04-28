@@ -2152,6 +2152,37 @@ public function findAvailableHotelRooms($location, $checkinDate, $checkoutDate) 
     }
 }
 
+//findHotelRooms($location)
+public function findHotelRooms($location) {
+    // Define the SQL query with placeholders
+    $query = '
+    SELECT * 
+    FROM hotel_rooms
+    JOIN hotel ON hotel_rooms.hotel_id = hotel.hotel_id
+    JOIN users ON hotel.user_id = users.id
+    WHERE hotel.city LIKE :location OR hotel.addr LIKE :location
+    AND hotel_rooms.roomCondition = :roomCondition
+    AND users.profile_status = 1';
+    // Prepare and execute the SQL query
+    $this->db->query($query);
+    
+    // Bind parameters
+    $this->db->bind(':location', '%' . $location . '%'); // Use LIKE for partial match
+    // $this->db->bind(':checkinDate', $checkinDate);
+    // $this->db->bind(':checkoutDate', $checkoutDate);
+    $this->db->bind(':roomCondition', 'activated'); 
+    
+    // Execute the query and fetch the results
+    $result = $this->db->resultSet();
+    
+    // Check if there are any results
+    if (!empty($result)) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
 
 //findAvailableVehicles($location, $checkinDate, $checkoutDate)
 public function findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate) {
@@ -2183,7 +2214,30 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
             return false;
         }
     }
+    //findVehiclesByLocation($location)
+    public function findVehiclesByLocationGiven($location) {
 
+        $this->db->query('
+        SELECT * 
+        FROM vehicles
+        JOIN travelagency ON vehicles.agency_id = travelagency.agency_id
+        JOIN users ON travelagency.user_id = users.id
+        WHERE (travelagency.city LIKE :location OR travelagency.city = \'All Island\')
+        AND vehicles.vehicleCondition = :vehicleCondition
+        AND users.profile_status = 1 AND users.approval = 1;
+    ');
+        
+            $this->db->bind(':location', '%' . $location . '%');
+            // $this->db->bind(':checkinDate', $checkinDate);
+            // $this->db->bind(':checkoutDate', $checkoutDate);
+            $this->db->bind(':vehicleCondition', 'activated');
+            $result = $this->db->resultSet();
+            if ($this->db->rowCount() > 0) {
+                return $result;
+            } else {
+                return false;
+            }
+        }
     //findAvailableGuidesByLocation($location, $checkinDate, $checkoutDate)
     public function findAvailableGuidesByLocation($location, $checkinDate, $checkoutDate) {
 
