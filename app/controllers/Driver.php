@@ -588,7 +588,7 @@ public function getFinalPayment(){
                 }
                 $userId = $_SESSION['user_id'];
 
-                var_dump($userId);
+                // var_dump($userId);
 
             
                 $agencyDetails = $this->TravelsModel->getAgencyDetails($userId);

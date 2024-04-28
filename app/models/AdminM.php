@@ -179,7 +179,22 @@ class AdminM{
           return null;
       }
   }
-  
+
+  public function checkOngoingBooking($userId) {
+    $this->db->query('SELECT COUNT(*) AS bookingsCount FROM bookings WHERE user_id = :userId AND endDate < CURDATE()
+  UNION 
+  SELECT COUNT(*) AS cartBookingsCount FROM cartbookings WHERE user_id = :userId AND endDate < CURDATE()
+  ');
+    $this->db->bind(':userId', $userId);
+    $this->db->execute(); // Execute the query after binding the parameter
+    $row = $this->db->single();
+    if ($this->db->rowCount() > 0) {
+        return $row;
+    } else {
+        return null;
+    }
+}
+
     
     
        
