@@ -140,6 +140,58 @@ class Businessmanager extends Controller
         $this->view('businessmanager/notifications', $data);
     }
 
+    public function services(){
+
+        $profilePicture = $this->getProfilePicture();
+        $hotelRooms = $this->getHotelRooms();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
+
+        $data = [
+           'profilePicture' => $profilePicture,
+            'hotelRooms' => $hotelRooms,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
+        ];
+        $this->view('businessmanager/services', $data);
+    }
+
+    public function vehicles(){
+        $profilePicture = $this->getProfilePicture();
+        $vehicles = $this->getVehicles();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
+
+        $data = [
+            'profilePicture' => $profilePicture,
+            'vehicles' => $vehicles,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
+        ];
+        $this->view('businessmanager/vehicles', $data);
+    }
+
+    public function guide(){
+
+        $profilePicture = $this->getProfilePicture();
+        $guides = $this->getGuides();
+        $bookingsCount = $this->getBookingsCount();
+        $OngoingCount = $this->getOngoingCount();
+        $guestCount = $this->getGuestCount();
+
+        $data = [
+            'profilePicture' => $profilePicture,
+            'guides' => $guides,
+            'bookingsCount' => $bookingsCount,
+            'OngoingCount'=> $OngoingCount,
+            'guestCount'=> $guestCount
+        ];
+        $this->view('businessmanager/guide', $data);
+    }
 
     public function businessmanageredit()
     {
@@ -916,14 +968,6 @@ class Businessmanager extends Controller
 
         return  $guestCount;
     }
-
-//    public function basicInfo(){
-//
-//        $user_id = $_SESSION['user_id'];
-//
-//        $basicInfo = $this->BusinessmanagersModel->basicInfo($user_id);
-//
-//    }
 
 
     public function generateReport()
@@ -1799,7 +1843,40 @@ class Businessmanager extends Controller
     }
 
 
+    public function getHotelRooms(){
 
+            $hotelRooms = $this->BusinessmanagersModel->getHotelRooms();
+//            var_dump($hotelRooms);
 
+            if ($hotelRooms) {
+                return $hotelRooms;
+            } else {
+                return [];
+            }
+    }
+
+    public function getVehicles(){
+
+        $vehicles = $this->BusinessmanagersModel->getVehicles();
+
+        if ($vehicles) {
+            return $vehicles;
+        } else {
+            return [];
+        }
+
+    }
+
+    public function getGuides(){
+
+        $guides = $this->BusinessmanagersModel->getGuides();
+
+        if ($guides) {
+            return $guides;
+        } else {
+            return [];
+        }
+
+    }
 
 }

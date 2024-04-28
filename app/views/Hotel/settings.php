@@ -115,7 +115,7 @@ include 'navigation.php';
                 <div class="rectangle">
                     <div class="basic-info-content">
                         <h2>Insert Service Validations</h2>
-                        <?php if ($data['verificationStatus'] === 0):                            ?>
+                        <?php if ($data['verificationStatus'] === 0): ?>
                             <p style="color: orange;">Add your verification documents</p>
                         <?php elseif ($data['verificationStatus'] === 1): ?>
                             <p style="color: #2189ff;">Yet to be approved</p>
@@ -124,11 +124,18 @@ include 'navigation.php';
                         <?php elseif ($data['verificationStatus'] === 3): ?>
                             <p style="color: red;">Your verification has been rejected</p>
                         <?php endif; ?>
-                        <a href="<?php echo URLROOT; ?>hotel/hotelvalidation">
-                            <button class="edit-button">Insert</button>
-                        </a>
+
+                        <?php if ($data['verificationStatus'] !== 0): ?>
+                            <button class="edit-button" disabled>Insert</button>
+                        <?php else: ?>
+                            <a href="<?php echo URLROOT; ?>hotel/hotelvalidation">
+                                <button class="edit-button">Insert</button>
+                            </a>
+                        <?php endif; ?>
                     </div>
                 </div>
+
+
 
             </div>
 

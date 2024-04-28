@@ -524,19 +524,33 @@ class Hotels
 
 
 
-    public function insertPdf($filename, $userId)
+    public function insertPdf($filename, $userId, $registrationNumber, $expiryDate)
     {
+        // Update the hotels table
+        $this->db->query('UPDATE hotel SET registrationNumber = :registrationNumber, expiryDate = :expiryDate WHERE user_id = :userId');
+        $this->db->bind(':registrationNumber', $registrationNumber);
+        $this->db->bind(':expiryDate', $expiryDate);
+        $this->db->bind(':userId', $userId);
+
+        // Execute the query for hotels
+        if (!$this->db->execute()) {
+            return false;
+        }
+
+        // Update the users table
         $this->db->query('UPDATE users SET document = :filename WHERE id = :userId');
         $this->db->bind(':filename', $filename);
         $this->db->bind(':userId', $userId);
 
-        // Execute
+        // Execute the query for users
         if ($this->db->execute()) {
             return true;
         } else {
             return false;
         }
     }
+
+
 
     public function updateProfilePicture($userId, $filename)
     {

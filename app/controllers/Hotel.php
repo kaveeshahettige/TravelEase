@@ -990,6 +990,8 @@ class Hotel extends Controller
         $userId = $_SESSION['user_id'];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $registrationNumber = $_POST['registrationNumber'];
+            $expiryDate = $_POST['expiryDate'];
             $targetDir = '../public/documents/';
             $fileName = basename($_FILES['service-validation-pdf']['name']); // Extract the filename
 
@@ -998,7 +1000,7 @@ class Hotel extends Controller
             // Move the uploaded file to the target directory
             if (move_uploaded_file($_FILES['service-validation-pdf']['tmp_name'], $targetFile)) {
                 // Call the model to insert the filename into the database
-                if ($this->hotelsModel->insertPdf($fileName, $userId)) {
+                if ($this->hotelsModel->insertPdf($fileName, $userId,$registrationNumber, $expiryDate)) {
                     // Success - You can redirect or show a success message
                     flash('success', 'PDF submitted successfully');
                     redirect('hotel/settings');

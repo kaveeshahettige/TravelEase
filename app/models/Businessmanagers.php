@@ -885,6 +885,40 @@ class Businessmanagers
         return $this->db->resultSet();
     }
 
+    public function getHotelRooms(){
+        $this->db->query('SELECT hotel_rooms.*, users.fname AS hotel_name 
+                      FROM hotel_rooms
+                      LEFT JOIN hotel ON hotel_rooms.hotel_id = hotel.hotel_id
+                      LEFT JOIN users ON hotel.user_id = users.id
+                      WHERE hotel_rooms.roomCondition = "activated"
+                      ORDER BY hotel_rooms.room_id ASC');
+
+        return $this->db->resultSet();
+    }
+
+
+    public function getVehicles(){
+        $this->db->query('SELECT vehicles.*, users.fname AS agency_name 
+                      FROM vehicles
+                      LEFT JOIN travelagency ON vehicles.agency_id = travelagency.agency_id
+                      LEFT JOIN users ON travelagency.user_id = users.id
+                      WHERE vehicles.vehicleCondition = "activated"
+                      ORDER BY vehicles.vehicle_id ASC');
+
+        return $this->db->resultSet();
+    }
+
+    public function getGuides(){
+        $this->db->query('SELECT guides.*, 
+                    CONCAT(users.fname, " ", users.lname) AS guide_name 
+                      FROM guides
+                      LEFT JOIN users ON guides.user_id = users.id
+                      WHERE users.profile_status = "1"
+                      ORDER BY guides.guide_id ASC');
+
+        return $this->db->resultSet();
+    }
+
 
 
 
