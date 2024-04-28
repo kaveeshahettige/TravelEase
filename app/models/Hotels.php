@@ -602,7 +602,12 @@ class Hotels
     public function deleteRoomStatus($room_id, $startDate)
     {
         // Prepare and execute the SQL query to delete room availability
-        $sql = "DELETE FROM room_availability WHERE room_id = :room_id AND startDate = :startDate";
+        $sql = "DELETE ra
+            FROM room_availability AS ra
+            LEFT JOIN bookings AS b ON ra.room_id = b.room_id AND :startDate >= b.startDate AND :startDate <= b.endDate AND b.bookingCondition != 'cancelled'
+            LEFT JOIN cartbookings AS cb ON ra.room_id = cb.room_id AND :startDate >= cb.startDate AND :startDate <= cb.endDate AND cb.bookingCondition != 'cancelled'
+            WHERE (b.room_id IS NULL AND cb.room_id IS NULL)
+            AND ra.room_id = :room_id AND ra.startDate = :startDate";
         $this->db->query($sql);
         $this->db->bind(':room_id', $room_id);
         $this->db->bind(':startDate', $startDate);
@@ -614,6 +619,8 @@ class Hotels
             return false; // Return false if the deletion failed
         }
     }
+
+
 
     public function getActiveRooms($hotel_id){
         $this->db->query('SELECT * FROM hotel_rooms WHERE hotel_id = :hotel_id AND roomCondition = "activated"');
@@ -754,6 +761,17 @@ class Hotels
 
         // Execute the query
         return $this->db->execute();
+    }
+
+    public function notifyUsersWithType2($booking_id, $sender_id, $notification_message){
+
+        $sql = "SELECT id FROM users WHERE type = 2";
+        $this->db->query($sql);
+        $users = $this->db->resultSet();
+
+        foreach ($users as $user){
+            $this->insertNotification($booking_id, $sender_id, $user->id, $notification_message);
+        }
     }
 
     public function getNotifications($user_id)

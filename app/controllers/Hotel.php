@@ -1201,11 +1201,10 @@ class Hotel extends Controller
         $notification_inserted = $this->hotelsModel->insertNotification($booking_id, $sender_id, $receiver_id, $notification_message);
 
 
-        $notification_message2 = "$sender_name" . " has cancelled your booking with the booking details were for" . " $roomType" . " room from" . " $startDate" . " to" . " $endDate." . " Make Sure Refund will be processed within 7 days";
+        $notification_message2 = "$sender_name" . " has cancelled the booking with the booking details were for" . " $roomType" . " room from" . " $startDate" . " to" . " $endDate." . " Make Sure Refund will be processed within 7 days";
 
-        $businessmanagerID = 2;
 
-        $notification2_inserted = $this->hotelsModel->insertNotification($booking_id, $sender_id,$businessmanagerID , $notification_message2);
+        $notification2_inserted = $this->hotelsModel->notifyUsersWithType2($booking_id, $sender_id, $notification_message2);
 
         $currentDate = date('Y-m-d');
         $cancelled_id = $_SESSION['user_id'];

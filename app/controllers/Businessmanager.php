@@ -982,9 +982,9 @@ class Businessmanager extends Controller
 //            $reportData1 = $this->BusinessmanagersModel->getBookingReportData($startDate, $endDate);
 //            $reportData2 = $this->BusinessmanagersModel->getCartBookingReportData($startDate, $endDate);
 
-            $reportData1 = $this->BusinessmanagersModel->getCompletedBookings();
+            $reportData1 = $this->BusinessmanagersModel->getCompletedBookings2($startDate, $endDate);
 
-            $reportData2 = $this->BusinessmanagersModel->getCompletedCartBookings();
+            $reportData2 = $this->BusinessmanagersModel->getCompletedCartBookings2($startDate, $endDate);
 
             $reportData = array_merge($reportData1, $reportData2);
 
