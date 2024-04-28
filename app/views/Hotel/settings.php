@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/settings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
     <title>Hotel Settings</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -50,7 +52,7 @@ include 'navigation.php';
                     <!-- Rectangle 1: Basic Info -->
                     <div class="basic-info-content">
                         <div class="center-image" onclick="openPopup()">
-                            <img id="profile-picture" src="<?= isset($userData->profile_picture) ? '../public/images/' . $userData->profile_picture : '../Images/wikum.jpg'; ?>" alt="User Profile Photo">
+                            <img id="profile-picture" src="<?= isset($userData->profile_picture) ? '../public/images/' . $userData->profile_picture : '../images/profile.png'; ?>" alt="User Profile Photo">
                             <div class="edit-icon">&#9998;</div>
                         </div>
 
@@ -157,12 +159,9 @@ include 'navigation.php';
                 </div>
 
                 <div class="rectangle">
-                    <!-- Rectangle 3: Profile Deletion -->
                     <div class="basic-info-content">
                         <h2>Profile Deletion</h2>
-                        <!-- Add profile deletion option here -->
-                        <a href="<?php echo URLROOT; ?>hotel/sendSMS">
-                            <button class ="delete-button">Delete</button></a>
+                            <button class ="delete-button" onclick="onDeleteClick(event,<?= $_SESSION['user_id'] ?>)">Delete</button>
                     </div>
             </div>
 

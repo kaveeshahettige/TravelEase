@@ -15,6 +15,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="<?php echo URLROOT ?>/public/js/driver/calender.js"></script>
 
+
 </head>
 
 <body>
@@ -23,6 +24,9 @@
        <div class="user-profile">
             <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
+            <a class="" href="<?php echo URLROOT; ?>/driver/notification">
+                <i class="bx bx-bell"></i>
+            </a>
         </div>
 
 
@@ -106,12 +110,12 @@
 
                             <td>
                                 <button class="btn btn-remove-unavailable"
-                                    onclick="removeUnavailableDate(<?php echo $agency_vehicles->vehicle_id; ?>, '<?php echo $data['date']; ?>')">
-                                    Remove Unavailability
+                                    onclick="setUnavailableDate(<?php echo $agency_vehicles->vehicle_id; ?>, '<?php echo $data['date']; ?>')">
+                                    <i class='bx bx-check'></i>
                                 </button>
                                 <button class="btn btn-set-unavailable"
-                                    onclick="setUnavailableDate(<?php echo $agency_vehicles->vehicle_id; ?>, '<?php echo $data['date']; ?>')">
-                                    Set Unavailability
+                                    onclick="removeUnavailableDate(<?php echo $agency_vehicles->vehicle_id; ?>, '<?php echo $data['date']; ?>')">
+                                    <i class='bx bx-trash'></i>
                                 </button>
 
                             </td>

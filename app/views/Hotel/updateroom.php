@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/hotel/settingssub.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
-    <title>Hotel - Add Rooms</title>
+    <title>Hotel - Update Rooms</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -253,7 +253,7 @@ include 'navigation.php';
                         <div>
                             <div class="form-group">
                                 <label for="roomImages4">Room Images 4:</label>
-                                <input type="file" id="roomImages4" name="roomImages[]" accept="image/*" required>
+                                <input type="file" id="image" name="roomImages[]" accept="image/*" required>
                                 <?php if (!empty($roomData['roomImages'][3])): ?>
                                     <img src="<?php echo $roomData['roomImages'][3]; ?>" alt="Room Image 4">
                                 <?php endif; ?>

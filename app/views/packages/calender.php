@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/calender.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/calenders.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/navigation.css">
-    <title>Packages Availability</title>
+    <title>Guide Availability</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/hotel/x-icon" href="<?php echo URLROOT; ?>/images/hotel/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -39,27 +39,38 @@ include 'navigation.php';
 
 
             <!-- Total Bookings Box -->
+            <?php
+            $bookingCount = $data["bookingCount"];
+            ?>
             <div class="box">
-                <h2>Total Rooms Allocated</h2>
-                <p>10</p>
+                <h2>Total Bookings</h2>
+                <p><?php echo $bookingCount;?></p>
             </div>
 
             <!-- Ongoing Bookings Box -->
+            <?php
+            $totalRevenue = $data["totalRevenue"];
+            ?>
             <div class="box">
-                <h2>Booked Rooms</h2>
-                <p>5</p>
+                <h2>Total Revenue</h2>
+                <p><?php echo $totalRevenue;?> LKR</p>
             </div>
 
             <!-- Customers Box -->
+            <?php
+            $guestCount = $data["guestCount"];
+            ?>
             <div class="box">
-                <h2>Available Rooms</h2>
-                <p>5</p>
+                <h2>Total Customers</h2>
+                <p><?php echo $guestCount; ?></p>
             </div>
         </div>
     </div>
 
     <div class ="dashboard-sub-content">
+        <h2 style="margin-left: 25px;">Update Your Availability in the Calendar</h2>
         <div class="calendar-container">
+
 
             <div class="calendar-content">
                 <div class="calendar-header">

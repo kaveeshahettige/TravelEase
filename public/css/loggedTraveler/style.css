@@ -264,6 +264,7 @@ input[type="text"] {
     display: grid;
     grid-template-rows: 80% 20%;
     margin: 2%;
+    border-radius: 5%;
 }
 
 .main2trip .main2img1content:hover {
@@ -342,6 +343,7 @@ input[type="text"] {
     grid-template-rows: 73% 27%;
     margin: 2%;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5%;
 }
 .main3images .main3img1content:hover{
     display: grid;
@@ -354,6 +356,7 @@ input[type="text"] {
     grid-template-rows: 73% 27%;
     margin: 2%;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5%;
 }
 .main3images .main3img2content:hover{
     display: grid;
@@ -367,6 +370,7 @@ input[type="text"] {
     grid-template-rows: 73% 27%;
     margin: 2%;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5%;
 }
 .main3images .main3img3content:hover{
     display: grid;
@@ -380,6 +384,8 @@ input[type="text"] {
     width: 100%;
     height:auto;
     padding: 0px;
+    border-top-left-radius: 3%; /* Upper-left corner border radius */
+        border-top-right-radius: 3%;
 }
 
 .main3images p{

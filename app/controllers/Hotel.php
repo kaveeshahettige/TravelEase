@@ -1254,6 +1254,32 @@ class Hotel extends Controller
         return $totalRevenue;
     }
 
+    public function profileDelete()
+    {
+        $user_id = $_POST['user_id'];
+
+        $ongoingBooking = $this->hotelsModel->getOngoingBookingCount($user_id);
+        $ongoingCart = $this->hotelsModel->getOngoingCartCount($user_id);
+
+        $ongoingBookings = $ongoingBooking + $ongoingCart;
+
+        if ($ongoingBookings>0) {
+            echo json_encode(['error' => 'You have ongoing bookings. Please cancel them before deleting your profile']);
+            return;
+        }else {
+            $deleted = $this->hotelsModel->deleteProfile($user_id);
+        }
+
+
+        if ($deleted) {
+            echo json_encode(['success' => 'Profile deleted successfully']);
+        } else {
+            echo json_encode(['error' => 'Failed to delete profile']);
+        }
+
+    }
+
+
 }
 
 

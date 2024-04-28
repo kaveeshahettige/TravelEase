@@ -18,10 +18,10 @@
 </head>
 
 
- <?php
+<?php
                 // var_dump($data['completedBookings']);
 
-// var_dump($data['vehicle'])?> 
+// var_dump($data['vehicle'])?>
 
 
 <body>
@@ -30,6 +30,9 @@
             <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>"
                 alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
+            <a class="" href="<?php echo URLROOT; ?>/driver/notification">
+                <i class="bx bx-bell"></i>
+            </a>
         </div>
 
 
@@ -102,17 +105,69 @@
             </div>
         </div>
 
-        <div class="search-content">
-            <div class="booking-search">
-                <input type="text" id="booking-search" placeholder="Search for Boookings">
-                <button onclick="filterBookings()">
-                    <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
-                </button>
+        <div class="table-content">
+            <div class="tab">
+                <a href="<?php echo URLROOT?>/driver/bookings"><button class="tablinks active">Ongoing
+                        Bookings</button></a>
+                <a href="<?php echo URLROOT?>/driver/combookings"><button class="tablinks">Completed
+                        Bookings</button></a>
+                <a href="<?php echo URLROOT?>/driver/rejbookings"><button class="tablinks">Cancelled
+                        Bookings</button></a>
             </div>
         </div>
 
+        <div class="search-content">
+    <div class="booking-search">
+        <input type="text" id="cab-search" placeholder="Name or Vehicle Number">
+        <input type="date" id="start-date" placeholder="Start Date">
+        <input type="date" id="end-date" placeholder="End Date">
+        <button onclick="filterCabBookings()">
+            <i class="bx bx-search"></i>
+        </button>
+    </div>
+</div>
+
+<script>
+    function filterCabBookings() {
+        var input, filter, startDate, endDate, table, tr, tdPassengerName, tdPlateNumber, tdDate, i, txtPassengerName, txtPlateNumber, txtDate ;
+        input = document.getElementById("cab-search");
+        filter = input.value.toUpperCase();
+        startDate = document.getElementById("start-date").value;
+        endDate = document.getElementById("end-date").value;
+        table = document.querySelector(".cab-booking-table");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            tdPassengerName = tr[i].getElementsByTagName("td")[1]; // Index 1 for Passenger Name column
+            tdPlateNumber = tr[i].getElementsByTagName("td")[4]; // Index 4 for Plate Number column
+            tdDate = tr[i].getElementsByTagName("td")[2]; // Index 2 for Date column
+
+            if (tdPassengerName && tdPlateNumber && tdDate) {
+                txtPassengerName = tdPassengerName.textContent || tdPassengerName.innerText;
+                txtPlateNumber = tdPlateNumber.textContent || tdPlateNumber.innerText;
+                txtDate = tdDate.textContent || tdDate.innerText;
+                if ((txtPassengerName.toUpperCase().indexOf(filter) > -1 || txtPlateNumber.toUpperCase().indexOf(filter) > -1) &&
+                    (compareDates(startDate, txtDate) && compareDates(txtDate, endDate))) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function compareDates(start, end) {
+        if (!start || !end) return true;
+        var startDate = new Date(start);
+        var endDate = new Date(end);
+        var compareDate = new Date(end);
+        compareDate.setDate(compareDate.getDate() + 1); // Add one day to include the end date
+        return new Date(start) <= endDate && new Date(end) >= startDate;
+    }
+</script>
+
         <div class="table-content">
-            <h2>Pending Booking Details</h2>
+            <h2>Ongoing Booking Details</h2>
             <?php
     // Check if $data exists and has the expected structure
     if (!empty($data) && isset($data['pendingBookings'])) {
@@ -121,7 +176,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Booking ID</th>
+                        <!-- <th>Booking ID</th> -->
                         <!-- <th>Temp ID</th> -->
                         <th>Passenger Name</th>
                         <th>Passenger Contact Number</th>
@@ -145,7 +200,7 @@
                 ?>
                     <tr>
                         <td><?php echo $count; ?></td> <!-- Display the count -->
-                        <td><?php echo $booking->booking_id; ?></td>
+                        <!-- <td><?php echo $booking->booking_id; ?></td> -->
                         <!-- <td><?php echo $booking->temporyid; ?></td> -->
                         <td><?php echo $booking->fname . ' ' . $booking->lname; ?>
                         </td>
@@ -167,176 +222,7 @@
                 </tbody>
             </table>
             <?php } ?>
-        </div>
-        
-
-
-        <div class="dashboard-content">
-            <h1>Trip History</h1>
-        </div>
-
-        <div class="dashboard-sub-content">
-            <div class="top-boxes">
-
-                <!-- Total Request Box -->
-                <div class="box">
-                    <h2>Total Trips</h2>
-                    <p></p>
-                </div>
-
-
-            </div>
-        </div>
-
-        <div class="search-content">
-            <div class="booking-search">
-                <input type="text" id="booking-search" placeholder="Search Trips">
-                <button>
-                    <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
-                </button>
-            </div>
-        </div>
-        <div class="table-content">
-            <h2>Completed Booking Details</h2>
-            <table class="booking-table">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Trip ID</th>
-                        <th>Trip Charges</th>
-                        <!-- <th>Rating</th> -->
-                        <!-- <th>Comments</th> -->
-                        <th>More Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-
-                    
-            // Check if $data exists and has the expected structure
-            if (!empty($data) && isset($data['completedBookings']) ) {
-                $completedBookings = $data['completedBookings'];
-                // var_dump($data['completedBookings']);
-                $count = 0; // Initialize a counter variable
-
-                foreach ($completedBookings as $Cbooking) {
-                    
-                    $count++; // Increment the counter for each iteration
-            ?>
-                    <tr>
-                        <td><?php echo $count; ?></td>
-                        <td><?php echo $Cbooking->booking_id; ?></td>
-                        <td><?php echo $Cbooking->payment_amount; ?></td>
-                        <!-- <td><?php echo isset($Cbooking->feedbacks_details[0]->rating) ? $booking->feedbacks_details[0]->rating : 'N/A'; ?> -->
-                        <!-- </td> -->
-                        <!-- <td><?php echo isset($Cbooking->feedbacks_details[0]->feedback) ? $booking->feedbacks_details[0]->feedback : 'No feedback'; ?> -->
-                        <!-- </td> -->
-                        <td>
-                            <!-- Add onclick event to trigger showDetails function -->
-                            <button class="view-button"
-                                onclick="showDetails(<?php echo $count; ?>,
-    '<?php echo $Cbooking->booking_id; ?>',
-    '<?php echo $Cbooking->fname . ' ' . $booking->lname; ?>',
-    '<?php echo $Cbooking->number; ?>',
-    '<?php echo $Cbooking->startDate; ?>',
-    '<?php echo $Cbooking->endDate; ?>',
-    '<?php echo $Cbooking->start_time; ?>',
-    '<?php echo $Cbooking->plate_number; ?>',
-    '<?php echo $Cbooking->payment_amount; ?>',
-
-    '<?php echo isset($Cbooking->feedbacks_details[0]->feedback) ? $booking->feedbacks_details[0]->feedback : 'No feedback'; ?>')">More</button>
-                        </td>
-                    </tr>
-                    <?php
-                }
-            } else {
-                // Handle case where data is missing or not in expected format
-                echo '<tr><td colspan="6">No data available</td></tr>';
-            }
-            ?>
-                </tbody>
-            </table>
-        </div>
-
-
-
-
-
-
-    </main>
-
-    <script>
-    function showDetails(rowNumber, bookingId, travelerName, travelerNumber, startDate, endDate, start_time,
-        plate_number, payment, rating, feedback) {
-        var popupContainer = document.createElement('div');
-        popupContainer.classList.add('popup-container');
-
-        var popupContent = document.createElement('div');
-        popupContent.classList.add('popup-content');
-        popupContent.innerHTML = `
-  
-
-<div class="popup-content">
-    <h3>Booking Details</h3>
-    <div class="booking-detail">
-        <strong>Booking ID:</strong> ${bookingId}
-    </div>
-    <div class="booking-detail">
-        <strong>Traveler Name:</strong> ${travelerName}
-    </div>
-    <div class="booking-detail">
-        <strong>Traveler Number:</strong> ${travelerNumber}
-    </div>
-    <div class="booking-detail">
-        <strong>Start Date:</strong> ${startDate}
-    </div>
-    <div class="booking-detail">
-        <strong>End Date:</strong> ${endDate}
-    </div>
-    <div class="booking-detail">
-        <strong>Start Time:</strong> ${start_time}
-    </div>
-    <div class="booking-detail">
-        <strong>Vehicle Number:</strong> ${plate_number}
-    </div>
-   
-    <div class="booking-detail">
-        <strong>Amount:</strong> ${payment}
-    </div>
-   
-</div>
-
-
-
-   
-
-
-`;
-
-        function generateRatingStars(rating) {
-            let stars = '';
-            for (let i = 1; i <= 5; i++) {
-                if (i <= rating) {
-                    stars += '<span class="rating-stars"></span>';
-                } else {
-                    stars += '<span class="rating-stars empty"></span>';
-                }
-            }
-            return stars;
-        }
-
-
-        popupContainer.appendChild(popupContent);
-        document.body.appendChild(popupContainer);
-
-        // Close the popup when clicked outside the content
-        popupContainer.addEventListener('click', function(event) {
-            if (event.target === popupContainer) {
-                document.body.removeChild(popupContainer);
-            }
-        });
-    }
-    </script>
+        </div>        
 </body>
 
 

@@ -78,6 +78,7 @@ include 'navigation.php';
             </div>
             </div>
 
+
         <div class="table-content">
             <h2>Pending Refunds</h2>
             <table class="booking-table">

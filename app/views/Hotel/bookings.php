@@ -137,9 +137,9 @@ $userData= $data['basicInfo']['userData'];
                     <th>No</th>
                     <th>Guest Name</th>
                     <th>Check-in Date</th>
+                    <th>Check-out Date</th>
                     <th>Room Number</th>
                     <th>Room Type</th>
-                    <th>Booking Status</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -156,9 +156,9 @@ $userData= $data['basicInfo']['userData'];
                         <td><?php echo $key + 1; ?></td>
                         <td><?php echo $booking->fname; ?></td>
                         <td><?php echo date("Y-m-d", strtotime($booking->startDate)); ?></td>
+                        <td><?php echo date("Y-m-d", strtotime($booking->endDate)); ?></td>
                         <td><?php echo $booking->registration_number; ?></td>
                         <td><?php echo $booking->roomType; ?></td>
-                        <td><?php echo $booking->bookingCondition; ?></td>
                         <td>
                             <button class="view-button" onclick="openPopup(); updatePopupDetails('<?php echo $booking->profile_picture; ?>','<?php echo $booking->fname; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->roomType; ?>')">
                                 <i class='bx bx-show'></i>

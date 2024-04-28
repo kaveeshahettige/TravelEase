@@ -118,7 +118,7 @@ body{
 }
  .images .mainimage img{
     max-width: 100%;
-    height: 250px;
+    height: 350px;
     width: 500px;
     border-radius: 5%;
 }
@@ -464,6 +464,40 @@ body{
   }
   
   /* ///////////// */
-  
+  .des {
+    /* Add general styling for the container */
+    background-color: #f9f9f9;
+    padding: 10px;
+}
+
+.des h5 {
+    /* Style for the heading */
+    margin: 0;
+    font-size: 1.2em;
+    color: #333; /* Change the color as needed */
+}
+
+.des p {
+    /* Style for the paragraph */
+    margin-top: 5px;
+    font-size: 1em;
+    line-height: 1.4;
+     /* Change the color as needed */
+}
+
+.ldiv1 {
+    margin-bottom: 10px; /* Adjust spacing between each ldiv1 */
+}
+
+.booking-label {
+    font-weight: bold; /* Make the label bold */
+    margin-right: 10px; /* Add some space between label and value */
+}
+
+.booking-value {
+    /* You can add additional styling as needed */
+}
+
+
 
 

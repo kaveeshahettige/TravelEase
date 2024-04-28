@@ -108,9 +108,15 @@ include 'navigation.php';
             <?php else:
                 foreach ($reviews as $review): ?>
                     <div class="review-box">
+
                         <div class="review-image">
-                            <img src="<?php echo $review->user_profile_picture ? URLROOT . '/images/' . $review->user_profile_picture : URLROOT . '/images/hotel/wikum.jpg'; ?>" alt="User Photo">
+                            <?php
+                            $userProfilePicture = $review->user_profile_picture ? URLROOT . 'public/images/' . $review->user_profile_picture : URLROOT . 'images/profile.png';
+                            ?>
+                            <img src="<?php echo $userProfilePicture; ?>" alt="User Photo">
                         </div>
+
+
                         <div class="review-sub-content">
                             <h2><?= $review->user_fname; ?></h2>
                             <p class="review-text"><?= $review->feedback; ?></p>

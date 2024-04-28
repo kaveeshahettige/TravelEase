@@ -1,5 +1,5 @@
-function showCancelPopup(package_id, user_id, booking_id, startDate, endDate, temporyid, meetTime) {
-    console.log('showCancelPopup');
+function showCancelPopup(package_id, user_id, booking_id, startDate, endDate, temporyid, meetTime,amount) {
+    console.log(amount);
     // Create overlay div
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
@@ -9,7 +9,7 @@ function showCancelPopup(package_id, user_id, booking_id, startDate, endDate, te
     confirmDialog.innerHTML = `
         <div class="confirm-message">Are you sure you want to cancel this booking?</div>
         <div class="buttons">
-            <button class="btn btn-yes" onclick="cancelBooking('${package_id}', '${user_id}', '${booking_id}', '${startDate}', '${endDate}', '${temporyid}', '${meetTime}')">Yes</button>
+            <button class="btn btn-yes" onclick="cancelBooking('${package_id}', '${user_id}', '${booking_id}', '${startDate}', '${endDate}', '${temporyid}', '${meetTime}','${amount}')">Yes</button>
             <button class="btn btn-no" onclick="cancelCancel()">No</button>
         </div>
     `;
@@ -26,7 +26,7 @@ function cancelCancel() {
     confirmDialog.parentNode.removeChild(confirmDialog);
 }
 
-function cancelBooking(package_id, user_id, booking_id, startDate, endDate, temporyid, meetTime) {
+function cancelBooking(package_id, user_id, booking_id, startDate, endDate, temporyid, meetTime,amount) {
     console.log('cancelBooking');
     // Prepare the data to send
     const requestData = {
@@ -36,7 +36,8 @@ function cancelBooking(package_id, user_id, booking_id, startDate, endDate, temp
         startDate: startDate,
         endDate: endDate,
         temporyid: temporyid,
-        meetTime: meetTime
+        meetTime: meetTime,
+        amount: amount
     };
 
     const form = new FormData();
@@ -47,6 +48,7 @@ function cancelBooking(package_id, user_id, booking_id, startDate, endDate, temp
     form.append('endDate', endDate);
     form.append('temporyid', temporyid);
     form.append('meetTime', meetTime);
+    form.append('amount', amount);
 
     // Make an AJAX request
     fetch('http://localhost/TravelEase/packages/updateBookingStatus', {

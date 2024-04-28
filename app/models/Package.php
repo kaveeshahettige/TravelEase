@@ -6,94 +6,6 @@ class Package{
         $this->db =new Database;
     }
 
-    public function getPackages() {
-        $this->db->query('SELECT * FROM packages');
-        $results = $this->db->resultSet();
-        return $results;
-    }
-
-    public function packagesedit($packageData) {
-        $this->db->query ('INSERT INTO packages 
-    (name, type, TransportProvider, hotel, Price, Location, Images, description) VALUES (:name, :type, :TransportProvider, :hotel, :Price, :Location, :Images, :PackageDescription)');
-        //bind values
-        $this->db->bind(':name',$packageData['PackageName']);
-        $this->db->bind(':type',$packageData['PackageType']);
-        // $this->db->bind(':duration',$packageData['Duration']);
-        $this->db->bind(':TransportProvider',$packageData['TransportProvider']);
-        $this->db->bind(':hotel',$packageData['AccomadationProvider']);
-        $this->db->bind(':Price',$packageData['PriceOfPackage']);
-        $this->db->bind(':Location',$packageData['PriceOfPackage']);
-        $this->db->bind(':Images',$packageData['PackageImages']);
-        $this->db->bind(':PackageDescription',$packageData['PackageDescription']);
-
-        //execute
-        if($this->db->execute()){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    public function findpackages($PackageID){
-        $this->db->query('SELECT * from packages WHERE PackageID = :PackageID');
-        $this->db->bind(':PackageID', $PackageID);
-        $packageData=$this->db->resultSet();
-//                print_r($packageData);
-        //check row
-        if($this->db->rowCount()>0){
-            return $packageData[0];
-        }else{
-            return null;
-        }
-    }
-
-
-    public function updatePackages($packageData) {
-        $this->db->query('UPDATE packages 
-                      SET name = :PackageName, 
-                          type = :PackageType, 
-                          duration = :Duration,  
-                          Price= :PriceOfPackage, 
-                          description = :PackageDescription 
-                      WHERE PackageID = :PackageID');
-
-        // Bind values
-        $this->db->bind(':PackageID', $packageData['PackageID']);
-        $this->db->bind(':PackageName', $packageData['PackageName']);
-        $this->db->bind(':PackageType', $packageData['PackageType']);
-        $this->db->bind(':Duration', $packageData['Duration']);
-//        $this->db->bind(':TransportProvider', $packageData['TransportProvider']);
-//        $this->db->bind(':AccomadationProvider', $packageData['AccomadationProvider']);
-        $this->db->bind(':PriceOfPackage', $packageData['PriceOfPackage']);
-//        $this->db->bind(':Location', $packageData['Location']);
-//        $this->db->bind(':PackageImages', $packageData['PackageImages']);
-        $this->db->bind(':PackageDescription', $packageData['PackageDescription']);
-
-
-        // Execute
-        if ($this->db->execute()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
-    public function deletepackages($PackageID) {
-        $this->db->query('DELETE FROM packages WHERE PackageID = :PackageID');
-        // Bind values
-        $this->db->bind(':PackageID', $PackageID);
-
-        // Execute after binding
-        $this->db->execute();
-
-        // Check for row count affected
-        if ($this->db->rowCount() > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     public function updateProfilePicture($userId, $filename)
     {
@@ -125,7 +37,7 @@ class Package{
 
     public function insertStatus($user_id,$startDate){
 
-        $sql = "INSERT into guide_availability (user_id,startDate) VALUES (:user_id,:startDate)";
+        $sql = "INSERT into guide_availability (user_id,startDate,endDate) VALUES (:user_id,:startDate,:startDate)";
         $this->db->query($sql);
         $this->db->bind(':user_id',$user_id);
         $this->db->bind(':startDate',$startDate);
@@ -169,7 +81,6 @@ class Package{
     }
 
 
-
     public function getUserInfo($user_id)
     {
         $sql = "SELECT * FROM users WHERE id = :user_id";
@@ -184,11 +95,46 @@ class Package{
 
 
     public function getBookings($user_id){
+        $sql = "SELECT b.*, u.fname, u.profile_picture, g.meetTime, p.amount
+            FROM bookings b
+            JOIN users u ON b.user_id = u.id
+            LEFT JOIN guide_bookings g ON b.booking_id = g.booking_id
+            LEFT JOIN payments p ON b.booking_id = p.booking_id
+            WHERE b.package_id = :user_id
+            AND b.endDate >= CURDATE()
+            AND b.bookingCondition != 'cancelled'
+            ";
+
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->resultSet();
+    }
+
+    public function getCancelledBookings($user_id){
         $sql = "SELECT b.*, u.fname, u.profile_picture, g.meetTime
             FROM bookings b
             JOIN users u ON b.user_id = u.id
             LEFT JOIN guide_bookings g ON b.booking_id = g.booking_id
-            WHERE b.package_id = :user_id";
+            WHERE b.package_id = :user_id
+            AND b.bookingCondition = 'cancelled'
+            ";
+
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->resultSet();
+    }
+
+    public function getCompleteBookings($user_id){
+        $sql = "SELECT b.*, u.fname, u.profile_picture, g.meetTime
+            FROM bookings b
+            JOIN users u ON b.user_id = u.id
+            LEFT JOIN guide_bookings g ON b.booking_id = g.booking_id
+            WHERE b.package_id = :user_id
+            AND b.endDate < CURDATE()
+            AND b.bookingCondition != 'cancelled'
+            ";
 
         $this->db->query($sql);
         $this->db->bind(':user_id', $user_id);
@@ -198,11 +144,43 @@ class Package{
 
 
     public function getCartBookings($user_id){
+        $sql = "SELECT cb.*, u.fname, u.profile_picture, g.meetTime, p.amount
+            FROM cartbookings cb
+            JOIN users u ON cb.user_id = u.id
+            LEFT JOIN guide_bookings g ON cb.booking_id = g.booking_id
+            LEFT JOIN cartpayments p ON cb.booking_id = p.booking_id AND cb.temporyid = p.tempory_id
+            WHERE cb.package_id = :user_id
+            AND cb.endDate >= CURDATE()
+            AND cb.bookingCondition = 'cancelled'";
+
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->resultSet();
+    }
+
+    public function getCancelledCartBookings($user_id){
         $sql = "SELECT cb.*, u.fname, u.profile_picture, g.meetTime
             FROM cartbookings cb
             JOIN users u ON cb.user_id = u.id
             LEFT JOIN guide_bookings g ON cb.booking_id = g.booking_id
-            WHERE cb.package_id = :user_id";
+            WHERE cb.package_id = :user_id
+            AND cb.bookingCondition = 'cancelled'";
+
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->resultSet();
+    }
+
+    public function getCompleteCartBookings($user_id){
+        $sql = "SELECT cb.*, u.fname, u.profile_picture, g.meetTime
+            FROM cartbookings cb
+            JOIN users u ON cb.user_id = u.id
+            LEFT JOIN guide_bookings g ON cb.booking_id = g.booking_id
+            WHERE cb.package_id = :user_id
+            AND cb.endDate < CURDATE()
+            AND cb.bookingCondition != 'cancelled'";
 
         $this->db->query($sql);
         $this->db->bind(':user_id', $user_id);
@@ -317,6 +295,50 @@ class Package{
         return $this->db->execute();
     }
 
+    public function notifyUsersWithType2($booking_id, $sender_id, $notification_message){
+
+        $sql = "SELECT id FROM users WHERE type = 2";
+        $this->db->query($sql);
+        $users = $this->db->resultSet();
+
+        foreach ($users as $user){
+            $this->insertNotification($booking_id, $sender_id, $user->id, $notification_message);
+        }
+    }
+
+
+
+
+    public function updateRefund($temporyid,$booking_id,$sender_id,$receiver_id,$cancelled_id,$amount,$currentDate){
+
+        $sql = "INSERT INTO refunds (tempory_id,booking_id,serviceProvider_id,user_id,cancel_user_id,refund_amount,cancelled_date) 
+                VALUES (:temporyid,:booking_id, :sender_id, :receiver_id, :cancelled_id, :amount, :currentDate)";
+
+        $this->db->query($sql);
+
+        $this->db->bind(':temporyid', $temporyid);
+        $this->db->bind(':booking_id', $booking_id);
+        $this->db->bind(':sender_id', $sender_id);
+        $this->db->bind(':receiver_id', $receiver_id);
+        $this->db->bind(':cancelled_id', $cancelled_id);
+        $this->db->bind(':amount', $amount);
+        $this->db->bind(':currentDate', $currentDate);
+
+        return $this->db->execute();
+    }
+
+    public function insertNotification2($booking_id, $sender_id, $receiver_id, $notification_message){
+        $sql = "INSERT INTO notifications (booking_id, sender_id, receiver_id, notification) VALUES (:booking_id, :sender_id, :receiver_id, :notification_message)";
+        $this->db->query($sql);
+        $this->db->bind(':booking_id', $booking_id);
+        $this->db->bind(':sender_id', $sender_id);
+        $this->db->bind(':receiver_id', $receiver_id); // Use the provided receiver_id
+        $this->db->bind(':notification_message', $notification_message);
+
+        return $this->db->execute();
+    }
+
+
     public function getNotifications($user_id)
     {
         $sql = "SELECT n.*, u.fname, u.profile_picture
@@ -355,6 +377,50 @@ class Package{
         }
     }
 
+
+    public function getBookingCount($user_id){
+
+        $this->db->query('SELECT COUNT(*) as count FROM bookings 
+                         WHERE package_id = :user_id
+                         AND bookingCondition != "cancelled"');
+
+        $this->db->bind(':user_id', $user_id);
+
+        $result = $this->db->single();
+        return $result->count;
+    }
+
+    public function getCartBookingCount($user_id){
+
+        $this->db->query('SELECT COUNT(*) as count FROM cartbookings 
+                         WHERE package_id = :user_id
+                         AND bookingCondition != "cancelled"');
+
+        $this->db->bind(':user_id', $user_id);
+
+        $result = $this->db->single();
+        return $result->count;
+    }
+
+    public function getTotalRevenue($user_id){
+        $this->db->query('SELECT SUM(paidAmount) as total FROM final_payment
+                         WHERE serviceProvider_id  = :user_id');
+
+        $this->db->bind(':user_id', $user_id);
+
+        $result = $this->db->single();
+        return $result->total;
+    }
+
+    public function getGuestCount($user_id){
+        $this->db->query('SELECT COUNT(DISTINCT b.user_id) AS user_count
+                      FROM bookings b
+                      WHERE b.serviceProvider_id = :user_id AND bookingCondition != "cancelled" ');
+
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->single()->user_count;
+    }
 
 
 }

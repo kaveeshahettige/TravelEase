@@ -1,0 +1,633 @@
+body{
+    background-color:  #FDFFFF;
+    font-family: "Poppins", sans-serif;
+   
+}
+/* Style for the navbar */
+.navbar {
+    overflow: hidden; 
+    /*display: flex;
+    flex-direction: row;*/
+}
+
+/* Style for the logo */
+.logo {
+    float: left; 
+    font-family: 'Caveat', cursive;
+    font-style: italic;
+}
+.logo img{
+    width: 50px;
+    margin-left: 30px;
+    padding: 7px;
+}
+.logo label{
+    position: absolute;
+    padding: 20px;
+    padding-left: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Style for the navigation list */
+.navbar ul {
+    list-style-type: none; /* Remove bullet points from the list */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Clear floats within the list */
+    margin-left: 400px;
+}
+
+/* Style for list items (navigation links) */
+.navbar li {
+    float: left; /* Float the list items to the right */
+    padding: 10px 15px 10px 15px;
+}
+
+/* Style for list item links */
+.navbar a {
+    display: block; /* Make links block-level for better spacing */
+    color: black; /* Text color of the links */
+    text-align: center; /* Center-align the text within the links */
+    padding: 14px 16px; /* Add padding to the links */
+    text-decoration: none; /* Remove underlines from the links */
+    font-size: 20px;
+}
+.navbar a:hover{
+   
+   color:#F9B314;
+}
+#selected{
+    font-weight: bold;
+}
+.rightcontent{
+    float: right;
+}
+
+#logout{
+    background-color: #F9B314;
+    padding: 10px 15px 10px 15px;
+    border-radius: 20px;
+    color: #FDFFFF;
+}
+.rightcontent li a{
+   padding: 0px;
+  }
+.rightcontent li a img {
+    width: 50px; /* Set the width of the profile picture */
+    height: 50px; /* Set the height of the profile picture */
+    border-radius: 50%; /* Make the image circular */
+    margin-left: 10px; /* Add spacing between the profile picture and the last navigation item */
+    border: 2px solid #F9B314;
+   
+  }
+
+/* /////////////////////// */
+.resultPagem1{
+    display: grid;
+    grid-template-columns: 60% 40%;
+}
+.results{
+    position: relative;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5)
+    
+}
+.ResultTopics{
+font-size: 40px;
+}
+
+.results img{
+    max-width: 100%;
+    height: 100%;
+    
+}
+.results .textonimage{
+    width: 95%;
+    position: absolute; /* Position the div absolutely */
+    bottom: 0%; /* Position it 80% from the top of the parent container */
+    left: 50%; /* Position it 50% from the left of the parent container */
+    transform: translate(-50%, -50%); /* Center it both horizontally and vertically */
+    text-align: center; /* Center the text horizontally */
+    color:#FDFFFF; /* Text color */
+    font-size: 20px;
+    
+    padding: 0px; /* Add padding for spacing */
+}
+.dark-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Adjust the alpha (fourth) value to control darkness */
+    pointer-events: none; /* Allows interaction with the underlying image */
+}
+
+.map img{
+    max-width: 100%;
+    height: 100%;
+}
+#map {
+    height: 100%; /* Set the height to 100% to fill the parent container */
+}
+
+.resultsPage1_1 .Buttons button{
+    padding: 10px 30px;
+    margin: 40px;
+    margin-top: 30px;
+    margin-right: 40px;
+    margin-bottom:20px;
+    color: #F9B314;
+    border: 2px solid #F9B314;
+    background-color: #FDFFFF;
+    border-radius: 10px;
+   font-size: 17px;
+}
+
+.resultsPage1_1 .Buttons button:hover{
+    padding: 10px 30px;
+    margin: 40px;
+    margin-top: 30px;
+    margin-right: 40px;
+    margin-bottom:20px;
+    color: #FDFFFF;
+    border: 2px solid #FDFFFF;
+    background-color: #F9B314;
+    border-radius: 10px;
+   font-size: 17px;
+}
+/* /////////// */
+
+.whatToDo{
+        display: grid;
+       grid-template-columns: 48% 48%;
+        grid-column-gap: 4%;
+}
+
+.whatToDo .divleft{
+    display: grid;
+    grid-template-rows: 30% 30% 30%;
+     grid-row-gap: 3%;
+}
+.divleft .divleft1_1{
+    display: flex;
+  flex-direction: row; /* Stack items vertically */
+   /* Center items horizontally */
+  text-align: left; 
+}
+.divleft1_1 img{
+    width: 300px;
+    height: 200px;
+    border-radius: 10px;
+}
+/* ////////////// */
+.whatToDo .divright{
+    display: grid;
+    grid-template-rows: 30% 30% 30%;
+     grid-row-gap: 3%;
+}
+.divright .divright1_1{
+    display: flex;
+  flex-direction: row; /* Stack items vertically */
+   /* Center items horizontally */
+  text-align: left; 
+}
+.divright1_1 img{
+    width: 300px;
+    height: 200px;
+    border-radius: 10px;
+}
+
+/* /////////////mainsection3////////////////// */
+
+.resultPagem2{
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.resultPagem3{
+    margin-top: 70px;
+    
+}
+
+/* ////////////////// */
+
+.main2images{
+    display: grid;
+    grid-template-columns:33% 33% 33%;
+    column-gap: 1%;
+    align-items: center;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding-top: 0px;
+}
+
+.main2images .main2img1content{
+    display: grid;
+    height: 80%;
+    grid-template-rows: 65% 10%;
+    margin: 2%;
+    margin-top: 0px;
+    padding: 0px 0px 20px 0px;
+    border-radius: 5%;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    
+}
+.main2images .main2img1content:hover{
+    
+    display: grid;
+    grid-template-rows: 65% 10%;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+.main2images .main2img2content{
+    display: grid;
+    height: 80%;
+    grid-template-rows: 65% 10%;
+    margin: 2%;
+    margin-top: 0px;
+}
+.main2images .main2img2content:hover{
+    display: grid;
+    grid-template-rows: 65% 10%;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+
+}
+.main2images .main2img3content{
+    display: grid;
+    height: 80%;
+    grid-template-rows: 65% 10%;
+    margin: 2%;
+    margin-top: 0px;
+}
+.main2images .main2img3content:hover{
+    display: grid;
+    grid-template-rows: 65% 10%;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+
+}
+.main2images img{
+    width: 100%;
+    height:100%;
+    padding: 0px;
+    border-radius: 2%;
+}
+
+.main2images p{
+    padding-left: 10px;
+}
+.main2img1content .c1{
+    display: grid;
+    grid-template-columns:55% 40%;
+}
+.main2img2content .c2{
+    display: grid;
+    grid-template-columns:60% 40%;
+}
+.main2img3content .c3{
+    display: grid;
+    grid-template-columns:60% 40%;
+}
+.main2images button{
+    padding: 10px 20px 10px 20px;
+    margin: 20px;
+    margin-left: 50px;
+    border-radius: 20px;
+    border: 2px solid #F9B314;
+    color: #F9B314;
+    background-color: #FDFFFF;
+    cursor: pointer;
+}
+.main2images button:hover{
+    padding: 10px 20px 10px 20px;
+    margin: 20px;
+    margin-left: 50px;
+    border-radius: 20px;
+    background-color: #F9B314;
+    color: #FDFFFF;
+    cursor: pointer;
+}
+
+/* ////resultPagem4/// */
+.resultPagem4{
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.resultPagem4 .vehicles{
+    display: grid;
+    flex-direction: column;
+    gap: 10px;
+}
+.resultPagem4 .vehicles .vehicledetails{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+   padding-left: 50px;
+   padding-right: 100px;
+   align-items: center;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
+}
+.resultPagem4 .vehicles .vehicledetails:hover{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 50px;
+    padding-right: 100px;
+   align-items: center;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    
+}
+.vehicles img{
+    width: 300px;
+    height: 200px;
+    margin-top: 10px;
+    border-radius: 5%;
+}
+
+.vehicles .vehicledetails .vehicleIndetails{
+    /* 
+    display: flex;
+    flex-direction: row; */
+    border-radius: 10px;
+    background-color: #ffe2a4;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 35% 30% 35%;
+    align-items: center;
+    width: 100%;
+    
+}
+.vehicles .vehicledetails .vehicleIndetails ul {
+    list-style: none;
+}
+
+.vehicledetails .vehicleBookButton button{
+    padding: 10px 30px 10px 30px;
+    margin-left: 20px;
+    border-radius: 20px;
+    border: 2px solid #F9B314;
+    color: #F9B314;
+    background-color: #FDFFFF;
+    cursor: pointer;
+}
+.vehicledetails .vehicleBookButton button:hover{
+    padding: 10px 30px 10px 30px;
+    margin-left: 20px;
+    border-radius: 20px;
+    background-color: #F9B314;
+    color: #FDFFFF;
+    cursor: pointer;
+}
+
+.footer{
+    background-color: #353432;
+    width: 100%;
+    height: 200px;
+}
+
+#loginbut{
+    background-color: #706F6C;
+    padding: 10px 25px 10px 25px;
+    border-radius: 20px;
+    color: #FDFFFF;
+}
+.footer{
+    background-color: #353432;
+}
+.footer {
+    
+    color: #FDFFFF;
+    padding: 20px 0;
+    text-align: center;
+    margin-left: 0px;
+    /* border: 2px solid rgb(59, 35, 244); */
+}
+
+/* Style the footer content container */
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.footer {
+    
+    color: #FDFFFF;
+    padding: 20px 0;
+    text-align: center;
+    margin-left: 0px;
+    /* border: 2px solid rgb(59, 35, 244); */
+}
+
+/* Style the footer content container */
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.social-links a {
+    
+    color: #c21e1e;
+    text-decoration: none;
+    font-size: 20px;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #007BFF;
+}
+.site-links a {
+    color: #FDFFFF;
+    text-decoration: none;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+.pickupTimeField {
+    margin-bottom: 20px;
+}
+
+.pickupTimeField label {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.pickupTimeField input[type="time"] {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Styles for the modal */
+.modal {
+    display: none; /* Hide the modal by default */
+    position: fixed; /* Position the modal */
+    z-index: 1; /* Make sure it appears on top of other elements */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scrolling if needed */
+    background-color: rgba(0,0,0,0.5); /* Black background with transparency */
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* 80% width */
+}
+
+/* Close button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.continue-button {
+    position: fixed;
+    bottom: 20px; /* Adjust as needed to leave space from the bottom */
+    right: 20px; /* Adjust as needed to leave space from the right */
+    background-color: #007bff; /* Blue background color */
+    color: white; /* White text color */
+    border: none;
+    padding: 10px 20px; /* Adjust padding as needed */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.continue-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* ////////////// */
+
+.modalpt {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  .modalpt-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  .closept {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .closept:hover,
+  .closept:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+
+/* /////////// */
+
+/* Notification CSS */
+#cartNotification {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #36923b;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#removecartNotification{
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #c33427;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Popup CSS */
+.popup {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #c33427;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.popup1 {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #b43327;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+.no-hotels-message {
+        display: block;
+        background-color: #ffcccc;
+        color: #cc0000;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        width:40%;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,3 +1,11 @@
+<?php
+$bookingDetails = $data['bookingDetails'];
+$totalAmount = $data['totalAmount'];
+$invoice_number = $data['invoice_number'];
+$current_date = date('Y-m-d');
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,9 +59,9 @@
     <h1>Invoice</h1>
 </div>
 <div class="invoice-details">
-    <p><strong>Invoice Number:</strong>' . $invoice_number . '</p>
-    <p><strong>Billed To:</strong> ' . $bookingDetails[0]->service_provider_name . '</p>
-    <p><strong>Date:</strong> ' . $current_date . '</p>
+    <p><strong>Invoice Number:</strong><?=$invoice_number?> </p>
+    <p><strong>Billed To:</strong> <?=$bookingDetails[0]->serviceprovider_name?></p>
+    <p><strong>Date:</strong><?=$current_date?></p>
 </div>
 <table>
     <thead>
@@ -68,23 +76,25 @@
     </tr>
     </thead>
     <tbody>';
-    foreach ($bookingDetails as $bookingDetail) {
+    <?php
+    foreach ($bookingDetails as $bookingDetail){?>
     $html .= '<tr>
-        <td>' . $bookingDetail->traveler_name . '</td>
-        <td>' . $bookingDetail->booking_type . '</td>
-        <td>' . $bookingDetail->bookingDate . '</td>
-        <td>' . $bookingDetail->startDate . '</td>
-        <td>' . $bookingDetail->endDate . '</td>
-        <td>' . $bookingDetail->service_detail . '</td>
-        <td>Rs' . $bookingDetail->payment_amount . '</td>
+        <td><?=$bookingDetail->traveler_name?></td>
+        <td><?=$bookingDetail->booking_type?></td>
+        <td><?=$bookingDetail->bookingDate?></td>
+        <td><?=$bookingDetail->startDate?></td>
+        <td><?=$bookingDetail->endDate?></td>
+        <td><?=$bookingDetail->service_detail?></td>
+        <td>Rs<?= $bookingDetail->payment_amount?></td>
     </tr>';
+    <?php } ?>
     }
     $html .= '</tbody>
 </table>
 <div class="total-section">
-    <p><strong>Total Amount:</strong> Rs' . $totalAmount . '</p>
-    <p><strong>Commission Fee (10%):</strong> Rs' . ($totalAmount * 0.1) . '</p>
-    <p><strong>Final Payment:</strong> Rs' . ($totalAmount * 0.9) . '</p>
+    <p><strong>Total Amount:</strong> Rs<?= $totalAmount?> </p>
+    <p><strong>Commission Fee (10%):</strong> Rs<?= ($totalAmount * 0.1)?> </p>
+    <p><strong>Final Payment:</strong> Rs<?=($totalAmount * 0.9)?> </p>
 </div>
 <div class="footer">
     <p>Thank you for your business!</p>
