@@ -171,7 +171,7 @@
                         <h1><?php echo $place->place_name; ?></h1>
                         <div class="divleft1_1" >
                             <div >
-                                <p style="margin-top:0px"><?php echo $place->place_description; ?></p>
+                                <p style="margin-top:0px:text-align:justify"><?php echo $place->place_description; ?></p>
                             </div>
                             <div>
                                 <img src="<?php echo URLROOT . '/images/' . $place->place_photo; ?>" alt="">
@@ -187,7 +187,7 @@
                             <h1><?php echo $place->place_name; ?></h1>
                             <div class="divright1_1">
                                 <div>
-                                    <p style="margin-top:0px"><?php echo $place->place_description; ?></p>
+                                    <p style="margin-top:0px:text-align:justify"><?php echo $place->place_description; ?></p>
                                 </div>
                                 <div>
                                     <img src="<?php echo URLROOT . '/images/' . $place->place_photo; ?>" alt="">
@@ -230,7 +230,7 @@ echo "Current PHP timezone: " . $timezone;
         <div class="c1">
             <div>
                 <p style="font-size: 30px; margin: 0px; font-weight: bold;"><?php echo ($hotelroom ? $hotelroom->fname . ' ' . $hotelroom->lname : ' '); ?></p>
-                <p><?php echo $hotelroom->roomType ?>&nbsp;Room</p>
+                <p><?php echo $hotelroom->roomType ?>&nbsp;</p>
                 <!-- <p><?php echo $hotelroom->ratings->rating ?></p> -->
                 <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
@@ -350,7 +350,7 @@ echo "Current PHP timezone: " . $timezone;
 
                     <div class="vehicleBookButton" style="margin-bottom:100px">
                         <!-- <div><button class="view-button" onclick="openPopup(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">View</button></div>  -->
-                        <button onclick="booking(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">Book now</button>
+                        <button style="padding:18px 30px;" onclick="booking(4, <?php echo $vehicle->vehicle_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">Book </button>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -371,7 +371,7 @@ echo "Current PHP timezone: " . $timezone;
             <div class="main2images" style="margin-top:0px;" id="div1">
             <?php foreach ($data['guides'] as $guide): ?>
     <div class="main2img1content">
-        <div><img src="<?php echo URLROOT ?>images/<?php echo $guide->image; ?>" alt=""></div>
+        <div><img style="height:90%" src="<?php echo URLROOT ?>images/<?php echo $guide->image; ?>" alt=""></div>
         <div class="c1">
             <div>
                 <p style="font-size: 30px; margin: 0px; font-weight: bold;"><?php echo ($guide ? $guide->fname . ' ' . $guide->lname : ' '); ?></p>
@@ -407,8 +407,8 @@ echo "Current PHP timezone: " . $timezone;
                 <button style="margin-top: 10px; margin-bottom: 10px;" onclick="bookingHas(5, <?php echo $guide->user_id; ?>, '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">
                     &rarr; View Deal
                 </button>
-                <button style="margin-top: 10px; margin-bottom: 10px;" class="view-button" onclick="booking(5, '<?php echo $guide->user_id; ?>', '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">
-                    &#x1F4C5; Book Now
+                <button style="margin-top: 10px; margin-bottom: 10px;padding:10px 30px;" class="view-button" onclick="booking(5, '<?php echo $guide->user_id; ?>', '<?php echo $data['checkinDate']; ?>', '<?php echo $data['checkoutDate']; ?>')">
+                    &#x1F4C5; Book 
                 </button>
                
             </div>

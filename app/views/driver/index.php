@@ -7,6 +7,8 @@
 <!-- <link rel="stylesheet" href="<?php echo URLROOT?>/css/driver/dashboard.css"> -->
 <link rel="stylesheet" href="<?php echo URLROOT?>/css/driver/settings.css">
 <link rel="stylesheet" href="<?php echo URLROOT?>/css/driver/bookings.css">
+<script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
+<link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -47,8 +49,7 @@
 
             <li><a href="<?php echo URLROOT; ?>driver/reviews"><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
             <li><a href="<?php echo URLROOT; ?>driver/settings"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-            <li><a href="<?php echo URLROOT?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>
-                    Logout</a></li>
+            <li> <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
         </ul>
         <!-- <div class="logout">
             <a href="<?php echo URLROOT; ?>pages/indes" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
