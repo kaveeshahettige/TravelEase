@@ -561,17 +561,17 @@ class Hotel extends Controller
                 'petPolicy_err' => '',
                 'description_err' => '',
                 'cancellationPolicy_err' => '',
-                'roomSize_err' => '', // New field
-                'balconyAvailability_err' => '', // New field
-                'privatePoolAvailability_err' => '', // New field
-                'hotTubAvailability_err' => '', // New field
-                'refrigeratorAvailability_err' => '', // New field
-                'hotShowerHeaterAvailability_err' => '', // New field
-                'washingMachineAvailability_err' => '', // New field
-                'kitchenAvailability_err' => '', // New field
-                'breakfastIncluded_err' => '', // New field
-                'lunchIncluded_err' => '', // New field
-                'dinnerIncluded_err' => '', // New field
+                'roomSize_err' => '',
+                'balconyAvailability_err' => '',
+                'privatePoolAvailability_err' => '',
+                'hotTubAvailability_err' => '',
+                'refrigeratorAvailability_err' => '',
+                'hotShowerHeaterAvailability_err' => '',
+                'washingMachineAvailability_err' => '',
+                'kitchenAvailability_err' => '',
+                'breakfastIncluded_err' => '',
+                'lunchIncluded_err' => '',
+                'dinnerIncluded_err' => '',
                 'roomImages' => [],
             ];
 
@@ -579,17 +579,17 @@ class Hotel extends Controller
             if (isset($_FILES['roomImages']) && !empty($_FILES['roomImages']['name'][0])) {
                 $images = $_FILES['roomImages'];
                 foreach ($images['tmp_name'] as $key => $tmp_name) {
-                    $file_name = $images['name'][$key]; // Original file name
-                    $upload_dir = "../public/images/" . $file_name; // Destination directory
+                    $file_name = $images['name'][$key];
+                    $upload_dir = "../public/images/" . $file_name;
                     if (move_uploaded_file($tmp_name, $upload_dir)) {
-                        $uploadedImages[] = $file_name; // Store the original file name
+                        $uploadedImages[] = $file_name;
                     }
                 }
             }
 
 
             $roomData['roomImages'] = $uploadedImages;
-            // Validate form fields (you need to implement this)
+
 
             // Check for any validation errors
             if (empty($roomData['roomType_err']) && empty($roomData['numOfBeds_err']) &&
@@ -628,8 +628,8 @@ class Hotel extends Controller
                 'room_id' => $room_id,
                 'roomType' => $hotels->roomType,
                 'numOfBeds' => $hotels->numOfBeds,
-                'numAdults' => $hotels->numAdults, // New field
-                'numChildren' => $hotels->numChildren, // New field
+                'numAdults' => $hotels->numAdults,
+                'numChildren' => $hotels->numChildren,
                 'price' => $hotels->price,
                 'acAvailability' => $hotels->acAvailability,
                 'tvAvailability' => $hotels->tvAvailability,
@@ -638,17 +638,18 @@ class Hotel extends Controller
                 'petPolicy' => $hotels->petPolicy,
                 'description' => $hotels->description,
                 'cancellationPolicy' => $hotels->cancellationPolicy,
-                'roomSize' => $hotels->roomSize, // New field
-                'balconyAvailability' => $hotels->balconyAvailability, // New field
-                'privatePoolAvailability' => $hotels->privatePoolAvailability, // New field
-                'hotTubAvailability' => $hotels->hotTubAvailability, // New field
-                'refrigeratorAvailability' => $hotels->refrigeratorAvailability, // New field
-                'hotShowerHeaterAvailability' => $hotels->hotShowerHeaterAvailability, // New field
-                'washingMachineAvailability' => $hotels->washingMachineAvailability, // New field
-                'kitchenAvailability' => $hotels->kitchenAvailability, // New field
-                'breakfastIncluded' => $hotels->breakfastIncluded, // New field
-                'lunchIncluded' => $hotels->lunchIncluded, // New field
-                'dinnerIncluded' => $hotels->dinnerIncluded, // New field
+                'roomSize' => $hotels->roomSize,
+                'balconyAvailability' => $hotels->balconyAvailability,
+                'privatePoolAvailability' => $hotels->privatePoolAvailability,
+                'hotTubAvailability' => $hotels->hotTubAvailability,
+                'refrigeratorAvailability' => $hotels->refrigeratorAvailability,
+                'hotShowerHeaterAvailability' => $hotels->hotShowerHeaterAvailability,
+                'washingMachineAvailability' => $hotels->washingMachineAvailability,
+                'kitchenAvailability' => $hotels->kitchenAvailability,
+                'breakfastIncluded' => $hotels->breakfastIncluded,
+                'lunchIncluded' => $hotels->lunchIncluded,
+                'dinnerIncluded' => $hotels->dinnerIncluded,
+                'roomImages' => [],
             ];
 
             $data = [
