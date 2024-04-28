@@ -456,6 +456,7 @@ echo '</script>';
         
   //   ];
 // }
+
 $vehicleprice=null;
 $driver=null;
 if($serviceProvider->type==4){
@@ -713,6 +714,8 @@ public function markAsRead($notification_id) {
 //deactivateUser
 public function deactivateUser($id){
   $user=$this->userModel->deactivateUser($id);
+  redirect('../Landpage/');
+  
 }
 
 //cart

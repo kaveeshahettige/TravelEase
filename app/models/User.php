@@ -825,6 +825,24 @@ WHERE guides.user_id = :id;
     }
 }
 
+//getServiceProviderBookingTableDetails($booking->booking_id)
+// 
+
+//getGuidebookings($booking->booking_id,$Sid)
+public function getGuidebookings($Bid){
+    $this->db->query('SELECT * FROM guide_bookings WHERE booking_id=:booking_id');
+    $this->db->bind(':booking_id', $Bid);
+
+    $result=$this->db->single();
+    if($this->db->rowcount()>0){
+        return $result;
+     }
+     else{
+        return false;
+    }
+}
+
+
 //addBooking($transactionData);
 public function addBooking($transactionData){
     $currentDate = date('Y-m-d');  //this is a dummy
