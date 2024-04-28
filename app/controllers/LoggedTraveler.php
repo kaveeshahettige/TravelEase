@@ -1740,7 +1740,7 @@ class LoggedTraveler extends Controller
       $cancel = $this->userModel->cancelBooking($booking_id);
 
       //refund user
-      //$refund = $this->userModel->refundUser($booking_id);
+      $refund = $this->userModel->refundUser($booking_id);
 
       //check type and provide availibility of vehicle_bookings,room_availability
       $availibility = $this->userModel->makeAvailibility($temporyid, $booking_id, $bookingDetails, $bookingFurtherDetail);

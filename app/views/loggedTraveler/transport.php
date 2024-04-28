@@ -91,7 +91,7 @@
                         <div><img src="<?php echo URLROOT ?>images/<?php echo $agency->profile_picture; ?>" alt=""></div>
                         <div class="c1">
                             <div>
-                                <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $agency->fname; ?></p>
+                                <p style="font-size: 25px;margin:0px;font-weight:bold"><?php echo $agency->fname; ?></p>
                                 <p><?php echo $agency->city; ?></p>
                                 <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
                                     <?php

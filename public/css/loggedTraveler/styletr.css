@@ -98,7 +98,7 @@ body{
 }
 .main1searchbar .search{
     display: grid;
-    grid-template-columns: 28% 26% 10% 26% 10%;
+    grid-template-columns: 25% 24% 17% 24% 10%;
     width: 80%;
     margin-left: 10%;
     margin-top: 40px;
@@ -152,6 +152,7 @@ input[type="text"] {
     color: #605D5D;
     font-size: 20px;
     padding-left: 5px;
+    
 }
 .search .search1{
     border-right: 2px solid black;

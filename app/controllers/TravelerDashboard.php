@@ -683,7 +683,7 @@ public function cancelBooking($temporyid,$booking_id){
       //refundamount
       $result=$this->userModel->refundAmountCart($booking_id);
       //refund user
-      $refund = $this->userModel->refundUserCart($temporyid,$booking_id,$bookingDetails->serviceProvider_id,$id,$More->amount,$result['total_refund']);
+      $refund = $this->userModel->refundUserCart($temporyid,$booking_id,$bookingDetails->serviceProvider_id,$id,$result['total_refund']);
 
       //check type and provide availibility of vehicle_bookings,room_availability
       $availibility=$this->userModel->makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 
