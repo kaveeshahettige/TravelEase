@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/driver/calender.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <!-- <link rel="stylesheet" href="<?php echo URLROOT ?>/css/hotel/navigation.css"> -->
     <link rel="stylesheet" href="<?php echo URLROOT ?>/css/hotel/availablerooms.css">
     <title><?php echo SITENAME ?></title>
@@ -51,8 +53,7 @@
 
             <li><a href="<?php echo URLROOT; ?>driver/reviews"><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
             <li><a href="<?php echo URLROOT; ?>driver/settings"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-            <li><a href="<?php echo URLROOT?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>
-                    Logout</a></li>
+            <li> <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
         </ul>
 
         <!-- <div class="logout">
