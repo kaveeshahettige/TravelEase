@@ -1384,3 +1384,34 @@ li {
         cursor: pointer;
     }
 
+/* Delete Button */
+.delete-button2 {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.delete-button:hover {
+    background-color: darkred;
+}
+
+/* No Button */
+.no-button {
+    background-color: #F9B314;
+    color: black;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.no-button:hover {
+    background-color: goldenrod;
+}

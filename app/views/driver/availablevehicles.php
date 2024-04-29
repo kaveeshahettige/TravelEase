@@ -23,8 +23,9 @@
 <body>
 
     <nav class="left-menu">
-       <div class="user-profile">
-            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>" alt="User Profile Photo">
+        <div class="user-profile">
+            <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture ?>"
+                alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
             <a class="" href="<?php echo URLROOT; ?>/driver/notification">
                 <i class="bx bx-bell"></i>
@@ -53,7 +54,8 @@
 
             <li><a href="<?php echo URLROOT; ?>driver/reviews"><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
             <li><a href="<?php echo URLROOT; ?>driver/settings"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-            <li> <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
+            <li> <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i
+                        class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
         </ul>
 
         <!-- <div class="logout">
@@ -91,6 +93,7 @@
                         $date = $data['date'];
                         $unavailableVehicles = $data['unavailableVehicles'] ?? []; // Set default value to empty array if $unavailableVehicles is null
                         // var_dump( $unavailableVehicles);
+                        // var_dump($vehicleData);
                         foreach ($vehicleData as $agency_vehicles) :
 
                             
@@ -109,15 +112,19 @@
                                     ?>
                             </td>
 
+
                             <td>
-                                <button class="btn btn-remove-unavailable"
+                                <button class="btn btn-make-unavailable"
+                                    data-vehicle-id="<?php echo $agency_vehicles->vehicle_id; ?>"
                                     onclick="setUnavailableDate(<?php echo $agency_vehicles->vehicle_id; ?>, '<?php echo $data['date']; ?>')">
                                     <i class='bx bx-check'></i>
                                 </button>
-                                <button class="btn btn-set-unavailable"
+                                <button class="btn btn-make-available"
+                                    data-vehicle-id="<?php echo $agency_vehicles->vehicle_id; ?>"
                                     onclick="removeUnavailableDate(<?php echo $agency_vehicles->vehicle_id; ?>, '<?php echo $data['date']; ?>')">
                                     <i class='bx bx-trash'></i>
                                 </button>
+
 
                             </td>
 
