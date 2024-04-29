@@ -2848,9 +2848,10 @@ public function refundAmount($booking_id){
 
 }
 //refundAmountCart
-public function refundAmountCart($booking_id){
-    $this->db->query('SELECT SUM(amount) AS total_refund FROM cartpayments WHERE booking_id = :booking_id');
+public function refundAmountCart($booking_id,$temporyid){
+    $this->db->query('SELECT * FROM cartpayments WHERE booking_id = :booking_id AND tempory_id = :temporyid');
     $this->db->bind(':booking_id', $booking_id);
+    $this->db->bind(':temporyid', $temporyid);
     $this->db->execute();
     $result = $this->db->single();
     

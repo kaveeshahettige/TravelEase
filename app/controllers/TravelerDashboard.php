@@ -456,6 +456,10 @@ echo '</script>';
         
   //   ];
 // }
+$guideTable = null;
+    if ($serviceProvider->type == 5) {
+      $guideTable = $this->userModel->getGuidebookings($booking->booking_id);
+    }
 
 $vehicleprice=null;
 $driver=null;
@@ -467,6 +471,7 @@ if($serviceProvider->type==4){
   $data=[
     'serviceProviderName' => $serviceProvider ? $serviceProvider->fname . ' ' . $serviceProvider->lname : null,
     'type' => $serviceProvider ? $serviceProvider->type : null,
+    'serviceProvider' => $serviceProvider ? $serviceProvider : null,
     'profile_picture' => $user ? $user->profile_picture : null,
     'number' => $serviceProvider ? $serviceProvider->number : null,
     'location' => $mainbookingDetails ? $mainbookingDetails->city : null,
@@ -477,6 +482,7 @@ if($serviceProvider->type==4){
     'cancellationEligibility' => $cancellationEligibility,
     'vehicleprice'=>$vehicleprice?$vehicleprice:null,
     'driver'=>$driver?$driver:null,
+    'guideTable' => $guideTable,
   ];
   $this->view('travelerDashboard/bookingpopup',$data);
 }
@@ -681,9 +687,9 @@ public function cancelBooking($temporyid,$booking_id){
       $cancel = $this->userModel->cancelCartBooking($temporyid,$booking_id);
 
       //refundamount
-      $result=$this->userModel->refundAmountCart($booking_id);
+      $result=$this->userModel->refundAmountCart($booking_id,$temporyid);
       //refund user
-      $refund = $this->userModel->refundUserCart($temporyid,$booking_id,$bookingDetails->serviceProvider_id,$id,$result['total_refund']);
+      $refund = $this->userModel->refundUserCart($temporyid,$booking_id,$bookingDetails->serviceProvider_id,$id,$result->amount);
 
       //check type and provide availibility of vehicle_bookings,room_availability
       $availibility=$this->userModel->makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 

@@ -229,7 +229,7 @@ echo "Current PHP timezone: " . $timezone;
         <div><img src="<?php echo URLROOT ?>images/<?php echo $hotelroom->image; ?>" alt=""></div>
         <div class="c1">
             <div>
-                <p style="font-size: 30px; margin: 0px; font-weight: bold;"><?php echo ($hotelroom ? $hotelroom->fname . ' ' . $hotelroom->lname : ' '); ?></p>
+                <p style="font-size: 26px; margin: 0px; font-weight: bold;"><?php echo ($hotelroom ? $hotelroom->fname . ' ' . $hotelroom->lname : ' '); ?></p>
                 <p><?php echo $hotelroom->roomType ?>&nbsp;</p>
                 <!-- <p><?php echo $hotelroom->ratings->rating ?></p> -->
                 <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
