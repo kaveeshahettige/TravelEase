@@ -90,14 +90,28 @@
                         </div>
                         <div>
                             <div class="form-group">
-                                <label for="cardholdername">Card Holder Name</label>
+                                <label for="cardholdername">Account Holder Name</label>
                                 <input type="text" id="cardholdername" name="cardholdername" value="<?php echo $data['card_holder_name']?>" >
                                 
                             </div>
                         
                             <div class="form-group">
-                                <label for="accountnumber"></label>
+                                <label for="accountnumber">Account Number</label>
                                 <input type="text" id="accountnumber" name="accountnumber" value="<?php echo $data['account_number']?>" >
+                               
+                            </div>
+                            
+                        </div>
+                        <div>
+                            <div class="form-group">
+                                <label for="cardholdername">Bank</label>
+                                <input type="text" id="bank" name="bank" value="<?php echo $data['bank']?>" >
+                                
+                            </div>
+                        
+                            <div class="form-group">
+                                <label for="accountnumber">Branch</label>
+                                <input type="text" id="branch" name="branch" value="<?php echo $data['branch']?>" >
                                
                             </div>
                             

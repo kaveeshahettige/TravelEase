@@ -131,11 +131,16 @@
         <div class="main4img">
             <img src="<?php echo URLROOT ?>images/5.jpg" alt="">
             <div class="shade">
-                <p>Is Your Service Ready to Shine?</p>
-                <button>Register</button>
+            <p>Ready To Plan Your Trip?</p>
+                <button onclick="gotoplantrip()">Plan Trip</button>
             </div>
 
         </div>
+        <script>
+            function gotoplantrip(){
+                window.location.href='/TravelEase/loggedTraveler/plantrip'
+            }
+        </script>
         <div class="footer">
             <div class="contact-info">
 

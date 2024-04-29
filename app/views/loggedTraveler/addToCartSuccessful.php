@@ -39,8 +39,8 @@
 <body>
     <!-- <?php echo var_dump($data['transaction'])?> -->
     <div class="container">
-        <h1>Add to Cart Successful</h1>
-        <p>Your items has been successfully added to the cart. Thank you!</p>
+        <h1>Add to Wishlist Successful</h1>
+        <p>Your items has been successfully added to the wishlist. Thank you!</p>
     </div>
 </body>
 </html>

@@ -77,6 +77,7 @@
     padding: 15px 30px; /* Increase padding for better appearance */
     border-radius: 8px;
     cursor: pointer;
+    margin-right:-100px;
 }
 
 .button-container {
@@ -139,6 +140,7 @@
             </form>
         </div>
     </section>
+    <?php if (!empty($data['bookingDetailsArray'])): ?>
     <section class="main2">
     <div class="topbar">
     <?php if (!empty($data['bookingDetailsArray'])): ?>
@@ -149,7 +151,7 @@
 
 <div class="main2trip-container">
     <div class="main2trip-scroll" id="main2trip-scroll">
-        <?php if (!empty($data['bookingDetailsArray'])): ?>
+        
             <?php foreach ($data['bookingDetailsArray'] as $element): ?>
                 <div class="main2img1content">
                     <?php $serviceProviderID = $element['serviceProviderID'];?>
@@ -166,7 +168,7 @@
                                 <p class="provider-name"><?php echo ucfirst($element['serviceProviderName'])?></p>
                             <?php endif; ?>
                             <?php if (!empty($element['mainbookingDetails']->city)): ?>
-                                <p class="city"><?php echo $element['mainbookingDetails']->city ?></p>
+                                <p class="city" style="font-size:18px;"><?php echo $element['mainbookingDetails']->city ?></p>
                             <?php endif; ?>
                         </div>
                         <div>
@@ -175,13 +177,14 @@
                     </div>
                 </div>
             <?php endforeach; ?>
-        <?php endif; ?>
     </div>
     <div class="button-container">
         <button class="scroll-button" onclick="goleft()">◄</button>
         <button class="scroll-button" onclick="scrollRight()">►</button>
     </div>
 </div>
+<?php endif; ?>
+
 
 
     </section>
@@ -230,7 +233,7 @@ function scrollRight() {
         ?>
     </div>
                     </div>
-                    <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider1Id'] ?>)">Book Now</button></div>
+                    <div style="margin-top:30px;"> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider1Id'] ?>)">Book Now</button></div>
                     <!-- <?php echo $data['randomServiceProvider1Id']?> -->
                 </div>
                 
@@ -260,7 +263,7 @@ function scrollRight() {
         ?>
     </div>
                     </div>
-                    <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider2Id'] ?>)">Book Now</button></div>
+                    <div style="margin-top:30px;"> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider2Id'] ?>)">Book Now</button></div>
                 </div>
             </div>
             <div class="main3img3content">
@@ -288,7 +291,7 @@ function scrollRight() {
         ?>
     </div>
                     </div>
-                    <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider3Id'] ?>)">Book Now</button></div>
+                    <div style="margin-top:30px;"> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider3Id'] ?>)">Book Now</button></div>
                 </div>
             </div>
         </div>
@@ -414,7 +417,7 @@ window.onclick = function(event) {
                 
                 //document.getElementById("checkingBigger").style.display = "block";
                 var notification = document.getElementById("notification");
-            notification.innerText = "Check-in Date is smalle !";
+            notification.innerText = "Check-in Date is small !";
             notification.style.display = "block";
 
             // Hide notification after 3 seconds
@@ -429,24 +432,37 @@ window.onclick = function(event) {
                 return false;
             }
 
-            // Check if check-in date is in the past
-            // if (checkinDate < today) {
-            //     alert("Check-in date cannot be in the past.");
-            //     return false;
-            // }
+            //Check if check-in date is in the past
+            if (checkinDate < today) {
+                alert("Check-in date cannot be in the past.");
+                return false;
+            }
 
-            // Check if check-out date is in the past
-            // if (checkoutDate < today) {
-            //     alert("Check-out date cannot be in the past.");
-            //     return false;
-            // }
+           // Check if check-out date is in the past
+            if (checkoutDate < today) {
+                alert("Check-out date cannot be in the past.");
+                return false;
+            }
 
             // All validations passed
             return true;
         }
         checkinDateInput.addEventListener("change", function() {
-            checkoutDateInput.min = checkinDateInput.value;
-        });
+    var checkinDate = new Date(checkinDateInput.value); // Get the check-in date
+
+    // Calculate the checkout date, which is the check-in date plus 90 days
+    var checkoutDate = new Date(checkinDate.getTime() + (90 * 24 * 60 * 60 * 1000));
+
+    // Format the checkout date as YYYY-MM-DD for setting the minimum date for the checkout input
+    var minCheckoutDate = checkoutDate.toISOString().split('T')[0];
+
+    // Set the minimum date for the checkout input to be the check-in date
+    checkoutDateInput.min = checkinDateInput.value;
+
+    // Set the maximum date for the checkout input to be 90 days after the check-in date
+    checkoutDateInput.max = minCheckoutDate;
+});
+
     });
 </script>
 
