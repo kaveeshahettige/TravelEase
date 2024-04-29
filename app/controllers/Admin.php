@@ -115,21 +115,7 @@ class Admin extends Controller{
       
      
     
-                
-
-      $hotelId = $_POST['hotel_id'];
       
-      $success = $this->userModel->updateProfileStatus($hotelId);
-      
-      if ($success) {
-        redirect('admin/hotel');
-          // Redirect or show success message
-      } else {
-        redirect('admin/hotel');
-          // Handle deletion failure
-      }
-  
-}
     
         public function agency(){
           $admindetail=$this->userModel->getadmindata();
