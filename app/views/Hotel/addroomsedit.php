@@ -67,6 +67,7 @@ include 'navigation.php';
                             <input type="number" id="price" name="price" required>
                         </div>
 
+
                         <div class="form-group">
                             <label for="roomSize">Room Size:</label>
                             <input type="text" id="roomSize" name="roomSize" placeholder="Enter Room Size">
@@ -275,13 +276,6 @@ include 'navigation.php';
                             </div>
                         </div>
 
-                        <div>
-                            <div class="form-group">
-                                <label for="cancellationPolicy">Cancellation Policy:</label>
-                                <textarea id="cancellationPolicy" name="cancellationPolicy" rows="4" required></textarea>
-                            </div>
-                        </div>
-
                     </div>
 
                     <div>
@@ -295,6 +289,15 @@ include 'navigation.php';
             </div>
         </div>
     </div>
+    <script>
+        // Get the input element
+        var priceInput = document.getElementById('price');
+        priceInput.addEventListener('input', function() {
+            if (priceInput.value < 0) {
+                priceInput.value = 0;
+            }
+        });
+    </script>
 </main>
 </body>
 </html>

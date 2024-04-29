@@ -133,10 +133,11 @@ include 'navigation.php';
 
         /* Style for the room image */
         #room-image {
-            max-width: 100%; /* Ensure the image doesn't exceed its container */
-            height: 50%; /* Maintain aspect ratio */
-            display: block; /* Ensure the image is displayed as a block element */
-            margin-top: 10px; /* Add some space between the image and other details */
+            max-width: 50%;
+            height: 40%;
+            display: block;
+            margin-top: 10px;
+            margin-left: 170px;
         }
 
         .close-btn {

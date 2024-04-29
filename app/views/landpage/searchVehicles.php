@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>TravelEase</title>
-    <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>images/TravelEase_logo.png">
-    <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/stylepa.css">
+    <link rel="icon" type="image/x-icon" href="<?php echo URLROOT?>/images/TravelEase_logo.png">
+    <link rel="stylesheet" href="<?php echo URLROOT?>css/loggedTraveler/styleve.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="<?php echo URLROOT?>/js/loggedTraveler/script.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.2/css/boxicons.min.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTDElEffBAws-JYjYaUELqmkOCpa6C5R8&libraries=places"></script>
     <style>
         /* Style for the suggestions dropdown */
@@ -33,61 +31,76 @@
     
     <div class="navbar">
         <div class="logo">
-            <img src="<?php echo URLROOT?>images/TravelEase_logo.png"alt="Logo">
+            <img src="<?php echo URLROOT?>/images/TravelEase_logo.png"alt="Logo">
             <label for="logoname">Travel<span style="color: #458A9E;">Ease</span> </label>
         </div>
         <ul>
         <li><a href="<?php echo URLROOT?>Landpage" >Home</a></li>
             <li><a href="<?php echo URLROOT?>Landpage/hotel" >Hotels</a></li>
-            <li><a href="<?php echo URLROOT?>Landpage/transport">Transport Providers</a></li>
-            <li><a href="<?php echo URLROOT?>Landpage/package" id="selected">Guides</a></li>
+            <li><a href="<?php echo URLROOT?>Landpage/transport" id="selected">Transport Providers</a></li>
+            <li><a href="<?php echo URLROOT?>Landpage/package" >Guides</a></li>
             <div class="rightcontent">
             <li><a href="<?php echo URLROOT?>Users/login" id="loginbut">Login</a></li>
                 </div>
         </ul>
-        </ul>
     </div>
     <section class="main1">
-        <div class="main1img">
-            <img src="<?php echo URLROOT?>images/6.1.jpg" alt="">
+    <div class="main1img">
+            <img src="<?php echo URLROOT?>/images/tr.jpg" alt="">
+            
+            <div class="image-overlay"></div>
             <div class="onimagetext">
-    <p id="txt1">Discover Expert Guides for Your Travels Here</p>
-    <p id="txt2">Explore Your Adventure!</p>
+    <p id="txt1">Unlock Exceptional Transport Options Here</p>
+    <p id="txt2">Embark on Your Ideal Journey!</p>
+    
 </div>
         </div>
-        <form action="<?php echo URLROOT ?>Landpage/searchGuides" method="POST">
+        <form action="<?php echo URLROOT ?>loggedTraveler/searchVehicles" method="POST">
         <div class="main1searchbar">
-            <div class="search">
-                <div class="search1"><input type="text" placeholder=" <?php echo isset($data['location']) ? $data['location'] : 'Location:'; ?>" name="location" id="location-input"></div>
-                <div class="search4"><button id="searchbtn">Search</button></div>
-            </div>
+        <div class="search">
+    <div class="search1"><input type="text" id="location-input" placeholder="Location: <?php echo $data['location']; ?>" name="location" value="<?php echo $data['location']; ?>"></div>
+    <div class="search2">Pick-up Date:<br><?php echo $data['checkinDate']; ?><input type="date" placeholder="Pick-up Date:" name="pickupdate" value="<?php echo $data['checkinDate']; ?>"></div>
+    <div class="search3">Time:<br><?php echo $data['checkinTime']; ?><input id="pickupTime" type="time" placeholder="Pick-up Time:" name="pickuptime" value="<?php echo $data['checkinTime']; ?>"></div>
+    <div class="search4">Drop-off Date:<br><?php echo $data['checkoutDate']; ?><input type="date" placeholder="Drop-off Date" name="dropoffdate" value="<?php echo $data['checkoutDate']; ?>"></div>
+    <div class="search6"><button id="searchbtn">Search</button></div>
+    <!-- <div class="search6"><button id="searchbtn" onclick="clickSearchTransport()">Search</button></div> -->
+</div>
+
         </div>
+
         </form>
         
     </section>
-    
-    <section class="main2" id="S1">
-    <div class="main2buttons">
-        <button id="but1">All</button>
-        <button class="but2_3" id="mostPopularButton">Most Popular</button>
-        <button class="but2_3" id="topRatedButton">Top-Rated</button>
-    </div>
+    <!-- <?php echo var_dump($data) ?> -->
+    <?php 
+if (is_array($data['vehicles'])) {
+    $agency_chunks = array_chunk($data['vehicles'], 3);
+    // Proceed with further processing
+} else {
+    // Handle the case where $data['vehicles'] is not an array
+}
 
-    <?php if (!empty($data['packages']) && is_array($data['packages'])): ?>
+?>
+    <section class="main2">
+        <div class="main2buttons">
+            <button id="but1">All</button>
+            <button class="but2_3" id="mostPopularButton">Most Popular</button>
+            <button class="but2_3"  id="topRatedButton">Top-Rated</button>
+        </div>
+
+        <?php if (!empty($data['vehicles']) && is_array($data['vehicles'])): ?>
         <div class="main2images" id="div1">
-    <?php foreach ($data['packages'] as $package): ?>
-        <div class="main2img1content">
-            <div class="image-container">
-                <img src="<?php echo URLROOT ?>images/<?php echo $package->image; ?>" alt="">
-            </div>
-            <div class="c1">
-                <div>
-                    <p style="font-size: 30px;margin:0px;font-weight:bold;padding-top:10px;"><?php echo $package->fname?> <?php echo $package->lname?></p>
-                    <p><?php echo $package->city ?></p>
-                    <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
+        <?php foreach ($data['vehicles'] as $vehicles): ?>
+            <div class="main2img1content">
+                <div><img src="<?php echo URLROOT ?>images/<?php echo $vehicles->image; ?>" alt=""></div>
+                <div class="c1"> 
+                    <div>
+                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $vehicles->brand . ' ' .ucfirst( $vehicles->model)?></p>
+                        <p><?php echo $vehicles->city; ?></p>
+                        <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
        // Extract the rating value from the ratings object
-       $rating = isset($package->gratings->rating) ? $package->gratings->rating : 0;
+       $rating = isset($vehicles->vratings->rating) ? $vehicles->vratings->rating : 0;
                     
        // Round the rating value
        $filled_stars = $rating;
@@ -104,25 +117,33 @@
         }
         ?>
     </div>
+                    </div>
+                    <div><button onclick="gotologin()">View</button></div>
+                    <!-- <div> <button onclick="Tripdetails(<?= $vehicles->user_id?>)">View</button></div> -->
                 </div>
-                <div><button onclick="Tripdetails(<?= $package->user_id?>)">View</button></div>
+                
             </div>
+            <?php endforeach; ?>
         </div>
-    <?php endforeach; ?>
-</div>
-
-    <?php elseif (empty($data['packages'])): ?>
-        <p>No Guides available.</p>
+        <script>
+            function gotologin(){
+                //alert("Please login to view details");
+                window.location.href='/TravelEase/users/login';
+            }
+        </script>
+        <?php elseif (empty($data['agencies'])): ?>
+        <p>No transport agencies available.</p>
     <?php else: ?>
-        <p>Error retrieving guide data.</p>
+        <p>Error retrieving transport agency data.</p>
     <?php endif; ?>
-</section>
+        
+    </section>
     <section class="main4">
         <div class="main4img">
             <img src="<?php echo URLROOT?>images/5.jpg" alt="">
             <div class="shade">
                 <p>Is Your Service Ready to Shine?</p>
-                <button><a href="<?php echo URLROOT ?>users/packagereg" style="text-decoration: none; color: inherit;">Register</a></button>
+                <button><a href="<?php echo URLROOT ?>users/transportRegNew" style="text-decoration: none; color: inherit;">Register</a></button>
             </div>
             
         </div>
@@ -139,7 +160,7 @@
                 <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
             </div>
             <div class="site-links">
-                <a href="<?php echo URLROOT?>loggedTraveler/index">Home</a> |
+                <a href="../index.html">Home</a> |
                 <a href="">About Us</a> |
                 <a href="<?php echo URLROOT?>Landpage/termsofuse" target="_blank">Terms of Use</a> | 
                 <a href="">Contact</a>
@@ -153,14 +174,12 @@
     <script>
         // JavaScript code to scroll to section with ID "S1"
         window.onload = function() {
-            // Check if the current URL matches the desired URL
-            if (window.location.href === 'http://localhost/TravelEase/loggedTraveler/searchGuides') {
                 // Scroll to the section with ID "S1"
                 document.getElementById('location-input').scrollIntoView();
-            }
+            
         };
     </script>
-    <script>
+     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const locationInput = document.getElementById("location-input");
             const options = {

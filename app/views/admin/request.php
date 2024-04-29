@@ -165,9 +165,11 @@ if (!empty($data['hotelRequests']) && is_array($data['hotelRequests'])):
                         <!-- <td><?php echo $hotel->id ?></td> -->
                         <td><?php echo ucfirst($hotel->fname) . ' ' . ucfirst($hotel->lname) ?></td>
                         <td>
+
                             <button class="view-button" class="1"
                                 data-name="<?php echo $hotel->fname . ' ' . $hotel->lname ?>"
                             data-description="<?php echo $hotel->description ?>"
+
                                 data-no-rooms="<?php echo $hotel->no_rooms ?>"
                                 data-alt-phone="<?php echo $hotel->alt_phone_number ?>"
                                 data-manager-name="<?php echo $hotel->manager_name ?>"
@@ -258,7 +260,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const accountNumber = this.getAttribute('data-account-number');
 
             hotelDetailsContainer.innerHTML = `
+
                 <h2 style="text-align:center">${hotelName}</h2>
+
                 <div class="hotel_popup" style="display: flex">
                     <div class="popup-column">
                         <p>ID: ${hotelId}</p>

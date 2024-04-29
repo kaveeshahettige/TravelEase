@@ -117,12 +117,6 @@ class Admin extends Controller{
     
                 
 
-            
-            
-    public function deleteHotel() {
-
-
-        
       $hotelId = $_POST['hotel_id'];
       
       $success = $this->userModel->updateProfileStatus($hotelId);
@@ -172,11 +166,8 @@ class Admin extends Controller{
         }
         public function settings(){
 
-          // $userId = $_POST['id'];
-          // var_dump($userId);
-          // $ongoingBookings = $this->userModel->checkOngoingBooking($userId);
-      
-          // var_dump($ongoingBookings);
+
+        
 
 
             $no=$this->userModel->noOfManagers();
@@ -468,6 +459,7 @@ class Admin extends Controller{
             $this->view('admin/traveler',$data); 
 
         }
+
       //   public function deleteTraveler() {
       //     $userId = $_POST['id'];
       //     // $ongoingBookings = $this->userModel->checkOngoingBooking($userId);
@@ -509,7 +501,7 @@ class Admin extends Controller{
     
     //     // Only update profile status if ongoing bookings are 0
     }
-      
+
         public function deleteAgency($id){
           $user=$this->userModel->deleteAgency($id);
         }

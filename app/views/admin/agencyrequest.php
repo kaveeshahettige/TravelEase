@@ -5,18 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
+
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/request.css">
     <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
 
     <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
+
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
+
     <title>TravelEase</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon"
         href="<?php echo URLROOT?>/images/TravelEase_logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
 
     <style>
         .popup-container {
@@ -54,6 +59,7 @@
             color: #f00; /* Change color on hover if desired */
         }
     </style>
+
 </head>
 
 <body>
@@ -79,12 +85,14 @@
             <li><a href="<?php echo URLROOT; ?>admin/agency"><i class='bx bxs-car bx-sm'></i> Travel Agencies </a></li>
             <li><a href="<?php echo URLROOT; ?>admin/package"><i class='bx bx-package bx-sm'></i>Guide</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/settings"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
+
             
         </ul>
 
         <div class="logout">
         <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a>
         </div>
+
     </nav>
     <main>
         <div class="logo-container">
@@ -113,7 +121,9 @@
             <div class="tab">
                 <a href="<?php echo URLROOT?>/admin/request"><button class="tablinks">Hotel
                         Requests</button></a>
+
                 <a href="<?php echo URLROOT?>/admin/agencyrequest"><button class="tablinks active">Travel Agency
+
                         Requests</button></a>
                 <a href="<?php echo URLROOT?>/admin/guiderequests"><button class="tablinks">Guide
                         Requests</button></a>
@@ -128,6 +138,7 @@
                 </button>
             </div>
         </div>
+
 
 
         <div class="table-content">
@@ -267,6 +278,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 </body>
+
 
 
 </html>

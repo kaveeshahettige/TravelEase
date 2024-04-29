@@ -64,11 +64,19 @@ include 'navigation.php';
             if (!empty($notifications)) {
                 foreach ($notifications as $key => $notification):
                     ?>
-                    <div class="notification-item">
-                        <!-- Assuming you have an image path stored in $notification->sender_image -->
-                        <img src="<?php echo $notification->sender_profile_picture; ?>" alt="Sender Image" class="sender-image">
+            <div class="notification-item">
+                <?php
+                $defaultImagePath = '../public/images/profile.png';
+                if (isset($notification->sender_profile_picture) && !empty($notification->sender_profile_picture)) {
+                    $imagePath = '../public/images/' . $notification->sender_profile_picture;
+                } else {
+                    $imagePath = $defaultImagePath;
+                }
+                ?>
+                <img src="<?= $imagePath ?>" alt="Sender Image" class="sender-image">
 
-                        <div class="notification-text-container">
+
+            <div class="notification-text-container">
                             <span class="sender-name"><?php echo $notification->sender_name; ?></span>
                             <span class="notification-date"><?php echo $notification->nDate; ?></span>
                             <p class="notification-text"><?php echo $notification->notification; ?></p>

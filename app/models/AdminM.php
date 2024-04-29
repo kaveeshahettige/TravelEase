@@ -208,9 +208,11 @@ class AdminM{
   }
 
   public function checkOngoingBooking($userId) {
+
     $this->db->query('SELECT COUNT(*) AS bookingsCount FROM bookings WHERE user_id = :userId AND startDate >= CURDATE() AND bookingCondition != \'cancelled\' 
   UNION 
   SELECT COUNT(*) AS cartBookingsCount FROM cartbookings WHERE user_id = :userId AND startDate >= CURDATE() AND bookingCondition != \'cancelled\' 
+
   ');
     $this->db->bind(':userId', $userId);
     $this->db->execute(); // Execute the query after binding the parameter
