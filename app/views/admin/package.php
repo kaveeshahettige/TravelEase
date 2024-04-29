@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/package.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
     <title></title>
@@ -40,13 +42,12 @@
             <li><a href="<?php echo URLROOT; ?>admin/package" class="active"><i
                         class='bx bx-package bx-sm'></i>Guide</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/settings"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-            <li><a href="<?php echo URLROOT; ?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>
-                    Logout</a></li>
+            
         </ul>
 
-        <!-- <div class="logout">
-            <a href="<?php echo URLROOT; ?>pages/indes" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
-        </div> -->
+        <div class="logout">
+        <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a>
+        </div>
     </nav>
     <main>
         <div class="logo-container">
@@ -89,7 +90,7 @@ if (!empty($data['guide']) && is_array($data['guide'])):
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Registered Number</th>
+                        <!-- <th>Registered Number</th> -->
                         <th>Guide Name</th>
                         <th>Action</th>
                     </tr>
@@ -101,10 +102,12 @@ if (!empty($data['guide']) && is_array($data['guide'])):
             ?>
                     <tr class="t-row">
                         <td><?php echo $count ?></td>
-                        <td><?php echo $guide->guide_id ?></td>
+                        <!-- <td><?php echo $guide->guide_id ?></td> -->
                         <td><?php echo ucfirst($guide->fname) . ' ' . ucfirst($guide->lname) ?></td>
                         <td>
-                            <button class="view-button" data-description="<?php echo $guide->description ?>"
+                            <button class="view-button" 
+                                data-id="<?php echo $guide->guide_id ?>"
+                            data-description="<?php echo $guide->description ?>"
                                 data-address="<?php echo $guide->address ?>" data-city="<?php echo $guide->city ?>"
                                 data-province="<?php echo $guide->province ?>"
                                 data-facebook="<?php echo $guide->facebook ?>"
@@ -157,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     viewButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const guideId = this.closest('.t-row').querySelector('td:nth-child(2)').innerText;
+            const guideId = this.getAttribute('data-id');
             const guideName = this.closest('.t-row').querySelector('td:nth-child(3)').innerText;
             const guideDescription = this.getAttribute('data-description');
             const guideAddress = this.getAttribute('data-address');

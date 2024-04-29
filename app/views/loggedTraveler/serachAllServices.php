@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTDElEffBAws-JYjYaUELqmkOCpa6C5R8&callback=initMap" async defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.2/css/boxicons.min.css">
     
     <style>
@@ -70,12 +70,17 @@
         });
 
         // Define an array to store all the places
-        var places = [
-            <?php foreach ($data['places'] as $place): ?>
-                '<?php echo $place->place_name ?>',
-            <?php endforeach; ?>
-        ];
+        <?php if (!empty($data['places'])): ?>
+    var places = [
+        <?php foreach ($data['places'] as $place): ?>
+            '<?php echo addslashes($place->place_name) ?>',
+        <?php endforeach; ?>
+    ];
+<?php else: ?>
+    var places = ['<?php echo addslashes($data['city']->city) ?>'];
+<?php endif; ?>
 
+        
         // Geocode each place and create markers
         places.forEach(function(place) {
             var geocoder = new google.maps.Geocoder();

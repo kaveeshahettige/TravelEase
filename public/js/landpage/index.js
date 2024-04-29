@@ -36,7 +36,7 @@ function clickSearch() {
   /////////////////////////
   function StartPlan() {
     // Set the new URL you want to navigate to
-    const newPageURL = "landpage/plantrip"; // Replace with your desired URL
+    const newPageURL = "../users/login"; // Replace with your desired URL
   
     // Use window.location to navigate to the new page
     window.location.href = newPageURL;
@@ -49,3 +49,7 @@ function clickSearch() {
   const planbutton = document.getElementById("planbutton");
   planbutton.addEventListener("click", StartPlan);
 
+  function Tripdetails(id) {
+    // Corrected implementation
+    window.location.href = `landpage/tripfurtherdetail/${id}`;
+  }

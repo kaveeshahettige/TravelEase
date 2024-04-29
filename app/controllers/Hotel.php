@@ -24,6 +24,8 @@ class Hotel extends Controller
         $bookingsCount = $this->getBookingsCount();
         $guestCount = $this->getGuestCount();
         $totalRevenue = $this->getTotalRevenue();
+        $approval = $this->getProfileStatus();
+        $verificationStatus = $this->checkServiceValidations();
 
         $data = [
             'bookingsCount' => $bookingsCount,
@@ -31,7 +33,10 @@ class Hotel extends Controller
             'basicInfo' => $this->basicInfo(),
             'roomCount' => $this->roomCount(),
             'bookingData' => $bookingData,
-            'totalRevenue' => $totalRevenue
+            'totalRevenue' => $totalRevenue,
+            'approval' => $approval,
+            'verificationStatus' => $verificationStatus,
+
         ];
 
         $this->view('hotel/index',$data);
@@ -353,7 +358,6 @@ class Hotel extends Controller
                 'lunchIncluded' => trim($_POST['lunchIncluded']),
                 'dinnerIncluded' => trim($_POST['dinnerIncluded']),
                 'description' => trim($_POST['description']),
-                'cancellationPolicy' => trim($_POST['cancellationPolicy']),
                 'roomType_err' => '',
                 'numOfBeds_err' => '',
                 'numAdults_err' => '',
@@ -376,7 +380,6 @@ class Hotel extends Controller
                 'lunchIncluded_err' => '',
                 'dinnerIncluded_err' => '',
                 'description_err' => '',
-                'cancellationPolicy_err' => '',
                 'roomImages' => [],
             ];
 
@@ -423,8 +426,7 @@ class Hotel extends Controller
                 empty($roomData['refrigeratorAvailability_err']) && empty($roomData['hotShowerHeaterAvailability_err']) &&
                 empty($roomData['washingMachineAvailability_err']) && empty($roomData['kitchenAvailability_err']) &&
                 empty($roomData['breakfastIncluded_err']) && empty($roomData['lunchIncluded_err']) &&
-                empty($roomData['dinnerIncluded_err']) && empty($roomData['description_err']) &&
-                empty($roomData['cancellationPolicy_err'])
+                empty($roomData['dinnerIncluded_err']) && empty($roomData['description_err'])
             ) {
                 // Set the correct hotel_id before inserting into the database
                 // Set the uploaded images data
@@ -477,7 +479,6 @@ class Hotel extends Controller
                 'lunchIncluded' => '',
                 'dinnerIncluded' => '',
                 'description' => '',
-                'cancellationPolicy' => '',
                 'roomType_err' => '',
                 'numOfBeds_err' => '',
                 'numAdults_err' => '',
@@ -500,7 +501,6 @@ class Hotel extends Controller
                 'lunchIncluded_err' => '',
                 'dinnerIncluded_err' => '',
                 'description_err' => '',
-                'cancellationPolicy_err' => '',
                 'roomImages' => [],
             ];
             $data = [
@@ -531,7 +531,6 @@ class Hotel extends Controller
                 'smokingPolicy' => trim($_POST['smokingPolicy']),
                 'petPolicy' => trim($_POST['petPolicy']),
                 'description' => trim($_POST['description']),
-                'cancellationPolicy' => trim($_POST['cancellationPolicy']),
                 'roomSize' => trim($_POST['roomSize']), // New field
                 'balconyAvailability' => trim($_POST['balconyAvailability']), // New field
                 'privatePoolAvailability' => trim($_POST['privatePoolAvailability']), // New field
@@ -555,18 +554,17 @@ class Hotel extends Controller
                 'smokingPolicy_err' => '',
                 'petPolicy_err' => '',
                 'description_err' => '',
-                'cancellationPolicy_err' => '',
-                'roomSize_err' => '', // New field
-                'balconyAvailability_err' => '', // New field
-                'privatePoolAvailability_err' => '', // New field
-                'hotTubAvailability_err' => '', // New field
-                'refrigeratorAvailability_err' => '', // New field
-                'hotShowerHeaterAvailability_err' => '', // New field
-                'washingMachineAvailability_err' => '', // New field
-                'kitchenAvailability_err' => '', // New field
-                'breakfastIncluded_err' => '', // New field
-                'lunchIncluded_err' => '', // New field
-                'dinnerIncluded_err' => '', // New field
+                'roomSize_err' => '',
+                'balconyAvailability_err' => '',
+                'privatePoolAvailability_err' => '',
+                'hotTubAvailability_err' => '',
+                'refrigeratorAvailability_err' => '',
+                'hotShowerHeaterAvailability_err' => '',
+                'washingMachineAvailability_err' => '',
+                'kitchenAvailability_err' => '',
+                'breakfastIncluded_err' => '',
+                'lunchIncluded_err' => '',
+                'dinnerIncluded_err' => '',
                 'roomImages' => [],
             ];
 
@@ -574,17 +572,17 @@ class Hotel extends Controller
             if (isset($_FILES['roomImages']) && !empty($_FILES['roomImages']['name'][0])) {
                 $images = $_FILES['roomImages'];
                 foreach ($images['tmp_name'] as $key => $tmp_name) {
-                    $file_name = $images['name'][$key]; // Original file name
-                    $upload_dir = "../public/images/" . $file_name; // Destination directory
+                    $file_name = $images['name'][$key];
+                    $upload_dir = "../public/images/" . $file_name;
                     if (move_uploaded_file($tmp_name, $upload_dir)) {
-                        $uploadedImages[] = $file_name; // Store the original file name
+                        $uploadedImages[] = $file_name;
                     }
                 }
             }
 
 
             $roomData['roomImages'] = $uploadedImages;
-            // Validate form fields (you need to implement this)
+
 
             // Check for any validation errors
             if (empty($roomData['roomType_err']) && empty($roomData['numOfBeds_err']) &&
@@ -592,7 +590,7 @@ class Hotel extends Controller
                 empty($roomData['price_err']) && empty($roomData['acAvailability_err']) &&
                 empty($roomData['tvAvailability_err']) && empty($roomData['wifiAvailability_err']) &&
                 empty($roomData['smokingPolicy_err']) && empty($roomData['petPolicy_err']) &&
-                empty($roomData['description_err']) && empty($roomData['cancellationPolicy_err']) &&
+                empty($roomData['description_err'])  &&
                 empty($roomData['roomSize_err']) && empty($roomData['balconyAvailability_err']) && // New fields
                 empty($roomData['privatePoolAvailability_err']) && empty($roomData['hotTubAvailability_err']) && // New fields
                 empty($roomData['refrigeratorAvailability_err']) && empty($roomData['hotShowerHeaterAvailability_err']) && // New fields
@@ -623,8 +621,8 @@ class Hotel extends Controller
                 'room_id' => $room_id,
                 'roomType' => $hotels->roomType,
                 'numOfBeds' => $hotels->numOfBeds,
-                'numAdults' => $hotels->numAdults, // New field
-                'numChildren' => $hotels->numChildren, // New field
+                'numAdults' => $hotels->numAdults,
+                'numChildren' => $hotels->numChildren,
                 'price' => $hotels->price,
                 'acAvailability' => $hotels->acAvailability,
                 'tvAvailability' => $hotels->tvAvailability,
@@ -632,18 +630,18 @@ class Hotel extends Controller
                 'smokingPolicy' => $hotels->smokingPolicy,
                 'petPolicy' => $hotels->petPolicy,
                 'description' => $hotels->description,
-                'cancellationPolicy' => $hotels->cancellationPolicy,
-                'roomSize' => $hotels->roomSize, // New field
-                'balconyAvailability' => $hotels->balconyAvailability, // New field
-                'privatePoolAvailability' => $hotels->privatePoolAvailability, // New field
-                'hotTubAvailability' => $hotels->hotTubAvailability, // New field
-                'refrigeratorAvailability' => $hotels->refrigeratorAvailability, // New field
-                'hotShowerHeaterAvailability' => $hotels->hotShowerHeaterAvailability, // New field
-                'washingMachineAvailability' => $hotels->washingMachineAvailability, // New field
-                'kitchenAvailability' => $hotels->kitchenAvailability, // New field
-                'breakfastIncluded' => $hotels->breakfastIncluded, // New field
-                'lunchIncluded' => $hotels->lunchIncluded, // New field
-                'dinnerIncluded' => $hotels->dinnerIncluded, // New field
+                'roomSize' => $hotels->roomSize,
+                'balconyAvailability' => $hotels->balconyAvailability,
+                'privatePoolAvailability' => $hotels->privatePoolAvailability,
+                'hotTubAvailability' => $hotels->hotTubAvailability,
+                'refrigeratorAvailability' => $hotels->refrigeratorAvailability,
+                'hotShowerHeaterAvailability' => $hotels->hotShowerHeaterAvailability,
+                'washingMachineAvailability' => $hotels->washingMachineAvailability,
+                'kitchenAvailability' => $hotels->kitchenAvailability,
+                'breakfastIncluded' => $hotels->breakfastIncluded,
+                'lunchIncluded' => $hotels->lunchIncluded,
+                'dinnerIncluded' => $hotels->dinnerIncluded,
+                'roomImages' => [],
             ];
 
             $data = [
@@ -834,7 +832,9 @@ class Hotel extends Controller
 
             if ($isRoomInUse) {
                 // Alert the user
-                echo "<script>alert('Unable to delete room. It is currently in use.')</script>";
+                http_response_code(409);
+                echo json_encode(array("error" => "Unable to delete room. It is currently in use."));
+                exit();
             } else {
                 // Attempt to deactivate the room
                 $deactivated = $this->hotelsModel->deactivateRoom($room_id);
@@ -990,6 +990,8 @@ class Hotel extends Controller
         $userId = $_SESSION['user_id'];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $registrationNumber = $_POST['registrationNumber'];
+            $expiryDate = $_POST['expiryDate'];
             $targetDir = '../public/documents/';
             $fileName = basename($_FILES['service-validation-pdf']['name']); // Extract the filename
 
@@ -998,7 +1000,7 @@ class Hotel extends Controller
             // Move the uploaded file to the target directory
             if (move_uploaded_file($_FILES['service-validation-pdf']['tmp_name'], $targetFile)) {
                 // Call the model to insert the filename into the database
-                if ($this->hotelsModel->insertPdf($fileName, $userId)) {
+                if ($this->hotelsModel->insertPdf($fileName, $userId,$registrationNumber, $expiryDate)) {
                     // Success - You can redirect or show a success message
                     flash('success', 'PDF submitted successfully');
                     redirect('hotel/settings');
@@ -1193,11 +1195,10 @@ class Hotel extends Controller
         $notification_inserted = $this->hotelsModel->insertNotification($booking_id, $sender_id, $receiver_id, $notification_message);
 
 
-        $notification_message2 = "$sender_name" . " has cancelled your booking with the booking details were for" . " $roomType" . " room from" . " $startDate" . " to" . " $endDate." . " Make Sure Refund will be processed within 7 days";
+        $notification_message2 = "$sender_name" . " has cancelled the booking with the booking details were for" . " $roomType" . " room from" . " $startDate" . " to" . " $endDate." . " Make Sure Refund will be processed within 7 days";
 
-        $businessmanagerID = 2;
 
-        $notification2_inserted = $this->hotelsModel->insertNotification($booking_id, $sender_id,$businessmanagerID , $notification_message2);
+        $notification2_inserted = $this->hotelsModel->notifyUsersWithType2($booking_id, $sender_id, $notification_message2);
 
         $currentDate = date('Y-m-d');
         $cancelled_id = $_SESSION['user_id'];
@@ -1277,6 +1278,15 @@ class Hotel extends Controller
             echo json_encode(['error' => 'Failed to delete profile']);
         }
 
+    }
+
+
+    public function getProfileStatus(){
+        $user_id = $_SESSION['user_id'];
+
+        $profileStatus = $this->hotelsModel->getProfileStatus($user_id);
+
+        return $profileStatus;
     }
 
 

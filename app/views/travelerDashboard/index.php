@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="<?php echo URLROOT?>js/travelerDashboard/script.js"></script>
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
 </head>
 <body>
     <nav class="left-menu">
@@ -38,9 +40,12 @@
         </ul>  
         
         
-        <div class="logout">
+        <!-- <div class="logout">
             <a href="<?php echo URLROOT?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
-        </div>
+        </div> -->
+        <div class="logout">
+        <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a>
+    </div>
     </nav>
     <main>
         <div class="logo-container">

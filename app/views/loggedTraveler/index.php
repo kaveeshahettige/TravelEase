@@ -10,8 +10,10 @@
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-NwdoN0yM5JcJJ4jX1KvJXrQhQ+6RMo3hV3brvytgePvVzSlc3PjMFbpL5T+VUAq7" crossorigin="anonymous">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTDElEffBAws-JYjYaUELqmkOCpa6C5R8&libraries=places"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.2/css/boxicons.min.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
 
 
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADD6_nBEr9ZJd44sKcqr0dj-JRvbt5ogo&libraries=places"></script> -->
@@ -25,6 +27,74 @@
             display: inline-block;
             float: left;
         }
+        .main2trip-container {
+    position: relative;
+    width: 100%;
+    height: 500px; /* Adjust container height as needed */
+    overflow: hidden; /* Hide overflow */
+}
+
+.main2trip-scroll {
+    display: flex;
+    white-space: nowrap;
+    overflow-x: hidden; /* Hide the horizontal scroll bar */
+}
+
+
+.main2img1content {
+    display: inline-block;
+    margin-right: 40px; /* Adjust spacing between cards */
+    text-align: center; /* Center align content */
+}
+
+.image-container {
+    width: 400px; /* Adjust image container width */
+    height: 300px; /* Adjust image container height */
+    overflow: hidden;
+}
+
+.trip-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.provider-name {
+    font-size: 28px; /* Increase font size */
+    font-weight: bold;
+    margin: 15px 0; /* Add margin for better appearance */
+}
+
+.city {
+    font-size: 22px; /* Increase font size */
+    margin: 10px 0; /* Add margin for better appearance */
+}
+
+.view-booking {
+    background-color: #F9B314;
+    color: #fff;
+    border: none;
+    padding: 15px 30px; /* Increase padding for better appearance */
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px; /* Adjust margin for better appearance */
+}
+
+.scroll-button {
+    background-color: #F9B314;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+
     </style>
 </head>
 <body>
@@ -42,8 +112,9 @@
             <div class="rightcontent">
             <li><a href="<?php echo URLROOT ?>travelerDashboard/cart/<?php echo $_SESSION['user_id'] ?>"><i class='bx bxs-cart bx-lg bx-tada bx-rotate-90' ></i></a></li>
             <li><a href="<?php echo URLROOT ?>travelerDashboard/index/<?php echo $_SESSION['user_id'] ?>"><img src="<?php echo empty($data['profile_picture']) ? URLROOT.'images/user.jpg' : URLROOT.'images1/'.$data['profile_picture']; ?>" alt="Profile Picture" alt="User Profile Photo"> </a></li>
-            <li><a href="<?php echo URLROOT?>users/logout" id="logout">Log Out</a></li>
+            <li><a href="#" onclick="confirmLogout(event)" id="logout">Log Out</a></li>
             </div>
+            
         </ul>
     </div>
     <section class="main1">
@@ -69,53 +140,66 @@
         </div>
     </section>
     <section class="main2">
-        <div class="topbar">
-        <?php if (!empty($data['bookingDetailsArray'])): ?>
-            <span id="upcoming">Upcoming Trips</span>
-            <?php endif; ?>
-            <button id="plantrip" onclick="planNewTrip()">Plan New Trip</button>
-        </div>
-        <!-- <?php echo var_dump($data['bookingDetailsArray'])?> -->
-        <div class="main2trip-container">
-    <div class="main2trip">
+    <div class="topbar">
+    <?php if (!empty($data['bookingDetailsArray'])): ?>
+        <span id="upcoming">Upcoming Trips</span>
+    <?php endif; ?>
+    <button id="plantrip" onclick="planNewTrip()">Plan New Trip</button>
+</div>
+
+<div class="main2trip-container">
+    <div class="main2trip-scroll" id="main2trip-scroll">
         <?php if (!empty($data['bookingDetailsArray'])): ?>
             <?php foreach ($data['bookingDetailsArray'] as $element): ?>
                 <div class="main2img1content">
                     <?php $serviceProviderID = $element['serviceProviderID'];?>
-                    <div style="width: 510px; height: 400px; overflow: hidden;">
-                    <?php if ($element['type'] == 3): ?>
-                        <img src="<?php echo URLROOT ?>images/rooms/<?php echo $element['furtherBookingDetails']->image ?>" alt="" style="width: 100%; height: 100%; object-fit: cover;">
-                        <?php elseif ($element['type'] == 4): ?>
-                        <img src="<?php echo URLROOT ?>images/<?php echo $element['furtherBookingDetails']->image ?>" alt="" style="width: 100%; height: 100%; object-fit: cover;">
-                        <?php elseif ($element['type'] == 5): ?>
-                        <img src="<?php echo URLROOT ?>images/<?php echo $element['furtherBookingDetails']->image ?>" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="image-container">
+                        <?php if ($element['type'] == 3): ?>
+                            <img src="<?php echo URLROOT ?>images/<?php echo $element['furtherBookingDetails']->image ?>" alt="" class="trip-image">
+                        <?php elseif ($element['type'] == 4 || $element['type'] == 5): ?>
+                            <img src="<?php echo URLROOT ?>images/<?php echo $element['furtherBookingDetails']->image ?>" alt="" class="trip-image">
                         <?php endif; ?>
                     </div>
                     <div class="c1"> 
                         <div>
                             <?php if (!empty($element['serviceProviderName'])): ?>
-                                <p style="font-size: 30px; margin: 0; font-weight: bold;"><?php echo ucfirst($element['serviceProviderName'])?></p>
+                                <p class="provider-name"><?php echo ucfirst($element['serviceProviderName'])?></p>
                             <?php endif; ?>
                             <?php if (!empty($element['mainbookingDetails']->city)): ?>
-                                <p><?php echo $element['mainbookingDetails']->city ?></p>
+                                <p class="city"><?php echo $element['mainbookingDetails']->city ?></p>
                             <?php endif; ?>
                         </div>
                         <div>
-                        <button id="viewbooking" onclick="viewBooking(<?php echo $element['temporyIDs']; ?>, <?php echo $serviceProviderID; ?>, '<?php echo $element['bookingIDs']; ?>')">View</button>            
+                            <button style="margin-top:10px" class="view-booking" onclick="viewBooking(<?php echo $element['temporyIDs']; ?>, <?php echo $serviceProviderID; ?>, '<?php echo $element['bookingIDs']; ?>')">View</button>            
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
+    <div class="button-container">
+        <button class="scroll-button" onclick="goleft()">◄</button>
+        <button class="scroll-button" onclick="scrollRight()">►</button>
+    </div>
 </div>
 
 
-        
-
-           
-        </div>
     </section>
+    <script>
+      function goleft() {
+    console.log("Scrolling left");
+    const container = document.getElementById("main2trip-scroll");
+    container.scrollLeft -= 400; // Adjust scroll amount as needed
+}
+
+function scrollRight() {
+    console.log("Scrolling right");
+    const container = document.getElementById("main2trip-scroll");
+    container.scrollLeft += 400; // Adjust scroll amount as needed
+}
+
+
+    </script>
     <section class="main3">
         <div class="main3heading">
             <p>Explore Your Favorite Destinations</p>
@@ -125,7 +209,7 @@
             <div><img src="<?php echo URLROOT . '/images/' . $data['service1pp'] ?>" alt=""></div>
                 <div class="c1"> 
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider1Name']?></p>
+                        <p style="font-size: 26px;font-weight:bold"><?php echo $data['randomServiceProvider1Name']?></p>
                         <p style="margin-bottom:6px"><?php echo $data['randomServiceProvider1Location']?></p>
                         <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
@@ -155,7 +239,7 @@
             <div><img src="<?php echo URLROOT . '/images/' . $data['service2pp'] ?>" alt=""></div>
                 <div class="c2">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider2Name']?></p>
+                        <p style="font-size: 26px;font-weight:bold"><?php echo $data['randomServiceProvider2Name']?></p>
                         <p style="margin-bottom:6px"><?php echo $data['randomServiceProvider2Location']?></p>
                         <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
@@ -183,7 +267,7 @@
             <div><img src="<?php echo URLROOT . '/images/' . $data['service3pp'] ?>" alt=""></div>
                 <div class="c3">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider3Name']?></p>
+                        <p style="font-size: 26px;font-weight:bold"><?php echo $data['randomServiceProvider3Name']?></p>
                         <p style="margin-bottom:6px"><?php echo $data['randomServiceProvider3Location']?></p>
                         <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
@@ -328,21 +412,34 @@ window.onclick = function(event) {
             //Check if check-in date is after check-out date
             if (checkinDate > checkoutDate) {
                 
-                document.getElementById("checkingBigger").style.display = "block";
+                //document.getElementById("checkingBigger").style.display = "block";
+                var notification = document.getElementById("notification");
+            notification.innerText = "Check-in Date is smalle !";
+            notification.style.display = "block";
+
+            // Hide notification after 3 seconds
+            setTimeout(function() {
+                notification.style.display = "none";
+                notification.innerText = "";
+            }, 3000);
+
+            // Prevent form submission
+            event.preventDefault();
+
                 return false;
             }
 
             // Check if check-in date is in the past
-            if (checkinDate < today) {
-                alert("Check-in date cannot be in the past.");
-                return false;
-            }
+            // if (checkinDate < today) {
+            //     alert("Check-in date cannot be in the past.");
+            //     return false;
+            // }
 
             // Check if check-out date is in the past
-            if (checkoutDate < today) {
-                alert("Check-out date cannot be in the past.");
-                return false;
-            }
+            // if (checkoutDate < today) {
+            //     alert("Check-out date cannot be in the past.");
+            //     return false;
+            // }
 
             // All validations passed
             return true;

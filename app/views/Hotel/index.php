@@ -89,62 +89,90 @@ include 'navigation.php';
                 </div>
             </div>
 
-            <div class="right-content">
-                <!-- Table with Maximum 4 Rows -->
-                <div class="table2-content">
-                    <h2>Booking Details</h2>
-                    <table class="booking-table">
-                        <thead>
-                        <tr>
-                            <th>Guest Name</th>
-                            <th>Check-in Date</th>
-                            <th>Room Number</th>
-                            <th>Room Type</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        $bookingData = $data["bookingData"];
-                        $rowCount = 0;
-                        foreach ($bookingData as $key => $booking):
-                            if ($rowCount >= 3) break; // Limit to 4 rows
-                            ?>
+            <?php if ($data['approval'] === 1): ?>
+                <div class="right-content">
+                    <!-- Table with Maximum 4 Rows -->
+                    <div class="table2-content">
+                        <h2>Booking Details</h2>
+                        <table class="booking-table">
+                            <thead>
                             <tr>
-                                <td><?php echo $booking->fname; ?></td>
-                                <td><?php echo date("Y-m-d", strtotime($booking->startDate)); ?></td>
-                                <td><?php echo $booking->registration_number; ?></td>
-                                <td><?php echo $booking->roomType; ?></td>
-                                <td>
-                                    <a class="view-button" href="<?php echo URLROOT; ?>hotel/bookings">
-                                        <i class='bx bx-search'></i> <!-- Change the icon to 'bx-search' -->
-                                    </a>
-                                </td>
+                                <th>Guest Name</th>
+                                <th>Check-in Date</th>
+                                <th>Room Number</th>
+                                <th>Room Type</th>
+                                <th>Action</th>
                             </tr>
+                            </thead>
+                            <tbody>
                             <?php
-                            $rowCount++;
-                        endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
+                            $bookingData = $data["bookingData"];
+                            $rowCount = 0;
+                            foreach ($bookingData as $key => $booking):
+                                if ($rowCount >= 4) break; // Limit to 4 rows
+                                ?>
+                                <tr>
+                                    <td><?php echo $booking->fname; ?></td>
+                                    <td><?php echo date("Y-m-d", strtotime($booking->startDate)); ?></td>
+                                    <td><?php echo $booking->registration_number; ?></td>
+                                    <td><?php echo $booking->roomType; ?></td>
+                                    <td>
+                                        <a class="view-button" href="<?php echo URLROOT; ?>hotel/bookings">
+                                            <i class='bx bx-search'></i> <!-- Change the icon to 'bx-search' -->
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php
+                                $rowCount++;
+                            endforeach;
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
 
-                <!-- Rooms Allocated Section -->
+                    <!-- Rooms Allocated Section -->
+                    <div class="rectangle">
+                        <div class="basic-info-content">
+                            <div class="hotel-details">
+                                <h2>Rooms Allocated</h2>
+                                <h6>No.of Rooms</h6>
+                                <p><?php echo $data['roomCount']; ?></p>
+                            </div>
+                            <a href="<?php echo URLROOT; ?>hotel/addrooms">
+                                <button class="edit-button">Add</button>
+                            </a>
+                        </div>
+                    </div>
+
+            <?php else: ?>
+
                 <div class="rectangle">
                     <div class="basic-info-content">
-                        <div class="hotel-details">
-                            <h2>Rooms Allocated</h2>
-                            <h6>No.of Rooms</h6>
-                            <?php
-                            $roomCount = $data;
-                            ?>
-                            <p><?php echo $data['roomCount']; ?></p>
-                        </div>
-                        <a href="<?php echo URLROOT; ?>hotel/addrooms">
-                            <button class="edit-button">Add</button>
-                        </a>
+                        <h2>Insert Service Validations</h2>
+                        <?php if ($data['verificationStatus'] === 0): ?>
+                            <p style="color: orange;">Add your verification documents</p>
+                        <?php elseif ($data['verificationStatus'] === 1): ?>
+                            <p style="color: #2189ff;">Yet to be approved</p>
+                        <?php elseif ($data['verificationStatus'] === 2): ?>
+                            <p style="color: green;">Congratulations! Your verification has been approved</p>
+                        <?php elseif ($data['verificationStatus'] === 3): ?>
+                            <p style="color: red;">Your verification has been rejected</p>
+                        <?php endif; ?>
+
+                        <?php if ($data['verificationStatus'] !== 0): ?>
+                            <button class="edit-button" disabled>Insert</button>
+                        <?php else: ?>
+                            <a href="<?php echo URLROOT; ?>hotel/hotelvalidation">
+                                <button class="edit-button">Insert</button>
+                            </a>
+
+                        <?php endif; ?>
                     </div>
                 </div>
-            </div>
+
+            <?php endif; ?>
+                </div>
+
         </div>
     </div>
 </main>

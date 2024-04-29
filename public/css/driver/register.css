@@ -19,6 +19,8 @@ body {
     text-align: center;
     margin-top: 100px;
     margin-bottom: 20px;
+    /* border:5px solid red; */
+
 }
 
 .logo-text {
@@ -49,17 +51,19 @@ h1 {
     color: #454545;
 }
 
-form {
+.form-container {
     display: flex;
     flex-wrap: wrap; /* Wrap columns */
     justify-content: space-between;
     margin-top: 20px;
+   
 }
 
 .column {
     width: 48%;
     margin-top: 10px;
     text-align: left;
+    /* border: 2px solid black; */
 }
 
 .label-container {
@@ -69,16 +73,17 @@ form {
 label {
     font-weight: bold;
     display: block;
-    margin-top: 10px;
+    margin-left: 10px;
 }
 
 input[type="text"],
 input[type="email"],
 input[type="tel"],
 input[type="password"],
-input[type="checkbox"],
+
 select,
 textarea {
+
     width: calc(100% - 12px);
     padding: 5px;
     margin-top: 5px;
@@ -125,23 +130,32 @@ button:hover {
 .checkbox-container {
     display:flex; 
     align-items: center; 
-    /* margin: 10px; */
-  }
+    justify-content: center;
+     margin: 10px;
+  } 
   
-  .checkbox {
+   .checkbox {
     display: flex;
+    align-items: left;
+    margin-top: 20px;
+    justify-content: center;
     align-items: center;
-    margin-top: 10px; /* Adjust as needed */
+    padding: 10px;
+    /* border: 1px solid red; */
+   
 }
 
 .terms-link {
-    margin-left: 5px; /* Adjust the margin as needed */
+    margin-left: 5px; 
+    
+    /* Adjust the margin as needed */
 }
 
 body, ul {
     margin: 0;
     padding: 0;
     font-family: "Poppins", sans-serif;
+
 }
 
 /* Left menu styles */
@@ -481,4 +495,11 @@ li {
     }
 
 } 
+.baseButtons {
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    margin-top: 20px; /* Adjust margin as needed */
+}
+
 
