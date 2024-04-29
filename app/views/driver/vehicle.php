@@ -1,5 +1,3 @@
-<?php                     var_dump($data['bookedVehicles']); ?>
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -165,8 +163,8 @@
                                 <img src="<?php echo URLROOT; ?>/images/<?php echo $vehicle['vehi_img4']; ?>"
                                     alt="Vehicle Image 4">
                             </div>
-                            <button class="prev-btn"></button>
-                            <button class="next-btn">></button>
+                            <button class="prev-btn"><i class='bx bx-skip-previous-circle' ></i></i></button>
+                            <button class="next-btn"><i class='bx bx-skip-next-circle'></i></button>
                         </div>
                         <div class="card-details">
                             <h1><?php echo $vehicle['brand']; ?> <?php echo $vehicle['model']; ?></h1>
@@ -207,8 +205,8 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <p>Are you sure you want to delete this vehicle?</p>
-        <button id="confirmDeleteBtn">Yes</button>
-        <button class="cancel-btn">Cancel</button>
+        <button class="delete-button2" id="confirmDeleteBtn">Yes</button>
+        <button class="no-button">Cancel</button>
     </div>
 </div>
 

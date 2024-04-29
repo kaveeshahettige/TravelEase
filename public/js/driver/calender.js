@@ -194,19 +194,17 @@ function handleFormSubmit() {
     // }
 }
 
-    
 function setUnavailableDate(vehicle_id, date) {
-    const requestData = {
-        vehicle_id: vehicle_id,
-        date: date
-    };
 
-    fetch('http://localhost/TravelEase/Driver/setUnavailableDate', {
+    console.log('Vehicle ID:', vehicle_id);
+    console.log('Date:', date);
+    const form = new FormData();
+    form.append('vehicle_id', vehicle_id);
+    form.append('date', date);
+
+    fetch('http://localhost/travelEase/driver/setUnavailableDate', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData)
+        body: form
     })
     .then(response => {
         if (!response.ok) {
@@ -217,50 +215,48 @@ function setUnavailableDate(vehicle_id, date) {
     .then(data => {
         console.log(data);
         if (data.success) {
-            // Update the UI or perform other actions as needed
             console.log('Vehicle status updated successfully');
-            // You may choose to update the UI here without reloading the page
             window.location.reload(); // Reload the page to reflect changes (optional)
         } else {
             console.error('Failed to update vehicle status:', data.message);
-            alert('Failed to update vehicle status. Please try again.'); // Display an error message
+            alert('Failed to update vehicle status. Please try again.');
         }
     })
     .catch(error => {
         console.error('Error updating vehicle status:', error);
-        alert('Error updating vehicle status. Please check console for details.'); // Display a generic error message
+        alert('Error updating vehicle status. Please check console for details.');
     });
 }
 
-
-
 function removeUnavailableDate(vehicle_id, date) {
-    // Prepare the data to send
-    const requestData = {
-        vehicle_id: vehicle_id,
-        date: date // Adjust variable name to match PHP controller
-    };
+    console.log('Vehicle ID:', vehicle_id);
+    console.log('Date:', date);
+    const form = new FormData();
+    form.append('vehicle_id', vehicle_id);
+    form.append('date', date);
 
-    // Create a new FormData object and append data to it
-    const formData = new FormData();
-    formData.append('vehicle_id', vehicle_id);
-    formData.append('date', date); // Adjust variable name to match PHP controller
-
-    // Make an AJAX request using fetch
-    fetch('http://localhost/TravelEase/Driver/removeUnavailableDate', {
+    fetch('http://localhost/travelEase/driver/removeUnavailableDate', {
         method: 'POST',
-        body: formData
+        body: form
     })
     .then(response => {
-        if (response.ok) {
-            console.log('Unavailability removed successfully');
-            window.location.reload(); // Reload the page after successful removal
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log(data);
+        if (data.success) {
+            console.log('Vehicle status updated successfully');
+            window.location.reload(); // Reload the page to reflect changes (optional)
         } else {
-            throw new Error('Error removing unavailability: ', response);
+            console.error('Failed to update vehicle status:', data.message);
+            alert('Failed to update vehicle status. Please try again.');
         }
     })
     .catch(error => {
-        console.error('Error removing unavailability:', error);
+        console.error('Error updating vehicle status:', error);
+        alert('Error updating vehicle status. Please check console for details.');
     });
 }
-

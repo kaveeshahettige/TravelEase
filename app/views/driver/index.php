@@ -1,3 +1,4 @@
+<!-- <?php echo $data['agencyDetails']->agency_id; ?> -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -166,9 +167,9 @@
 
 
 
-                            </div>
-                            <div class="right-content">
-                                <div class="table2-content">
+                </div>
+                <div class="right-content">
+                    <div class="table2-content">
 
                         <?php
                             // Check if $data exists and has the expected structure
@@ -223,36 +224,38 @@
                                     <td>
                                         <a class="view-button" href="<?php echo URLROOT; ?>driver/bookings"
                                             style="width: 15px;" ;>
-                                                                    <i class='bx bx-search'></i>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                        <?php } ?>
-                                                    </tbody>
-                                                </table>
-                                                <?php } // End of else block
+                                            <i class='bx bx-search'></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                        <?php } // End of else block
                             } // End of if $data check ?>
-                                            </div>
+                    </div>
 
 
-                                            <?php
+                    <?php
                                         $vehicleCount = $data['vehicleCount'];
                                         ?>
 
-                                            <!-- Rooms Allocated Section -->
-                                            <div class="rectangle">
-                                                <div class="basic-info-content">
-                                                    <div class="hotel-details">
-                                                        <h2>Total Vehicles</h2>
-                                                        <!-- PHP code here -->
 
-                                                        <h2><?php echo $vehicleCount; ?></h2>
-                                                    </div>
-                                                    <a href="<?php echo URLROOT; ?>driver/vehiclereg">
-                                                        <button class="edit-button">Add a Vehicle</button>
-                                                    </a>
-                                                </div>
-                                            </div>
+                    <?php if (!empty($data['agencyDetails'])) : ?>
+                    <div class="rectangle">
+                        <div class="basic-info-content">
+                            <div class="hotel-details">
+                                <h2>Total Vehicles</h2>
+                                <!-- PHP code here -->
+                                <h2><?php echo $vehicleCount; ?></h2>
+                            </div>
+                            <a href="<?php echo URLROOT; ?>driver/vehiclereg">
+                                <button class="edit-button">Add a Vehicle</button>
+                            </a>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+
 
 
                 </div>

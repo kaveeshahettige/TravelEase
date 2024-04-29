@@ -89,13 +89,13 @@
                 <!-- Total Bookings Box -->
                 <div class="box">
                     <h2>Total Bookings</h2>
-                    <p></p>
+                    <p><?php echo $data['totalBookingsArray'];?></p>
                 </div>
 
                 <!-- Ongoing Bookings Box -->
                 <div class="box">
                     <h2>Completed Bookings</h2>
-                    <p></p>
+                    <p><?php echo $data['completedBookingsCount'];?></p>
                 </div>
 
             
