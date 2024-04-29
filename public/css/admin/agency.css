@@ -13,6 +13,7 @@ body, ul {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 9999;
+    
     /* border:2px solid red; */
 
 
@@ -27,13 +28,15 @@ body, ul {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    max-width: 1200px;
+    /* max-width: 1200px; */
     /* max-height: 1000px; */
-    width: 100%;
+    /* max-height: 1000px; */
+    width: 75%;
     text-align: left;
 }
+
 .popup-column{
-    border: 1px solid red;
+    /* border: 1px solid red; */
     width: 100%;
 
 }

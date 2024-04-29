@@ -159,13 +159,13 @@
 <!-- For Air bags -->
 <!-- For Air bags -->
 <p>
-    <strong><i class="fas fa-circle"></i> Air bags: <?php echo $data1['furtherBookingDetails']->airbag ?></strong>
+    <strong><i class="fas fa-circle"></i> Air bags: </strong>
     <?php if ($data1['furtherBookingDetails']->airbag == 1): ?>
         <i style="color:green" class="fas fa-check-circle"></i>
     <?php else: ?>
         <i style="color:red" class="fas fa-times-circle"></i>
     <?php endif; ?>
-    <strong><i class="fas fa-map"></i> Navigation: <?php echo $data1['furtherBookingDetails']->nav ?></strong>
+    <strong><i class="fas fa-map"></i> Navigation: </strong>
     <?php if ($data1['furtherBookingDetails']->nav == 1): ?>
         <i style="color:green" class="fas fa-check-circle"></i>
     <?php else: ?>
@@ -180,13 +180,13 @@
 
 <!-- For TV -->
 <p>
-    <strong><i class="fas fa-tv"></i> TV: <?php echo $data1['furtherBookingDetails']->tv ?></strong>
+    <strong><i class="fas fa-tv"></i> TV: </strong>
     <?php if ($data1['furtherBookingDetails']->tv == 1): ?>
         <i style="color:green" class="fas fa-check-circle"></i>
     <?php else: ?>
         <i style="color:red" class="fas fa-times-circle"></i>
     <?php endif; ?>
-    <strong><i class="fas fa-plug"></i> USB: <?php echo $data1['furtherBookingDetails']->usb ?></strong>
+    <strong><i class="fas fa-plug"></i> USB: </strong>
     <?php if ($data1['furtherBookingDetails']->usb == 1): ?>
         <i style="color:green" class="fas fa-check-circle"></i>
     <?php else: ?>
