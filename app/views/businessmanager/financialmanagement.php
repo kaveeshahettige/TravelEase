@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/manager-financial management.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <title>Business Financial Management</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
@@ -113,6 +114,34 @@ include 'navigation.php';
               </tbody>
             </table>
         </div>
+
+        <div class="more-content">
+            <button class="next-page-btn" onclick="showNextPage()">See More <i class='bx bx-chevron-right'></i></button>
+        </div>
+
+        <script>
+            // JavaScript function to show the next page of table rows
+            function showNextPage() {
+                var table = document.querySelector(".transaction-table");
+                var tr = table.getElementsByTagName("tr");
+                var i;
+                for (i = 0; i < tr.length; i++) {
+                    if (tr[i].style.display === "none") {
+                        tr[i].style.display = "";
+                    }
+                }
+            }
+            //limit rows
+            var table = document.querySelector(".transaction-table");
+            var tr = table.getElementsByTagName("tr");
+            var i;
+            for (i = 0; i < tr.length; i++) {
+                if (i > 3) {
+                    tr[i].style.display = "none";
+                }
+            }
+
+        </script>
 
 
 
