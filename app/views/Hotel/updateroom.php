@@ -34,7 +34,7 @@ include 'navigation.php';
         <div id="base">
             <?php
             $roomData = $data['roomData'];
-            var_dump($roomData);
+
             ?>
             <h3>Add Rooms</h3>
             <div id="form">
@@ -274,14 +274,6 @@ include 'navigation.php';
                         <div class="form-group">
                             <label for="roomDescription">Room Description:</label>
                             <textarea id="description" name="description" rows="4" required><?php echo $roomData['description'] ?? ''; ?></textarea>
-                            <?php echo "case"; ?>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="form-group">
-                            <label for="cancellationPolicy">Cancellation Policy:</label>
-                            <textarea id="cancellationPolicy" name="cancellationPolicy" rows="4" required><?php echo $roomData['cancellationPolicy'] ?? ''; ?></textarea>
                         </div>
                     </div>
 

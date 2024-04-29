@@ -108,8 +108,8 @@ class Hotels
 
           // Insert the data into the hotel_rooms table
             $this->db->query('INSERT INTO hotel_rooms 
-            (hotel_id, roomType, numOfBeds, numAdults, numChildren, price, roomSize, acAvailability, tvAvailability, wifiAvailability, smokingPolicy, petPolicy, balconyAvailability, privatePoolAvailability, hotTubAvailability, refrigeratorAvailability, hotShowerHeaterAvailability, washingMachineAvailability, kitchenAvailability, breakfastIncluded, lunchIncluded, dinnerIncluded, description, cancellationPolicy, registration_number, roomImages1, roomImages2, roomImages3, image) 
-            VALUES (:hotel_id, :roomType, :numOfBeds, :numAdults, :numChildren, :price, :roomSize, :acAvailability, :tvAvailability, :wifiAvailability, :smokingPolicy, :petPolicy, :balconyAvailability, :privatePoolAvailability, :hotTubAvailability, :refrigeratorAvailability, :hotShowerHeaterAvailability, :washingMachineAvailability, :kitchenAvailability, :breakfastIncluded, :lunchIncluded, :dinnerIncluded, :description, :cancellationPolicy, :registration_number, :roomImages1, :roomImages2, :roomImages3, :roomImages4)');
+            (hotel_id, roomType, numOfBeds, numAdults, numChildren, price, roomSize, acAvailability, tvAvailability, wifiAvailability, smokingPolicy, petPolicy, balconyAvailability, privatePoolAvailability, hotTubAvailability, refrigeratorAvailability, hotShowerHeaterAvailability, washingMachineAvailability, kitchenAvailability, breakfastIncluded, lunchIncluded, dinnerIncluded, description, registration_number, roomImages1, roomImages2, roomImages3, image) 
+            VALUES (:hotel_id, :roomType, :numOfBeds, :numAdults, :numChildren, :price, :roomSize, :acAvailability, :tvAvailability, :wifiAvailability, :smokingPolicy, :petPolicy, :balconyAvailability, :privatePoolAvailability, :hotTubAvailability, :refrigeratorAvailability, :hotShowerHeaterAvailability, :washingMachineAvailability, :kitchenAvailability, :breakfastIncluded, :lunchIncluded, :dinnerIncluded, :description, :registration_number, :roomImages1, :roomImages2, :roomImages3, :roomImages4)');
 
             // Bind values
             $this->db->bind(':hotel_id', $roomData['hotel_id']);
@@ -135,7 +135,6 @@ class Hotels
             $this->db->bind(':lunchIncluded', $roomData['lunchIncluded']);
             $this->db->bind(':dinnerIncluded', $roomData['dinnerIncluded']);
             $this->db->bind(':description', $roomData['description']);
-            $this->db->bind(':cancellationPolicy', $roomData['cancellationPolicy']);
             $this->db->bind(':registration_number', $roomData['registration_number']);
             $this->db->bind(':roomImages1', $roomData['roomImages'][0] ?? '');
             $this->db->bind(':roomImages2', $roomData['roomImages'][1] ?? '');
@@ -187,7 +186,6 @@ class Hotels
         smokingPolicy = :smokingPolicy, 
         petPolicy = :petPolicy, 
         description = :description, 
-        cancellationPolicy = :cancellationPolicy,
         roomSize = :roomSize,
         balconyAvailability = :balconyAvailability,
         privatePoolAvailability = :privatePoolAvailability,
@@ -218,7 +216,6 @@ class Hotels
         $this->db->bind(':smokingPolicy', $roomData['smokingPolicy']);
         $this->db->bind(':petPolicy', $roomData['petPolicy']);
         $this->db->bind(':description', $roomData['description']);
-        $this->db->bind(':cancellationPolicy', $roomData['cancellationPolicy']);
         $this->db->bind(':roomSize', $roomData['roomSize']);
         $this->db->bind(':balconyAvailability', $roomData['balconyAvailability']);
         $this->db->bind(':privatePoolAvailability', $roomData['privatePoolAvailability']);
@@ -362,12 +359,18 @@ class Hotels
     public function checkRoomUsage($room_id)
     {
         // Check bookings table
-        $this->db->query('SELECT * FROM bookings WHERE room_id = :room_id');
+        $this->db->query('SELECT * FROM bookings 
+                              WHERE bookings.bookingCondition != "cancelled"
+                              AND bookings.endDate >= CURDATE()
+                             AND bookings.room_id = :room_id');
         $this->db->bind(':room_id', $room_id);
         $bookingsResult = $this->db->resultSet();
 
         // Check anycartbookings table
-        $this->db->query('SELECT * FROM cartbookings WHERE room_id = :room_id');
+        $this->db->query('SELECT * FROM cartbookings 
+                              WHERE cartbookings.bookingCondition != "cancelled"
+                                AND cartbookings.endDate >= CURDATE()
+                              AND room_id = :room_id');
         $this->db->bind(':room_id', $room_id);
         $cartBookingsResult = $this->db->resultSet();
 

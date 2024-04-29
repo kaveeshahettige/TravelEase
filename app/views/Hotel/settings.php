@@ -168,7 +168,7 @@ include 'navigation.php';
                 <div class="rectangle">
                     <div class="basic-info-content">
                         <h2>Profile Deletion</h2>
-                            <button class ="delete-button" onclick="onDeleteClick(event,<?= $_SESSION['user_id'] ?>)">Delete</button>
+                            <button class ="delete-button" onclick="onDeleteClick(event,<?= $_SESSION['user_id'] ?>)">Deactivate</button>
                     </div>
             </div>
 

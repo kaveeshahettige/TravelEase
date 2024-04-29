@@ -358,7 +358,6 @@ class Hotel extends Controller
                 'lunchIncluded' => trim($_POST['lunchIncluded']),
                 'dinnerIncluded' => trim($_POST['dinnerIncluded']),
                 'description' => trim($_POST['description']),
-                'cancellationPolicy' => trim($_POST['cancellationPolicy']),
                 'roomType_err' => '',
                 'numOfBeds_err' => '',
                 'numAdults_err' => '',
@@ -381,7 +380,6 @@ class Hotel extends Controller
                 'lunchIncluded_err' => '',
                 'dinnerIncluded_err' => '',
                 'description_err' => '',
-                'cancellationPolicy_err' => '',
                 'roomImages' => [],
             ];
 
@@ -428,8 +426,7 @@ class Hotel extends Controller
                 empty($roomData['refrigeratorAvailability_err']) && empty($roomData['hotShowerHeaterAvailability_err']) &&
                 empty($roomData['washingMachineAvailability_err']) && empty($roomData['kitchenAvailability_err']) &&
                 empty($roomData['breakfastIncluded_err']) && empty($roomData['lunchIncluded_err']) &&
-                empty($roomData['dinnerIncluded_err']) && empty($roomData['description_err']) &&
-                empty($roomData['cancellationPolicy_err'])
+                empty($roomData['dinnerIncluded_err']) && empty($roomData['description_err'])
             ) {
                 // Set the correct hotel_id before inserting into the database
                 // Set the uploaded images data
@@ -482,7 +479,6 @@ class Hotel extends Controller
                 'lunchIncluded' => '',
                 'dinnerIncluded' => '',
                 'description' => '',
-                'cancellationPolicy' => '',
                 'roomType_err' => '',
                 'numOfBeds_err' => '',
                 'numAdults_err' => '',
@@ -505,7 +501,6 @@ class Hotel extends Controller
                 'lunchIncluded_err' => '',
                 'dinnerIncluded_err' => '',
                 'description_err' => '',
-                'cancellationPolicy_err' => '',
                 'roomImages' => [],
             ];
             $data = [
@@ -536,7 +531,6 @@ class Hotel extends Controller
                 'smokingPolicy' => trim($_POST['smokingPolicy']),
                 'petPolicy' => trim($_POST['petPolicy']),
                 'description' => trim($_POST['description']),
-                'cancellationPolicy' => trim($_POST['cancellationPolicy']),
                 'roomSize' => trim($_POST['roomSize']), // New field
                 'balconyAvailability' => trim($_POST['balconyAvailability']), // New field
                 'privatePoolAvailability' => trim($_POST['privatePoolAvailability']), // New field
@@ -560,7 +554,6 @@ class Hotel extends Controller
                 'smokingPolicy_err' => '',
                 'petPolicy_err' => '',
                 'description_err' => '',
-                'cancellationPolicy_err' => '',
                 'roomSize_err' => '',
                 'balconyAvailability_err' => '',
                 'privatePoolAvailability_err' => '',
@@ -597,7 +590,7 @@ class Hotel extends Controller
                 empty($roomData['price_err']) && empty($roomData['acAvailability_err']) &&
                 empty($roomData['tvAvailability_err']) && empty($roomData['wifiAvailability_err']) &&
                 empty($roomData['smokingPolicy_err']) && empty($roomData['petPolicy_err']) &&
-                empty($roomData['description_err']) && empty($roomData['cancellationPolicy_err']) &&
+                empty($roomData['description_err'])  &&
                 empty($roomData['roomSize_err']) && empty($roomData['balconyAvailability_err']) && // New fields
                 empty($roomData['privatePoolAvailability_err']) && empty($roomData['hotTubAvailability_err']) && // New fields
                 empty($roomData['refrigeratorAvailability_err']) && empty($roomData['hotShowerHeaterAvailability_err']) && // New fields
@@ -637,7 +630,6 @@ class Hotel extends Controller
                 'smokingPolicy' => $hotels->smokingPolicy,
                 'petPolicy' => $hotels->petPolicy,
                 'description' => $hotels->description,
-                'cancellationPolicy' => $hotels->cancellationPolicy,
                 'roomSize' => $hotels->roomSize,
                 'balconyAvailability' => $hotels->balconyAvailability,
                 'privatePoolAvailability' => $hotels->privatePoolAvailability,
@@ -840,7 +832,9 @@ class Hotel extends Controller
 
             if ($isRoomInUse) {
                 // Alert the user
-                echo "<script>alert('Unable to delete room. It is currently in use.')</script>";
+                http_response_code(409);
+                echo json_encode(array("error" => "Unable to delete room. It is currently in use."));
+                exit();
             } else {
                 // Attempt to deactivate the room
                 $deactivated = $this->hotelsModel->deactivateRoom($room_id);

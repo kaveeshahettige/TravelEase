@@ -276,13 +276,6 @@ include 'navigation.php';
                             </div>
                         </div>
 
-                        <div>
-                            <div class="form-group">
-                                <label for="cancellationPolicy">Cancellation Policy:</label>
-                                <textarea id="cancellationPolicy" name="cancellationPolicy" rows="4" required></textarea>
-                            </div>
-                        </div>
-
                     </div>
 
                     <div>
