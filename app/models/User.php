@@ -92,7 +92,7 @@ class User{
     }
 
     public function updateUser($data){
-        $this->db->query('UPDATE users SET fname = :fname, lname = :lname,email = :email,number = :number,card_holder_name=:card_holder_name,account_number=:account_number WHERE id = :id');
+        $this->db->query('UPDATE users SET fname = :fname, lname = :lname,email = :email,number = :number,card_holder_name=:card_holder_name,account_number=:account_number,bank=:bank,branch=:branch WHERE id = :id');
         // Bind values
         $this->db->bind(':id', $data['id']);
         $this->db->bind(':fname', $data['fname']);
@@ -101,6 +101,8 @@ class User{
         $this->db->bind(':number', $data['number']);
         $this->db->bind(':card_holder_name', $data['card_holder_name']);
         $this->db->bind(':account_number', $data['account_number']);
+        $this->db->bind(':bank', $data['bank']);
+        $this->db->bind(':branch', $data['branch']);
         // Execute
         if($this->db->execute()){
         //add a function to rlaod site
@@ -385,9 +387,9 @@ public function registerPackageProvider($data){
     if($this->db->execute()){
         $user_id = $this->db->lastInsertId();
          var_dump($data);
-         $this->db->query('INSERT INTO packageprovider (user_id,address, package_type, description) VALUES (:id,:address, :package_type, :description)');
+         $this->db->query('INSERT INTO guides(user_id,address, description) VALUES (:id,:address, :description)');
 
-         $this->db->bind(':package_type', $data['packageType']);
+        //  $this->db->bind(':package_type', $data['packageType']);
          $this->db->bind(':description', $data['description']);
          $this->db->bind(':address', $data['address']); // Change the binding to :address
          $this->db->bind(':id', $user_id);

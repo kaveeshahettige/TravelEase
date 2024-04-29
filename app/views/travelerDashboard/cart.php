@@ -151,7 +151,7 @@
 <div id="confirmationModal" class="modal2">
   <div class="modal2-content">
     <span class="close2">&times;</span>
-    <p>Are you sure you want to remove this from cart?</p>
+    <p>Are you sure you want to remove this from wishlist?</p>
     <button id="confirmCancelBtn">Yes, Remove</button>
     <button id="denyCancelBtn">No,Close</button>
     <div id="confirmationMessage"></div>
