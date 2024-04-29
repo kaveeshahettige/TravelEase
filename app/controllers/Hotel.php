@@ -641,13 +641,17 @@ class Hotel extends Controller
                 'breakfastIncluded' => $hotels->breakfastIncluded,
                 'lunchIncluded' => $hotels->lunchIncluded,
                 'dinnerIncluded' => $hotels->dinnerIncluded,
-                'roomImages' => [],
+                'roomImages1' => $hotels->roomImages1,
+                'roomImages2' => $hotels->roomImages2,
+                'roomImages3' => $hotels->roomImages3,
+                'roomImages4' => $hotels->image,
             ];
 
             $data = [
                 'basicInfo' => $this->basicInfo(),
                 'roomData' => $roomData,
             ];
+
 
             $this->view('hotel/updateroom', $data);
         }

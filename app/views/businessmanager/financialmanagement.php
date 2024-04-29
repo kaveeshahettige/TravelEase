@@ -61,15 +61,6 @@ include 'navigation.php';
         
                 
             </div>
-
-        <div class="search-content">
-            <div class="booking-search">
-                <input type="text" id="booking-search" placeholder="Search for New Transactions">
-                <button onclick="filterBookings()">
-                    <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
-                </button>
-            </div>
-        </div>
         
         <div class="table-content">
                 <h2>All Transactions</h2>

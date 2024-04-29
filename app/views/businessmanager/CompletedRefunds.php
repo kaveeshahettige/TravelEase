@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/manager-packages.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
     <title>Business Manager Refunds</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
@@ -65,15 +66,6 @@ include 'navigation.php';
         <div class="tab">
             <a href="<?php echo URLROOT?>/businessmanager/refund"><button class="tablinks">Pending Refunds</button></a>
             <a href="<?php echo URLROOT?>/businessmanager/CompletedRefunds"><button class="tablinks active">Completed Refunds</button></a>
-        </div>
-    </div>
-
-    <div class="search-content">
-        <div class="booking-search">
-            <input type="text" id="booking-search" placeholder="Search for Refund Details">
-            <button onclick="filterBookings()">
-                <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
-            </button>
         </div>
     </div>
 

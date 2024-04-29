@@ -66,34 +66,37 @@ include 'navigation.php';
         </div>
     </div>
 
-    <div class="search-content">
-        <div class="review-search">
-            <input type="text" id="review-search" placeholder="Search for Reviews">
-            <button onclick="filterBookings()">
-                <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
-            </button>
-        </div>
-    </div>
-
     <div class="review-content">
+        <h2>Review Details</h2>
         <?php
         $reviews = $data["reviews"];
-        foreach ($reviews as $review): ?>
-            <div class="review-box">
+        if (!empty($reviews)) {
+            foreach ($reviews as $review): ?>
+                <div class="review-box">
                     <div class="review-image">
-                        <!-- You may want to display the actual user image if available -->
-                        <img src="<?php echo URLROOT; ?>/images/hotel/<?php echo $review->profile_picture; ?>" alt="Guest Photo">
+                        <?php if (!empty($review->profile_picture)): ?>
+                            <img src="<?php echo URLROOT; ?>/images/hotel/<?php echo $review->profile_picture; ?>" alt="Guest Photo">
+                        <?php else: ?>
+                            <img src="<?php echo URLROOT; ?>/images/profile.png" alt="Default Profile Photo">
+                        <?php endif; ?>
                     </div>
-                <div class="eview-sub-content">
-                    <h2><?php echo $review->fname; ?></h2>
-                    <p>Date: <?php echo $review->time; ?></p>
-                    <p class="review-text"><?php echo $review->feedback; ?></p>
-                    <p>Rating: <?= getStarRating($review->rating); ?></p>
-                    <p>Date: <?= $review->time; ?></p>
+                    <div class="review-sub-content">
+                        <h2><?php echo $review->fname; ?></h2>
+                        <p>Date: <?php echo $review->time; ?></p>
+                        <?php if (!empty($review->feedback)): ?>
+                            <p class="review-text"><?php echo $review->feedback; ?></p>
+                        <?php endif; ?>
+                        <p>Rating: <?= getStarRating(!empty($review->rating) ? $review->rating : 0); ?></p>
+                        <p>Date: <?= !empty($review->time) ? $review->time : "N/A"; ?></p>
+                    </div>
                 </div>
-            </div>
-        <?php endforeach; ?>
+            <?php endforeach;
+        } else {
+            echo "<p>No reviews available.</p>";
+        }
+        ?>
     </div>
+
 
 
     <?php
@@ -106,9 +109,6 @@ include 'navigation.php';
     }
     ?>
 
-    <div class="more-content">
-        <button class="next-page-btn">More Reviews <i class='bx bx-chevron-right'></i></button>
-    </div>
 
 </main>
 <div id="myModal" class="modal">
