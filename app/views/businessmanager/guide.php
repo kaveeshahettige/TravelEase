@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
+    <script src= "<?php echo URLROOT?>/public/js/businessmanager/script.js"></script>
     <title>Registered Guides</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -76,6 +77,7 @@ include 'navigation.php';
                 <th>Guide Language</th>
                 <th>Guide Price</th>
                 <th>Guide Description</th>
+                <th>Action</th>
             </tr>
             <?php
             $guides = $data["guides"];
@@ -87,11 +89,28 @@ include 'navigation.php';
                         <td><?php echo $guide->languages ?></td>
                         <td><?php echo $guide->pricePerDay ?></td>
                         <td><?php echo $guide->description ?></td>
+                        <td>
+                            <button class="view-button" onclick="guideopenPopup();guideupdatePopupDetails('<?php echo $guide->guide_name ?>','<?php echo $guide->languages ?>',<?php echo $guide->pricePerDay ?>)">
+                                <i class='bx bx-show'></i>
+                            </button>
+                        </td>
                     </tr>
                     <?php
             }
             ?>
         </table>
+    </div>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <!-- Add details about the booking here -->
+            <h2>Guide Details</h2>
+           <p id="guide_name">Guide Name: </p>
+            <p id="languages">Guide Language: </p>
+            <p id="pricePerDay">Guide Price: </p>
+
+        </div>
     </div>
 
 

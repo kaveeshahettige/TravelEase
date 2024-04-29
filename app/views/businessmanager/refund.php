@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/manager-packages.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <title>Business Manager Refunds</title>
@@ -107,7 +108,7 @@ include 'navigation.php';
                         <td><?php echo $refund->refund_amount; ?></td>
                         <td><?php echo $refund->cancelled_date; ?></td>
                         <td>
-                            <button class="view-button">
+                            <button class="view-button" onclick="refundopenPopup();refundupdatePopupDetails('<?php echo $refund->booking_id; ?>', '<?php echo $refund->provider_fname; ?>', '<?php echo $refund->cancel_user_fname; ?>', '<?php echo $refund->refund_amount; ?>', '<?php echo $refund->cancelled_date; ?>')">
                                 <i class='bx bx-show'></i>
                             </button>
                             <button class="complete-button" onclick="showConfirmPopup(<?php echo $refund->booking_id; ?>, <?php echo $refund->refund_id; ?>)">
@@ -119,6 +120,19 @@ include 'navigation.php';
                 <?php endforeach; ?>
                 </tbody>
             </table>
+        </div>
+
+        <div class="popup" id="popup">
+            <div class="popup-content">
+                <span class="close" onclick="closePopup()">&times;</span>
+                <!-- Add details about the booking here -->
+                <h2>Refund Details</h2>
+               <p id="booking_id">Booking ID: </p>
+                <p id="provider_fname">Service Provider Name: </p>
+                <p id="cancel_user_fname">Service Cancelled by: </p>
+                <p id="refund_amount">Refund Amount: </p>
+                <p id="cancelled_date">Cancelled Date: </p>
+            </div>
         </div>
 
 

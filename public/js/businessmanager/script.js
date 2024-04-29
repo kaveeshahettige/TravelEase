@@ -294,4 +294,61 @@ function confirmRefund(booking_id,refund_id) {
     }
 
 
+function refundopenPopup() {
+    document.getElementById('popup').style.display = 'block';
+}
 
+function closePopup() {
+    document.getElementById('popup').style.display = 'none';
+}
+
+function refundupdatePopupDetails(booking_id,provider_fname,cancel_user_fname,refund_amount,cancelled_date) {
+
+    document.getElementById('booking_id').innerText = 'Booking ID: ' + booking_id;
+    document.getElementById('provider_fname').innerText = 'Provider Name: ' + provider_fname;
+    document.getElementById('cancel_user_fname').innerText = 'Cancelled By: ' + cancel_user_fname;
+    document.getElementById('refund_amount').innerText = 'Refund Amount: ' + refund_amount;
+    document.getElementById('cancelled_date').innerText = 'Cancelled Date: ' + cancelled_date;
+
+}
+
+
+function roomopenPopup() {
+    document.getElementById('popup').style.display = 'block';
+}
+
+function roomupdatePopupDetails(roomType,hotel_name,price,description) {
+
+    document.getElementById('roomType').innerText = 'Room Type: ' + roomType;
+    document.getElementById('hotel_name').innerText = 'Hotel Name: ' + hotel_name;
+    document.getElementById('price').innerText = 'Price: ' + price;
+    document.getElementById('description').innerText = 'Description: ' + description;
+
+}
+
+function vehicleopenPopup() {
+    document.getElementById('popup').style.display = 'block';
+}
+
+function vehicleupdatePopupDetails(agency_name,brand,model,plate_number,priceperday,description) {
+
+    document.getElementById('agency_name').innerText = 'Agency Name: ' + agency_name;
+    document.getElementById('brand').innerText = 'Brand: ' + brand;
+    document.getElementById('model').innerText = 'Model: ' + model;
+    document.getElementById('plate_number').innerText = 'Plate Number: ' + plate_number;
+    document.getElementById('priceperday').innerText = 'Price Per Day: ' + priceperday;
+    document.getElementById('description').innerText = 'Description: ' + description;
+
+}
+
+function guideopenPopup() {
+    document.getElementById('popup').style.display = 'block';
+}
+
+function guideupdatePopupDetails(guide_name,languages,pricePerDay) {
+
+    document.getElementById('guide_name').innerText = 'Guide Name: ' + guide_name;
+    document.getElementById('languages').innerText = 'Languages: ' + languages;
+    document.getElementById('pricePerDay').innerText = 'Price Per Day: ' + pricePerDay;
+
+}

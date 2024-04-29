@@ -702,7 +702,6 @@ class Businessmanagers
                         LEFT JOIN guides g ON b.package_id = g.guide_id
                         LEFT JOIN payments p ON b.booking_id = p.booking_id                   
                         WHERE b.bookingCondition != "cancelled"
-                        AND b.endDate < CURDATE()
                         AND b.bookingDate >= :startDate
                         AND b.bookingDate <= :endDate');
 
@@ -745,7 +744,6 @@ class Businessmanagers
                         LEFT JOIN cartpayments cp ON cb.booking_id = cp.booking_id AND cb.temporyid = cp.tempory_id  
                         LEFT JOIN vehicle_bookings vb ON cb.booking_id = vb.booking_id
                         WHERE cb.bookingCondition != "cancelled"
-                        AND cb.endDate < CURDATE()
                         AND cb.bookingDate >= :startDate
                         AND cb.bookingDate <= :endDate');
 
@@ -770,7 +768,6 @@ class Businessmanagers
                       JOIN cartpayments cp ON cb.booking_id = cp.booking_id AND cb.temporyid = cp.tempory_id
                       JOIN users u ON cb.serviceProvider_id = u.id
                       WHERE cb.bookingCondition != "cancelled" 
-                      AND cb.endDate < CURDATE()
                       AND cb.startDate >= :startDate 
                       AND cb.endDate <= :endDate ');
 
@@ -786,7 +783,6 @@ class Businessmanagers
               FROM bookings b
               LEFT JOIN users u ON b.user_id = u.id
               WHERE b.bookingCondition != "cancelled" 
-              AND b.endDate < CURDATE()
               AND b.bookingDate >= :startDate
               AND b.bookingDate <= :endDate
               GROUP BY b.user_id
@@ -803,7 +799,6 @@ class Businessmanagers
               FROM cartbookings cb
               LEFT JOIN users u ON cb.user_id = u.id
               WHERE cb.bookingCondition != "cancelled" 
-              AND cb.endDate < CURDATE()
               AND cb.bookingDate >= :startDate
               AND cb.bookingDate <= :endDate
               GROUP BY cb.user_id
@@ -821,7 +816,6 @@ class Businessmanagers
                       FROM bookings b
                       LEFT JOIN users u ON b.serviceProvider_id = u.id
                       WHERE b.bookingCondition != "cancelled" 
-                      AND b.endDate < CURDATE()
                      AND b.bookingDate >= :startDate
                         AND b.bookingDate <= :endDate
                       AND b.serviceProvider_id IN (SELECT id FROM users WHERE type = 3)
@@ -839,7 +833,6 @@ class Businessmanagers
                       FROM cartbookings cb
                       LEFT JOIN users u ON cb.serviceProvider_id = u.id
                       WHERE cb.bookingCondition != "cancelled" 
-                      AND cb.endDate < CURDATE()
                      AND cb.bookingDate >= :startDate
                      AND cb.bookingDate <= :endDate
                       AND cb.serviceProvider_id IN (SELECT id FROM users WHERE type = 3)
@@ -857,7 +850,6 @@ class Businessmanagers
                       FROM bookings b
                       LEFT JOIN users u ON b.serviceProvider_id = u.id
                       WHERE b.bookingCondition != "cancelled" 
-                      AND b.endDate < CURDATE()
                       AND b.bookingDate >= :startDate 
                       AND b.bookingDate <= :endDate
                       AND b.serviceProvider_id IN (SELECT id FROM users WHERE type = 4)
@@ -875,7 +867,6 @@ class Businessmanagers
                       FROM cartbookings cb
                       LEFT JOIN users u ON cb.serviceProvider_id = u.id
                       WHERE cb.bookingCondition != "cancelled" 
-                      AND cb.endDate < CURDATE()
                       AND cb.bookingDate >= :startDate 
                       AND cb.bookingDate <= :endDate
                       AND cb.serviceProvider_id IN (SELECT id FROM users WHERE type = 4)
@@ -889,13 +880,12 @@ class Businessmanagers
     }
 
     public function getGuideReportData($startDate, $endDate){
-        $this->db->query('SELECT COUNT(*) AS booking_count, u.fname AS guide_name
+        $this->db->query('SELECT COUNT(*) AS booking_count, u.fname AS guide_name , b.serviceProvider_id as serviceProvider_id
                       FROM bookings b
                       LEFT JOIN users u ON b.serviceProvider_id = u.id
                       WHERE b.bookingCondition != "cancelled" 
-                      AND b.endDate < CURDATE()
                       AND b.bookingDate >= :startDate
-                        AND b.bookingDate <= :endDate
+                      AND b.bookingDate <= :endDate
                       AND b.serviceProvider_id IN (SELECT id FROM users WHERE type = 5)
                       GROUP BY b.serviceProvider_id
                       ORDER BY COUNT(*) DESC');
@@ -907,13 +897,12 @@ class Businessmanagers
     }
 
     public function getCartGuideReportData($startDate, $endDate){
-        $this->db->query('SELECT COUNT(*) AS booking_count, u.fname AS guide_name
+        $this->db->query('SELECT COUNT(*) AS booking_count, u.fname AS guide_name,cb.serviceProvider_id as serviceProvider_id
                       FROM cartbookings cb
                       LEFT JOIN users u ON cb.serviceProvider_id = u.id
                       WHERE cb.bookingCondition != "cancelled" 
-                      AND cb.endDate < CURDATE()
                       AND cb.bookingDate >= :startDate
-                        AND cb.bookingDate <= :endDate
+                      AND cb.bookingDate <= :endDate
                       AND cb.serviceProvider_id IN (SELECT id FROM users WHERE type = 5)
                       GROUP BY cb.serviceProvider_id
                       ORDER BY COUNT(*) DESC');
@@ -948,7 +937,6 @@ class Businessmanagers
                       LEFT JOIN users u ON b.serviceProvider_id = u.id
                       LEFT JOIN payments p ON b.booking_id = p.booking_id
                       WHERE b.bookingCondition != "cancelled" 
-                      AND b.endDate < CURDATE()
                       ORDER BY b.bookingDate DESC');
 
         return $this->db->resultSet();
@@ -960,7 +948,6 @@ class Businessmanagers
                       LEFT JOIN users u ON cb.serviceProvider_id = u.id
                       LEFT JOIN cartpayments cp ON cb.booking_id = cp.booking_id AND cb.temporyid = cp.tempory_id
                       WHERE cb.bookingCondition != "cancelled" 
-                      AND cb.endDate < CURDATE()
                       ORDER BY cb.bookingDate DESC');
 
         return $this->db->resultSet();

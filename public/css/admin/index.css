@@ -178,6 +178,13 @@ a.active, a:active {
     color: #F9B314; /* Change text color for active buttons */
 }
 
+.chart-container {
+    max-width: 400px; /* Set the maximum width of the container */
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+
+
 
 
 /* Media Query for Responsive Design */
