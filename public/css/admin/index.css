@@ -13,6 +13,13 @@ body, ul {
     overflow-y: auto;
     font-family: "Poppins", sans-serif;
 }
+.dashboard-sub-content {
+    padding-left: 250px;
+    margin-right: auto;
+    padding-top: 5px;
+    text-align: center;
+    font-family: "Poppins", sans;
+}
 
 /* User profile styles */
 .user-profile {
@@ -658,13 +665,24 @@ body, ul {
 
 /* Left menu styles */
 .left-menu {
-    background-color: #FFDB8B;
+    background-color: #FDDD95;
     color: #000;
     width: 250px;
-    height: 1000vh;
+    height: 100vh;
     position: fixed;
     overflow-y: auto;
-    font-family: "Poppins", sans;
+    font-family: "Poppins", sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s ease; /* Add a smooth transition effect */
+}
+
+.left-menu:hover {
+    width: 270px; /* Increase width on hover */
+}
+
+
+.left-menu:hover {
+    width: 270px; /* Increase width on hover */
 }
 
 /* User profile styles */
@@ -812,39 +830,37 @@ li {
     padding-top: 25px;
     font-family: "Poppins", sans;
 }
-
 .dashboard-sub-content {
     padding-left: 250px;
     margin-right: auto;
     padding-top: 5px;
-    font-family: "Poppins", sans;
+    font-family: "Poppins", sans-serif;
 }
 
-/* Style for the container of top boxes */
 .top-boxes {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns in the first row */
+    grid-template-rows: auto auto; /* Two rows, both sized automatically */
+    gap: 20px; /* Gap between grid items */
     padding: 20px;
     background-color: #ffffff;
     border-radius: 5px;
-    box-sizing: border-box;
 }
 
-
-.top-boxes > div {
-    width: calc(50% - 10px); /* For two divs in a row with spacing */
-    margin-right: 20px; /* Adjust this as needed for spacing between divs */
-    box-sizing: border-box;
-    border: 0.5px solid #e9e7e7;
+/* Style for each box */
+.box {
+    border: 1px solid #e9e7e7;
     border-left: 10px solid #FFEFCC;
+    padding: 10px;
 }
 
-/* For the first two boxes, remove the margin-right to keep them adjacent */
-.top-boxes > div:nth-child(2n) {
-    margin-right: 0;
+/* For smaller screens, adjust grid to 3 columns */
+@media (max-width: 768px) {
+    .top-boxes {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns in the first row */
+    }
 }
+
 
 
 /* Style for each individual box */
@@ -880,10 +896,11 @@ li {
     flex: 0.5;
     margin: 10px;
     background-color: #f9f9f9;
-    width: 120px;
-    height: 120px;
+    width:100%;
+    height: 150px;
     box-sizing: border-box;
     overflow: hidden;
+    /* border: 1px solid red; */
 }
 
 /* Style for small image */
@@ -1122,4 +1139,5 @@ li {
     }
 
 }
+
 

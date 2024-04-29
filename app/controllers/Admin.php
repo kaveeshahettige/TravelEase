@@ -23,6 +23,11 @@ class Admin extends Controller{
           $noa=$this->userModel->noOfAgencies();
           $nop=$this->userModel->noOfpackages();
           $nore=$this->userModel->noOfRequests();
+          $nob=$this->userModel->noOfBookings();
+          $nocb=$this->userModel->noOfCompleteBookings();
+
+          // var_dump($nocb);
+          // var_dump($nob);
 
           $data = [
             'fname'=>$admindetail->fname,
@@ -30,7 +35,9 @@ class Admin extends Controller{
             'noh'=>$noh, 
             'noa'=>$noa,
             'nop'=>$nop,
-            'nore'=>$nore,   
+            'nore'=>$nore, 
+            'nob'=>$nob, 
+            'nocb'=>$nocb, 
           ];
             $this->view('admin/index',$data);
         }
@@ -106,52 +113,10 @@ class Admin extends Controller{
           $this->view('admin/hotel', $data);
       }
       
-      public function deleteTraveler() {
-
-
-        
-            $userId = $_POST['id'];
-
-            $ongoingBookings = $this->userModel->checkOngoingBooking($userId);
-
-            var_dump(
+     
+    
                 
-                  $ongoingBookings
-  
-              );
 
-              if($ongoingBookings>0){
-                echo '<script>alert("Cannot delete user. User has ongoing bookings.");</script>';
-                redirect('admin/traveler');
-              }else{
-                $success = $this->userModel->updateProfileStatus($userId);
-            
-                if ($success) {
-                  redirect('admin/traveler');
-                    // Redirect or show success message
-                } else {
-                  redirect('admin/traveler');
-                    // Handle deletion failure
-                }
-              }
-            
-
-            
-            $success = $this->userModel->updateProfileStatus($userId);
-            
-            if ($success) {
-              redirect('admin/traveler');
-                // Redirect or show success message
-            } else {
-              redirect('admin/traveler');
-                // Handle deletion failure
-            }
-        
-    }
-    public function deleteHotel() {
-
-
-        
       $hotelId = $_POST['hotel_id'];
       
       $success = $this->userModel->updateProfileStatus($hotelId);
@@ -170,6 +135,11 @@ class Admin extends Controller{
           $admindetail=$this->userModel->getadmindata();
           $no=$this->userModel->noOfAgencies();
           $agency=$this->userModel->findAgencyDetail();
+
+          // $userId = 5;
+          // $ongoingBookings = $this->userModel->checkOngoingBooking($userId);
+
+          // var_dump($ongoingBookings);
 
           // var_dump($agency);
           $data = [
@@ -196,15 +166,8 @@ class Admin extends Controller{
         }
         public function settings(){
 
-          // $userId = 4;
 
-          //   $ongoingBookings = $this->userModel->checkOngoingBooking($userId);
-
-          //   var_dump(
-                
-          //         $ongoingBookings
-  
-          //     );
+        
 
 
             $no=$this->userModel->noOfManagers();
@@ -476,9 +439,12 @@ class Admin extends Controller{
             $this->view('admin/businessmanageraddform',$data);
         }
         public function traveler(){
+    
           $admindetail=$this->userModel->getadmindata();
             $no=$this->userModel->noOfTravelers();
             $traveler=$this->userModel->findTravelerDetail();
+
+            
 
             // var_dump($admindetail);
 
@@ -493,12 +459,49 @@ class Admin extends Controller{
             $this->view('admin/traveler',$data); 
 
         }
-        // public function deleteTraveler($id){
-        //   $user=$this->userModel->deleteTraveler($id);
-        // }
-        // public function deleteHotel($id){
-        //   $user=$this->userModel->deleteHotel($id);
-        // }
+
+      //   public function deleteTraveler() {
+      //     $userId = $_POST['id'];
+      //     // $ongoingBookings = $this->userModel->checkOngoingBooking($userId);
+      
+      //     if ($ongoingBookings == 0) {
+      //         $success = $this->userModel->updateProfileStatus($userId);
+      
+      //         if ($success) {
+      //             // Redirect to a success page or show a success message
+      //             echo json_encode(['success' => true]);
+      //             exit; // Stop further execution
+      //         } else {
+      //             // Handle deletion failure
+      //             echo json_encode(['success' => false, 'error' => 'Failed to delete traveler']);
+      //             exit; // Stop further execution
+      //         }
+      //     } else {
+      //         // Handle case where ongoing bookings exist (optional)
+      //         echo json_encode(['success' => false, 'error' => 'Cannot delete traveler with ongoing bookings']);
+      //         exit; // Stop further execution
+      //     }
+      
+      //     // Only update profile status if ongoing bookings are 0
+      // }
+      
+      public function deleteTraveler() {
+        $userId = $_POST['id'];
+        // $ongoingBookings = $this->userModel->checkOngoingBooking($userId);
+        $success = $this->userModel->updateProfileStatus($userId);
+
+    
+        if ($success) {
+            redirect('admin/traveler');
+            // Redirect or show success message
+        } else {
+            redirect('admin/traveler');
+            // Handle deletion failure
+        }
+    
+    //     // Only update profile status if ongoing bookings are 0
+    }
+
         public function deleteAgency($id){
           $user=$this->userModel->deleteAgency($id);
         }

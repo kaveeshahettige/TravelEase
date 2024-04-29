@@ -74,7 +74,7 @@
 
         <div class="main-content">
             <div class="room-content">
-                <h2>Rooms Details</h2>
+                <h2>Vehicle Details</h2>
                 <?php echo "Selected Date: " . $data['date']; ?>
                 <table class="room-table">
                     <thead>
@@ -90,7 +90,7 @@
                         $vehicleData = $data["vehicleData"];
                         $date = $data['date'];
                         $unavailableVehicles = $data['unavailableVehicles'] ?? []; // Set default value to empty array if $unavailableVehicles is null
-                        var_dump( $unavailableVehicles);
+                        // var_dump( $unavailableVehicles);
                         foreach ($vehicleData as $agency_vehicles) :
 
                             

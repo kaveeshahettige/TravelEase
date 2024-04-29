@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/addbusinessedit.css">
     <title>Edit-Business Manager</title>
     <link rel="icon" type="image/x-icon" href="../Images/TravelEase.png">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -38,7 +40,7 @@
         
         
         <div class="logout">
-            <a href="#" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
+        <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a>
         </div>
     </nav>
     <main>

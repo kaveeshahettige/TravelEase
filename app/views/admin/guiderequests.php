@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/request.css">
     <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
 
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
+
+
     <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
     <title>TravelEase</title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon"
@@ -14,6 +18,80 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <style>
+        .popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    z-index: 9999; /* Ensure the popup appears on top of other elements */
+}
+
+.popup-content {
+    background-color: #fff; /* White background for the popup content */
+    width: 80%; /* Adjust the width as needed */
+    max-width: 800px; /* Maximum width for the popup */
+    margin: 20px auto; /* Center the popup vertically and horizontally */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow for a subtle depth effect */
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #333;
+}
+
+.close:hover {
+    color: #f00; /* Change color on hover if desired */
+}
+
+/* Additional styles for the popup content */
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.column {
+    flex: 1;
+}
+
+.guide-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.guide-info h2 {
+    margin-bottom: 10px;
+}
+
+.guide-text {
+    margin-bottom: 20px;
+}
+
+.guide-description {
+    margin-top: 20px;
+}
+
+#guide-image {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 10px;
+}
+
+    </style>
+   
+
 </head>
 
 <body>
@@ -39,13 +117,14 @@
             <li><a href="<?php echo URLROOT; ?>admin/agency"><i class='bx bxs-car bx-sm'></i> Travel Agencies </a></li>
             <li><a href="<?php echo URLROOT; ?>admin/package"><i class='bx bx-package bx-sm'></i>Guide</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/settings"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-            <li><a href="<?php echo URLROOT; ?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>
-                    Logout</a></li>
+
+            
         </ul>
 
-        <!-- <div class="logout">
-            <a href="<?php echo URLROOT; ?>pages/indes" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
-        </div> -->
+        <div class="logout">
+        <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a>
+        </div>
+
     </nav>
     <main>
         <div class="logo-container">
@@ -171,6 +250,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const popup = document.getElementById('popup-container'); // Changed ID to "guide-popup"
     const guideDetailsContainer = document.getElementById('guide-details');
 
+    const closeBtn = document.querySelector('.close'); // Select the close button
+
+
     viewButtons.forEach(button => {
         button.addEventListener('click', function() {
             const guideId = this.closest('.t-row').querySelector('td:nth-child(2)').innerText;
@@ -231,10 +313,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    const closeBtn = document.querySelector(
-        '.close-guide-popup'); // Changed selector to match the close button class
+
     closeBtn.addEventListener('click', function() {
-        popup.style.display = 'none';
+        popup.style.display = 'none'; // Close the popup when the close button is clicked
+
     });
 });
 </script>

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/addbusinessmanager.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
     <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
     <title>TravelEase</title>
     <link rel="icon" type="image/x-icon" href="<?php echo URLROOT; ?>/images/admin/TravelEase.png">
@@ -39,7 +41,7 @@
         
         
         <div class="logout">
-            <a href="<?php echo URLROOT?>users/logout" class="nav-button active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
+        <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a>
         </div>
     </nav>
     <main>

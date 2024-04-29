@@ -50,6 +50,33 @@ class AdminM{
         }
       }
 
+      public function noOfBookings(){
+        $this->db->query('SELECT 
+            (SELECT COUNT(*) FROM bookings WHERE endDate >= CURDATE() AND bookingCondition != \'cancelled\') AS bookingsCount,
+            (SELECT COUNT(*) FROM cartbookings WHERE endDate >= CURDATE() AND bookingCondition != \'cancelled\') AS cartBookingsCount
+        ');
+        $row = $this->db->single();
+        if($this->db->rowCount() > 0){
+            return $row->bookingsCount + $row->cartBookingsCount;
+        } else {
+            return false;
+        }
+    }
+
+    public function noOfCompleteBookings(){
+      $this->db->query('SELECT 
+          (SELECT COUNT(*) FROM bookings WHERE endDate < CURDATE() AND bookingCondition != \'cancelled\') AS bookingsCount,
+          (SELECT COUNT(*) FROM cartbookings WHERE endDate < CURDATE() AND bookingCondition != \'cancelled\') AS cartBookingsCount
+      ');
+      $row = $this->db->single();
+      if($this->db->rowCount() > 0){
+          return $row->bookingsCount + $row->cartBookingsCount;
+      } else {
+          return false;
+      }
+  }
+  
+
       public function noOfManagers(){
         $this->db->query('SELECT COUNT(*) AS count FROM users WHERE type = 2');
         $row = $this->db->single();
@@ -181,9 +208,11 @@ class AdminM{
   }
 
   public function checkOngoingBooking($userId) {
-    $this->db->query('SELECT COUNT(*) AS bookingsCount FROM bookings WHERE user_id = :userId AND endDate < CURDATE()
+
+    $this->db->query('SELECT COUNT(*) AS bookingsCount FROM bookings WHERE user_id = :userId AND startDate >= CURDATE() AND bookingCondition != \'cancelled\' 
   UNION 
-  SELECT COUNT(*) AS cartBookingsCount FROM cartbookings WHERE user_id = :userId AND endDate < CURDATE()
+  SELECT COUNT(*) AS cartBookingsCount FROM cartbookings WHERE user_id = :userId AND startDate >= CURDATE() AND bookingCondition != \'cancelled\' 
+
   ');
     $this->db->bind(':userId', $userId);
     $this->db->execute(); // Execute the query after binding the parameter
@@ -194,6 +223,7 @@ class AdminM{
         return null;
     }
 }
+
 
     
     

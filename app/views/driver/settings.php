@@ -76,7 +76,7 @@
                             <!-- Rectangle 1: Basic Info -->
                             <div class="basic-info-content">
                                 <div class="center-image">
-                                    <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture;; ?>"
+                                    <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture; ?>"
                                         alt="profile Picture">
 
                                 </div>

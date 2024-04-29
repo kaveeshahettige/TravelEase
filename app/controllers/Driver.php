@@ -294,6 +294,14 @@ public function bookings() {
     $profileimage = $this->TravelsModel->getProfileImage($userId);
 
 
+    $totalBookingsArray = $this->TravelsModel->getTotalBookings($userId);
+
+    // var_dump($totalBookingsArray);
+
+    // Assuming the counts are in the order of the SQL query
+    // $totalBookingsCount = $totalBookingsArray[0]['count'] + $totalBookingsArray[1]['count'];
+    
+    
 
           
 
@@ -305,6 +313,7 @@ public function bookings() {
         'pendingBookings' => $pendingBookings,
         'completedBookings' => $completedBookings, // Add completed bookings to data array
         'profileimage' => $profileimage,
+        'totalBookingsArray' => $totalBookingsArray,
 
     ];
     // Get user ID from session
@@ -1106,6 +1115,11 @@ public function getFinalPayment(){
         $endDate = $_POST['endDate'];
         $payment_amount = $_POST['payment_amount'];
         $plate_number = $_POST['plate_number'];
+
+        $basicinfo = $this->basicInfo();
+        $sender_name = $basicinfo['userData']->fname;
+
+        
 
         if ($temporyid == 0) {
             // Call the model function to update the booking status
