@@ -92,14 +92,15 @@ class User{
     }
 
     public function updateUser($data){
-        $this->db->query('UPDATE users SET fname = :fname, lname = :lname,email = :email,number = :number WHERE id = :id');
+        $this->db->query('UPDATE users SET fname = :fname, lname = :lname,email = :email,number = :number,card_holder_name=:card_holder_name,account_number=:account_number WHERE id = :id');
         // Bind values
         $this->db->bind(':id', $data['id']);
         $this->db->bind(':fname', $data['fname']);
         $this->db->bind(':lname', $data['lname']);
         $this->db->bind(':email', $data['email']);
         $this->db->bind(':number', $data['number']);
-  
+        $this->db->bind(':card_holder_name', $data['card_holder_name']);
+        $this->db->bind(':account_number', $data['account_number']);
         // Execute
         if($this->db->execute()){
         //add a function to rlaod site
@@ -823,6 +824,24 @@ WHERE guides.user_id = :id;
         }
     }
 }
+
+//getServiceProviderBookingTableDetails($booking->booking_id)
+// 
+
+//getGuidebookings($booking->booking_id,$Sid)
+public function getGuidebookings($Bid){
+    $this->db->query('SELECT * FROM guide_bookings WHERE booking_id=:booking_id');
+    $this->db->bind(':booking_id', $Bid);
+
+    $result=$this->db->single();
+    if($this->db->rowcount()>0){
+        return $result;
+     }
+     else{
+        return false;
+    }
+}
+
 
 //addBooking($transactionData);
 public function addBooking($transactionData){
@@ -2133,6 +2152,37 @@ public function findAvailableHotelRooms($location, $checkinDate, $checkoutDate) 
     }
 }
 
+//findHotelRooms($location)
+public function findHotelRooms($location) {
+    // Define the SQL query with placeholders
+    $query = '
+    SELECT * 
+    FROM hotel_rooms
+    JOIN hotel ON hotel_rooms.hotel_id = hotel.hotel_id
+    JOIN users ON hotel.user_id = users.id
+    WHERE hotel.city LIKE :location OR hotel.addr LIKE :location
+    AND hotel_rooms.roomCondition = :roomCondition
+    AND users.profile_status = 1';
+    // Prepare and execute the SQL query
+    $this->db->query($query);
+    
+    // Bind parameters
+    $this->db->bind(':location', '%' . $location . '%'); // Use LIKE for partial match
+    // $this->db->bind(':checkinDate', $checkinDate);
+    // $this->db->bind(':checkoutDate', $checkoutDate);
+    $this->db->bind(':roomCondition', 'activated'); 
+    
+    // Execute the query and fetch the results
+    $result = $this->db->resultSet();
+    
+    // Check if there are any results
+    if (!empty($result)) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
 
 //findAvailableVehicles($location, $checkinDate, $checkoutDate)
 public function findAvailableVehiclesByLocation($location, $checkinDate, $checkoutDate) {
@@ -2164,7 +2214,30 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
             return false;
         }
     }
+    //findVehiclesByLocation($location)
+    public function findVehiclesByLocationGiven($location) {
 
+        $this->db->query('
+        SELECT * 
+        FROM vehicles
+        JOIN travelagency ON vehicles.agency_id = travelagency.agency_id
+        JOIN users ON travelagency.user_id = users.id
+        WHERE (travelagency.city LIKE :location OR travelagency.city = \'All Island\')
+        AND vehicles.vehicleCondition = :vehicleCondition
+        AND users.profile_status = 1 AND users.approval = 1;
+    ');
+        
+            $this->db->bind(':location', '%' . $location . '%');
+            // $this->db->bind(':checkinDate', $checkinDate);
+            // $this->db->bind(':checkoutDate', $checkoutDate);
+            $this->db->bind(':vehicleCondition', 'activated');
+            $result = $this->db->resultSet();
+            if ($this->db->rowCount() > 0) {
+                return $result;
+            } else {
+                return false;
+            }
+        }
     //findAvailableGuidesByLocation($location, $checkinDate, $checkoutDate)
     public function findAvailableGuidesByLocation($location, $checkinDate, $checkoutDate) {
 
@@ -2761,7 +2834,74 @@ return $success; // Return success status after the loop
     }
 }
 
+
+//refundAmount($booking_id)
+public function refundAmount($booking_id){
+    $this->db->query('SELECT * FROM payments WHERE booking_id = :booking_id');
+    $this->db->bind(':booking_id', $booking_id);
+    $more = $this->db->single();
+    if ($this->db->rowCount() > 0) {
+        return $more;
+    } else {
+        return false;
+    }
+
+}
+//refundAmountCart
+public function refundAmountCart($booking_id,$temporyid){
+    $this->db->query('SELECT * FROM cartpayments WHERE booking_id = :booking_id AND tempory_id = :temporyid');
+    $this->db->bind(':booking_id', $booking_id);
+    $this->db->bind(':temporyid', $temporyid);
+    $this->db->execute();
+    $result = $this->db->single();
     
+    // Check if any rows were found
+    if ($result) {
+        return $result;
+        //return $result['total_refund'];
+    } else {
+        return 0; // Return 0 if there are no rows matching the booking_id
+    }
+}
+
+//refundUser(0,$booking_id)
+public function refundUser($temporyid, $booking_id, $serviceProvider_id, $userid, $amount){
+    $this->db->query('INSERT INTO refunds (tempory_id, booking_id, serviceProvider_id, user_id, refund_amount, cancel_user_id, cancelled_date) 
+                      VALUES (:tempory_id, :booking_id, :serviceProvider_id, :user_id, :refund_amount, :cancel_user_id, :cancelled_date)');
+    $this->db->bind(':booking_id', $booking_id);
+    $this->db->bind(':tempory_id', $temporyid);
+    $this->db->bind(':serviceProvider_id', $serviceProvider_id);
+    $this->db->bind(':user_id', $userid); // Corrected binding here
+    $this->db->bind(':refund_amount', $amount);
+    $this->db->bind(':cancel_user_id', $userid);
+    $this->db->bind(':cancelled_date', date('Y-m-d H:i:s'));
     
+    if($this->db->execute()){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//refundUserCart($temporyid, $booking_id, $serviceProvider_id, $userid, $amount)
+public function refundUserCart($temporyid, $booking_id, $serviceProvider_id, $userid, $amount){
+    $this->db->query('INSERT INTO refunds (tempory_id, booking_id, serviceProvider_id, user_id, refund_amount, cancel_user_id, cancelled_date) 
+                      VALUES (:tempory_id, :booking_id, :serviceProvider_id, :user_id, :refund_amount, :cancel_user_id, :cancelled_date)');
+    $this->db->bind(':booking_id', $booking_id);
+    $this->db->bind(':tempory_id', $temporyid);
+    $this->db->bind(':serviceProvider_id', $serviceProvider_id);
+    $this->db->bind(':user_id', $userid); // Corrected binding here
+    $this->db->bind(':refund_amount', $amount);
+    $this->db->bind(':cancel_user_id', $userid);
+    $this->db->bind(':cancelled_date', date('Y-m-d H:i:s'));
+    
+    if($this->db->execute()){
+        return true;
+    } else {
+        return false;
+    } 
+    
+}
+
 }
 

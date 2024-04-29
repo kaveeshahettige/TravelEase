@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT ?>/js/loggedTraveler/script.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.2/css/boxicons.min.css">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCwpU1PTXuk_KMIDsXvXDjqiXUYCQZt2c&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTDElEffBAws-JYjYaUELqmkOCpa6C5R8&libraries=places"></script>
     <style>
         /* Style for the suggestions dropdown */
         .pac-container {
@@ -91,7 +91,7 @@
                         <div><img src="<?php echo URLROOT ?>images/<?php echo $agency->profile_picture; ?>" alt=""></div>
                         <div class="c1">
                             <div>
-                                <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $agency->fname; ?></p>
+                                <p style="font-size: 25px;margin:0px;font-weight:bold"><?php echo $agency->fname; ?></p>
                                 <p><?php echo $agency->city; ?></p>
                                 <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
                                     <?php

@@ -155,18 +155,22 @@
 </div>
 
 <div class="ldiv1">
-    <div class="booking-label"><i class="far fa-calendar-alt"></i> Start date:</div>
+    <div class="booking-label"><i class="far fa-calendar-alt"></i> Check-in date:</div>
     <div class="booking-value"><?php echo $data['booking']->startDate?></div>
 </div>
 
 <div class="ldiv1">
-    <div class="booking-label"><i class="far fa-calendar-alt"></i> End date:</div>
+    <div class="booking-label"><i class="far fa-calendar-alt"></i> Check-out date:</div>
     <div class="booking-value"><?php echo $data['booking']->endDate?></div>
 </div>
 
 <div class="ldiv1">
-    <div class="booking-label"><i class="fas fa-user-times"></i> Cancellation eligibility:</div>
-    <div class="booking-value"><?php echo  $data['cancellationEligibility']?></div>
+    <div class="booking-label"><i class="fas fa-clock"></i> Check-in time:</div>
+    <div class="booking-value"><?php echo  $data['mainbookingDetails']->check_in_time?></div>
+</div>
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-clock"></i> Check-out time:</div>
+    <div class="booking-value"><?php echo  $data['mainbookingDetails']->check_out_time?></div>
 </div>
 
                 </div>
@@ -313,8 +317,12 @@
 </div>
 
 <div class="ldiv1">
-    <div class="booking-label"><i class="fas fa-exclamation-circle"></i> Cancellation eligibility:</div>
-    <div class="booking-value"><?php echo  $data['cancellationEligibility']?></div>
+    <div class="booking-label"><i class="fas fa-map-marker-alt"></i> Pick-up location:</div>
+    <div class="booking-value"><?php echo $data['mainbookingDetails']->address?></div>
+</div>
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-map-marker-alt"></i> Pick-up time:</div>
+    <div class="booking-value"><?php echo $data['driver']->start_time?></div>
 </div>
 
                 </div>
@@ -388,6 +396,24 @@
     <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->instagram)?></div>
 </div>
 
+<!-- //guideTable -->
+<div class="ldiv1">
+    <div class="booking-label"><i class="fas fa-clock"></i> Meet Time:</div>
+    <div class="booking-value"><?php echo ucfirst($data['guideTable']->meetTime)?></div>
+</div>
+<!-- <div class="ldiv1">
+    <div class="booking-label"><i class="fab fa-instagram"></i> Instagram:</div>
+    <div class="booking-value"><?php echo ucfirst($data['mainbookingDetails']->instagram)?></div>
+</div>
+<div class="ldiv1">
+    <div class="booking-label"><i class="fab fa-instagram"></i> Instagram:</div>
+    <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->instagram)?></div>
+</div>
+<div class="ldiv1">
+    <div class="booking-label"><i class="fab fa-instagram"></i> Instagram:</div>
+    <div class="booking-value"><?php echo ucfirst($data['furtherBookingDetails']->instagram)?></div>
+</div> -->
+
                     
                 </div>
                 
@@ -415,7 +441,7 @@
 <?php endif; ?>
 <!-- <?php if ($data['cancellationEligibility'] == "Available"): ?>
     <!-- <button id="delbutton" onclick="deleteBooking('<?php echo $data['booking']->booking_id; ?>')">Cancel Trip</button> -->
-    <button id="delbutton" onclick="cancelBooking(<?php echo isset($data['Tid']) ? $data['Tid'] : 0; ?>, '<?php echo $data['booking']->booking_id; ?>')">Cancel Trip</button>
+    <!-- <button id="delbutton" onclick="cancelBooking(<?php echo isset($data['Tid']) ? $data['Tid'] : 0; ?>, '<?php echo $data['booking']->booking_id; ?>')">Cancel Trip</button> -->
     
     </div>
 <?php endif; ?> -->

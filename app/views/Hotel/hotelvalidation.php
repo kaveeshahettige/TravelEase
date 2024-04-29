@@ -31,6 +31,19 @@ include 'navigation.php';
             <h3 style="padding-left:20px;">Insert Service Validations</h3>
             <div id="form">
                 <form class="service-validation-form" method="POST" action="<?php echo URLROOT; ?>/hotel/processServiceValidation" enctype="multipart/form-data">
+                    <div>
+                        <div class="form-group">
+                            <label for="roomType">Registration Number</label>
+                            <input type="text" id="registrationNumber" name="registrationNumber" placeholder="Enter Registration Number" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="numOfBeds">Expiry Date</label>
+                            <input type="date" id="expiryDate" name="expiryDate" min="1" required>
+                        </div>
+                    </div>
+
+
                     <p>Submit a PDF for Service Validation:</p>
                     <input type="file" id="service-validation-pdf" name="service-validation-pdf" accept=".pdf" required>
                     <button class="edit-button" type="submit">Submit</button>

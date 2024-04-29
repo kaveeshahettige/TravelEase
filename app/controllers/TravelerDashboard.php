@@ -456,6 +456,11 @@ echo '</script>';
         
   //   ];
 // }
+$guideTable = null;
+    if ($serviceProvider->type == 5) {
+      $guideTable = $this->userModel->getGuidebookings($booking->booking_id);
+    }
+
 $vehicleprice=null;
 $driver=null;
 if($serviceProvider->type==4){
@@ -466,6 +471,7 @@ if($serviceProvider->type==4){
   $data=[
     'serviceProviderName' => $serviceProvider ? $serviceProvider->fname . ' ' . $serviceProvider->lname : null,
     'type' => $serviceProvider ? $serviceProvider->type : null,
+    'serviceProvider' => $serviceProvider ? $serviceProvider : null,
     'profile_picture' => $user ? $user->profile_picture : null,
     'number' => $serviceProvider ? $serviceProvider->number : null,
     'location' => $mainbookingDetails ? $mainbookingDetails->city : null,
@@ -476,6 +482,7 @@ if($serviceProvider->type==4){
     'cancellationEligibility' => $cancellationEligibility,
     'vehicleprice'=>$vehicleprice?$vehicleprice:null,
     'driver'=>$driver?$driver:null,
+    'guideTable' => $guideTable,
   ];
   $this->view('travelerDashboard/bookingpopup',$data);
 }
@@ -630,24 +637,27 @@ public function cancelBooking($temporyid,$booking_id){
     $user=$this->userModel->findUserDetail($id);
     //$bookingDetails=$this->userModel->findBookingDetails($booking_id,$temporyid);
     
-    if ($temporyid==0) {
-      //detail of the booking
-      $bookingDetails=$this->userModel->findBookingDetails($booking_id);
+     if ($temporyid==0) {
+    //   //detail of the booking
+       $bookingDetails=$this->userModel->findBookingDetails($booking_id);
       $bookingFurtherDetail=$this->userModel->findBookingFurtherDetail($bookingDetails);
       if($bookingDetails->type==4){
-        $message="Agency vehicle with ID ".$bookingFurtherDetail->vehicle_id."-".$bookingFurtherDetail->brand ." ".$bookingFurtherDetail->model." ".$bookingFurtherDetail->plate_number." ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+        $message="Agency vehicle with ID ".$bookingFurtherDetail->vehicle_id." - ".$bookingFurtherDetail->brand ."  ".$bookingFurtherDetail->model."  ".$bookingFurtherDetail->plate_number." ,booked during ".$bookingDetails->startDate." to ".$bookingDetails->endDate." has been cancelled.";
       }elseif($bookingDetails->type==3){
-        $message="Hotel room with ID ".$bookingFurtherDetail->room_id."-".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+        $message="Hotel room with ID ".$bookingFurtherDetail->room_id." - ".$bookingFurtherDetail->roomType ."Type ,booked during ".$bookingDetails->startDate." to ".$bookingDetails->endDate." has been cancelled.";
     }elseif($bookingDetails->type==5){
-      $message="Guide service,booked during ".$bookingDetails->startDate."to ".$bookingDetails->endDate."has been cancelled.";
+      $message="Guide service,booked during ".$bookingDetails->startDate." to ".$bookingDetails->endDate." has been cancelled.";
     }
       
       
       //cancel from booking table
       $cancel = $this->userModel->cancelBooking($booking_id);
 
+      //refundamount
+      $More=$this->userModel->refundAmount($booking_id);
       //refund user
-      //$refund = $this->userModel->refundUser($booking_id);
+      $refund = $this->userModel->refundUser($temporyid,$booking_id,$bookingDetails->serviceProvider_id,$id,$More->amount);
+
 
       //check type and provide availibility of vehicle_availbilty,room_availability,guide_availability
       $availibility=$this->userModel->makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 
@@ -676,8 +686,10 @@ public function cancelBooking($temporyid,$booking_id){
       //cancel from cartbookings table
       $cancel = $this->userModel->cancelCartBooking($temporyid,$booking_id);
 
+      //refundamount
+      $result=$this->userModel->refundAmountCart($booking_id,$temporyid);
       //refund user
-      //$refund = $this->userModel->refundUser($booking_id);
+      $refund = $this->userModel->refundUserCart($temporyid,$booking_id,$bookingDetails->serviceProvider_id,$id,$result->amount);
 
       //check type and provide availibility of vehicle_bookings,room_availability
       $availibility=$this->userModel->makeAvailibility($temporyid,$booking_id,$bookingDetails,$bookingFurtherDetail); 
@@ -708,6 +720,8 @@ public function markAsRead($notification_id) {
 //deactivateUser
 public function deactivateUser($id){
   $user=$this->userModel->deactivateUser($id);
+  redirect('../Landpage/');
+  
 }
 
 //cart

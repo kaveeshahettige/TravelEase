@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
-    <title>Add Package</title>
+    <title>Businesss Manager Navigation</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
@@ -37,6 +37,7 @@
     $businessManagerMenu = [
         ['url' => 'businessmanager/index', 'icon' => 'bx bxs-dashboard bx-sm', 'text' => 'Overview'],
         ['url' => 'businessmanager/bookings', 'icon' => 'bx bxs-book bx-sm', 'text' => 'Bookings'],
+        ['url' => 'businessmanager/services', 'icon' => 'bx bxs-hotel bx-sm', 'text' => 'Services'],
         ['url' => 'businessmanager/reports', 'icon' => 'bx bxs-report bx-sm', 'text' => 'Reports'],
         ['url' => 'businessmanager/refund', 'icon' => 'bx bx-arrow-back bx-sm', 'text' => 'Refunds'],
         ['url' => 'businessmanager/financialmanagement', 'icon' => 'bx bx-line-chart bx-sm', 'text' => 'Financial Management'],

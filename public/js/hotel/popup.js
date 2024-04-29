@@ -43,6 +43,7 @@ function deleteRoom(room_id) {
                 window.location.reload();
             } else {
                 console.error('Error deleting room: ', response);
+                alert('Room is currently in use. Cannot delete.');
             }
         })
         .catch(function(error) {
@@ -140,10 +141,12 @@ function deleteUser(user_id) {
                 window.location.reload();
             } else {
                 console.error('Error deleting user: ', response);
+                alert('Hotel has ongoing events. Cannot delete.');
             }
         })
         .catch(function(error) {
             console.error('Error deleting user:', error);
+            alert('Hotel has ongoing events. Cannot delete.');
         })
         .finally(function() {
             // Close the pop-up after the operation is completed

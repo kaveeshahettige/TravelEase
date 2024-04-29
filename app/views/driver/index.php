@@ -7,6 +7,8 @@
 <!-- <link rel="stylesheet" href="<?php echo URLROOT?>/css/driver/dashboard.css"> -->
 <link rel="stylesheet" href="<?php echo URLROOT?>/css/driver/settings.css">
 <link rel="stylesheet" href="<?php echo URLROOT?>/css/driver/bookings.css">
+<script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
+<link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -19,8 +21,8 @@
                 alt="User Profile Photo">
             <span class="user-name"><?php echo $_SESSION['user_fname'].' '.$_SESSION['user_lname']?></span>
             <a class="" href="<?php echo URLROOT; ?>/driver/notification">
-    <i class="bx bx-bell"></i>
-</a>
+                <i class="bx bx-bell"></i>
+            </a>
         </div>
 
 
@@ -47,8 +49,8 @@
 
             <li><a href="<?php echo URLROOT; ?>driver/reviews"><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
             <li><a href="<?php echo URLROOT; ?>driver/settings"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-            <li><a href="<?php echo URLROOT?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>
-                    Logout</a></li>
+            <li> <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i
+                        class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
         </ul>
         <!-- <div class="logout">
             <a href="<?php echo URLROOT; ?>pages/indes" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
@@ -134,7 +136,7 @@
 
 
 
-                           
+
                             <div class="hotel-details">
                                 <?php if (!empty($data['agencyDetails'])) : ?>
                                 <h6>Manager Name </h6>
@@ -164,35 +166,35 @@
 
 
 
-                </div>
-                <div class="right-content">
-                    <div class="table2-content">
+                            </div>
+                            <div class="right-content">
+                                <div class="table2-content">
 
                         <?php
-// Check if $data exists and has the expected structure
-if (!empty($data) && isset($data['pendingBookings'])) {
-    if ($data['vehicleCount'] == 0 && $data['pendingBookings'] == NULL) {
-        echo '<div class="rectangle">
-                <div class="basic-info-content">
-                    <div class="hotel-details">
-                        <p>Add vehicles to get new Bookings.</p>
-                    </div>
-                </div>
-            </div>';
-    } elseif ($data['vehicleCount'] != 0 && $data['pendingBookings'] == NULL) {
-            
-            echo '<div class="rectangle">
-            <div class="basic-info-content">
-                <div class="hotel-details">
-                <p>No New Bookings to Show.</p>
-                </div>
-            </div>
-        </div>';
+                            // Check if $data exists and has the expected structure
+                            if (!empty($data) && isset($data['pendingBookings'])) {
+                                if ($data['vehicleCount'] == 0 && $data['pendingBookings'] == NULL) {
+                                    echo '<div class="rectangle">
+                                            <div class="basic-info-content">
+                                                <div class="hotel-details">
+                                                    <p>Add vehicles to get new Bookings.</p>
+                                                </div>
+                                            </div>
+                                        </div>';
+                                } elseif ($data['vehicleCount'] != 0 && $data['pendingBookings'] == NULL) {
+                                        
+                                        echo '<div class="rectangle">
+                                        <div class="basic-info-content">
+                                            <div class="hotel-details">
+                                            <p>No New Bookings to Show.</p>
+                                            </div>
+                                        </div>
+                                    </div>';
 
 
-        } else {
-            // Display the table if conditions are not met
-    ?>
+                            } else {
+                                // Display the table if conditions are not met
+                        ?>
                         <h2>New Booking Details</h2>
                         <table class="booking-table">
                             <thead>
@@ -206,50 +208,51 @@ if (!empty($data) && isset($data['pendingBookings'])) {
                             <tbody>
                                 <!-- PHP code here -->
                                 <?php
-            $pendingBookings = $data['pendingBookings'] ?? [];
+                                    $pendingBookings = $data['pendingBookings'] ?? [];
 
 
-            $count = 0; // Initialize a counter variable
+                                    $count = 0; // Initialize a counter variable
 
-            foreach ($pendingBookings as $booking) {
-                $count++; // Increment the counter for each iteration
-            ?>
+                                    foreach ($pendingBookings as $booking) {
+                                        $count++; // Increment the counter for each iteration
+                                    ?>
                                 <tr>
                                     <td><?php echo $booking->fname . ' ' . $booking->lname; ?>
                                     <td><?php echo $booking->startDate; ?></td>
                                     <td><?php echo $booking->plate_number; ?></td>
                                     <td>
-                                        <a class="view-button" href="<?php echo URLROOT; ?>driver/bookings" style="width: 15px;";>
-                                            <i class='bx bx-search'></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
-                        <?php } // End of else block
-    } // End of if $data check ?>
-                    </div>
+                                        <a class="view-button" href="<?php echo URLROOT; ?>driver/bookings"
+                                            style="width: 15px;" ;>
+                                                                    <i class='bx bx-search'></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                                <?php } // End of else block
+                            } // End of if $data check ?>
+                                            </div>
 
 
-                    <?php
-                $vehicleCount = $data['vehicleCount'];
-                ?>
+                                            <?php
+                                        $vehicleCount = $data['vehicleCount'];
+                                        ?>
 
-                    <!-- Rooms Allocated Section -->
-                    <div class="rectangle">
-                        <div class="basic-info-content">
-                            <div class="hotel-details">
-                                <h2>Total Vehicles</h2>
-                                <!-- PHP code here -->
+                                            <!-- Rooms Allocated Section -->
+                                            <div class="rectangle">
+                                                <div class="basic-info-content">
+                                                    <div class="hotel-details">
+                                                        <h2>Total Vehicles</h2>
+                                                        <!-- PHP code here -->
 
-                                <h2><?php echo $vehicleCount; ?></h2>
-                            </div>
-                            <a href="<?php echo URLROOT; ?>driver/vehiclereg">
-                                <button class="edit-button">Add a Vehicle</button>
-                            </a>
-                        </div>
-                    </div>
+                                                        <h2><?php echo $vehicleCount; ?></h2>
+                                                    </div>
+                                                    <a href="<?php echo URLROOT; ?>driver/vehiclereg">
+                                                        <button class="edit-button">Add a Vehicle</button>
+                                                    </a>
+                                                </div>
+                                            </div>
 
 
                 </div>

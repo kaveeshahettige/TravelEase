@@ -1,8 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
+    renderCalendar();
+});
+
+let currentDate = new Date();
+
+function renderCalendar() {
     const monthYearElement = document.getElementById("current-month-year");
     const daysElement = document.getElementById("calendar-days");
-
-    let currentDate = new Date();
 
     monthYearElement.innerText = getMonthYearString(currentDate);
 
@@ -11,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Add day names
     const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    dayNames.forEach((dayName) => {
+    dayNames.forEach(dayName => {
         const dayNameCell = document.createElement("div");
         dayNameCell.classList.add("day", "day-name");
         dayNameCell.innerText = dayName;
@@ -32,26 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
     for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
         const cell = createDayCell(date);
-
-        // Highlight the current date
-        if (date.toDateString() === new Date().toDateString()) {
-            cell.classList.add("current-date");
-        }
-
-        // Check if the date is in the past
-        if (date < new Date()) {
-            cell.classList.add("disabled"); // Add a CSS class to visually disable past dates
-            cell.removeEventListener("click", handleDayClick); // Remove click event listener for past dates
-        }
-
         daysElement.appendChild(cell);
     }
-});
-
-
-
-let currentDate = new Date();
-
+}
 
 function createEmptyCell() {
     const cell = document.createElement("div");
@@ -68,18 +55,34 @@ function createDayCell(date) {
     dayNumber.innerText = date.getDate();
     cell.appendChild(dayNumber);
 
-    // Check if the date is the current date
+    // Check if the date is today
     const today = new Date();
-    if (date.toDateString() === today.toDateString()) {
-        cell.classList.add("current-date"); // Add the current date styling
+    if (isSameDate(date, today)) {
+        cell.classList.add("today"); // Add the "today" class
     }
 
-    cell.addEventListener("click", function () {
-        handleDayClick(date);
-    });
+    // Check if the date is in the past
+    if (date < today && !isSameDate(date, today)) {
+        // If the date is in the past (excluding today), disable the click event handler
+        cell.classList.add("disabled");
+    } else {
+        // If the date is today or in the future, attach the click event handler
+        cell.addEventListener("click", function () {
+            handleDayClick(date);
+        });
+    }
 
     return cell;
 }
+
+function isSameDate(date1, date2) {
+    return (
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate()
+    );
+}
+
 
 
 function getFormattedDateStringForSQL(date) {
@@ -89,7 +92,6 @@ function getFormattedDateStringForSQL(date) {
 
     return `${year}-${month}-${day}`;
 }
-
 
 function handleDayClick(date) {
     const selectedDateElement = document.getElementById("selected-date");
@@ -103,7 +105,6 @@ function handleDayClick(date) {
     // Add logic here to fetch and display availability information for the selected date
     availabilityInfoElement.innerText = "Availability: Available";
 }
-
 
 function getFormattedDateString(date) {
     const options = { weekday: "short", day: "numeric" };
@@ -185,7 +186,6 @@ function deleteRoom(roomId) {
     updateRoomStatus('delete_room', roomId);
 }
 
-
 function handleFormSubmit() {
     // var selectedDate = document.getElementById('selectedDate').value;
     // if (!selectedDate) {
@@ -193,44 +193,6 @@ function handleFormSubmit() {
     //     return false; // Prevent form submission
     // }
 }
-
- // Function to set the selected date as unavailable
- 
-
-// // Function to remove the selected date from unavailability
-// function removeUnavailableDate(vehicle_id, date) {
-
-//     console.log('Vehicle ID:', vehicleId);
-//     console.log('Date:', date);
-//     fetch(
-//         'http://localhost/TravelEase/driver/removeUnavailableDate',
-//         {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify({
-//                 vehicle_id: vehicleId,
-//                 date: date,
-//             }),
-//         }
-//     )
-//     .then(response => {
-//         if (!response.ok) {
-//             throw new Error('Network response was not ok');
-//         }
-//         return response.json();
-//     })
-//     .then(data => {
-//         console.log(data);
-//         // Handle success or display a message to the user
-//         window.location.reload(); // Reload the page to reflect changes
-//     })
-//     .catch(error => {
-//         console.error('Error removing unavailable date:', error);
-//         alert('Error removing unavailable date. Please check console for details.'); // Display a generic error message
-//     });
-// }
 
     
 function setUnavailableDate(vehicle_id, date) {

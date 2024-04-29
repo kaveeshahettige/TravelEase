@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/agency.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
     <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
     <title></title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/admin/x-icon" href="<?php echo URLROOT; ?>/images/admin/TravelEase.png">
@@ -34,14 +36,13 @@
 
             <li><a href="<?php echo URLROOT; ?>admin/hotel"><i class='bx bxs-hotel bx-sm'></i></i> Hotels</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/agency"class="active"><i class='bx bxs-car bx-sm'></i> Travel Agencies </a></li>
-            <li><a href="<?php echo URLROOT; ?>admin/package"><i class='bx bx-package bx-sm'></i>Packages</a></li>
+            <li><a href="<?php echo URLROOT; ?>admin/package"><i class='bx bx-package bx-sm'></i>Guide</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/settings"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-            <li><a href="<?php echo URLROOT?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
         </ul> 
         
-        <!-- <div class="logout">
-            <a href="<?php echo URLROOT; ?>pages/indes" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
-        </div> -->
+        <div class="logout">
+        <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a>
+        </div>
     </nav>
     <main>
         <div class="logo-container">
@@ -84,7 +85,7 @@ if (!empty($data['agency']) && is_array($data['agency'])):
         <thead>
             <tr>
                 <th>No</th>
-                <th>Registration Number</th>
+                <!-- <th>Registration Number</th> -->
                 <th>Hotel Name</th>
                 <th>Action</th>
             </tr>
@@ -97,10 +98,11 @@ if (!empty($data['agency']) && is_array($data['agency'])):
             ?>
             <tr class="t-row">
                 <td><?php echo $count ?></td>
-                <td><?php echo $agency->id ?></td>
+                <!-- <td><?php echo $agency->id ?></td> -->
                 <td><?php echo ucfirst($agency->fname) . ' ' . ucfirst($agency->lname) ?></td>
                 <td>
                     <button class="view-button"
+                        data-id="<?php echo $agency->id ?>"
                         data-description="<?php echo $agency->description ?>"
                         data-address="<?php echo $agency->address ?>"
                         data-phone="<?php echo $agency->number ?>"
@@ -158,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Button clicked');
 
             // Retrieve data attributes
-            const agencyId = this.closest('.t-row').querySelector('td:nth-child(2)').innerText;
+            const agencyId = this.getAttribute('data-id');
             const agencyName = this.closest('.t-row').querySelector('td:nth-child(3)').innerText;
             const agencyDescription = this.getAttribute('data-description');
             const agencyAddress = this.getAttribute('data-address');

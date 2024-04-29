@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/driver/settings.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <title><?php echo SITENAME ?></title>
     <link rel="icon" type="<?php echo URLROOT; ?>/images/driver/x-icon"
         href="<?php echo URLROOT; ?>/images/driver/TravelEase.png">
@@ -47,8 +49,7 @@
             <li><a href="<?php echo URLROOT; ?>driver/reviews"><i class='bx bxs-star bx-sm bx-fw'></i> Reviews</a></li>
             <li><a href="<?php echo URLROOT; ?>driver/settings" class="active"><i class='bx bxs-cog bx-sm'></i>
                     Settings</a></li>
-            <li><a href="<?php echo URLROOT?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>
-                    Logout</a></li>
+            <li> <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a></li>
         </ul>
 
         <!-- <div class="logout">
@@ -75,7 +76,7 @@
                             <!-- Rectangle 1: Basic Info -->
                             <div class="basic-info-content">
                                 <div class="center-image">
-                                    <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture;; ?>"
+                                    <img src="<?php echo URLROOT; ?>/images/<?php echo $data['profileimage']->profile_picture; ?>"
                                         alt="profile Picture">
 
                                 </div>
@@ -171,7 +172,7 @@
                             </div>
                         </div>
 
-                        <?php var_dump($data['pendingBookingCount'])?>
+                        <!-- <?php var_dump($data['pendingBookingCount'])?> -->
 
                         <div class="rectangle">
                             <!-- Rectangle 2: Change Password -->

@@ -51,7 +51,13 @@ class Package{
 
     public function deleteStatus($user_id, $startDate)
     {
-        $sql = "DELETE FROM guide_availability WHERE user_id = :user_id AND startDate = :startDate";
+        $sql = "DELETE ga 
+            FROM guide_availability AS ga
+            LEFT JOIN bookings AS b ON ga.user_id = b.package_id AND b.startDate <= :startDate AND b.endDate >= :startDate AND b.bookingCondition != 'cancelled'
+            LEFT JOIN cartbookings AS cb ON ga.user_id = cb.package_id AND cb.startDate <= :startDate AND cb.endDate >= :startDate AND cb.bookingCondition != 'cancelled'
+            WHERE (b.package_id IS NULL AND cb.package_id IS NULL)
+            AND ga.user_id = :user_id AND ga.startDate = :startDate";
+
         $this->db->query($sql);
         $this->db->bind(':user_id', $user_id);
         $this->db->bind(':startDate', $startDate);
@@ -63,6 +69,7 @@ class Package{
             return false; // Return false if the deletion failed
         }
     }
+
 
     public function getAvailability($user_id, $startDate) {
         $sql = "SELECT * FROM guide_availability 

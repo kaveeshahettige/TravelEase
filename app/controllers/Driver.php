@@ -68,6 +68,15 @@ class Driver extends Controller{
         $this->view('driver/index', $data);
     }
 
+    public function navigation() {
+
+        $profileimage = $this->TravelsModel->getProfileImage($_SESSION['user_id']);
+        $data = [
+            'profileimage' => $profileimage,
+        ];
+        $this->view('driver/navigation', $data);
+    }
+
     public function addagency() {
         if (!isset($_SESSION['user_id'])) {
             // Redirect to login page or handle unauthorized access
@@ -285,6 +294,14 @@ public function bookings() {
     $profileimage = $this->TravelsModel->getProfileImage($userId);
 
 
+    $totalBookingsArray = $this->TravelsModel->getTotalBookings($userId);
+
+    // var_dump($totalBookingsArray);
+
+    // Assuming the counts are in the order of the SQL query
+    // $totalBookingsCount = $totalBookingsArray[0]['count'] + $totalBookingsArray[1]['count'];
+    
+    
 
           
 
@@ -296,6 +313,7 @@ public function bookings() {
         'pendingBookings' => $pendingBookings,
         'completedBookings' => $completedBookings, // Add completed bookings to data array
         'profileimage' => $profileimage,
+        'totalBookingsArray' => $totalBookingsArray,
 
     ];
     // Get user ID from session
@@ -386,77 +404,7 @@ public function rejbookings() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public function updateBookingStatus(){
 
-
-    // Retrieve room_id, booking_id, and temporyid from the POST request
-    $sender_id = $_SESSION['user_id'];
-    $receiver_id = $_POST['user_id'];
-    $temporyid = $_POST['temporyid'];
-    $vehicle_id = $_POST['vehicle_id'];
-    $booking_id = $_POST['booking_id'];
-    $startDate = $_POST['startDate'];
-    $endDate = $_POST['endDate'];
-    
- 
- 
-    
-    $sender_name = $_SESSION['user_name'];
- 
- 
-    // Check if temporyid is 0
-    if ($temporyid == 0) {
-        // Call the model function to update the booking status
-        $updated = $this->TravelsModel->updateBookingStatus($booking_id);
-    } elseif ($temporyid !== 1) {
-        // Handle the case where temporyid is 1
-        $updated = $this->TravelsModel->updateCartBookingStatus($booking_id, $vehicle_id);
-    } else {
-        // Handle the case where temporyid is neither 0 nor 1
-        $updated = $this->TravelsModel->updateCartBookingStatus($booking_id, $vehicle_id);
-    }
- 
- 
-    // Construct the notification message
-    $notification_message = "Travel Agency,"." $sender_name" . " has cancelled your booking with the booking details were for vehicle" . " $startDate". " to" ." $endDate." ." We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
- 
- 
-    // Insert notification
-    $notification_inserted = $this->TravelsModel->insertNotification($booking_id, $sender_id, $receiver_id, $notification_message);
- 
- 
-    require_once __DIR__ . '/../libraries/sms/vendor/autoload.php';
- 
- 
-    // $basic  = new \Vonage\Client\Credentials\Basic("992a5e27", "YiQN3gXeYkIkfbcJ");
-    // $client = new \Vonage\Client($basic);
- 
- 
-    $messageBody = "Tour Guide,"." $sender_name" . " has cancelled your booking with the booking details were for tour guide room from" . " $startDate". " to" ." $endDate." ." We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
- 
- 
-    // $response = $client->sms()->send(
-    //     new \Vonage\SMS\Message\SMS("94768968161", 'Travelease', $messageBody)
-    // );
- 
- 
-    $message = $response->current();
- 
- 
-    if ($message->getStatus() == 0) {
-        echo "The message was sent successfully\n";
-    } else {
-        echo "The message failed with status: " . $message->getStatus() . "\n";
-    }
- 
- 
-    // Return JSON response based on the result
-    if ($updated && $notification_inserted && $message->getStatus() == 0) {
-        echo json_encode(['success' => true]);
-    } else {
-        echo json_encode(['success' => false]);
-    }
- }
  
     public function getPlateNumberForVehicle($vehicleId) {
         $plateNumber = $this->TravelsModel->getPlateNumberForVehicle($vehicleId);
@@ -588,7 +536,7 @@ public function getFinalPayment(){
                 }
                 $userId = $_SESSION['user_id'];
 
-                var_dump($userId);
+                // var_dump($userId);
 
             
                 $agencyDetails = $this->TravelsModel->getAgencyDetails($userId);
@@ -1154,6 +1102,87 @@ public function getFinalPayment(){
                         redirect('error');
                     }
                 }
+
+    public function updateBookingStatus(){
+
+        //Retrieve vehicle_id, booking_id, and temporyid from the POST request
+        $sender_id = $_SESSION['user_id'];
+        $receiver_id = $_POST['user_id'];
+        $temporyid = $_POST['temporyid'];
+        $vehicle_id = $_POST['vehicle_id'];
+        $booking_id = $_POST['booking_id'];
+        $startDate = $_POST['startDate'];
+        $endDate = $_POST['endDate'];
+        $payment_amount = $_POST['payment_amount'];
+        $plate_number = $_POST['plate_number'];
+
+        $basicinfo = $this->basicInfo();
+        $sender_name = $basicinfo['userData']->fname;
+
+        
+
+        if ($temporyid == 0) {
+            // Call the model function to update the booking status
+            $updated = $this->TravelsModel->updateBookingStatus($booking_id);
+        } elseif ($temporyid !== 1) {
+            // Handle the case where temporyid is 1
+            $updated = $this->TravelsModel->updateCartBookingStatus($booking_id, $vehicle_id);
+        } else {
+            // Handle the case where temporyid is neither 0 nor 1
+            $updated = $this->TravelsModel->updateCartBookingStatus($booking_id, $vehicle_id);
+        }
+
+        // Construct the notification message
+        $notification_message = "$sender_name" . " has cancelled your booking with the booking details were for" . " $plate_number" . "vehicle from" . " $startDate" . " to" . " $endDate." . " We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
+
+        // Insert notification
+        $notification_inserted = $this->TravelsModel->insertNotification($booking_id, $sender_id, $receiver_id, $notification_message);
+
+
+        $manager_notification = "$sender_name" . " has cancelled your booking with the booking details were for" . " $plate_number" . " vehicle from" . " $startDate" . " to" . " $endDate." . " Make Sure Refund will be processed within 7 days";
+
+
+        $notification2_inserted = $this->TravelsModel->notifyUsersWithType2($booking_id, $sender_id,$manager_notification);
+
+        $currentDate = date('Y-m-d');
+        $cancelled_id = $_SESSION['user_id'];
+
+        //Update the refund table
+        $refund = $this->TravelsModel->updateRefund($temporyid,$booking_id,$sender_id,$receiver_id,$cancelled_id,$payment_amount,$currentDate);
+
+
+        $availabilityUpdate = $this->TravelsModel->updateAvailability($vehicle_id,$startDate,$endDate);
+
+//       (tempory_id, booking_id, serviceProvider_id,user_id,refund_amount)
+
+        require_once __DIR__ . '/../libraries/sms/vendor/autoload.php';
+
+        $basic  = new \Vonage\Client\Credentials\Basic("992a5e27", "YiQN3gXeYkIkfbcJ");
+        $client = new \Vonage\Client($basic);
+
+        $messageBody = "$sender_name has cancelled your booking with the booking details for $plate_number vehicle from $startDate to $endDate. We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
+
+        $response = $client->sms()->send(
+            new \Vonage\SMS\Message\SMS("94768968161", 'Travelease', $messageBody)
+        );
+
+        $message = $response->current();
+
+        if ($message->getStatus() == 0) {
+            echo "The message was sent successfully\n";
+        } else {
+            echo "The message failed with status: " . $message->getStatus() . "\n";
+        }
+
+        // Return JSON response based on the result
+        if ($updated && $notification_inserted && $notification2_inserted && $availabilityUpdate && $refund && $message->getStatus() == 0) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false]);
+        }
+
+    }
+
                 
                 
 
