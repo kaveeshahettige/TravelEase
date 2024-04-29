@@ -21,8 +21,9 @@
         <p class="quote">Start your journey here</p>
         <h2>Register as a Transport Provider</h2>
         <p class="description">Please fill in the following details to register as a transport provider</p>
-        <div>
-            <form action="<?php echo URLROOT?>users/transportRegNew" method="POST">
+
+        <form action="<?php echo URLROOT?>users/transportRegNew" method="POST">
+            <div class="form-container">
                 <div class="column">
                     <label for="fname">Travel Agency Name:</label>
                     <input type="text" id="fname" name="fname" required>
@@ -46,35 +47,37 @@
                     <input type="password" id="confirm-password" name="confirm_password" required>
                     <span class="invalid-feedback"><?php echo $data['confirm_password_err']; ?></span>
 
+                </div>
+
+               
+            </div>
+            <div]>
+                    <div class="checkbox">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="">I agree to the <a href="#" class="terms-link">Terms and
+                                Conditions</a></label>
+                    </div>
 
 
 
+                    <div class="baseButtons">
+                        <button class="saveBut" type="submit">Submit</button>
+                    </div>
 
                 </div>
 
 
 
-        </div>
+        </form>
 
-        <div class="checkbox">
-            <input type="checkbox" id="terms" name="terms" required>
-            <label for="terms">I agree to the <a href="#" class="terms-link">Terms and Conditions</a></label>
-        </div>
-
-
-
-        <div>
-            <div class="baseButtons">
-                <button class="saveBut" type="submit">Submit</button>
-            </div>
-
-        </div>
-    </div>
-
-    </form>
 
 
     </div>
+
+
+
+
+    
 </body>
 
 </html>

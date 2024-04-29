@@ -135,7 +135,7 @@
 
     <?php
     $userData = $data['basicInfo']['userData'];
-    var_dump($data['vehicleCount']);
+    // var_dump($data['vehicleCount']);
     ?>
 
     <!-- Popup content -->

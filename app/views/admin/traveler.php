@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/hotel.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
 
@@ -41,15 +43,14 @@
                     Traveler</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/hotel"><i class='bx bxs-hotel bx-sm'></i></i> Hotels</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/agency"><i class='bx bxs-car bx-sm'></i> Travel Agencies </a></li>
-            <li><a href="<?php echo URLROOT; ?>admin/package"><i class='bx bx-package bx-sm'></i>Guide</a></li>
+            <li><a href="<?php echo URLROOT; ?>admin/package"><i class='bx bx-package bx-sm'></i>Packages</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/settings"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-            <li><a href="<?php echo URLROOT?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>
-                    Logout</a></li>
+            
         </ul>
 
-        <!-- <div class="logout">
-            <a href="<?php echo URLROOT; ?>pages/indes" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
-        </div> -->
+        <div class="logout">
+        <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a>
+        </div>
     </nav>
     <main>
         <div class="logo-container">
@@ -91,7 +92,7 @@ if (!empty($data['traveler']) && is_array($data['traveler'])):
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Registration Number</th>
+                        <!-- <th>Registration Number</th> -->
                         <th>Name</th>
                         
                       
@@ -106,11 +107,13 @@ if (!empty($data['traveler']) && is_array($data['traveler'])):
                 ?>
                     <tr class="t-row">
                         <td><?php echo $count ?></td>
-                        <td><?php echo $user->id ?></td>
+                        <!-- <td><?php echo $user->id ?></td> -->
                         <td><?php echo ucfirst($user->fname) . ' ' . ucfirst($user->lname) ?></td>
                         
                         <td>
-    <button class="view-button" data-email="<?php echo $user->email ?>"
+    <button class="view-button" 
+                data-id="<?php echo $user->id ?>"
+    data-email="<?php echo $user->email ?>"
         data-number="<?php echo $user->number ?>"
         data-image="<?php echo $user->profile_picture ?>">View</button>&nbsp;
         <button class="delete-button"  onclick="DeletePopup(<?php echo $user->id ?>)">Delete</button>
@@ -170,8 +173,14 @@ endif;
         });
 
         function showCustomPopup() {
-            customPopup.style.display = 'block';
-        }
+    var popupElement = document.getElementById('yourPopupElementId');
+    console.log(popupElement); // Check if popupElement is null or the actual element
+    if (popupElement) {
+        popupElement.style.display = 'block';
+    } else {
+        console.error('Popup element not found or null.');
+    }
+}
 
         function hideCustomPopup() {
             customPopup.style.display = 'none';
@@ -189,8 +198,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     viewButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const userId = this.closest('.t-row').querySelector('td:nth-child(2)').innerText;
-            const userName = this.closest('.t-row').querySelector('td:nth-child(3)').innerText;
+            const userId = this.getAttribute('data-id');
+            const userName = this.closest('.t-row').querySelector('td:nth-child(2)').innerText;
             const userEmail = this.getAttribute('data-email');
             const userNumber = this.getAttribute('data-number');
             const userImage = this.getAttribute('data-image');

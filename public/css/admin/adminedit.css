@@ -9,21 +9,21 @@ body{
 
 /* Left menu styles */
 .left-menu {
-    background-color: #FFDB8B;
+    background-color: #FDDD95;
     color: #000;
     width: 250px;
     height: 100vh;
     position: fixed;
     overflow-y: auto;
     font-family: "Poppins", sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s ease; /* Add a smooth transition effect */
 }
 
-/* User profile styles */
-.user-profile {
-    display: flex;
-    align-items: center;
-    padding: 20px;
+.left-menu:hover {
+    width: 270px; /* Increase width on hover */
 }
+
 
 .user-profile img {
     width: 50px;

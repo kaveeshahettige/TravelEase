@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/request.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
+    <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
     <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
 
     <script src="<?php echo URLROOT?>/js/admin/script.js"></script>
@@ -14,6 +16,55 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        .popup-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.popup-content {
+  position: relative;
+  max-width: 600px;
+  margin: 100px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.popup-content .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  color: #333;
+}
+
+.popup-content .hotel_popup {
+  display: flex;
+}
+
+.popup-content .popup-column {
+  flex: 1;
+}
+
+.popup-content h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.popup-content p {
+  margin-bottom: 5px;
+}
+
+    </style>
 </head>
 
 <body>
@@ -39,13 +90,12 @@
             <li><a href="<?php echo URLROOT; ?>admin/agency"><i class='bx bxs-car bx-sm'></i> Travel Agencies </a></li>
             <li><a href="<?php echo URLROOT; ?>admin/package"><i class='bx bx-package bx-sm'></i>Guide</a></li>
             <li><a href="<?php echo URLROOT; ?>admin/settings"><i class='bx bxs-cog bx-sm'></i> Settings</a></li>
-            <li><a href="<?php echo URLROOT; ?>users/logout" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>
-                    Logout</a></li>
+           
         </ul>
 
-        <!-- <div class="logout">
-            <a href="<?php echo URLROOT; ?>pages/indes" class="active"><i class='bx bxs-log-out bx-sm bx-fw'></i>  Logout</a>
-        </div> -->
+        <div class="logout">
+        <a href="#" class="nav-button active" onclick="confirmLogout(event)"><i class='bx bxs-log-out bx-sm bx-fw'></i> Logout</a>
+        </div>
     </nav>
     <main>
         <div class="logo-container">
@@ -98,7 +148,7 @@ if (!empty($data['hotelRequests']) && is_array($data['hotelRequests'])):
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Name</th>
                         <th>Details</th>
                         <th>Document</th>
@@ -112,10 +162,12 @@ if (!empty($data['hotelRequests']) && is_array($data['hotelRequests'])):
             ?>
                     <tr class="t-row">
                         <td><?php echo $count ?></td>
-                        <td><?php echo $hotel->id ?></td>
+                        <!-- <td><?php echo $hotel->id ?></td> -->
                         <td><?php echo ucfirst($hotel->fname) . ' ' . ucfirst($hotel->lname) ?></td>
                         <td>
-                            <button class="view-button" class="1" data-description="<?php echo $hotel->description ?>"
+                            <button class="view-button" class="1"
+                                data-name="<?php echo $hotel->fname . ' ' . $hotel->lname ?>"
+                            data-description="<?php echo $hotel->description ?>"
                                 data-no-rooms="<?php echo $hotel->no_rooms ?>"
                                 data-alt-phone="<?php echo $hotel->alt_phone_number ?>"
                                 data-manager-name="<?php echo $hotel->manager_name ?>"
@@ -128,10 +180,9 @@ if (!empty($data['hotelRequests']) && is_array($data['hotelRequests'])):
                                 data-instagram="<?php echo $hotel->instagram ?>"
                                 data-additional-notes="<?php echo $hotel->additional_notes ?>"
                                 data-card-holder-name="<?php echo $hotel->card_holder_name ?>"
-                                data-account-number="<?php echo $hotel->account_number ?>">View</button>
+                                data-account-number="<?php echo $hotel->account_number ?>"><i class='bx bx-show'></i> </button>
                         </td>
-                        <td><button class="view-button" onclick="openDocument('<?php echo $hotel->document ?>')">View
-                                Document</button></td>
+                        <td><button class="view-button" onclick="openDocument('<?php echo $hotel->document ?>')"><i class='bx bxs-file-doc'></i></button></td>
                         <td><button class="accept-button" onclick="acceptUser(<?php echo $hotel->id ?>)">Accept</button>
                             <button class="decline-button"
                                 onclick="declineUser(<?php echo $hotel->id ?>)">Decline</button></td>
@@ -207,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const accountNumber = this.getAttribute('data-account-number');
 
             hotelDetailsContainer.innerHTML = `
-                <h2>${hotelName}</h2>
+                <h2 style="text-align:center">${hotelName}</h2>
                 <div class="hotel_popup" style="display: flex">
                     <div class="popup-column">
                         <p>ID: ${hotelId}</p>

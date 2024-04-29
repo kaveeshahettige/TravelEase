@@ -85,12 +85,12 @@
                 <div class="img-box">
                     <img src="<?php echo URLROOT; ?>/images/driver/dashboard.jpg" alt="hotel Image">
                 </div>
-
+<!-- <?php $totalbookings = $data['totalBookings'];?> -->
 
                 <!-- Total Bookings Box -->
                 <div class="box">
                     <h2>Total Bookings</h2>
-                    <p></p>
+                    <p><?php echo $data['totalBookingsArray']; ?></p>
                 </div>
 
                 <!-- Ongoing Bookings Box -->
