@@ -166,7 +166,7 @@ class AdminM{
     }
 
     public function gethotelUserID(){
-      $this->db->query("SELECT id from users where type='3' and approval='1' and profile_status='1'");
+      $this->db->query("SELECT id from users where type='3' and approval='1' and profile_status='1' AND profile_status='1'");
         $data=$this->db->resultSet();
 
         //check row
@@ -285,7 +285,7 @@ class AdminM{
     }
     //findAgencyDetail
     public function findAgencyDetail(){
-      $this->db->query("SELECT u.*, ta.* FROM users u JOIN travelagency ta ON u.id = ta.user_id WHERE u.type = '4' AND u.approval = '1'");
+      $this->db->query("SELECT u.*, ta.* FROM users u JOIN travelagency ta ON u.id = ta.user_id WHERE u.type = '4' AND u.approval = '1' AND u.profile_status = '1'");
       $data = $this->db->resultSet();
   
       // Check row count

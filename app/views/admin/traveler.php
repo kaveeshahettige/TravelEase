@@ -113,6 +113,7 @@ if (!empty($data['traveler']) && is_array($data['traveler'])):
                         <td>
     <button class="view-button" 
                 data-id="<?php echo $user->id ?>"
+                data-name="<?php echo $user->fname . ' ' . $user->lname ?>"
     data-email="<?php echo $user->email ?>"
         data-number="<?php echo $user->number ?>"
         data-image="<?php echo $user->profile_picture ?>">View</button>&nbsp;

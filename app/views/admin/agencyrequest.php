@@ -166,6 +166,9 @@
                         <td><?php echo ucfirst($agency->fname) . ' ' . ucfirst($agency->lname) ?></td>
                         <td>
                         <button class="view-button"
+                        data-id="<?php echo $agency->id ?>"
+                        data-name="<?php echo ucfirst($agency->fname) . ' ' . ucfirst($agency->lname) ?>"
+
                         data-description="<?php echo $agency->description ?>"
                         data-address="<?php echo $agency->address ?>"
                         data-phone="<?php echo $agency->number ?>"
@@ -176,14 +179,10 @@
                         data-twitter="<?php echo $agency->twitter ?>"
                         data-instagram="<?php echo $agency->instagram ?>"
                         data-card-holder-name="<?php echo $agency->card_holder_name ?>"
-                        data-account-number="<?php echo $agency->account_number ?>"
-                    >View</button>
-
-
+                        data-account-number="<?php echo $agency->account_number ?>"><i class='bx bx-show'></i></button>
                         </td>
-                        <td><button class="view-button"
-                                onclick="openDocument('<?php echo isset($agency->document) ? $agency->document : '' ?>')">View
-                                Document</button></td>
+                        <td><button class="view-button2"
+                                onclick="openDocument('<?php echo isset($agency->document) ? $agency->document : '' ?>')"><i class='bx bxs-file-doc'></button></td>
                         <td><button class="accept-button"
                                 onclick="acceptUser(<?php echo $agency->id ?>)">Accept</button> <button
                                 class="decline-button" onclick="declineUser(<?php echo $agency->id ?>)">Decline</button>
@@ -222,8 +221,8 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Button clicked');
 
             // Retrieve data attributes
-            const agencyId = this.closest('.t-row').querySelector('td:nth-child(2)').innerText;
-            const agencyName = this.closest('.t-row').querySelector('td:nth-child(3)').innerText;
+            const agencyId = this.getAttribute('data-id');
+            const agencyName = this.getAttribute('data-name');
             const agencyDescription = this.getAttribute('data-description');
             const agencyAddress = this.getAttribute('data-address');
             const agencyPhone = this.getAttribute('data-phone');
@@ -244,24 +243,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Populate the popup HTML
             agencyDetailsContainer.innerHTML = `
-                <h2>${agencyName}</h2>
+                <h2 style="text-align:center">${agencyName}</h2>
                 <div class="agency_popup" style="display: flex">
                     <div class="popup-column">
                         <p>ID: ${agencyId}</p>
                         <p>Address: ${agencyAddress}</p>
                         <p>Phone: ${agencyPhone}</p>
                         <p>Manager Name: ${managerName}</p>
-                        <p>Description: ${agencyDescription}</p>
-                        </div><div class="popup-column">
+                       
+                       
                         <p>City: ${city}</p>
                         <p>Website: ${website}</p>
                         <p>Facebook: ${facebook}</p>
                         <p>Twitter: ${twitter}</p>
                         <p>Instagram: ${instagram}</p>
-                   
+                        </div><div class="popup-column">
                     
                         <p>Card Holder Name: ${cardHolderName}</p>
                         <p>Account Number: ${accountNumber}</p>
+                        <p>Description: ${agencyDescription}</p>
                     </div>
                 </div>
             `;

@@ -205,10 +205,9 @@ if (!empty($data['guideRequests']) && is_array($data['guideRequests'])):
                                 data-languages="<?php echo $guide->languages ?>"
                                 data-reg-number="<?php echo $guide->GuideRegNumber ?>"
                                 data-license-exp-date="<?php echo $guide->LisenceExpDate ?>"
-                                data-sites="<?php echo $guide->sites ?>">View</button>
+                                data-sites="<?php echo $guide->sites ?>"><i class='bx bx-show'></i></button>
                         </td>
-                        <td><button class="view-button" onclick="openDocument('<?php echo $guide->document ?>')">View
-                                Document</button></td>
+                        <td><button class="view-button2" onclick="openDocument('<?php echo $guide->document ?>')"><i class='bx bxs-file-doc'></i></i></button></td>
                         <td><button class="accept-button" onclick="acceptUser(<?php echo $guide->id ?>)">Accept</button>
                             <button class="decline-button"
                                 onclick="declineUser(<?php echo $guide->id ?>)">Decline</button>
@@ -282,9 +281,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h2>${guideName}</h2>
                 <img id="guide-image" src="${imageSrc}" alt="${guideName} Image">
             </div>
-            <div class="guide-text">
+            <div class="guide-text" >
                 <p><strong>ID:</strong> ${guideId}</p>
-                <p><strong>Sites:</strong> ${guideSites}</p>
+                <p style="text-align:justify;padding-right:15px"><strong>Sites:</strong> ${guideSites}</p>
                 <p><strong>Address:</strong> ${guideAddress}, ${guideCity}, ${guideProvince}</p>
                 <p><strong>Facebook:</strong> ${guideFacebook}</p>
                 <p><strong>Instagram:</strong> ${guideInstagram}</p>
@@ -301,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="guide-description">
                 <p><strong>Description:</strong></p>
-                <p>${guideDescription}</p>
+                <p style="text-align:justify">${guideDescription}</p>
             </div>
         </div>
     </div>

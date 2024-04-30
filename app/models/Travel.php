@@ -404,9 +404,9 @@ public function getPaymentDetailsForBooking($bookingId) {
             FROM feedbacksnratings fr
             JOIN users u ON fr.user_id = u.id
             WHERE fr.booking_id IN (
-                SELECT booking_id FROM bookings WHERE serviceProvider_id = :user_id AND bookingCondition = 'completed'
+                SELECT booking_id FROM bookings WHERE serviceProvider_id = :user_id AND endDate < CURDATE()  AND bookingCondition != 'cancelled'
                 UNION
-                SELECT booking_id FROM cartbookings WHERE serviceProvider_id = :user_id AND bookingCondition = 'completed'
+                SELECT booking_id FROM cartbookings WHERE serviceProvider_id = :user_id AND endDate < CURDATE()  AND bookingCondition != 'cancelled'
             )
             AND fr.fservice_id = :user_id";
         
