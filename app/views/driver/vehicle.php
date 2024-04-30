@@ -111,14 +111,14 @@
             <h1>Vehicle Informaion</h1>
         </div>
 
-        <div class="search-content">
+        <!-- <div class="search-content">
             <div class="booking-search">
                 <input type="text" id="booking-search" placeholder="Search Vehicles">
                 <button onclick="filterBookings()">
-                    <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
+                    <i class="bx bx-search"></i> 
                 </button>
             </div>
-        </div>
+        </div> -->
 
         <div class="dashboard-sub-content">
             <div class="top-boxes">
@@ -179,7 +179,7 @@
                                 <a href="<?php echo URLROOT; ?>driver/vehicleedit/<?php echo $vehicle['vehicle_id']; ?>"
                                     class="edit-button">Edit</a>
                                 <form id="deleteForm" action="<?php echo URLROOT; ?>driver/vehicledelete" method="POST">
-                                    <input type="hidden" id="vehicle_id" name="vehicle_id">
+                                    <input type="hidden" id="vehicleId" name="vehicle_id">
                                     <button type="button" onclick="confirmDelete(<?php echo $vehicle['vehicle_id']; ?>)"
                                         class="delete-button">
                                         <i class='bx bx-trash'></i> Delete
@@ -205,7 +205,7 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <p>Are you sure you want to delete this vehicle?</p>
-        <button class="delete-button2" id="confirmDeleteBtn">Yes</button>
+        <button class="delete-button" id="confirmDeleteBtn">Yes</button>
         <button class="no-button">Cancel</button>
     </div>
 </div>
@@ -213,33 +213,32 @@
 
         <script src="<?php echo URLROOT?>/js/driver/vehicle.js"></script>
         <script>
-    function confirmDelete(vehicleId) {
-        // Check if the vehicleId is in the bookedVehicles array
-        if (<?php echo json_encode($data['bookedVehicles']); ?>.includes(vehicleId)) {
-            alert("This vehicle cannot be deleted as it has pending bookings.");
-        } else {
-            // Open the modal
-            document.getElementById('deleteConfirmationModal').style.display = 'block';
+ function confirmDelete(vehicleId) {
+    console.log(vehicleId);
+    // Check if the vehicleId is in the bookedVehicles array
+    if (<?php echo json_encode($data['bookedVehicles']); ?>.includes(vehicleId)) {
+        alert("This vehicle cannot be deleted as it has pending bookings.");
+    } else {
+        // Open the modal
+        document.getElementById('deleteConfirmationModal').style.display = 'block';
 
-            // Set the vehicleId in the hidden input field
-            document.getElementById('vehicle_id').value = vehicleId;
-        }
+        // Set the vehicleId in the hidden input field
+        document.getElementById('vehicleId').value = vehicleId;
     }
+}
 
-    // Close the modal when the user clicks on the close button or outside the modal
-    document.querySelector('.close').addEventListener('click', function() {
-        document.getElementById('deleteConfirmationModal').style.display = 'none';
-    });
+// Close the modal when the user clicks on the close button
+document.querySelector('.close').addEventListener('click', function() {
+    document.getElementById('deleteConfirmationModal').style.display = 'none';
+});
 
-    // Handle cancellation by closing the modal
-    document.querySelector('.cancel-btn').addEventListener('click', function() {
-        document.getElementById('deleteConfirmationModal').style.display = 'none';
-    });
+// Handle deletion confirmation
+document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+    document.getElementById('deleteForm').submit();
+});
 
-    // Handle deletion confirmation
-    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-        document.getElementById('deleteForm').submit();
-    });
+
+    
 </script>
 
 
