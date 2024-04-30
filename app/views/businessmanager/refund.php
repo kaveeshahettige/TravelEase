@@ -70,16 +70,6 @@ include 'navigation.php';
             </div>
         </div>
 
-        <div class="search-content">
-            <div class="booking-search">
-                <input type="text" id="booking-search" placeholder="Search for Refund Details">
-                <button onclick="filterBookings()">
-                    <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
-                </button>
-            </div>
-            </div>
-
-
         <div class="table-content">
             <h2>Pending Refunds</h2>
             <table class="booking-table">
@@ -135,10 +125,36 @@ include 'navigation.php';
             </div>
         </div>
 
-
         <div class="more-content">
-                <button class="next-page-btn">See More <i class='bx bx-chevron-right'></i></button>
-            </div>
+            <button class="next-page-btn" onclick="showNextPage()">See More <i class='bx bx-chevron-right'></i></button>
+        </div>
+
+        <script>
+            // JavaScript function to show the next page of table rows
+            function showNextPage() {
+                var table = document.querySelector(".booking-table");
+                var tr = table.getElementsByTagName("tr");
+                var i;
+                for (i = 0; i < tr.length; i++) {
+                    if (tr[i].style.display === "none") {
+                        tr[i].style.display = "";
+                    }
+                }
+            }
+            //limit rows
+            var table = document.querySelector(".booking-table");
+            var tr = table.getElementsByTagName("tr");
+            var i;
+            for (i = 0; i < tr.length; i++) {
+                if (i > 3) {
+                    tr[i].style.display = "none";
+                }
+            }
+
+        </script>
+
+
+
         <script src= "<?php echo URLROOT?>/public/js/businessmanager/script.js"></script>
     </main>
 </body>

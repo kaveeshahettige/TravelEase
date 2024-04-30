@@ -143,11 +143,6 @@ include 'navigation.php';
 
 
 
-
-        <div class="more-content">
-            <button class="next-page-btn">More Reviews <i class='bx bx-chevron-right'></i></button>
-        </div>
-
     </main>
     <div id="myModal" class="modal">
         <div class="modal-content">
