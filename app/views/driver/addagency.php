@@ -67,7 +67,7 @@
                                 <input type="text" id="manager_name" name="manager_name" required>
                             </div>
                             <div class="form-group">
-                                <label for="reg_number">Registration Number</label>
+                                <label for="reg_number">Agency Registration Number</label>
                                 <input type="text" id="reg_number" name="reg_number" required>
                             </div>
                         </div>
@@ -104,29 +104,39 @@
                                 <input type="text" id="account_number" name="account_number" required>
                             </div>
                         </div>
+                        <div>
+                            <div class="form-group">
+                                <label for="bank_name">Bank Name</label>
+                                <input type="text" id="bank_name" name="bank_name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="bank_branch">Bank Branch</label>
+                                <input type="text" id="bank_branch" name="bank_branch" required>
+                            </div>
+                        </div>
 
                         <h2 style="padding-left:20px;">Social Media Details</h2>
-                        <p>Share your agency's online presence by providing the following social media details</p><br>
+                        <p>Share your agency's online presence by providing the following social media details.</p><br>
 
                         <div>
                             <div class="form-group">
                                 <label for="website">Website</label>
-                                <input type="url" id="website" name="website" >
+                                <input type="text" id="website" name="website">
                             </div>
                             <div class="form-group">
                                 <label for="facebook">Facebook</label>
-                                <input type="url" id="facebook" name="facebook" >
+                                <input type="text" id="facebook" name="facebook">
                             </div>
                         </div>
 
                         <div>
                             <div class="form-group">
                                 <label for="twitter">Twitter</label>
-                                <input type="url" id="twitter" name="twitter" >
+                                <input type="text" id="twitter" name="twitter">
                             </div>
                             <div class="form-group">
                                 <label for="instagram">Instagram</label>
-                                <input type="url" id="instagram" name="instagram" >
+                                <input type="text" id="instagram" name="instagram">
                             </div>
                         </div>
 

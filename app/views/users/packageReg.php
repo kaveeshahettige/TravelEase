@@ -16,10 +16,10 @@
             <h1>TravelEase</h1>
         </div>
         <p class="quote">Start your journey here</p>
-        <h2>Register as a Guiding Package Owner</h2>
+        <h2>Register as a Guid</h2>
         <form action="<?php echo URLROOT?>users/packagereg" method="POST">
             <div class="column">
-                <label for="packageOwnerName">Package Owner Name:</label>
+                <label for="packageOwnerName">Guide Name:</label>
                 <input type="text" id="packageOwnerName" name="packageOwnerName" required>
 
                 <label for="address">Address:</label>
@@ -31,23 +31,24 @@
 
                 <label for="description">Description:</label>
                 <textarea id="description" name="description" rows="4" required></textarea>
-                <label for="password">Confirm Password:</label>
-                <input type="password" id="confirm-password" name="confirm_password" required> 
+                <label for="contactNumber">Contact Number:</label>
+                <input type="tel" id="contactNumber" name="number" required>
+                
             </div>
             
             <div class="column">
-                <label for="PackageType">Package Type:</label>
+                <!-- <label for="PackageType">Package Type:</label>
                 <select id="packageType" name="packageType" required>
                     <option value="Solo">Solo</option>
                                   <option value="Couple">Couple</option>
                                   <option value="Family">Family</option>
                                   <option value="Group">Group</option>
                                   <option value="Other">Other</option>
-                </select>
-                <label for="contactNumber">Contact Number:</label>
-                <input type="tel" id="contactNumber" name="number" required>
+                </select> -->
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
+                <label for="password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm_password" required> 
                 
 
                 <!-- <label for="socialMedia">Social Media Links:</label>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
+    <script src= "<?php echo URLROOT?>/public/js/businessmanager/script.js"></script>
     <title>Registered Rooms</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -92,7 +93,9 @@ include 'navigation.php';
                     <td><?php echo $room->price ?></td>
                     <td><?php echo $room->description ?></td>
                     <td>
-                        <a href="<?php echo URLROOT ?>/businessmanager/editRoom/<?php echo $room->room_id ?>"><button class="view-button">View</button></a>
+                      <button class="view-button" onclick="roomopenPopup();roomupdatePopupDetails('<?php echo $room->roomType ?>', '<?php echo $room->hotel_name ?>', <?php echo $room->price ?>,' <?php echo $room->description ?>')">
+                          <i class='bx bx-show'></i>
+                      </button>
                     </td>
                 </tr>
                 <?php
@@ -101,6 +104,19 @@ include 'navigation.php';
             </tbody>
         </table>
     </div>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <!-- Add details about the booking here -->
+            <h2>Room Details</h2>
+            <p id="roomType">Room Type: </p>
+            <p id="hotel_name">Hotel: </p>
+            <p id="price">Price: </p>
+            <p id="description">Description: </p>
+        </div>
+    </div>
+
 
 
 </main>

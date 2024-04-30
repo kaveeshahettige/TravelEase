@@ -463,6 +463,66 @@ public function getPaymentDetailsForBooking($bookingId) {
             }
         }
 
+        public function getFeedbackCount($userID){
+            $sql = "SELECT COUNT(user_id) AS count FROM feedbacksnratings WHERE fservice_id = :user_id";
+            $this->db->query($sql);
+            $this->db->bind(':user_id', $userID);
+            $this->db->execute();
+            $row = $this->db->single();
+            return $row->count;
+
+        }
+
+        public function getCompletedBookingsCount($userId){
+            $sql = "SELECT COUNT(*) AS count FROM bookings WHERE serviceProvider_id = :user_id AND endDate < CURDATE() AND bookingCondition != 'cancelled'
+            UNION
+            SELECT COUNT(*) AS count FROM cartbookings WHERE serviceProvider_id = :user_id AND endDate < CURDATE() AND bookingCondition != 'cancelled'";
+            $this->db->query($sql);
+            $this->db->bind(':user_id', $userId);
+            $this->db->execute();
+            $row = $this->db->single();
+        }
+
+        public function getCancelledBookingsCount($userId){
+            $sql = "SELECT COUNT(*) AS count FROM bookings WHERE serviceProvider_id = :user_id AND bookingCondition = 'cancelled'
+            UNION
+            SELECT COUNT(*) AS count FROM cartbookings WHERE serviceProvider_id = :user_id AND bookingCondition = 'cancelled'";
+            $this->db->query($sql);
+            $this->db->bind(':user_id', $userId);
+            $this->db->execute();
+            $row = $this->db->single();
+            return $row->count;
+        }
+
+        public function getTotalCustomers($userId){
+            $sql = "SELECT COUNT(user_id) AS count FROM bookings WHERE serviceProvider_id =:user_id AND bookingCondition != 'cancelled'
+            UNION
+            SELECT COUNT(user_id) AS count FROM cartbookings WHERE serviceProvider_id =:user_id AND bookingCondition != 'cancelled'";
+            $this->db->query($sql);
+            $this->db->bind(':user_id', $userId);
+            $this->db->execute();
+            $row = $this->db->single();
+            return $row->count;
+
+        }
+
+        public function getOngoingBookingsCount($userId) {
+            $sql = "SELECT COUNT(*) AS count FROM bookings WHERE serviceProvider_id = :user_id AND endDate > CURDATE() AND bookingCondition != 'cancelled'
+            UNION
+            SELECT COUNT(*) AS count FROM cartbookings WHERE serviceProvider_id = :user_id AND endDate > CURDATE() AND bookingCondition != 'cancelled'";
+            $this->db->query($sql);
+            $this->db->bind(':user_id', $userId);
+            $this->db->execute();
+            $row = $this->db->single();
+    
+            if ($row) {
+                $totalBookingsCount = $row->count;
+                return $totalBookingsCount;
+            } else {
+                return 0; // Return 0 or handle the case where no bookings are found
+            }
+        }
+
 
         public function getUnavailableDatesForVehicles($vehicleIds,$date)
         {
@@ -480,6 +540,17 @@ public function getPaymentDetailsForBooking($bookingId) {
             return $this->db->resultSet();
         }
          
+        public function getVehicleBooking($agencyId){
+            $this->db->query('SELECT COUNT(*) AS count FROM vehicles WHERE agency_id = :agency_id AND status = 1');
+            $this->db->bind(':agency_id', $agencyId);
+           if($this->db->rowCount()>0){
+           return true;
+           }
+           else{
+            return false;
+           }
+        }
+
         public function getVehicleCount($agencyId){
             $this->db->query('SELECT COUNT(*) AS count FROM vehicles WHERE agency_id = :agency_id AND status = 1');
             $this->db->bind(':agency_id', $agencyId);
@@ -754,7 +825,7 @@ public function saveVehicle($data) {
 
 
 public function addAgency($data) {
-    $query = "INSERT INTO travelagency (reg_number, address, city, description, website, facebook, twitter, instagram, card_holder_name, account_number, manager_name, user_id) VALUES (:reg_number, :address, :city, :description, :website, :facebook, :twitter, :instagram, :card_holder_name, :account_number, :manager_name, :user_id)";
+    $query = "INSERT INTO travelagency (reg_number, address, city, description, website, facebook, twitter, instagram, card_holder_name, account_number, manager_name, user_id, bank_name, bank_branch, agency_name) VALUES (:reg_number, :address, :city, :description, :website, :facebook, :twitter, :instagram, :card_holder_name, :account_number, :manager_name, :user_id, :bank_name, :bank_branch,:agency_name)";
     
     $this->db->query($query);
     $this->db->bind(':reg_number', $data['reg_number']);
@@ -769,9 +840,19 @@ public function addAgency($data) {
     $this->db->bind(':account_number', $data['account_number']);
     $this->db->bind(':manager_name', $data['manager_name']);
     $this->db->bind(':user_id', $data['user_id']);
+    $this->db->bind(':bank_name', $data['bank_name']);
+    $this->db->bind(':bank_branch', $data['bank_branch']);
+    $this->db->bind(':agency_name', $data['agency_name']);
 
     // Execute the query
     return $this->db->execute();
+}
+
+public function getAgencyName($userId){
+    $this->db->query('SELECT fname FROM users WHERE id = :user_id');
+    $this->db->bind(':user_id', $userId);
+    $row = $this->db->single();
+    return $row->fname;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
