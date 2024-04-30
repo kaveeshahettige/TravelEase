@@ -65,8 +65,8 @@
     <section class="main2" id="S1">
     <div class="main2buttons">
         <button id="but1">All</button>
-        <button class="but2_3" id="mostPopularButton">Most Popular</button>
-        <button class="but2_3" id="topRatedButton">Top-Rated</button>
+        <!-- <button class="but2_3" id="mostPopularButton">Most Popular</button>
+        <button class="but2_3" id="topRatedButton">Top-Rated</button> -->
     </div>
 
     <?php if (!empty($data['packages']) && is_array($data['packages'])): ?>
