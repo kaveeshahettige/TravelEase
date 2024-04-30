@@ -575,7 +575,7 @@ public function getFinalPayment(){
 
         $feedbackCount = $this->TravelsModel->getFeedbackCount($userId);
 
-        // var_dump($feedbackCount);
+        // var_dump($feedbackDetails);
 
             $data=['profileimage' => $profileimage,
             'feedbackDetails' => $feedbackDetails,

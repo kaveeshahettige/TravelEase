@@ -84,14 +84,14 @@
             </div>
         </div>
 
-        <div class="search-content">
+        <!-- <div class="search-content">
             <div class="review-search">
                 <input type="text" id="review-search" placeholder="Search for Reviews">
                 <button onclick="filterBookings()">
-                    <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
+                    <i class="bx bx-search"></i> 
                 </button>
             </div>
-        </div>
+        </div> -->
 
 
         <div class="review-content">
