@@ -977,10 +977,10 @@ class Hotel extends Controller
     public function getReviews()
     {
         $user_id = $_SESSION['user_id'];
-        $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
+        // $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
 
         // Get reviews data from the model
-        $reviews = $this->hotelsModel->getReviews($hotel_id);
+        $reviews = $this->hotelsModel->getReviews($user_id);
 
         if ($reviews) {
             return $reviews;
@@ -1156,8 +1156,7 @@ class Hotel extends Controller
     public function getReviewCount(){
 
         $user_id = $_SESSION['user_id'];
-        $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
-        $reviewCount = $this->hotelsModel->getReviewCount($hotel_id);
+        $reviewCount = $this->hotelsModel->getReviewCount($user_id);
 
         return $reviewCount;
 

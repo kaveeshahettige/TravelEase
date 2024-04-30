@@ -226,7 +226,7 @@ function DeletePopup(id) {
     const confirmDialog = document.createElement('div');
     confirmDialog.className = 'confirm-dialog';
     confirmDialog.innerHTML = `
-        <div class="confirm-message">Are you sure you want to delete this room?</div>
+        <div class="confirm-message">Are you sure you want to delete this guide?</div>
         <div class="buttons">
             <button class="btn btn-yes" onclick="confirmDeleteUser('${id}')">Yes</button>
             <button class="btn btn-no" onclick="cancelDelete()">No</button>
