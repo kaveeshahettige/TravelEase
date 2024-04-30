@@ -1629,6 +1629,9 @@ class Businessmanager extends Controller
 
         $reports = $this->BusinessmanagersModel->insertReport($filename,'Transport Provider Report', $startDate, $endDate,$created_date);
 
+        //download button
+
+
         //view pdf
         header('Content-Type: application/pdf');
         header('Content-Disposition: inline; filename="transportReport.pdf"');
