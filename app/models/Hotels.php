@@ -453,6 +453,19 @@ class Hotels
         return $this->db->resultSet();
     }
 
+    public function getReviews($user_id){
+        $this->db->query('SELECT r.*, u.fname AS user_fname, u.profile_picture AS user_profile_picture, h.fname AS hotel_name, h.profile_picture AS hotel_profile_picture
+                      FROM feedbacksnratings r
+                      JOIN users u ON r.user_id = u.id
+                      JOIN users h ON r.fservice_id = h.id
+                      WHERE r.fservice_id = :user_id');
+
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->resultSet();
+    }
+
+
 
 
     public function getCartBookingsByHotel($hotel_id)
@@ -504,26 +517,26 @@ class Hotels
 
 
 
-    public function getReviews($hotel_id)
-    {
-        // Prepare the SQL query
-        $sql = 'SELECT r.*, u.fname AS user_fname, u.profile_picture AS user_profile_picture, 
-            h.fname AS hotel_name, h.profile_picture AS hotel_profile_picture , hro.registration_number AS room_number
-            FROM feedbacksnratings r
-            JOIN bookings b ON r.booking_id = b.booking_id AND r.ftempory_id = b.temporyid
-            JOIN users u ON r.user_id = u.id
-            JOIN users h ON r.fservice_id = h.id
-            LEFT JOIN hotel hr ON  r.fservice_id = hr.user_id
-            LEFT JOIN hotel_rooms hro ON b.room_id = hro.room_id
-            WHERE hr.hotel_id = :hotel_id';
+    // public function getReviews($hotel_id)
+    // {
+    //     // Prepare the SQL query
+    //     $sql = 'SELECT r.*, u.fname AS user_fname, u.profile_picture AS user_profile_picture, 
+    //         h.fname AS hotel_name, h.profile_picture AS hotel_profile_picture , hro.registration_number AS room_number
+    //         FROM feedbacksnratings r
+    //         JOIN bookings b ON r.booking_id = b.booking_id AND r.ftempory_id = b.temporyid
+    //         JOIN users u ON r.user_id = u.id
+    //         JOIN users h ON r.fservice_id = h.id
+    //         LEFT JOIN hotel hr ON  r.fservice_id = hr.user_id
+    //         LEFT JOIN hotel_rooms hro ON b.room_id = hro.room_id
+    //         WHERE hr.hotel_id = :hotel_id';
 
-        // Execute the query
-        $this->db->query($sql);
-        $this->db->bind(':hotel_id', $hotel_id);
+    //     // Execute the query
+    //     $this->db->query($sql);
+    //     $this->db->bind(':hotel_id', $hotel_id);
 
-        // Fetch and return the result set
-        return $this->db->resultSet();
-    }
+    //     // Fetch and return the result set
+    //     return $this->db->resultSet();
+    // }
 
 
 
@@ -699,18 +712,15 @@ class Hotels
         return $this->db->single()->user_count;
     }
 
-    public function getReviewCount($hotel_id){
+    public function getReviewCount($user_id){
         $sql = 'SELECT COUNT(*) AS review_count
-            FROM `feedbacksnratings` r
-            JOIN `bookings` b ON r.booking_id = b.booking_id
-            JOIN `users` u ON r.user_id = u.id
-            JOIN `users` h ON r.fservice_id = h.id
-            LEFT JOIN `hotel` hr ON r.fservice_id = hr.user_id
-            WHERE hr.hotel_id = :hotel_id';
+                      FROM feedbacksnratings r
+                      JOIN users u ON r.fservice_id = u.id
+                      WHERE  r.fservice_id = :user_id';
 
         // Execute the query
         $this->db->query($sql);
-        $this->db->bind(':hotel_id', $hotel_id);
+        $this->db->bind(':user_id', $user_id);
 
         // Fetch the result
         $result = $this->db->single();
