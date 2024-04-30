@@ -63,10 +63,10 @@
             <h2>Total Earnings</h2>
             <p>Rs. <?= isset($totalEarnings) ? number_format($totalEarnings, 2) : '0.00' ?></p>
         </div>
-        <div class="box">
+        <!-- <div class="box">
             <h2>Last Payment</h2>
             <p></p>
-        </div>
+        </div> -->
     </div>
 </div>
 

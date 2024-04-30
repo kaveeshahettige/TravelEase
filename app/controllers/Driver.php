@@ -725,7 +725,8 @@ public function getFinalPayment(){
                         ];
                         $this->view('driver/vehicle', $data);
                    
-     }public function vehicledelete() {
+     }
+     public function vehicledelete() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Get the vehicle_id from the POST data
             $vehicleId = $_POST['vehicle_id'];
@@ -742,7 +743,7 @@ public function getFinalPayment(){
     
             // Redirect back to the same page after deletion
             // Optionally, you can echo a success message here
-            echo 'Vehicle deleted successfully.';
+            redirect('driver/vehicle');
             exit();
         } else {
             // Handle other request methods (optional)
