@@ -623,9 +623,9 @@ function addToCartBackend(type, id, add) {
   } else {
       // Remove item from cart
       if (cart[type]) {
-          var index = cart[type].indexOf(id);
+          var index = cart[type].indexOf(id);// finds the index of the id 
           if (index !== -1) {
-              cart[type].splice(index, 1);
+              cart[type].splice(index, 1);//removes one element from the array stored under the key type 
               console.log('Removing item from cart:', type, id);
               showRemovedCartNotification()
           }
@@ -679,7 +679,6 @@ function continueToCheckout() {
         // Print each item ID in the type
         cartData[type].forEach(function(id) {
           console.log('ID:', id);
-          // You can retrieve additional details of the item from your data source and print them here
         });
       } else {
         console.log('Invalid data format for type', type);

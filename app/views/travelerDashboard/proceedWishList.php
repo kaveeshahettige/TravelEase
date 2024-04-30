@@ -322,6 +322,7 @@ endforeach;
 
     </p>
     
+    <?php if($total!=0):?>
     <form id="paymentFormMain" action="<?php echo URLROOT ?>TravelerDashboard/paymentwishlist/<?php echo $data['cartid'] ?>/<?php echo urlencode(json_encode($servicePrices)) ?>" method="POST">
     <input type="hidden" name="totalAmount" id="totalAmountInput" value="<?php echo $total; ?>">
     <input type="hidden" name="driverType" id="driverTypeInput" value="<?php echo $data['driverType']; ?>">
@@ -338,6 +339,9 @@ endforeach;
         <!-- <button type="submit" formaction="<?php echo URLROOT ?>loggedTraveler/addtocart/<?php echo urlencode(json_encode($data['bookingcartArray'])) . '/' .$data['checkinDate'].'/'.$data['checkoutDate'] . '/' . $data['pickupTime'] . '/' .$data1['meetTime']?>" class="payment-button">Add to Wish List</button> -->
     </div>
 </form>
+<?php else:?>
+    <p style="color:red">No items are available right now.Come again later!</p>
+<?php endif ;?>
 
 </div>
 
