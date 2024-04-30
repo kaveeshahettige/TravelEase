@@ -69,15 +69,6 @@ include 'navigation.php';
 
     </div>
 
-    <div class="search-content">
-        <div class="booking-search">
-            <input type="text" id="booking-search" placeholder="Search for Revenue">
-            <button onclick="filterBookings()">
-                <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
-            </button>
-        </div>
-    </div>
-
     <div class="table-content">
         <h2>Revenue Details</h2>
         <?php if (empty($data["finalPayment"]) || !is_array($data["finalPayment"])): ?>

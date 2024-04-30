@@ -160,7 +160,7 @@ class Hotels
         $this->db->query('SELECT * from hotel_rooms WHERE room_id = :room_id ');
         $this->db->bind(':room_id', $room_id);
         $roomData = $this->db->resultSet();
-        //        print_r($roomData);
+
         //check row
         if ($this->db->rowCount() > 0) {
             //            echo "hi";

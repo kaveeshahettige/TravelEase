@@ -34,7 +34,6 @@ include 'navigation.php';
         <div id="base">
             <?php
             $roomData = $data['roomData'];
-
             ?>
             <h3>Add Rooms</h3>
             <div id="form">
@@ -222,10 +221,10 @@ include 'navigation.php';
                         <div>
                             <div class="form-group">
                                 <label for="roomImages1">Room Images 1:</label>
-                                <input type="file" id="roomImages1" name="roomImages[]" accept="image/*" required>
-                                <?php if (!empty($roomData['roomImages'][0])): ?>
-                                    <?php $imagePath1 = '../public/images/' . $roomData['roomImages'][0]; ?>
-                                    <img src="<?php echo $imagePath1; ?>" alt="Room Image 1">
+                                <input type="file" id="roomImages1" name="roomImages[]" accept="image/*" >
+                                <?php if (!empty($roomData['roomImages1'])): ?>
+                                    <?php $imagePath1 = URLROOT.'/images/' . $roomData['roomImages1']; ?>
+                                    <img src="<?= $imagePath1 ?>" alt="Room Image 1" width="200" height="200">
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -233,10 +232,10 @@ include 'navigation.php';
                         <div>
                             <div class="form-group">
                                 <label for="roomImages2">Room Images 2:</label>
-                                <input type="file" id="roomImages2" name="roomImages[]" accept="image/*" required>
-                                <?php if (!empty($roomData['roomImages'][1])): ?>
-                                    <?php $imagePath2 = '../public/images/' . $roomData['roomImages'][1]; ?>
-                                    <img src="<?php echo $imagePath2; ?>" alt="Room Image 2">
+                                <input type="file" id="roomImages2" name="roomImages[]" accept="image/*" >
+                                <?php if (!empty($roomData['roomImages2'])):?>
+                                    <?php $imagePath2 = URLROOT.'/images/' . $roomData['roomImages2']; ?>
+                                    <img src="<?= $imagePath2 ?>" alt="Room Image 2" width="200" height="200">
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -246,10 +245,10 @@ include 'navigation.php';
                         <div>
                             <div class="form-group">
                                 <label for="roomImages3">Room Images 3:</label>
-                                <input type="file" id="roomImages3" name="roomImages[]" accept="image/*" required>
-                                <?php if (!empty($roomData['roomImages'][2])): ?>
-                                    <?php $imagePath3 = '../public/images/' . $roomData['roomImages'][2]; ?>
-                                    <img src="<?php echo $imagePath3; ?>" alt="Room Image 3">
+                                <input type="file" id="roomImages3" name="roomImages[]" accept="image/*" >
+                                <?php if (!empty($roomData['roomImages3'])): ?>
+                                    <?php $imagePath3 = URLROOT.'/images/' . $roomData['roomImages3']; ?>
+                                    <img src="<?= $imagePath3 ?>" alt="Room Image 3" width="200" height="200">
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -257,10 +256,10 @@ include 'navigation.php';
                         <div>
                             <div class="form-group">
                                 <label for="roomImages4">Room Images 4:</label>
-                                <input type="file" id="image" name="roomImages[]" accept="image/*" required>
-                                <?php if (!empty($roomData['roomImages'][3])): ?>
-                                    <?php $imagePath4 = '../public/images/' . $roomData['roomImages'][3]; ?>
-                                    <img src="<?php echo $imagePath4; ?>" alt="Room Image 4">
+                                <input type="file" id="image" name="roomImages[]" accept="image/*" >
+                                <?php if (!empty($roomData['roomImages4'])): ?>
+                                    <?php $imagePath4 = URLROOT.'/images/' . $roomData['roomImages4']; ?>
+                                    <img src="<?= $imagePath4 ?>" alt="Room Image 4" width="200" height="200">
                                 <?php endif; ?>
                             </div>
                         </div>

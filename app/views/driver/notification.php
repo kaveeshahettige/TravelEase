@@ -70,14 +70,14 @@
         </div>
         </div>
 
-        <div class="search-content">
+        <!-- <div class="search-content">
         <div class="booking-search">
             <input type="text" id="booking-search" placeholder="Search Notifications">
             <button onclick="filterBookings()">
-                <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
+                <i class="bx bx-search"></i> 
             </button>
         </div>
-        </div>
+        </div> -->
 
         
 

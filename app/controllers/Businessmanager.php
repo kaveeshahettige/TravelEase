@@ -331,10 +331,8 @@ class Businessmanager extends Controller
 
         $profilePicture = $this->getProfilePicture();
 
-
         $data = [
-            'profilePicture' => $profilePicture
-
+            'profilePicture' => $profilePicture,
         ];
 
         $this->view('businessmanager/settings', $data);
@@ -345,6 +343,7 @@ class Businessmanager extends Controller
     {
 
         $profilePicture = $this->getProfilePicture();
+
 
         $data = [
             'profilePicture' => $profilePicture,
@@ -1629,6 +1628,9 @@ class Businessmanager extends Controller
 
         $reports = $this->BusinessmanagersModel->insertReport($filename,'Transport Provider Report', $startDate, $endDate,$created_date);
 
+        //download button
+
+
         //view pdf
         header('Content-Type: application/pdf');
         header('Content-Disposition: inline; filename="transportReport.pdf"');
@@ -1879,4 +1881,17 @@ class Businessmanager extends Controller
 
     }
 
+    public function basicinfo(){
+
+        $user_id = $_SESSION['user_id'];
+
+        $basicinfo = $this->BusinessmanagersModel->getBasicInfo($user_id);
+
+        if ($basicinfo) {
+            return $basicinfo;
+        } else {
+            return [];
+        }
+
+    }
 }

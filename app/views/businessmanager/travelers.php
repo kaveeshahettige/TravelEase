@@ -135,7 +135,7 @@ include 'navigation.php';
                 <span class="close" onclick="closePopup()">&times;</span>
                 <!-- Add details about the booking here -->
                 <h2>Vehicle Details</h2>
-               <p id="agency_name">Agency Name: </p>
+                <p id="agency_name">Agency Name: </p>
                 <p id="brand">Vehicle Name: </p>
                 <p id="model">Vehicle Type: </p>
                 <p id="plate_number">Vehicle Plate Number: </p>
