@@ -92,7 +92,7 @@
             <div><img src="<?php echo URLROOT . '/images/' . $data['service1pp'] ?>" alt=""></div>
                 <div class="c1"> 
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider1Name']?></p>
+                        <p style="font-size: 23px;margin-top:40px;font-weight:bold"><?php echo $data['randomServiceProvider1Name']?></p>
                         <p style="margin-bottom:6px"><?php echo $data['randomServiceProvider1Location']?></p>
                         <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
@@ -113,7 +113,7 @@
         ?>
     </div>
                     </div>
-                    <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider1Id'] ?>)">View</button></div>
+                    <div style="margin-top:20px"> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider1Id'] ?>)">View</button></div>
                     <!-- <?php echo $data['randomServiceProvider1Id']?> -->
                 </div>
                 
@@ -122,7 +122,7 @@
             <div><img src="<?php echo URLROOT . '/images/' . $data['service2pp'] ?>" alt=""></div>
                 <div class="c2">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider2Name']?></p>
+                        <p style="font-size: 23px;margin-top:40px;font-weight:bold"><?php echo $data['randomServiceProvider2Name']?></p>
                         <p style="margin-bottom:6px"><?php echo $data['randomServiceProvider2Location']?></p>
                         <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
@@ -143,14 +143,14 @@
         ?>
     </div>
                     </div>
-                    <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider2Id'] ?>)">View</button></div>
+                    <div style="margin-top:20px"> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider2Id'] ?>)">View</button></div>
                 </div>
             </div>
             <div class="main3img3content">
             <div><img src="<?php echo URLROOT . '/images/' . $data['service3pp'] ?>" alt=""></div>
                 <div class="c3">
                     <div>
-                        <p style="font-size: 30px;margin:0px;font-weight:bold"><?php echo $data['randomServiceProvider3Name']?></p>
+                        <p style="font-size: 23px;margin-top:40px;font-weight:bold"><?php echo $data['randomServiceProvider3Name']?></p>
                         <p style="margin-bottom:6px"><?php echo $data['randomServiceProvider3Location']?></p>
                         <div style="font-size: 24px;padding-left:10px"> <!-- Adjust font-size here -->
         <?php
@@ -171,7 +171,7 @@
         ?>
     </div>
                     </div>
-                    <div> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider3Id'] ?>)">View</button></div>
+                    <div style="margin-top:20px"> <button id="bookingButton" onclick="Tripdetails(<?= $data['randomServiceProvider3Id'] ?>)">View</button></div>
                 </div>
             </div>
         </div>

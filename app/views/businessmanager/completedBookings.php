@@ -153,9 +153,10 @@ include 'navigation.php';
                     <td><?php echo $booking->service_detail?></td>
                     <td><?php echo $booking->payment_amount; ?></td>
                     <td>
-                        <button class="view-button" onclick="openPopup(<?php echo $key; ?>)">
+                        <button class="view-button" onclick="openPopup();updatePopupDetails('<?php echo $booking->traveler_name; ?>', '<?php echo $booking->service_type; ?>', '<?php echo $booking->serviceprovider_name; ?>', '<?php echo $booking->startDate; ?>', '<?php echo $booking->endDate; ?>', '<?php echo $booking->service_detail; ?>', '<?php echo $booking->payment_amount; ?>')">
                             <i class='bx bx-show'></i>
                         </button>
+                    </td>
                 </tr>
 
             <?php endforeach; ?>
@@ -175,11 +176,13 @@ include 'navigation.php';
             <!-- Add details about the booking here -->
             <h2>Booking Details</h2>
             <div id="profile-picture" class="profile-picture"></div>
-            <p id="guestName">Guest Name: </p>
-            <p id="providerType">Provider Type: </p>
-            <p id="providerName">Provider Name: </p>
-            <p id="paymentStatus">Payment Status: </p>
-            <!-- Add more details as needed -->
+            <p id="traveler_name">Guest Name: </p>
+            <p id="service_type">Service Type: </p>
+            <p id="serviceprovider_name">Service Provider: </p>
+            <p id="startDate">Start Date: </p>
+            <p id="endDate">End Date: </p>
+            <p id="service_detail">Service Details: </p>
+            <p id="payment_amount">Payment Amount: </p>
         </div>
     </div>
 

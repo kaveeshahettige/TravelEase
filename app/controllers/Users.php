@@ -214,6 +214,8 @@ class Users extends Controller{
             'id' => $_SESSION['user_id'],
             'card_holder_name' => trim($_POST['cardholdername']),
             'account_number' => trim($_POST['accountnumber']),
+            'bank'=>trim($_POST['bank']),
+            'branch'=>trim($_POST['branch']),
             'fname_err'=>'',
             'lname_err'=>'',
             'email_err'=>'',
@@ -273,6 +275,8 @@ class Users extends Controller{
             'card_holder_name' => $user->card_holder_name,
             'account_number' => $user->account_number,
             'profile_picture' => $user->profile_picture,
+            'bank' => $user->bank,
+            'branch' => $user->branch,
           ];
     
           $this->view('travelerDashboard/editinfo', $data);
@@ -746,7 +750,7 @@ public function packagereg(){
         //init data
         $data=[
             'fname'=>trim($_POST['packageOwnerName']),
-            'packageType'=>trim($_POST['packageType']),
+            // 'packageType'=>trim($_POST['packageType']),
             'address'=>trim($_POST['address']),
             'email'=>trim($_POST['email']),
             'description'=>trim($_POST['description']),  
@@ -851,13 +855,11 @@ public function transportRegNew(){
         //init data
         $data=[
             'fname'=>trim($_POST['fname']),
-            
             'email'=>trim($_POST['email']),
             'password'=>trim($_POST['password']),
             'confirm_password'=>trim($_POST['confirm_password']),
             'number'=>trim($_POST['number']),
             'fname_err'=>'',
-           
             'email_err'=>'',
             'password_err'=>'',
             'confirm_password_err'=>'',

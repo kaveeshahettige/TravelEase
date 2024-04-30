@@ -77,20 +77,10 @@
                 <!-- Total Bookings Box -->
                 <div class="box">
                     <h2>Total Reviews</h2>
-                    <p></p>
+                    <p><?php echo $data['feedbackCount'];?></p>
                 </div>
 
-                <!-- Ongoing Bookings Box -->
-                <div class="box">
-                    <h2>Total Bookings</h2>
-                    <p></p>
-                </div>
-
-                <!-- Customers Box -->
-                <div class="box">
-                    <h2>Total Customers</h2>
-                    <p></p>
-                </div>
+              
             </div>
         </div>
 

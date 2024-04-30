@@ -96,13 +96,13 @@
                 <!-- Ongoing Bookings Box -->
                 <div class="box">
                     <h2>Ongoing Bookings</h2>
-                    <p></p>
+                    <p><?php echo $data['pendingBookingsCount'];?></p>
                 </div>
 
                 <!-- Customers Box -->
                 <div class="box">
                     <h2>Total Customers</h2>
-                    <p></p>
+                    <p><?php echo $data['totalCustomers'];?></p>
                 </div>
             </div>
         </div>

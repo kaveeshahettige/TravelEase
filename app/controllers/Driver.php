@@ -47,7 +47,7 @@ class Driver extends Controller{
 
 
        
-
+        // var_dump($agencyDetails);
 
         
     
@@ -86,6 +86,8 @@ class Driver extends Controller{
     
         // Get user ID from session
         $userId = $_SESSION['user_id'];
+        $agencyName = $this->TravelsModel->getAgencyName($userId);
+        // var_dump($ageunavailableVehiclesncyName);
         $profileimage = $this->TravelsModel->getProfileImage($userId);
 
     
@@ -103,7 +105,12 @@ class Driver extends Controller{
                 'instagram' => $_POST['instagram'],
                 'card_holder_name' => $_POST['card_holder_name'],
                 'account_number' => $_POST['account_number'],
-                'user_id' => $userId // Set user_id based on session
+                'bank_name' => $_POST['bank_name'],
+                'bank_branch' => $_POST['bank_branch'],
+                'user_id' => $userId,
+                'agency_name' => $agencyName, 
+                
+                // Set user_id based on session
             ];
     
             // Save data using model
@@ -170,11 +177,15 @@ class Driver extends Controller{
         $vehicleIds = array_column($vehicleData, 'vehicle_id');
     
         $unavailableDates = $this->TravelsModel->getUnavailableDatesForVehicles($vehicleIds, $date);
+
+        // var_dump($unavailableDates);
         
         $unavailableVehicles = [];
         foreach ($unavailableDates as $unavailable) {
-            $unavailableVehicles[$unavailable->vehicle_id] = true;
+            $unavailableVehicles[] = $unavailable->vehicle_id;
         }
+
+
     
         $data = [
             'vehicleData' => $vehicleData,
@@ -189,6 +200,45 @@ class Driver extends Controller{
     }
     
     public function setUnavailableDate()
+    {
+        // Check if the request method is POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405); // Method Not Allowed
+            exit(json_encode(['success' => false, 'message' => 'Method not allowed.']));
+        }
+    
+        // Log received POST data for debugging
+        error_log('Received POST data: ' . print_r($_POST, true));
+    
+        // Check if the required POST parameters are set
+        if (!isset($_POST['vehicle_id']) || !isset($_POST['date'])) {
+            http_response_code(400); // Bad Request
+            exit(json_encode(['success' => false, 'message' => 'Missing parameters.']));
+        }
+    
+        // Retrieve POST data
+        $vehicle_id = $_POST['vehicle_id'];
+        $date = $_POST['date'];
+    
+        // Log data for debugging
+        error_log('Set Unavailability Request - Vehicle ID: ' . $vehicle_id . ', Date: ' . $date);
+    
+        // Assuming you have a method in your model to set unavailable dates
+        $result = $this->TravelsModel->insertUnavailableDate($vehicle_id, $date);
+    
+        // Check if the operation was successful
+        if ($result) {
+            // Set Unavailability successful
+            echo json_encode(['success' => true]);
+        } else {
+            // Set Unavailability failed
+            http_response_code(500); // Internal Server Error
+            exit(json_encode(['success' => false, 'message' => 'Failed to set unavailability.']));
+        }
+    }
+    
+
+public function removeUnavailableDate()
 {
     // Check if the request method is POST
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -206,40 +256,21 @@ class Driver extends Controller{
     $vehicle_id = $_POST['vehicle_id'];
     $date = $_POST['date'];
 
-    // Assuming you have a method in your model to set unavailable dates
-    $result = $this->TravelsModel->insertUnavailableDate($vehicle_id, $date);
+    // Log data for debugging
+    error_log('Remove Unavailability Request - Vehicle ID: ' . $vehicle_id . ', Date: ' . $date);
+
+    // Assuming you have a method in your model to remove unavailable dates
+    $result = $this->TravelsModel->removeUnavailableDate($vehicle_id, $date);
 
     // Check if the operation was successful
     if ($result) {
-        // Set Unavailability successful
+        // Remove Unavailability successful
         echo json_encode(['success' => true]);
     } else {
-        // Set Unavailability failed
-        echo json_encode(['success' => false, 'message' => 'Failed to set unavailability.']);
+        // Remove Unavailability failed
+        echo json_encode(['success' => false, 'message' => 'Failed to remove unavailability.']);
     }
 }
-
-    
-    public function removeUnavailableDate()
-    {
-
-        
-        
-        $vehicle_id = $_POST['vehicle_id'];
-        $date= $_POST['date'];
-
-        // Assuming you have a method in your model to remove unavailable dates
-        $result = $this->TravelsModel->removeUnavailableDate($vehicle_id, $date);
-    
-        if ($result) {
-            // Remove Unavailability successful
-            echo json_encode(['success' => true]);
-        } else {
-            // Remove Unavailability failed
-            echo json_encode(['success' => false]);
-        }
-    }
-    
 
 
     
@@ -283,6 +314,10 @@ public function bookings() {
     
     // $agencyId = $this->TravelsModel->getAgencyId($userId);
     $userId = $_SESSION['user_id'];
+
+    $pendingBookingsCount = $this->TravelsModel->getOngoingBookingsCount($userId);
+
+    // var_dump($pendingBookingsCount);
    
     $pendingBookings = $this->TravelsModel->getPendingBookings( $userId);
 
@@ -295,6 +330,10 @@ public function bookings() {
 
 
     $totalBookingsArray = $this->TravelsModel->getTotalBookings($userId);
+
+    $totalCustomers = $this->TravelsModel->getTotalCustomers($userId);
+
+    // var_dump($totalCustomerd);
 
     // var_dump($totalBookingsArray);
 
@@ -314,6 +353,8 @@ public function bookings() {
         'completedBookings' => $completedBookings, // Add completed bookings to data array
         'profileimage' => $profileimage,
         'totalBookingsArray' => $totalBookingsArray,
+        'pendingBookingsCount' => $pendingBookingsCount,
+        'totalCustomers' => $totalCustomers,
 
     ];
     // Get user ID from session
@@ -339,9 +380,14 @@ public function combookings() {
     // var_dump($pendingBookings);
     $completedBookings = $this->TravelsModel->getCompleteBookings($userId);
         // var_dump($completedBookings);
+        $totalBookingsArray = $this->TravelsModel->getTotalBookings($userId);
 
 
     $profileimage = $this->TravelsModel->getProfileImage($userId);
+
+    $completedBookingsCount = $this->TravelsModel->getCompletedBookingsCount($userId);
+
+    
 
 
 
@@ -354,6 +400,8 @@ public function combookings() {
     $data = [
         'completedBookings' => $completedBookings, // Add completed bookings to data array
         'profileimage' => $profileimage,
+        'totalBookingsArray' => $totalBookingsArray,
+        'completedBookingsCount' => $completedBookingsCount,
 
     ];
     // Get user ID from session
@@ -383,6 +431,9 @@ public function rejbookings() {
     $profileimage = $this->TravelsModel->getProfileImage($userId);
 
 
+    $totalBookingsArray = $this->TravelsModel->getTotalBookings($userId);
+
+    $CancelledBookingsCount = $this->TravelsModel->getCancelledBookingsCount($userId);
 
           
 
@@ -393,6 +444,8 @@ public function rejbookings() {
     $data = [
         'CancelledBookings' => $CancelledBookings, // Add completed bookings to data array
         'profileimage' => $profileimage,
+        'totalBookingsArray' => $totalBookingsArray,
+        'CancelledBookingsCount' => $CancelledBookingsCount,
 
     ];
     // Get user ID from session
@@ -520,8 +573,15 @@ public function getFinalPayment(){
 
         $feedbackDetails = $this->TravelsModel->getCompletedBookingFeedback($userId);
 
+        $feedbackCount = $this->TravelsModel->getFeedbackCount($userId);
+
+        // var_dump($feedbackCount);
+
             $data=['profileimage' => $profileimage,
-            'feedbackDetails' => $feedbackDetails];
+            'feedbackDetails' => $feedbackDetails,
+            'feedbackCount' => $feedbackCount
+            ];
+        
             //    var_dump($feedbackDetails);
                 $this->view('driver/reviews',$data);
             }
@@ -665,16 +725,15 @@ public function getFinalPayment(){
                         ];
                         $this->view('driver/vehicle', $data);
                    
-     }
-     public function vehicledelete() {
+     }public function vehicledelete() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Get the vehicle_id from the POST data
             $vehicleId = $_POST['vehicle_id'];
     
             // Check if the vehicle has pending bookings
-            if ($this->TravelsModel->getVehicleCount($vehicleId)) {
-                // Redirect with a message indicating the vehicle cannot be deleted
-                header('Location: ' . URLROOT . 'driver/vehicle?error=1');
+            if ($this->TravelsModel->getVehicleBooking($vehicleId)) { // If getVehicleCount returns true
+                // Show an error message indicating the vehicle cannot be deleted
+                echo 'Error: The vehicle cannot be deleted because it has pending bookings.';
                 exit();
             }
     
@@ -682,7 +741,8 @@ public function getFinalPayment(){
             $success = $this->TravelsModel->deleteVehicle($vehicleId);
     
             // Redirect back to the same page after deletion
-            header('Location: ' . URLROOT . 'driver/vehicle');
+            // Optionally, you can echo a success message here
+            echo 'Vehicle deleted successfully.';
             exit();
         } else {
             // Handle other request methods (optional)
@@ -692,6 +752,8 @@ public function getFinalPayment(){
             exit();
         }
     }
+    
+    
     
     
 
@@ -807,7 +869,7 @@ public function getFinalPayment(){
                         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             // Handle image uploads
                             $imageNames = [];
-                            $uploadPath = 'C:\xampp\htdocs\TravelEase\public\images\\'; // Update with your actual upload path
+                            $uploadPath = '..\public\images\\'; // Update with your actual upload path
                         
                             foreach ($_FILES as $key => $file) {
                                 if ($file['size'] > 0) {
@@ -920,7 +982,7 @@ public function getFinalPayment(){
     
             // Upload images
             $imageNames = [];
-            $uploadDir = 'C:/xampp/htdocs/TravelEase/public/images/'; // Adjust this path as per your server configuration
+            $uploadDir = '../public/images/'; // Adjust this path as per your server configuration
     
             // Process each uploaded image
             foreach ($_FILES as $key => $file) {

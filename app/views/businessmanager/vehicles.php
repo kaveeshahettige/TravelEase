@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
+    <script src= "<?php echo URLROOT?>/public/js/businessmanager/script.js"></script>
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
     <title>Registered Vehicles</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
@@ -78,6 +79,7 @@ include 'navigation.php';
                 <th>Vehicle Plate Number</th>
                 <th>Vehicle Price</th>
                 <th>Vehicle Description</th>
+                <th>Action</th>
             </tr>
             <?php
             $vehicles = $data["vehicles"];
@@ -91,9 +93,29 @@ include 'navigation.php';
                     <td><?php echo $vehicle->plate_number; ?></td>
                     <td><?php echo $vehicle->priceperday; ?></td>
                     <td><?php echo $vehicle->description; ?></td>
+                    <td>
+                        <button class="view-button" onclick="vehicleopenPopup();vehicleupdatePopupDetails('<?php echo $vehicle->agency_name; ?>','<?php echo $vehicle->brand; ?>','<?php echo $vehicle->model; ?>','<?php echo $vehicle->plate_number; ?>',<?php echo $vehicle->priceperday; ?>,'<?php echo $vehicle->description; ?>')">
+                            <i class='bx bx-show'></i>
+                        </button>
+                    </td>
                 </tr>
             <?php } ?>
         </table>
+
+        <div class="popup" id="popup">
+            <div class="popup-content">
+                <span class="close" onclick="closePopup()">&times;</span>
+                <!-- Add details about the booking here -->
+                <h2>Vehicle Details</h2>
+               <p id="agency_name">Agency Name: </p>
+                <p id="brand">Vehicle Name: </p>
+                <p id="model">Vehicle Type: </p>
+                <p id="plate_number">Vehicle Plate Number: </p>
+                <p id="priceperday">Vehicle Price: </p>
+                <p id="description">Vehicle Description: </p>
+            </div>
+        </div>
+
 
 
 </main>

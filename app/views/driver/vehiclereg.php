@@ -192,7 +192,7 @@
                         <h3>Without Driver Pricing:</h3>
 
                         <div class="form-group">
-    <label for="priceperday">Per Day Price (LKR)*:</label>
+    <label for="priceperday">Driver Price for Day (LKR)*:</label>
     <input type="text" id="priceperday" name="priceperday" pattern="[0-9]+" title="Please enter a positive number" required>
 </div>
 
