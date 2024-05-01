@@ -1241,11 +1241,7 @@ public function cartpaymentSuccessful() {
   }
 }
 
-
-
-
 }
-
 
 //////////////////
 

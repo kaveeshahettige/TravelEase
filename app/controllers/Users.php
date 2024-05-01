@@ -216,6 +216,7 @@ class Users extends Controller{
             'account_number' => trim($_POST['accountnumber']),
             'bank'=>trim($_POST['bank']),
             'branch'=>trim($_POST['branch']),
+            //'placelike'=>trim($_POST['placelike']),
             'fname_err'=>'',
             'lname_err'=>'',
             'email_err'=>'',
