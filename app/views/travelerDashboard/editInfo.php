@@ -121,7 +121,7 @@
                                 <label for="location">Living</label>
                                 <input type="text" id="location" name="location" placeholder="Galle">
                             </div> -->
-                            
+                                        
                         </div>
                         <div >
                             <div class="baseButtons">
@@ -135,8 +135,8 @@
                     
                     
                     </form>
-                </div>
-            </div>
+                </div>                
+            </div>            
            
             
         </div>
