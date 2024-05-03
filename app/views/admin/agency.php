@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/agency.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/admin/hotel.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
@@ -103,6 +105,7 @@ if (!empty($data['agency']) && is_array($data['agency'])):
                 <td>
                     <button class="view-button"
                         data-id="<?php echo $agency->id ?>"
+                        data-name="<?php echo ucfirst($agency->fname) . ' ' . ucfirst($agency->lname) ?>"
                         data-description="<?php echo $agency->description ?>"
                         data-address="<?php echo $agency->address ?>"
                         data-phone="<?php echo $agency->number ?>"
@@ -115,7 +118,7 @@ if (!empty($data['agency']) && is_array($data['agency'])):
                         data-card-holder-name="<?php echo $agency->card_holder_name ?>"
                         data-account-number="<?php echo $agency->account_number ?>"
                     >View</button>&nbsp;
-                    <button onclick="deleteHotel(<?php echo $agency->id ?>)" class="view-button">Delete</button>
+                    <button class="delete-button"  onclick="DeletePopup(<?php echo $agency->id ?>)">Delete</button>
                 </td>
             </tr>
             <?php
@@ -161,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Retrieve data attributes
             const agencyId = this.getAttribute('data-id');
-            const agencyName = this.closest('.t-row').querySelector('td:nth-child(3)').innerText;
+            const agencyName = this.getAttribute('data-name');
             const agencyDescription = this.getAttribute('data-description');
             const agencyAddress = this.getAttribute('data-address');
             const agencyPhone = this.getAttribute('data-phone');
@@ -182,22 +185,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Populate the popup HTML
             agencyDetailsContainer.innerHTML = `
-                <h2>${agencyName}</h2>
+                <h2 style="text-align:center">${agencyName}</h2>
                 <div class="agency_popup" style="display: flex">
-                    <div class="popup-column">
+                    <div class="popup-column" style="max-width:50%">
                         <p>ID: ${agencyId}</p>
                         <p>Address: ${agencyAddress}</p>
                         <p>Phone: ${agencyPhone}</p>
                         <p>Manager Name: ${managerName}</p>
                         <p>Description: ${agencyDescription}</p>
-                        </div><div class="popup-column">
+                        </div>
+                        <div class="popup-column">
                         <p>City: ${city}</p>
                         <p>Website: ${website}</p>
                         <p>Facebook: ${facebook}</p>
                         <p>Twitter: ${twitter}</p>
                         <p>Instagram: ${instagram}</p>
-                   
-                    
                         <p>Card Holder Name: ${cardHolderName}</p>
                         <p>Account Number: ${accountNumber}</p>
                     </div>
@@ -215,6 +217,60 @@ document.addEventListener('DOMContentLoaded', function() {
         popup.style.display = 'none';
     });
 });
+
+function DeletePopup(id) {
+    // Create overlay div
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+
+    const confirmDialog = document.createElement('div');
+    confirmDialog.className = 'confirm-dialog';
+    confirmDialog.innerHTML = `
+        <div class="confirm-message">Are you sure you want to delete this agency?</div>
+        <div class="buttons">
+            <button class="btn btn-yes" onclick="confirmDeleteUser('${id}')">Yes</button>
+            <button class="btn btn-no" onclick="cancelDelete()">No</button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(confirmDialog);
+}
+
+function cancelDelete() {
+    document.body.removeChild(document.querySelector('.overlay'));
+    document.body.removeChild(document.querySelector('.confirm-dialog'));
+}
+
+function confirmDeleteUser(id) {
+    // Prepare the data to send
+    const requestData = {
+        id: id,
+// Adjust variable name to match PHP controller
+    };
+
+    // Create a new FormData object and append data to it
+    const formData = new FormData();
+    formData.append('id', id);
+
+    // Make an AJAX request using fetch
+    fetch('http://localhost/TravelEase/Admin/deleteTraveler', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Traveler removed successfully');
+            window.location.reload(); // Reload the page after successful removal
+        } else {
+            throw new Error('Error removing traveler: ', response);
+        }
+    })
+    .catch(error => {
+        console.error('Error removing traveler:', error);
+    });
+}
+
 
 </script>
 

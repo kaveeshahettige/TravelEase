@@ -151,7 +151,8 @@ function markAsRead(notification_id) {
 }
 
 
-function showConfirmPopup(booking_id,refund_id) {
+function showConfirmPopup(booking_id,refund_id,refund_amount,final_refund,user_id) {
+    console.log(refund_amount);
     // Create overlay div
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
@@ -161,7 +162,7 @@ function showConfirmPopup(booking_id,refund_id) {
     confirmDialog.innerHTML = `
         <div class="confirm-message">Did you complete the Refund?</div>
         <div class="buttons">
-            <button class="btn btn-yes" onclick="confirmRefund('${booking_id}','${refund_id}' )">Yes</button>
+            <button class="btn btn-yes" onclick="confirmRefund('${booking_id}','${refund_id}','${refund_amount}','${final_refund}','${user_id}' )">Yes</button>
             <button class="btn btn-no" onclick="cancelCancel()">No</button>
         </div>
     `;
@@ -177,17 +178,25 @@ function cancelCancel() {
     document.body.removeChild(document.querySelector('.confirm-dialog'));
 }
 
-function confirmRefund(booking_id,refund_id) {
+function confirmRefund(booking_id,refund_id,refund_amount,final_refund,user_id) {
     console.log(booking_id);
+    console.log(refund_amount);
     // Prepare the data to send
     var requestData = {
         booking_id: booking_id,
         refund_id: refund_id,
+        refund_amount: refund_amount,
+        final_refund: final_refund,
+        user_id: user_id
+
     };
 
     const form = new FormData();
     form.append('booking_id', booking_id);
     form.append('refund_id', refund_id);
+    form.append('refund_amount', refund_amount);
+    form.append('final_refund', final_refund);
+    form.append('user_id', user_id);
 
 
     // Make an AJAX request

@@ -70,16 +70,6 @@ include 'navigation.php';
             </div>
         </div>
 
-        <div class="search-content">
-            <div class="booking-search">
-                <input type="text" id="booking-search" placeholder="Search for Refund Details">
-                <button onclick="filterBookings()">
-                    <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
-                </button>
-            </div>
-            </div>
-
-
         <div class="table-content">
             <h2>Pending Refunds</h2>
             <table class="booking-table">
@@ -91,6 +81,7 @@ include 'navigation.php';
                     <th>Traveler Name</th>
                     <th>Service Cancelled by</th>
                     <th>Refund Amount</th>
+                    <th>Final Refund</th>
                     <th>Cancelled Date</th>
                     <th>Action</th>
                 </tr>
@@ -98,6 +89,7 @@ include 'navigation.php';
                 <tbody>
                 <?php
                 $refunds = $data['refundData'];
+                var_dump($refunds[1]);
                 foreach ($refunds as $key => $refund): ?>
                     <tr>
                         <td><?php echo $key + 1; ?></td>
@@ -106,12 +98,13 @@ include 'navigation.php';
                         <td><?php echo $refund->user_fname; ?></td>
                         <td><?php echo $refund->cancel_user_fname; ?></td>
                         <td><?php echo $refund->refund_amount; ?></td>
+                        <td><?php echo $refund->refund_amount*0.7;?></td>
                         <td><?php echo $refund->cancelled_date; ?></td>
                         <td>
                             <button class="view-button" onclick="refundopenPopup();refundupdatePopupDetails('<?php echo $refund->booking_id; ?>', '<?php echo $refund->provider_fname; ?>', '<?php echo $refund->cancel_user_fname; ?>', '<?php echo $refund->refund_amount; ?>', '<?php echo $refund->cancelled_date; ?>')">
                                 <i class='bx bx-show'></i>
                             </button>
-                            <button class="complete-button" onclick="showConfirmPopup(<?php echo $refund->booking_id; ?>, <?php echo $refund->refund_id; ?>)">
+                            <button class="complete-button" onclick="showConfirmPopup(<?php echo $refund->booking_id; ?>, <?php echo $refund->refund_id; ?>,<?php echo $refund->refund_amount; ?>,<?php echo $refund->refund_amount*0.7; ?>,<?php echo $refund->user_id?>)">
                                 <i class='bx bx-check'></i>
                             </button>
 
@@ -135,10 +128,36 @@ include 'navigation.php';
             </div>
         </div>
 
-
         <div class="more-content">
-                <button class="next-page-btn">See More <i class='bx bx-chevron-right'></i></button>
-            </div>
+            <button class="next-page-btn" onclick="showNextPage()">See More <i class='bx bx-chevron-right'></i></button>
+        </div>
+
+        <script>
+            // JavaScript function to show the next page of table rows
+            function showNextPage() {
+                var table = document.querySelector(".booking-table");
+                var tr = table.getElementsByTagName("tr");
+                var i;
+                for (i = 0; i < tr.length; i++) {
+                    if (tr[i].style.display === "none") {
+                        tr[i].style.display = "";
+                    }
+                }
+            }
+            //limit rows
+            var table = document.querySelector(".booking-table");
+            var tr = table.getElementsByTagName("tr");
+            var i;
+            for (i = 0; i < tr.length; i++) {
+                if (i > 3) {
+                    tr[i].style.display = "none";
+                }
+            }
+
+        </script>
+
+
+
         <script src= "<?php echo URLROOT?>/public/js/businessmanager/script.js"></script>
     </main>
 </body>

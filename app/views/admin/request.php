@@ -165,26 +165,27 @@ if (!empty($data['hotelRequests']) && is_array($data['hotelRequests'])):
                         <!-- <td><?php echo $hotel->id ?></td> -->
                         <td><?php echo ucfirst($hotel->fname) . ' ' . ucfirst($hotel->lname) ?></td>
                         <td>
-
-                            <button class="view-button" class="1"
-                                data-name="<?php echo $hotel->fname . ' ' . $hotel->lname ?>"
-                            data-description="<?php echo $hotel->description ?>"
-
+                            <button class="view-button"
+                                data-id="<?php echo $hotel->id ?>"
+                                data-description="<?php echo $hotel->description ?>"
+                                data-address="<?php echo $hotel->street_address ?>"
                                 data-no-rooms="<?php echo $hotel->no_rooms ?>"
                                 data-alt-phone="<?php echo $hotel->alt_phone_number ?>"
                                 data-manager-name="<?php echo $hotel->manager_name ?>"
                                 data-manager-phone="<?php echo $hotel->manager_phone_number ?>"
                                 data-street-address="<?php echo $hotel->street_address ?>"
-                                data-city="<?php echo $hotel->city ?>" data-state="<?php echo $hotel->state_province ?>"
+                                data-city="<?php echo $hotel->city ?>"
+                                data-state="<?php echo $hotel->state_province ?>"
                                 data-website="<?php echo $hotel->website ?>"
                                 data-facebook="<?php echo $hotel->facebook ?>"
                                 data-twitter="<?php echo $hotel->twitter ?>"
                                 data-instagram="<?php echo $hotel->instagram ?>"
                                 data-additional-notes="<?php echo $hotel->additional_notes ?>"
                                 data-card-holder-name="<?php echo $hotel->card_holder_name ?>"
-                                data-account-number="<?php echo $hotel->account_number ?>"><i class='bx bx-show'></i> </button>
+                                data-account-number="<?php echo $hotel->account_number ?>"><i class='bx bx-show'></i></button>
                         </td>
-                        <td><button class="view-button" onclick="openDocument('<?php echo $hotel->document ?>')"><i class='bx bxs-file-doc'></i></button></td>
+                        <td><button class="view-button2" onclick="openDocument('<?php echo $hotel->document ?>')"><i class='bx bxs-file-doc'></i></button>
+</td>
                         <td><button class="accept-button" onclick="acceptUser(<?php echo $hotel->id ?>)">Accept</button>
                             <button class="decline-button"
                                 onclick="declineUser(<?php echo $hotel->id ?>)">Decline</button></td>
@@ -209,97 +210,70 @@ endif;
 </div>
 
 
-
-       
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-        // JavaScript code to show the popup when the "View" button is clicked
-        var popupContainer = document.getElementById('popup-container');
-        var popupContent = document.querySelector('.popup-content');
+    document.addEventListener('DOMContentLoaded', function() {
+        const viewButtons = document.querySelectorAll('.view-button');
+        const popup = document.getElementById('popup-container');
+        const hotelDetailsContainer = document.getElementById('hotel-details');
 
-        var viewButtons = document.querySelectorAll('.view-button');
+        viewButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const hotelId = this.getAttribute('data-id');
+                const hotelName = this.closest('.t-row').querySelector('td:nth-child(2)').innerText;
+                const hotelDescription = this.getAttribute('data-description');
+                const hotelAddress = this.getAttribute('data-address');
+                const noRooms = this.getAttribute('data-no-rooms');
+                const altPhoneNumber = this.getAttribute('data-alt-phone');
+                const managerName = this.getAttribute('data-manager-name');
+                const managerPhoneNumber = this.getAttribute('data-manager-phone');
+                const streetAddress = this.getAttribute('data-street-address');
+                const city = this.getAttribute('data-city');
+                const state = this.getAttribute('data-state');
+                const website = this.getAttribute('data-website');
+                const facebook = this.getAttribute('data-facebook');
+                const twitter = this.getAttribute('data-twitter');
+                const instagram = this.getAttribute('data-instagram');
+                const additionalNotes = this.getAttribute('data-additional-notes');
+                const cardHolderName = this.getAttribute('data-card-holder-name');
+                const accountNumber = this.getAttribute('data-account-number');
 
-        viewButtons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                popupContainer.style.display = 'block';
-                popupContent.style.display = 'block';
+                hotelDetailsContainer.innerHTML = `
+                    <h2 style="text-align:center">${hotelName}</h2>
+                    <div class="hotel_popup" style="display: flex">
+                        <div class="popup-column">
+                            <p>ID: ${hotelId}</p>
+                            <p>Address: ${hotelAddress}</p>
+                            <p>No. of Rooms: ${noRooms}</p>
+                            <p>Alt Phone Number: ${altPhoneNumber}</p>
+                            <p>Manager Name: ${managerName}</p>
+                            <p>Manager Phone Number: ${managerPhoneNumber}</p>
+                            <p>Description: ${hotelDescription}</p>
+                        </div>
+                        <div class="popup-column">
+                            <p>Street Address: ${streetAddress}</p>
+                            <p>City: ${city}</p>
+                            <p>State/Province: ${state}</p>
+                            <p>Website: ${website}</p>
+                            <p>Facebook: ${facebook}</p>
+                            <p>Twitter: ${twitter}</p>
+                            <p>Instagram: ${instagram}</p>
+                            <p>Additional Notes: ${additionalNotes}</p>
+                            <p>Card Holder Name: ${cardHolderName}</p>
+                            <p>Account Number: ${accountNumber}</p>
+                        </div>
+                    </div>
+                `;
+
+                popup.style.display = 'block';
             });
         });
 
-        var closeButton = document.querySelector('.close');
-        closeButton.addEventListener('click', function () {
-            popupContainer.style.display = 'none';
-            popupContent.style.display = 'none';
+        const closeBtn = document.querySelector('.close');
+        closeBtn.addEventListener('click', function() {
+            popup.style.display = 'none';
         });
     });
-
-document.addEventListener('DOMContentLoaded', function() {
-    const viewButtons = document.querySelectorAll('.view-button');
-    const popup = document.getElementById('popup-container');
-    const hotelDetailsContainer = document.getElementById('hotel-details'); // Corrected ID
-
-    viewButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const hotelId = this.closest('.t-row').querySelector('td:nth-child(2)').innerText;
-            const hotelName = this.closest('.t-row').querySelector('td:nth-child(3)').innerText;
-            const hotelDescription = this.getAttribute('data-description');
-            const hotelAddress = this.getAttribute('data-address');
-            const noRooms = this.getAttribute('data-no-rooms');
-            const altPhoneNumber = this.getAttribute('data-alt-phone');
-            const managerName = this.getAttribute('data-manager-name');
-            const managerPhoneNumber = this.getAttribute('data-manager-phone');
-            const streetAddress = this.getAttribute('data-street-address');
-            const city = this.getAttribute('data-city');
-            const state = this.getAttribute('data-state');
-            const website = this.getAttribute('data-website');
-            const facebook = this.getAttribute('data-facebook');
-            const twitter = this.getAttribute('data-twitter');
-            const instagram = this.getAttribute('data-instagram');
-            const additionalNotes = this.getAttribute('data-additional-notes');
-            const cardHolderName = this.getAttribute('data-card-holder-name');
-            const accountNumber = this.getAttribute('data-account-number');
-
-            hotelDetailsContainer.innerHTML = `
-
-                <h2 style="text-align:center">${hotelName}</h2>
-
-                <div class="hotel_popup" style="display: flex">
-                    <div class="popup-column">
-                        <p>ID: ${hotelId}</p>
-                        <p>Address: ${hotelAddress}</p>
-                        <p>No. of Rooms: ${noRooms}</p>
-                        <p>Alt Phone Number: ${altPhoneNumber}</p>
-                        <p>Manager Name: ${managerName}</p>
-                        <p>Manager Phone Number: ${managerPhoneNumber}</p>
-                        <p>Description: ${hotelDescription}</p>
-                    </div>
-                    <div class="popup-column">
-                        <p>Street Address: ${streetAddress}</p>
-                        <p>City: ${city}</p>
-                        <p>State/Province: ${state}</p>
-                        <p>Website: ${website}</p>
-                        <p>Facebook: ${facebook}</p>
-                        <p>Twitter: ${twitter}</p>
-                        <p>Instagram: ${instagram}</p>
-                        <p>Additional Notes: ${additionalNotes}</p>
-                        <p>Card Holder Name: ${cardHolderName}</p>
-                        <p>Account Number: ${accountNumber}</p>
-                    </div>
-                </div>
-            `;
-
-            popup.style.display = 'block';
-        });
-    });
-
-    const closeBtn = document.querySelector('.close');
-    closeBtn.addEventListener('click', function() {
-        popup.style.display = 'none';
-    });
-});
-
-
- </script>
+</script>
 
 
 

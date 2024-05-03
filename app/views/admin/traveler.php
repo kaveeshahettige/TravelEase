@@ -113,6 +113,7 @@ if (!empty($data['traveler']) && is_array($data['traveler'])):
                         <td>
     <button class="view-button" 
                 data-id="<?php echo $user->id ?>"
+                data-name="<?php echo $user->fname . ' ' . $user->lname ?>"
     data-email="<?php echo $user->email ?>"
         data-number="<?php echo $user->number ?>"
         data-image="<?php echo $user->profile_picture ?>">View</button>&nbsp;
@@ -233,7 +234,7 @@ function DeletePopup(id) {
     const confirmDialog = document.createElement('div');
     confirmDialog.className = 'confirm-dialog';
     confirmDialog.innerHTML = `
-        <div class="confirm-message">Are you sure you want to delete this room?</div>
+        <div class="confirm-message">Are you sure you want to delete this user?</div>
         <div class="buttons">
             <button class="btn btn-yes" onclick="confirmDeleteUser('${id}')">Yes</button>
             <button class="btn btn-no" onclick="cancelDelete()">No</button>

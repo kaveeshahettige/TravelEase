@@ -120,7 +120,6 @@ include 'navigation.php';
                         <div class="review-sub-content">
                             <h2><?= $review->user_fname; ?></h2>
                             <p class="review-text"><?= $review->feedback; ?></p>
-                            <p>Review for : <?=$review->room_number?> Room</p>
                             <p>Rating: <?= getStarRating($review->rating); ?></p>
                             <p>Date: <?= $review->time; ?></p>
                         </div>
@@ -142,11 +141,6 @@ include 'navigation.php';
 
 
 
-
-
-        <div class="more-content">
-            <button class="next-page-btn">More Reviews <i class='bx bx-chevron-right'></i></button>
-        </div>
 
     </main>
     <div id="myModal" class="modal">

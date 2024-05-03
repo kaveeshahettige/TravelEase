@@ -197,12 +197,12 @@
 </div>
 
 
-                        <h3>With Driver Pricing:</h3>
+                        <h3>Driver Pricing:</h3>
 
                         <p class="description">Leave this field blank if no driver is provided.</p>
 
                         <div class="form-group">
-    <label for="withDriverPerDay">Per Day Price (LKR)*:</label>
+    <label for="withDriverPerDay">Per Day Price For Driver (LKR)*:</label>
     <input type="text" id="withDriverPerDay" name="withDriverPerDay" pattern="^[0-9]+$" title="Please enter a positive number" required>
 </div>
 

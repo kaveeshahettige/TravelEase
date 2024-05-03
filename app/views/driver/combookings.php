@@ -113,7 +113,7 @@
             </div>
         </div>
 
-        <div class="search-content">
+        <!-- <div class="search-content">
             <div class="booking-search">
                 <input type="text" id="cab-search" placeholder="Name or Vehicle Number">
                 <input type="date" id="start-date" placeholder="Start Date">
@@ -122,9 +122,9 @@
                     <i class="bx bx-search"></i>
                 </button>
             </div>
-        </div>
+        </div> -->
 
-        <script>
+        <!-- <script>
     function filterCabBookings() {
         var input, filter, startDate, endDate, table, tr, tdPassengerName, tdPlateNumber, tdDate, i, txtPassengerName, txtPlateNumber, txtDate ;
         input = document.getElementById("cab-search");
@@ -161,7 +161,7 @@
         compareDate.setDate(compareDate.getDate() + 1); // Add one day to include the end date
         return new Date(start) <= endDate && new Date(end) >= startDate;
     }
-</script>
+</script> -->
 
 
 

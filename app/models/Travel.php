@@ -190,7 +190,7 @@ class Travel{
     
 
     public function vehicleDetails($agency_id) {
-        $this->db->query('SELECT * FROM vehicles WHERE agency_id = :agency_id AND status = 1');
+        $this->db->query('SELECT * FROM vehicles WHERE agency_id = :agency_id AND vehicleCondition = "activated"');
         $this->db->bind(':agency_id', $agency_id);
         $data = $this->db->resultSet();
         $data = json_decode(json_encode($data), true);
@@ -404,9 +404,9 @@ public function getPaymentDetailsForBooking($bookingId) {
             FROM feedbacksnratings fr
             JOIN users u ON fr.user_id = u.id
             WHERE fr.booking_id IN (
-                SELECT booking_id FROM bookings WHERE serviceProvider_id = :user_id AND bookingCondition = 'completed'
+                SELECT booking_id FROM bookings WHERE serviceProvider_id = :user_id AND endDate < CURDATE()  AND bookingCondition != 'cancelled'
                 UNION
-                SELECT booking_id FROM cartbookings WHERE serviceProvider_id = :user_id AND bookingCondition = 'completed'
+                SELECT booking_id FROM cartbookings WHERE serviceProvider_id = :user_id AND endDate < CURDATE()  AND bookingCondition != 'cancelled'
             )
             AND fr.fservice_id = :user_id";
         
@@ -552,14 +552,14 @@ public function getPaymentDetailsForBooking($bookingId) {
         }
 
         public function getVehicleCount($agencyId){
-            $this->db->query('SELECT COUNT(*) AS count FROM vehicles WHERE agency_id = :agency_id AND status = 1');
+            $this->db->query('SELECT COUNT(*) AS count FROM vehicles WHERE agency_id = :agency_id AND vehicleCondition = \'activated\'');
             $this->db->bind(':agency_id', $agencyId);
             $row = $this->db->single();
             return $row->count;
         }
 
         public function deleteVehicle($vehicle_id){
-            $this->db->query('UPDATE vehicles SET status = 0 WHERE vehicle_id = :vehicle_id');
+            $this->db->query('UPDATE vehicles SET vehicleCondition = \'deactivated\' WHERE vehicle_id = :vehicle_id');
             $this->db->bind(':vehicle_id', $vehicle_id);
             if($this->db->execute()){
                 return true;
@@ -567,6 +567,7 @@ public function getPaymentDetailsForBooking($bookingId) {
                 return false;
             }
         }
+        
          public function deleteProfile($userId){
             $this->db->query('UPDATE users SET profile_status = 0 WHERE id = :userId');
             $this->db->bind(':userId', $userId);

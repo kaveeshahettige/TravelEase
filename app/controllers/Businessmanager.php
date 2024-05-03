@@ -298,11 +298,23 @@ class Businessmanager extends Controller
             'refundData' => $refundData,
             'bookingsCount' => $bookingsCount,
             'OngoingCount'=> $OngoingCount,
-            'guestCount'=> $guestCount
+            'guestCount'=> $guestCount,
+
         ];
 //              var_dump($data);
         $this->view('businessmanager/refund', $data);
 
+    }
+
+    public function getTotalRefundCharge(){
+
+        $totalRefundCharge = $this->BusinessmanagersModel->getTotalRefundCharge();
+
+        if ($totalRefundCharge) {
+            return $totalRefundCharge;
+        } else {
+            return [];
+        }
     }
 
     public function CompletedRefunds()
@@ -312,6 +324,7 @@ class Businessmanager extends Controller
         $bookingsCount = $this->getBookingsCount();
         $OngoingCount = $this->getOngoingCount();
         $guestCount = $this->getGuestCount();
+        $totalRefundCharge = $this->getTotalRefundCharge();
 
 
         $data = [
@@ -319,7 +332,8 @@ class Businessmanager extends Controller
             'completeRefundData' => $completeRefundData,
             'bookingsCount' => $bookingsCount,
             'OngoingCount'=> $OngoingCount,
-            'guestCount'=> $guestCount
+            'guestCount'=> $guestCount,
+            'totalRefundCharge' => $totalRefundCharge
         ];
 //              var_dump($data);
         $this->view('businessmanager/CompletedRefunds', $data);
@@ -331,10 +345,8 @@ class Businessmanager extends Controller
 
         $profilePicture = $this->getProfilePicture();
 
-
         $data = [
-            'profilePicture' => $profilePicture
-
+            'profilePicture' => $profilePicture,
         ];
 
         $this->view('businessmanager/settings', $data);
@@ -345,6 +357,7 @@ class Businessmanager extends Controller
     {
 
         $profilePicture = $this->getProfilePicture();
+
 
         $data = [
             'profilePicture' => $profilePicture,
@@ -917,10 +930,20 @@ class Businessmanager extends Controller
         $booking_id = $_POST['booking_id'];
         $refund_id = $_POST['refund_id'];
         $refund_date = date('Y-m-d');
+        $refund_amount = $_POST['refund_amount'];
+        $final_refund = $refund_amount * 0.7;
+        $refund_charge = $refund_amount * 0.3;
+        $receiver_id = $_POST['user_id'];
 
-        $refundUpdated = $this->BusinessmanagersModel->confirmRefund($refund_id,$booking_id,$refund_date);
+        $refundUpdated = $this->BusinessmanagersModel->confirmRefund($refund_id,$refund_date,$final_refund,$refund_charge);
 
-        if ($refundUpdated) {
+        $sender_id = $_SESSION['user_id'];
+
+        $notification_message = "Your Refund till" . " $refund_date" . " has been Completed";
+
+        $notificationInserted = $this->BusinessmanagersModel->InsertNotification2($booking_id,$sender_id,$receiver_id ,$notification_message);
+
+        if ($refundUpdated && $notificationInserted) {
             echo json_encode(['success' => 'Refund is successfully completed']);
         } else {
             echo json_encode(['error' => 'Failed to make refund completed']);
@@ -1629,6 +1652,9 @@ class Businessmanager extends Controller
 
         $reports = $this->BusinessmanagersModel->insertReport($filename,'Transport Provider Report', $startDate, $endDate,$created_date);
 
+        //download button
+
+
         //view pdf
         header('Content-Type: application/pdf');
         header('Content-Disposition: inline; filename="transportReport.pdf"');
@@ -1879,4 +1905,17 @@ class Businessmanager extends Controller
 
     }
 
+    public function basicinfo(){
+
+        $user_id = $_SESSION['user_id'];
+
+        $basicinfo = $this->BusinessmanagersModel->getBasicInfo($user_id);
+
+        if ($basicinfo) {
+            return $basicinfo;
+        } else {
+            return [];
+        }
+
+    }
 }

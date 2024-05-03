@@ -534,12 +534,74 @@ class Admin extends Controller{
           $mail->addAddress($user->email, 'kaveesha');//sender
           $mail->Subject = 'TravelEase Confirmation';
           $mail->isHTML(true);
-          $mail->Body='<p>We are pleased to inform you that your document has been approved by TravelEase. </p>
-          You are now authorized to provide your service. <br>
-    
+          $mail->Body='<!DOCTYPE html>
+          <html lang="en">
+          <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Document Approval Notification</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              background-color: #f9f9f9;
+              margin: 0;
+              padding: 0;
+            }
+            .container {
+              max-width: 600px;
+              margin: 50px auto;
+              background-color: #fff;
+              border-radius: 10px;
+              box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+              padding: 40px;
+            }
+            h1 {
+              color: #333;
+              font-size: 24px;
+              text-align: center;
+              margin-bottom: 20px;
+            }
+            p {
+              color: #555;
+              font-size: 16px;
+              line-height: 1.6;
+              margin-bottom: 20px;
+            }
+            .btn {
+              display: inline-block;
+              padding: 10px 30px;
+              background-color: #007bff;
+              color: #fff;
+              text-decoration: none;
+              border-radius: 5px;
+              transition: background-color 0.3s ease;
+            }
+            .btn:hover {
+              background-color: #0056b3;
+            }
+            .footer {
+              text-align: center;
+              margin-top: 40px;
+              color: #777;
+              font-size: 14px;
+            }
+          </style>
+          </head>
+          <body>
+          <div class="container">
+            <h1>🎉 Congratulations! 🎉</h1>
+            <p>We are thrilled to announce that your document has been <strong>approved</strong> by TravelEase!</p>
+            <p>You are now officially <strong>authorized</strong> to provide your exceptional service to our valued customers.</p>
+            <p>Thank you for choosing TravelEase! Your dedication to providing excellent service aligns perfectly with our values.</p>
+            <p>If you have any questions or need assistance, do not hesitate to reach out to us. We are  here to support you every step of the way.</p>
+            <a href="mailto:info@travelease.com" class="btn">Contact Us</a>
+          </div>
+          <div class="footer">
+            <p>&copy; 2024 TravelEase. All rights reserved.</p>
+          </div>
+          </body>
+          </html>
           
-          Thank you for choosing TravelEase! <br> If you have any further questions or require assistance, feel free to contact us
-           <br>
            
            ';
           $mail->send();

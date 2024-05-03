@@ -558,10 +558,22 @@ li {
     font-size: 14px;
 }
 
+.view-button2:hover {
+    background-color: #FFDB8B;
+}
+.view-button2 {
+    background-color: #F9B314;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
 .view-button:hover {
     background-color: #FFDB8B;
 }
-
 
 
 /* Style for the booking search container */
@@ -825,4 +837,22 @@ li {
     .right-half {
         margin-top: 20px;
     }
+}
+.agency-popup {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.popup-column {
+    width: 48%; /* Adjust width as needed */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.agency-popup p {
+    margin: 5px 0;
 }

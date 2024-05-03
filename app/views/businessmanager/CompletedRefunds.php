@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/manager-packages.css">
+    <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/bookings.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/businessmanager/navigation.css">
     <title>Business Manager Refunds</title>
     <link rel="icon" type="<?php echo URLROOT?>/images/x-icon" href="<?php echo URLROOT?>/images/TravelEase.png">
@@ -52,10 +53,10 @@ include 'navigation.php';
 
             <!-- Customers Box -->
             <?php
-            $guestCount = $data["guestCount"]; ?>
+            $totalRefundCharge = $data['totalRefundCharge'];?>
             <div class="box">
-                <h2>Total Customers</h2>
-                <p><?php echo $guestCount ?></p>
+                <h2>Total Refund Charge</h2>
+                <p><?php echo  $totalRefundCharge -> totalRefundCharge ?> LKR</p>
             </div>
         </div>
 
@@ -65,15 +66,6 @@ include 'navigation.php';
         <div class="tab">
             <a href="<?php echo URLROOT?>/businessmanager/refund"><button class="tablinks">Pending Refunds</button></a>
             <a href="<?php echo URLROOT?>/businessmanager/CompletedRefunds"><button class="tablinks active">Completed Refunds</button></a>
-        </div>
-    </div>
-
-    <div class="search-content">
-        <div class="booking-search">
-            <input type="text" id="booking-search" placeholder="Search for Refund Details">
-            <button onclick="filterBookings()">
-                <i class="bx bx-search"></i> <!-- Using the Boxicons search icon -->
-            </button>
         </div>
     </div>
 
@@ -90,6 +82,8 @@ include 'navigation.php';
                 <th>Refund Amount</th>
                 <th>Cancelled Date</th>
                 <th>Refund Date</th>
+                <th>Paid Amount</th>
+                <th>Refund Charge</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -106,6 +100,8 @@ include 'navigation.php';
                     <td><?php echo $refund->refund_amount; ?></td>
                     <td><?php echo $refund->cancelled_date; ?></td>
                     <td><?php echo $refund->refund_date; ?></td>
+                    <td><?php echo $refund->final_refund; ?></td>
+                    <td><?php echo $refund->refund_charge; ?></td>
                     <td>
                         <button class="view-button">
                             <i class='bx bx-show'></i>
@@ -115,12 +111,43 @@ include 'navigation.php';
             <?php endforeach; ?>
             </tbody>
         </table>
+        <?php
+        $totalRefundCharge = $data['totalRefundCharge'];?>
+        <div class="total-refund-charge">
+            <h2>Total Refund Charge</h2>
+            <p><?php echo $totalRefundCharge->totalRefundCharge ?> LKR</p>
     </div>
+
 
 
     <div class="more-content">
-        <button class="next-page-btn">See More <i class='bx bx-chevron-right'></i></button>
+        <button class="next-page-btn" onclick="showNextPage()">See More <i class='bx bx-chevron-right'></i></button>
     </div>
+
+    <script>
+        // JavaScript function to show the next page of table rows
+        function showNextPage() {
+            var table = document.querySelector(".booking-table");
+            var tr = table.getElementsByTagName("tr");
+            var i;
+            for (i = 0; i < tr.length; i++) {
+                if (tr[i].style.display === "none") {
+                    tr[i].style.display = "";
+                }
+            }
+        }
+        //limit rows
+        var table = document.querySelector(".booking-table");
+        var tr = table.getElementsByTagName("tr");
+        var i;
+        for (i = 0; i < tr.length; i++) {
+            if (i > 3) {
+                tr[i].style.display = "none";
+            }
+        }
+
+    </script>
+
 
 </main>
 </body>

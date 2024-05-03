@@ -84,7 +84,7 @@ include 'navigation.php';
             foreach ($guides as $key=> $guide) {
                ?>
                     <tr>
-                        <td><?php echo $key=1 ?></td>
+                        <td><?php echo $key+1 ?></td>
                         <td><?php echo $guide->guide_name ?></td>
                         <td><?php echo $guide->languages ?></td>
                         <td><?php echo $guide->pricePerDay ?></td>
@@ -100,6 +100,34 @@ include 'navigation.php';
             ?>
         </table>
     </div>
+
+    <div class="more-content">
+        <button class="next-page-btn" onclick="showNextPage()">See More <i class='bx bx-chevron-right'></i></button>
+    </div>
+
+    <script>
+        // JavaScript function to show the next page of table rows
+        function showNextPage() {
+            var table = document.querySelector(".booking-table");
+            var tr = table.getElementsByTagName("tr");
+            var i;
+            for (i = 0; i < tr.length; i++) {
+                if (tr[i].style.display === "none") {
+                    tr[i].style.display = "";
+                }
+            }
+        }
+        //limit rows
+        var table = document.querySelector(".booking-table");
+        var tr = table.getElementsByTagName("tr");
+        var i;
+        for (i = 0; i < tr.length; i++) {
+            if (i > 10) {
+                tr[i].style.display = "none";
+            }
+        }
+
+    </script>
 
     <div class="popup" id="popup">
         <div class="popup-content">

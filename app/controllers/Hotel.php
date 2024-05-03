@@ -641,13 +641,17 @@ class Hotel extends Controller
                 'breakfastIncluded' => $hotels->breakfastIncluded,
                 'lunchIncluded' => $hotels->lunchIncluded,
                 'dinnerIncluded' => $hotels->dinnerIncluded,
-                'roomImages' => [],
+                'roomImages1' => $hotels->roomImages1,
+                'roomImages2' => $hotels->roomImages2,
+                'roomImages3' => $hotels->roomImages3,
+                'roomImages4' => $hotels->image,
             ];
 
             $data = [
                 'basicInfo' => $this->basicInfo(),
                 'roomData' => $roomData,
             ];
+
 
             $this->view('hotel/updateroom', $data);
         }
@@ -973,10 +977,10 @@ class Hotel extends Controller
     public function getReviews()
     {
         $user_id = $_SESSION['user_id'];
-        $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
+        // $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
 
         // Get reviews data from the model
-        $reviews = $this->hotelsModel->getReviews($hotel_id);
+        $reviews = $this->hotelsModel->getReviews($user_id);
 
         if ($reviews) {
             return $reviews;
@@ -1152,8 +1156,7 @@ class Hotel extends Controller
     public function getReviewCount(){
 
         $user_id = $_SESSION['user_id'];
-        $hotel_id = $this->hotelsModel->getHotelIdByUserId($user_id);
-        $reviewCount = $this->hotelsModel->getReviewCount($hotel_id);
+        $reviewCount = $this->hotelsModel->getReviewCount($user_id);
 
         return $reviewCount;
 
@@ -1213,13 +1216,13 @@ class Hotel extends Controller
 
         require_once __DIR__ . '/../libraries/sms/vendor/autoload.php';
 
-        $basic  = new \Vonage\Client\Credentials\Basic("992a5e27", "YiQN3gXeYkIkfbcJ");
+        $basic  = new \Vonage\Client\Credentials\Basic("1070dc73", "UaAAIbucN4Cfd2kd");
         $client = new \Vonage\Client($basic);
 
         $messageBody = "$sender_name has cancelled your booking with the booking details for $roomType room from $startDate to $endDate. We apologize for the inconvenience caused. Your payment refund will be processed within 7 days.";
 
         $response = $client->sms()->send(
-            new \Vonage\SMS\Message\SMS("94768968161", 'Travelease', $messageBody)
+            new \Vonage\SMS\Message\SMS("94701184956", 'Travelease', $messageBody)
         );
 
         $message = $response->current();
