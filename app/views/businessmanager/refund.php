@@ -81,6 +81,7 @@ include 'navigation.php';
                     <th>Traveler Name</th>
                     <th>Service Cancelled by</th>
                     <th>Refund Amount</th>
+                    <th>Final Refund</th>
                     <th>Cancelled Date</th>
                     <th>Action</th>
                 </tr>
@@ -88,6 +89,7 @@ include 'navigation.php';
                 <tbody>
                 <?php
                 $refunds = $data['refundData'];
+                var_dump($refunds[1]);
                 foreach ($refunds as $key => $refund): ?>
                     <tr>
                         <td><?php echo $key + 1; ?></td>
@@ -96,12 +98,13 @@ include 'navigation.php';
                         <td><?php echo $refund->user_fname; ?></td>
                         <td><?php echo $refund->cancel_user_fname; ?></td>
                         <td><?php echo $refund->refund_amount; ?></td>
+                        <td><?php echo $refund->refund_amount*0.7;?></td>
                         <td><?php echo $refund->cancelled_date; ?></td>
                         <td>
                             <button class="view-button" onclick="refundopenPopup();refundupdatePopupDetails('<?php echo $refund->booking_id; ?>', '<?php echo $refund->provider_fname; ?>', '<?php echo $refund->cancel_user_fname; ?>', '<?php echo $refund->refund_amount; ?>', '<?php echo $refund->cancelled_date; ?>')">
                                 <i class='bx bx-show'></i>
                             </button>
-                            <button class="complete-button" onclick="showConfirmPopup(<?php echo $refund->booking_id; ?>, <?php echo $refund->refund_id; ?>)">
+                            <button class="complete-button" onclick="showConfirmPopup(<?php echo $refund->booking_id; ?>, <?php echo $refund->refund_id; ?>,<?php echo $refund->refund_amount; ?>,<?php echo $refund->refund_amount*0.7; ?>,<?php echo $refund->user_id?>)">
                                 <i class='bx bx-check'></i>
                             </button>
 

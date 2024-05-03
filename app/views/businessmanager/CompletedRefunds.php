@@ -53,10 +53,10 @@ include 'navigation.php';
 
             <!-- Customers Box -->
             <?php
-            $guestCount = $data["guestCount"]; ?>
+            $totalRefundCharge = $data['totalRefundCharge'];?>
             <div class="box">
-                <h2>Total Customers</h2>
-                <p><?php echo $guestCount ?></p>
+                <h2>Total Refund Charge</h2>
+                <p><?php echo  $totalRefundCharge -> totalRefundCharge ?> LKR</p>
             </div>
         </div>
 
@@ -82,6 +82,8 @@ include 'navigation.php';
                 <th>Refund Amount</th>
                 <th>Cancelled Date</th>
                 <th>Refund Date</th>
+                <th>Paid Amount</th>
+                <th>Refund Charge</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -98,6 +100,8 @@ include 'navigation.php';
                     <td><?php echo $refund->refund_amount; ?></td>
                     <td><?php echo $refund->cancelled_date; ?></td>
                     <td><?php echo $refund->refund_date; ?></td>
+                    <td><?php echo $refund->final_refund; ?></td>
+                    <td><?php echo $refund->refund_charge; ?></td>
                     <td>
                         <button class="view-button">
                             <i class='bx bx-show'></i>
@@ -107,6 +111,11 @@ include 'navigation.php';
             <?php endforeach; ?>
             </tbody>
         </table>
+        <?php
+        $totalRefundCharge = $data['totalRefundCharge'];?>
+        <div class="total-refund-charge">
+            <h2>Total Refund Charge</h2>
+            <p><?php echo $totalRefundCharge->totalRefundCharge ?> LKR</p>
     </div>
 
 

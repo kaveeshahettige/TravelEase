@@ -563,17 +563,41 @@ class Businessmanagers
         return $this->db->execute();
     }
 
-    public function confirmRefund($refund_id, $booking_id, $refund_date)
+    public function confirmRefund($refund_id,$refund_date,$final_refund,$refund_charge)
     {
-        $sql = "UPDATE refunds SET refund_status = 1, refund_date = :refund_date 
-            WHERE refund_id = :refund_id AND booking_id = :booking_id";
+        $sql = "UPDATE refunds SET refund_status = 1, refund_date = :refund_date, final_refund = :final_refund, refund_charge = :refund_charge 
+               WHERE refund_id = :refund_id";
         $this->db->query($sql);
         $this->db->bind(':refund_id', $refund_id);
-        $this->db->bind(':booking_id', $booking_id);
         $this->db->bind(':refund_date', $refund_date);
+        $this->db->bind(':final_refund', $final_refund);
+        $this->db->bind(':refund_charge', $refund_charge);
 
         return $this->db->execute();
     }
+
+    public function InsertNotification2($booking_id, $sender_id, $receiver_id, $notification_message)
+    {
+        // Prepare and execute the SQL query to insert notification
+        $sql = "INSERT INTO notifications (booking_id, sender_id, receiver_id, notification) 
+            VALUES (:booking_id, :sender_id, :receiver_id, :notification)";
+        $this->db->query($sql);
+        $this->db->bind(':booking_id', $booking_id);
+        $this->db->bind(':sender_id', $sender_id);
+        $this->db->bind(':receiver_id', $receiver_id);
+        $this->db->bind(':notification', $notification_message);
+
+        // Execute the query
+        return $this->db->execute();
+    }
+
+    public function getTotalRefundCharge(){
+        $this->db->query('SELECT SUM(refund_charge) AS totalRefundCharge FROM refunds');
+
+        $result = $this->db->single();
+        return $result;
+    }
+
 
     public function InsertNotification($sender_id, $businessmanagerID, $notification_message)
     {
