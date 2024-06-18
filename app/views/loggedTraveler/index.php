@@ -10,13 +10,11 @@
     <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
     <script src="<?php echo URLROOT?>js/loggedTraveler/script.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-NwdoN0yM5JcJJ4jX1KvJXrQhQ+6RMo3hV3brvytgePvVzSlc3PjMFbpL5T+VUAq7" crossorigin="anonymous">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTDElEffBAws-JYjYaUELqmkOCpa6C5R8&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOURAPIKEY&libraries=places"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.2/css/boxicons.min.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/hotel/popup.css">
     <script src="<?php echo URLROOT; ?>/public/js/hotel/popup.js"></script>
 
-
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADD6_nBEr9ZJd44sKcqr0dj-JRvbt5ogo&libraries=places"></script> -->
 
     <style>
         /* Style for the suggestions dropdown */

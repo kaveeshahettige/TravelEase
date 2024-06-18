@@ -103,6 +103,7 @@ class User{
         $this->db->bind(':account_number', $data['account_number']);
         $this->db->bind(':bank', $data['bank']);
         $this->db->bind(':branch', $data['branch']);
+        // $this->db->bind(':placelike', $data['placelike']);
         // Execute
         if($this->db->execute()){
         //add a function to rlaod site
@@ -2904,6 +2905,19 @@ public function refundUserCart($temporyid, $booking_id, $serviceProvider_id, $us
     } 
     
 }
+//addPlacetoUser
+public function addPlacetoUser($user_id,$place){
+    $this->db->query('update users set placelike = :place where id = :user_id');
+    //update
 
+    $this->db->bind(':user_id', $user_id);
+    $this->db->bind(':place', $place);
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+
+}
 }
 

@@ -11,7 +11,7 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="<?php echo URLROOT?>/js/loggedTraveler/script.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.2/css/boxicons.min.css">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTDElEffBAws-JYjYaUELqmkOCpa6C5R8&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOURAPIKEY&libraries=places"></script>
     <style>
         /* Style for the suggestions dropdown */
         .pac-container {

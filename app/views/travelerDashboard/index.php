@@ -74,6 +74,7 @@
                             <h6 style="font-weight:bold">Registration Number: <?php echo $data['user']->id?></h6><br>
                             <h6 style="font-weight:bold"><?php echo $data['user']->email?></h6> <br>  
                             <h6 style="font-weight:bold"><?php echo $data['user']->number?></h6> <br>
+                            <!-- <h6 style="font-weight:bold">Place You Visit Last: <?php echo $data['user']->placelike?></h6> <br> -->
                         </div>   
                     </div>
                 </div>
