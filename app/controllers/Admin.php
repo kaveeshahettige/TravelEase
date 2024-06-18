@@ -528,9 +528,9 @@ class Admin extends Controller{
           $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
           $mail->Port = 587;
 
-          $mail->Username = '2021is046@stu.ucsc.cmb.ac.lk';
-          $mail->Password = '200036202687';
-          $mail->setFrom('2021is046@stu.ucsc.cmb.ac.lk', 'TravelEase');//our
+          $mail->Username = '';// your email
+          $mail->Password = '';// your email password
+           $mail->setFrom('', 'TravelEase');//your email
           $mail->addAddress($user->email, 'kaveesha');//sender
           $mail->Subject = 'TravelEase Confirmation';
           $mail->isHTML(true);
