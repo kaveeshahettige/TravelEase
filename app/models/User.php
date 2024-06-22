@@ -2435,7 +2435,8 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
         $this->db->query('SELECT COUNT(*) AS count
         FROM notifications
         WHERE receiver_id = :user_id
-        AND nDate >= DATE_SUB(NOW(), INTERVAL 30 DAY);');
+        
+       ');
 
         $this->db->bind(':user_id', $user_id);
         $row = $this->db->single();
@@ -2455,7 +2456,7 @@ public function findAvailableVehiclesByLocation($location, $checkinDate, $checko
         -- JOIN bookings b ON n.booking_id = b.booking_id
         WHERE n.receiver_id = :user_id
         AND markAsRead = 0
-        AND n.nDate >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+        
         ORDER BY n.nDate DESC;');
 
         $this->db->bind(':user_id', $user_id);

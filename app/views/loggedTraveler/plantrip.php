@@ -62,7 +62,7 @@
         </div>
     </section>
     
-    <script>
+    <!-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             const locationInput = document.getElementById("location-input");
             const options = {
@@ -87,7 +87,7 @@
                 }
             });
         });
-    </script>
+    </script> -->
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Get the form and input elements
